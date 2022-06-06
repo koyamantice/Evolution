@@ -107,17 +107,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)light;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='developer|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)light;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)light;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -212,43 +212,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="base\AbstractSceneFactory.cpp" />
-    <ClCompile Include="base\Audio.cpp" />
-    <ClCompile Include="base\DirectXCommon.cpp" />
-    <ClCompile Include="base\Easing.cpp" />
-    <ClCompile Include="base\Framework.cpp" />
-    <ClCompile Include="base\Input.cpp" />
-    <ClCompile Include="base\SceneFactory.cpp" />
-    <ClCompile Include="base\SceneManager.cpp" />
-    <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="base\XorShift.cpp" />
-    <ClCompile Include="camera\Camera.cpp" />
-    <ClCompile Include="camera\DebugCamera.cpp" />
-    <ClCompile Include="collision\BaseCollider.cpp" />
-    <ClCompile Include="collision\Collision.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
-    </ClCompile>
-    <ClCompile Include="collision\CollisionInfo.cpp" />
-    <ClCompile Include="collision\CollisionManager.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
-    </ClCompile>
-    <ClCompile Include="collision\CollisionPrimitive.cpp" />
-    <ClCompile Include="collision\CollisionTypes.cpp" />
-    <ClCompile Include="collision\MeshCollider.cpp" />
-    <ClCompile Include="collision\SphereCollider.cpp" />
-    <ClCompile Include="collision\TouchableObject.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SourceCode\Common\Easing.cpp" />
+    <ClCompile Include="SourceCode\Common\XorShift.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\Audio.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\BaseCollider.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\Collision.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\CollisionInfo.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\CollisionManager.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\CollisionTypes.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\MeshCollider.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\SphereCollider.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\collision\TouchableObject.cpp" />
     <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\Framework.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\Input.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\SceneManager.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\WinApp.cpp" />
+    <ClCompile Include="SourceCode\imgui\imgui.cpp" />
+    <ClCompile Include="SourceCode\imgui\imgui_demo.cpp" />
+    <ClCompile Include="SourceCode\imgui\imgui_draw.cpp" />
+    <ClCompile Include="SourceCode\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="SourceCode\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="SourceCode\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Texture.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp" />
@@ -258,13 +245,18 @@
     <ClCompile Include="SourceCode\Obj\3d\Mesh.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Model.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Object3d.cpp" />
+    <ClCompile Include="SourceCode\Obj\camera\Camera.cpp" />
+    <ClCompile Include="SourceCode\Obj\camera\DebugCamera.cpp" />
     <ClCompile Include="SourceCode\Obj\light\LightGroup.cpp" />
     <ClCompile Include="SourceCode\Obj\light\PointLight.cpp" />
     <ClCompile Include="SourceCode\Obj\light\SpotLight.cpp" />
+    <ClCompile Include="SourceCode\System\AbstractSceneFactory.cpp" />
+    <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
+    <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
+    <ClCompile Include="SourceCode\TisGame.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
     <ClCompile Include="SourceCode\User\TitleScene.cpp" />
-    <ClCompile Include="TisGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -272,41 +264,35 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="base\AbstractSceneFactory.h" />
-    <ClInclude Include="base\Audio.h" />
-    <ClInclude Include="base\BaseScene.h" />
-    <ClInclude Include="base\DirectXCommon.h" />
-    <ClInclude Include="base\Easing.h" />
-    <ClInclude Include="base\Framework.h" />
-    <ClInclude Include="base\Input.h" />
-    <ClInclude Include="base\SceneFactory.h" />
-    <ClInclude Include="base\SceneManager.h" />
-    <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="base\XorShift.h" />
-    <ClInclude Include="camera\Camera.h" />
-    <ClInclude Include="camera\DebugCamera.h" />
-    <ClInclude Include="collision\BaseCollider.h" />
-    <ClInclude Include="collision\Collision.h" />
-    <ClInclude Include="collision\CollisionAttribute.h" />
-    <ClInclude Include="collision\CollisionInfo.h" />
-    <ClInclude Include="collision\CollisionManager.h" />
-    <ClInclude Include="collision\CollisionPrimitive.h" />
-    <ClInclude Include="collision\CollisionTypes.h" />
-    <ClInclude Include="collision\MeshCollider.h" />
-    <ClInclude Include="collision\QueryCallback.h" />
-    <ClInclude Include="collision\RaycastHit.h" />
-    <ClInclude Include="collision\SphereCollider.h" />
-    <ClInclude Include="collision\TouchableObject.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx12.h" />
-    <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="SourceCode\Common\Easing.h" />
+    <ClInclude Include="SourceCode\Common\XorShift.h" />
+    <ClInclude Include="SourceCode\FrameWork\Audio.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\BaseCollider.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\Collision.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\CollisionAttribute.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\CollisionInfo.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\CollisionManager.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\CollisionPrimitive.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\CollisionTypes.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\MeshCollider.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\QueryCallback.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\RaycastHit.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\SphereCollider.h" />
+    <ClInclude Include="SourceCode\FrameWork\collision\TouchableObject.h" />
     <ClInclude Include="SourceCode\FrameWork\FPSManager.h" />
+    <ClInclude Include="SourceCode\FrameWork\Framework.h" />
+    <ClInclude Include="SourceCode\FrameWork\Input.h" />
+    <ClInclude Include="SourceCode\FrameWork\SceneManager.h" />
+    <ClInclude Include="SourceCode\FrameWork\WinApp.h" />
+    <ClInclude Include="SourceCode\imgui\imconfig.h" />
+    <ClInclude Include="SourceCode\imgui\imgui.h" />
+    <ClInclude Include="SourceCode\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="SourceCode\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="SourceCode\imgui\imgui_internal.h" />
+    <ClInclude Include="SourceCode\imgui\imstb_rectpack.h" />
+    <ClInclude Include="SourceCode\imgui\imstb_textedit.h" />
+    <ClInclude Include="SourceCode\imgui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\Obj\2d\Sprite.h" />
     <ClInclude Include="SourceCode\Obj\2d\Texture.h" />
     <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h" />
@@ -316,22 +302,28 @@
     <ClInclude Include="SourceCode\Obj\3d\Mesh.h" />
     <ClInclude Include="SourceCode\Obj\3d\Model.h" />
     <ClInclude Include="SourceCode\Obj\3d\Object3d.h" />
+    <ClInclude Include="SourceCode\Obj\camera\Camera.h" />
+    <ClInclude Include="SourceCode\Obj\camera\DebugCamera.h" />
     <ClInclude Include="SourceCode\Obj\light\DirectionalLight.h" />
     <ClInclude Include="SourceCode\Obj\light\LightGroup.h" />
     <ClInclude Include="SourceCode\Obj\light\PointLight.h" />
     <ClInclude Include="SourceCode\Obj\light\SpotLight.h" />
+    <ClInclude Include="SourceCode\System\AbstractSceneFactory.h" />
+    <ClInclude Include="SourceCode\System\BaseScene.h" />
+    <ClInclude Include="SourceCode\System\DirectXCommon.h" />
+    <ClInclude Include="SourceCode\System\SceneFactory.h" />
+    <ClInclude Include="SourceCode\TisGame.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />
     <ClInclude Include="SourceCode\User\TitleScene.h" />
-    <ClInclude Include="TisGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="imgui\imgui.vcxproj" />
-    <None Include="imgui\imgui.vcxproj.filters" />
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
     <None Include="Resources\shaders\OBJShaderHeader.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
+    <None Include="SourceCode\imgui\imgui.vcxproj" />
+    <None Include="SourceCode\imgui\imgui.vcxproj.filters" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl">

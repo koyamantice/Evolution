@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include"SceneManager.h"
 #include "DirectXCommon.h"
+#include"SceneManager.h"
 #include "WinApp.h"
 #include "Input.h"
 #include "Audio.h"

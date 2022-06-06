@@ -1,9 +1,0 @@
-diff a/base/BaseScene.h b/base/BaseScene.h	(rejected hunks)
-@@ -55,6 +55,7 @@
- 	int EffectNum = 0;
- 	float distanceY = 12;
- 	float distanceZ = 12;
-+=======
- 	float distanceZ = 5;
- >>>>>>> 87fae4b32dbea9fa85e9940437a51405a94e79d9
- 	//�n�܂�O�̉��o�̂��߂̕ϐ�
