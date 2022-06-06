@@ -107,17 +107,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)light;$(ProjectDir)scene\;$(ProjectDir)2d\;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir)3d\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)light;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='developer|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)light;$(ProjectDir)scene\;$(ProjectDir)2d\;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir)3d\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)light;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)light;$(ProjectDir)scene\;$(ProjectDir)2d\;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir)3d\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)light;$(ProjectDir)base\;$(ProjectDir)camera\;$(ProjectDir);$(ProjectDir)collision;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -212,27 +212,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="2d\Sprite.cpp" />
-    <ClCompile Include="2d\Texture.cpp" />
-    <ClCompile Include="3d\FbxLoader.cpp" />
-    <ClCompile Include="3d\FBXModel.cpp" />
-    <ClCompile Include="3d\FBXObject3d.cpp" />
-    <ClCompile Include="3d\Material.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">MinSpace</Optimization>
-      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='developer|x64'">true</IntrinsicFunctions>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="3d\Mesh.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">MinSpace</Optimization>
-      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='developer|x64'">true</IntrinsicFunctions>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="3d\Model.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">MinSpace</Optimization>
-      <IntrinsicFunctions Condition="'$(Configuration)|$(Platform)'=='developer|x64'">true</IntrinsicFunctions>
-      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='developer|x64'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="3d\Object3d.cpp" />
     <ClCompile Include="base\AbstractSceneFactory.cpp" />
     <ClCompile Include="base\Audio.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
@@ -262,21 +241,30 @@
     <ClCompile Include="collision\MeshCollider.cpp" />
     <ClCompile Include="collision\SphereCollider.cpp" />
     <ClCompile Include="collision\TouchableObject.cpp" />
-    <ClCompile Include="FPSManager\FPSManager.cpp" />
-    <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx12.cpp" />
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="light\LightGroup.cpp" />
-    <ClCompile Include="light\PointLight.cpp" />
-    <ClCompile Include="light\SpotLight.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ModelManager.cpp" />
-    <ClCompile Include="scene\TisGame.cpp" />
-    <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp" />
+    <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp" />
+    <ClCompile Include="SourceCode\Obj\2d\Texture.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\FBXModel.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\FBXObject3d.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\Material.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\Mesh.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\Model.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\Object3d.cpp" />
+    <ClCompile Include="SourceCode\Obj\light\LightGroup.cpp" />
+    <ClCompile Include="SourceCode\Obj\light\PointLight.cpp" />
+    <ClCompile Include="SourceCode\Obj\light\SpotLight.cpp" />
+    <ClCompile Include="SourceCode\User\ImageManager.cpp" />
+    <ClCompile Include="SourceCode\User\ModelManager.cpp" />
+    <ClCompile Include="SourceCode\User\TitleScene.cpp" />
+    <ClCompile Include="TisGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -284,16 +272,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="2d\Sprite.h" />
-    <ClInclude Include="2d\Texture.h" />
-    <ClInclude Include="3d\FbxLoader.h" />
-    <ClInclude Include="3d\FBXModel.h" />
-    <ClInclude Include="3d\FBXObject3d.h" />
-    <ClInclude Include="3d\Material.h" />
-    <ClInclude Include="3d\Mesh.h" />
-    <ClInclude Include="3d\Model.h" />
-    <ClInclude Include="3d\Object3d.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="base\AbstractSceneFactory.h" />
     <ClInclude Include="base\Audio.h" />
     <ClInclude Include="base\BaseScene.h" />
@@ -319,8 +297,6 @@
     <ClInclude Include="collision\RaycastHit.h" />
     <ClInclude Include="collision\SphereCollider.h" />
     <ClInclude Include="collision\TouchableObject.h" />
-    <ClInclude Include="FPSManager\FPSManager.h" />
-    <ClInclude Include="ImageManager.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx12.h" />
@@ -329,13 +305,25 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="light\DirectionalLight.h" />
-    <ClInclude Include="light\LightGroup.h" />
-    <ClInclude Include="light\PointLight.h" />
-    <ClInclude Include="light\SpotLight.h" />
-    <ClInclude Include="ModelManager.h" />
-    <ClInclude Include="scene\TisGame.h" />
-    <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="SourceCode\FrameWork\FPSManager.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Sprite.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Texture.h" />
+    <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h" />
+    <ClInclude Include="SourceCode\Obj\3d\FBXModel.h" />
+    <ClInclude Include="SourceCode\Obj\3d\FBXObject3d.h" />
+    <ClInclude Include="SourceCode\Obj\3d\Material.h" />
+    <ClInclude Include="SourceCode\Obj\3d\Mesh.h" />
+    <ClInclude Include="SourceCode\Obj\3d\Model.h" />
+    <ClInclude Include="SourceCode\Obj\3d\Object3d.h" />
+    <ClInclude Include="SourceCode\Obj\light\DirectionalLight.h" />
+    <ClInclude Include="SourceCode\Obj\light\LightGroup.h" />
+    <ClInclude Include="SourceCode\Obj\light\PointLight.h" />
+    <ClInclude Include="SourceCode\Obj\light\SpotLight.h" />
+    <ClInclude Include="SourceCode\User\ImageManager.h" />
+    <ClInclude Include="SourceCode\User\ModelManager.h" />
+    <ClInclude Include="SourceCode\User\TitleScene.h" />
+    <ClInclude Include="TisGame.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui\imgui.vcxproj" />
@@ -448,10 +436,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="DirectX new.rc" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
+    <ResourceCompile Include="Resources\DirectX new.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,40 +27,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2d\Sprite.cpp">
-      <Filter>2d</Filter>
-    </ClCompile>
-    <ClCompile Include="2d\Texture.cpp">
-      <Filter>2d</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageManager.cpp">
-      <Filter>2d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\FbxLoader.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\FBXModel.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\FBXObject3d.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\Mesh.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\Model.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\Object3d.cpp">
-      <Filter>3d</Filter>
-    </ClCompile>
     <ClCompile Include="base\Audio.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\Easing.cpp">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="base\DirectXCommon.cpp">
@@ -75,44 +42,38 @@
     <ClCompile Include="base\WinApp.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\XorShift.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="camera\Camera.cpp">
-      <Filter>camera</Filter>
+      <Filter>Obj\camera</Filter>
     </ClCompile>
     <ClCompile Include="camera\DebugCamera.cpp">
-      <Filter>camera</Filter>
+      <Filter>Obj\camera</Filter>
     </ClCompile>
     <ClCompile Include="collision\BaseCollider.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\Collision.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\CollisionInfo.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\CollisionManager.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\CollisionPrimitive.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\CollisionTypes.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\MeshCollider.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\SphereCollider.cpp">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="collision\TouchableObject.cpp">
-      <Filter>collision</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSManager\FPSManager.cpp">
-      <Filter>FPSManager</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>Imgui</Filter>
@@ -132,72 +93,78 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="light\LightGroup.cpp">
-      <Filter>light</Filter>
-    </ClCompile>
-    <ClCompile Include="light\SpotLight.cpp">
-      <Filter>light</Filter>
-    </ClCompile>
-    <ClCompile Include="light\PointLight.cpp">
-      <Filter>light</Filter>
-    </ClCompile>
     <ClCompile Include="base\AbstractSceneFactory.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="base\Framework.cpp">
-      <Filter>scene</Filter>
+      <Filter>System\scene</Filter>
     </ClCompile>
     <ClCompile Include="base\SceneFactory.cpp">
-      <Filter>scene</Filter>
+      <Filter>System\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="base\Framework.cpp">
+      <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="base\SceneManager.cpp">
-      <Filter>scene</Filter>
+      <Filter>FrameWork</Filter>
     </ClCompile>
-    <ClCompile Include="scene\TitleScene.cpp">
-      <Filter>stage\タイトル</Filter>
+    <ClCompile Include="base\XorShift.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="3d\Material.cpp">
-      <Filter>3d</Filter>
+    <ClCompile Include="base\Easing.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="scene\TisGame.cpp">
-      <Filter>scene</Filter>
+    <ClCompile Include="SourceCode\User\TitleScene.cpp">
+      <Filter>User\タイトル</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp">
+      <Filter>Obj\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\2d\Texture.cpp">
+      <Filter>Obj\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\FBXModel.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\FBXObject3d.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\Material.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\Mesh.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\Model.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\3d\Object3d.cpp">
+      <Filter>Obj\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\light\LightGroup.cpp">
+      <Filter>Obj\light</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\light\PointLight.cpp">
+      <Filter>Obj\light</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\light\SpotLight.cpp">
+      <Filter>Obj\light</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\ImageManager.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\ModelManager.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="TisGame.cpp">
+      <Filter>System\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="2d\Sprite.h">
-      <Filter>2d</Filter>
-    </ClInclude>
-    <ClInclude Include="2d\Texture.h">
-      <Filter>2d</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageManager.h">
-      <Filter>2d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\FbxLoader.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\FBXModel.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\FBXObject3d.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\Mesh.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\Model.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelManager.h">
-      <Filter>3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\Object3d.h">
-      <Filter>3d</Filter>
-    </ClInclude>
     <ClInclude Include="base\Audio.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\Easing.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="base\DirectXCommon.h">
@@ -209,53 +176,47 @@
     <ClInclude Include="base\WinApp.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\XorShift.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="camera\Camera.h">
-      <Filter>camera</Filter>
+      <Filter>Obj\camera</Filter>
     </ClInclude>
     <ClInclude Include="camera\DebugCamera.h">
-      <Filter>camera</Filter>
+      <Filter>Obj\camera</Filter>
     </ClInclude>
     <ClInclude Include="collision\BaseCollider.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\Collision.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\CollisionAttribute.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\CollisionInfo.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\CollisionManager.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\CollisionPrimitive.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\CollisionTypes.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\MeshCollider.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\QueryCallback.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\RaycastHit.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\SphereCollider.h">
-      <Filter>collision</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="collision\TouchableObject.h">
-      <Filter>collision</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSManager\FPSManager.h">
-      <Filter>FPSManager</Filter>
+      <Filter>FrameWork\collision</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>Imgui</Filter>
@@ -281,43 +242,82 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="light\LightGroup.h">
-      <Filter>light</Filter>
-    </ClInclude>
-    <ClInclude Include="light\SpotLight.h">
-      <Filter>light</Filter>
-    </ClInclude>
-    <ClInclude Include="light\PointLight.h">
-      <Filter>light</Filter>
-    </ClInclude>
     <ClInclude Include="base\AbstractSceneFactory.h">
-      <Filter>scene</Filter>
+      <Filter>System\scene</Filter>
     </ClInclude>
     <ClInclude Include="base\BaseScene.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="base\Framework.h">
-      <Filter>scene</Filter>
+      <Filter>System\scene</Filter>
     </ClInclude>
     <ClInclude Include="base\SceneFactory.h">
-      <Filter>scene</Filter>
+      <Filter>System\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Framework.h">
+      <Filter>FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="base\SceneManager.h">
-      <Filter>scene</Filter>
+      <Filter>FrameWork</Filter>
     </ClInclude>
-    <ClInclude Include="scene\TitleScene.h">
-      <Filter>stage\タイトル</Filter>
+    <ClInclude Include="base\XorShift.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="3d\Material.h">
-      <Filter>3d</Filter>
+    <ClInclude Include="base\Easing.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="scene\TisGame.h">
-      <Filter>scene</Filter>
+    <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="SourceCode\User\TitleScene.h">
+      <Filter>User\タイトル</Filter>
     </ClInclude>
-    <ClInclude Include="light\DirectionalLight.h">
-      <Filter>light</Filter>
+    <ClInclude Include="SourceCode\Obj\2d\Sprite.h">
+      <Filter>Obj\2d</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Texture.h">
+      <Filter>Obj\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\FBXModel.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\FBXObject3d.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\Material.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\Mesh.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\Model.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\3d\Object3d.h">
+      <Filter>Obj\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\light\DirectionalLight.h">
+      <Filter>Obj\light</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\light\LightGroup.h">
+      <Filter>Obj\light</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\light\PointLight.h">
+      <Filter>Obj\light</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\light\SpotLight.h">
+      <Filter>Obj\light</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FrameWork\FPSManager.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\ImageManager.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\ModelManager.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="TisGame.h">
+      <Filter>System\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui\imgui.vcxproj">
@@ -340,47 +340,56 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="2d">
-      <UniqueIdentifier>{ef999c71-70ae-49d5-b44c-e114292c5bb7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="3d">
-      <UniqueIdentifier>{c9627490-700b-403a-9499-68f903a24f75}</UniqueIdentifier>
-    </Filter>
     <Filter Include="base">
       <UniqueIdentifier>{930e728c-ed99-42a2-8282-9ef2b2aa3382}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="camera">
-      <UniqueIdentifier>{f2b82da3-2245-4882-a435-9e257e6d2e66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="collision">
-      <UniqueIdentifier>{324de7c2-248b-4844-ba99-ebb2e3c01aab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FPSManager">
-      <UniqueIdentifier>{d9f5374f-397d-44da-a87f-9fec4ee636c4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Imgui">
       <UniqueIdentifier>{d8191e5d-038f-4b22-a458-8a351ff2082e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="light">
-      <UniqueIdentifier>{9712d5e3-a37a-4acf-a22a-690fac496dda}</UniqueIdentifier>
+    <Filter Include="Common">
+      <UniqueIdentifier>{155b6472-b209-48ed-b45d-5f7980b30640}</UniqueIdentifier>
     </Filter>
-    <Filter Include="scene">
-      <UniqueIdentifier>{b5186c93-328c-47e8-a0dd-a4d7845b97dc}</UniqueIdentifier>
+    <Filter Include="FrameWork">
+      <UniqueIdentifier>{7eab3b5f-dfc7-4d31-ab34-cc1156d07ddd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stage">
-      <UniqueIdentifier>{978bab94-f725-4402-9c84-de1c8fee5723}</UniqueIdentifier>
+    <Filter Include="User">
+      <UniqueIdentifier>{57305cbd-9fa4-4ce4-b6e0-3d74641ac4d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stage\タイトル">
+    <Filter Include="Obj">
+      <UniqueIdentifier>{2f3982a7-16f6-4833-80e3-a026bf76c712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{ea32ec11-3ec5-4631-9497-e14500f7bcbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj\2d">
+      <UniqueIdentifier>{ef999c71-70ae-49d5-b44c-e114292c5bb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj\3d">
+      <UniqueIdentifier>{c9627490-700b-403a-9499-68f903a24f75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\タイトル">
       <UniqueIdentifier>{76303557-d2b1-4671-a130-77e66e2eace3}</UniqueIdentifier>
     </Filter>
     <Filter Include="シェーダーファイル">
       <UniqueIdentifier>{78a9d76b-31b8-4f30-82fc-5ff98a372aab}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="DirectX new.rc" />
+    <Filter Include="FrameWork\collision">
+      <UniqueIdentifier>{324de7c2-248b-4844-ba99-ebb2e3c01aab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj\light">
+      <UniqueIdentifier>{9712d5e3-a37a-4acf-a22a-690fac496dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj\camera">
+      <UniqueIdentifier>{f2b82da3-2245-4882-a435-9e257e6d2e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\scene">
+      <UniqueIdentifier>{b5186c93-328c-47e8-a0dd-a4d7845b97dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\DirectX new.rc" />
   </ItemGroup>
 </Project>
