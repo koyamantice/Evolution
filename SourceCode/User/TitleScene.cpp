@@ -37,11 +37,13 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	sprite[select] = Sprite::Create(ImageManager::Tselect, { 76.0f,418.0f });
 	//スプライト生成
 	Actor* Act_[2]{};
-	Act_[0] = new Actor(std::string("player"));
-	Act_[0]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
-
-
+	Act_[Player] = new Actor(std::string("player"));
+	Act_[Player]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
+	Act_[Enemy] = new Actor(std::string("enemy"));
+	Act_[Enemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
+	Act_[Enemy]->SetPosition({1,0,0});
 	actor[Player].reset(Act_[Player]);
+	actor[Enemy].reset(Act_[Enemy]);
 }
 //開放処理
 void TitleScene::Finalize() {
@@ -55,6 +57,21 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	camera->Update();
 	actor[Player]->Update();
+	actor[Enemy]->Update();
+
+
+	for (int i = 0; i < Chr_Max;i++) {
+		for (int j = 1; j < Chr_Max; j++) {
+			if(i!=j){
+				if (actor[i]->Collide(actor[j].get())) {
+					int a = 0;
+					a++;
+				}
+			}
+		}
+	}
+
+
 }
 //描画
 void TitleScene::Draw(DirectXCommon* dxCommon) {
@@ -71,6 +88,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	sprite[button]->Draw();
 
 	actor[Player]->Draw();
+	actor[Enemy]->Draw();
 
 }
 
