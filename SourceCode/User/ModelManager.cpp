@@ -10,6 +10,7 @@ ModelManager* ModelManager::GetIns() {
 }
 
 void ModelManager::Initialize() {
+	LoadModel(Player, "chr_knight");
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName) {

@@ -2,8 +2,10 @@
 #include"SceneManager.h"
 #include "Audio.h"
 #include "input.h"
+#include<string>
 #include "DebugText.h"
 #include"ImageManager.h"
+#include"ModelManager.h"
 #include <TisGame.h>
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	// カメラ生成
@@ -34,6 +36,12 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	//sprite[button]->SetScale(0.4f);
 	sprite[select] = Sprite::Create(ImageManager::Tselect, { 76.0f,418.0f });
 	//スプライト生成
+	Actor* Act_[2]{};
+	Act_[0] = new Actor(std::string("player"));
+	Act_[0]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
+
+
+	actor[Player].reset(Act_[Player]);
 }
 //開放処理
 void TitleScene::Finalize() {
@@ -46,6 +54,7 @@ void TitleScene::Finalize() {
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	camera->Update();
+	actor[Player]->Update();
 }
 //描画
 void TitleScene::Draw(DirectXCommon* dxCommon) {
@@ -60,5 +69,8 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	sprite[select]->Draw();
 	sprite[select]->Draw();
 	sprite[button]->Draw();
+
+	actor[Player]->Draw();
+
 }
 

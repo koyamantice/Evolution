@@ -1,5 +1,7 @@
 #pragma once
 #include "SceneManager.h"
+#include "Actor.h"
+
 /// <summary>
 /// タイトルシーン
 /// </summary>
@@ -27,14 +29,22 @@ public:
 
 private:
 	//メンバ変数
-	Sprite* sprite[4]{};
+	enum {
+		Player,
+		Enemy,
+		Chr_Max
+	};
+	std::unique_ptr<Actor> actor[Chr_Max]{};
+
 	enum {
 		back,
 		button,
 		select,
 		ground,
 		tutorial,
+		SpriteMax
 	};
+	Sprite* sprite[SpriteMax]{};
 	//各クラスのもの
 	DebugCamera* camera = { nullptr };
 	enum Select {

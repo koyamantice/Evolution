@@ -160,6 +160,9 @@
     <ClCompile Include="SourceCode\imgui\imgui_widgets.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Obj\Actor.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -315,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\imgui\imstb_truetype.h">
       <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\Actor.h">
+      <Filter>Obj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

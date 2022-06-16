@@ -245,6 +245,7 @@
     <ClCompile Include="SourceCode\Obj\3d\Mesh.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Model.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Object3d.cpp" />
+    <ClCompile Include="SourceCode\Obj\Actor.cpp" />
     <ClCompile Include="SourceCode\Obj\camera\Camera.cpp" />
     <ClCompile Include="SourceCode\Obj\camera\DebugCamera.cpp" />
     <ClCompile Include="SourceCode\Obj\light\LightGroup.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="SourceCode\Obj\3d\Mesh.h" />
     <ClInclude Include="SourceCode\Obj\3d\Model.h" />
     <ClInclude Include="SourceCode\Obj\3d\Object3d.h" />
+    <ClInclude Include="SourceCode\Obj\Actor.h" />
     <ClInclude Include="SourceCode\Obj\camera\Camera.h" />
     <ClInclude Include="SourceCode\Obj\camera\DebugCamera.h" />
     <ClInclude Include="SourceCode\Obj\light\DirectionalLight.h" />
