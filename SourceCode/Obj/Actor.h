@@ -5,6 +5,8 @@
 #include"Object3d.h"
 #include<DirectXMath.h>
 
+class ActorComponent;
+
 class Actor 
 {
 private:
@@ -53,11 +55,14 @@ public:
 	bool Collide(Actor* actor);
 
 	//virtualにしようか悩み中
-	void Initialize(Model* model);	//初期化処理
+	void Initialize(Model* model,ActorComponent* compornent=nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Draw();	//描画処理
 	void Finalize();	//終了処理
 	//
+	//コンポーネント
+	ActorComponent* compornent = nullptr;
+
 protected:
 	std::unique_ptr<Object3d> obj;
 };

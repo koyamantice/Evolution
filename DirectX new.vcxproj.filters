@@ -124,7 +124,7 @@
     <ClCompile Include="SourceCode\System\SceneFactory.cpp">
       <Filter>System\scene</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\FrameWork\Audio.cpp">
+    <ClCompile Include="SourceCode\FrameWork\AudioManager.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\FrameWork\Framework.cpp">
@@ -161,7 +161,13 @@
       <Filter>Imgui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Obj\Actor.cpp">
-      <Filter>Obj</Filter>
+      <Filter>Obj\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\ActorComponent.cpp">
+      <Filter>Obj\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Player.cpp">
+      <Filter>User</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,7 +283,7 @@
     <ClInclude Include="SourceCode\System\BaseScene.h">
       <Filter>System\scene</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\FrameWork\Audio.h">
+    <ClInclude Include="SourceCode\FrameWork\AudioManager.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\FrameWork\Framework.h">
@@ -320,7 +326,13 @@
       <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Obj\Actor.h">
-      <Filter>Obj</Filter>
+      <Filter>Obj\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obj\ActorComponent.h">
+      <Filter>Obj\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Player.h">
+      <Filter>User</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +397,9 @@
     </Filter>
     <Filter Include="System\scene">
       <UniqueIdentifier>{b5186c93-328c-47e8-a0dd-a4d7845b97dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj\Actor">
+      <UniqueIdentifier>{f7055635-e251-4d2c-865e-88a6b7793e5c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

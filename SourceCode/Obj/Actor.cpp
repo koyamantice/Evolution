@@ -1,8 +1,9 @@
 #include"Actor.h"
 #include <SourceCode/FrameWork/collision/Collision.h>
+#include"ActorComponent.h"
+#include <memory>
 
 int Actor::ID = 0;
-
 
 bool Actor::Collide(Actor* actor) {
 	//セットポジションとのコリジョン
@@ -17,7 +18,9 @@ bool Actor::Collide(Actor* actor) {
 	}
 }
 
-void Actor::Initialize(Model* model) {
+void Actor::Initialize(Model* model, ActorComponent* compornent) {
+	this->compornent = compornent;
+	if (this->compornent) { this->compornent->Initialize(); }
 	Object3d* obj_ = new Object3d();
 	obj_->SetModel(model);
 	obj_->Initialize();
@@ -25,10 +28,12 @@ void Actor::Initialize(Model* model) {
 }
 
 void Actor::Update() {
+	if (compornent) { compornent->Update(); }
 	obj->Update();
 }
 
 void Actor::Draw() {
+	if (compornent) { compornent->Draw(); }
 	Object3d::PreDraw();
 	obj->Draw();
 }

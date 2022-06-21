@@ -72,7 +72,7 @@ void DirectXCommon::PreDraw() {
 	cmdList->OMSetRenderTargets(1, &rtvH, false, &dsvH);
 
 	//画面クリア
-	float clearColor[] = { 1.0f,1.0f, 0.0f,1.0f }; // 黄色っぽい色
+	float clearColor[] = { 0.0f,0.0f, 0.75f,1.0f }; // 青っぽい色
 	cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 

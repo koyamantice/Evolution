@@ -214,7 +214,7 @@
   <ItemGroup>
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
-    <ClCompile Include="SourceCode\FrameWork\Audio.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\AudioManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\BaseCollider.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\Collision.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\CollisionInfo.cpp" />
@@ -246,6 +246,7 @@
     <ClCompile Include="SourceCode\Obj\3d\Model.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Object3d.cpp" />
     <ClCompile Include="SourceCode\Obj\Actor.cpp" />
+    <ClCompile Include="SourceCode\Obj\ActorComponent.cpp" />
     <ClCompile Include="SourceCode\Obj\camera\Camera.cpp" />
     <ClCompile Include="SourceCode\Obj\camera\DebugCamera.cpp" />
     <ClCompile Include="SourceCode\Obj\light\LightGroup.cpp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="SourceCode\TisGame.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
+    <ClCompile Include="SourceCode\User\Player.cpp" />
     <ClCompile Include="SourceCode\User\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -268,7 +270,7 @@
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
     <ClInclude Include="SourceCode\Common\XorShift.h" />
-    <ClInclude Include="SourceCode\FrameWork\Audio.h" />
+    <ClInclude Include="SourceCode\FrameWork\AudioManager.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\BaseCollider.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\Collision.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\CollisionAttribute.h" />
@@ -304,6 +306,7 @@
     <ClInclude Include="SourceCode\Obj\3d\Model.h" />
     <ClInclude Include="SourceCode\Obj\3d\Object3d.h" />
     <ClInclude Include="SourceCode\Obj\Actor.h" />
+    <ClInclude Include="SourceCode\Obj\ActorComponent.h" />
     <ClInclude Include="SourceCode\Obj\camera\Camera.h" />
     <ClInclude Include="SourceCode\Obj\camera\DebugCamera.h" />
     <ClInclude Include="SourceCode\Obj\light\DirectionalLight.h" />
@@ -317,6 +320,7 @@
     <ClInclude Include="SourceCode\TisGame.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />
+    <ClInclude Include="SourceCode\User\Player.h" />
     <ClInclude Include="SourceCode\User\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #include "TitleScene.h"
 #include"SceneManager.h"
-#include "Audio.h"
+#include "AudioManager.h"
 #include "input.h"
 #include<string>
 #include "DebugText.h"
@@ -14,8 +14,8 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 	// モデル読み込み
-	Audio::GetInstance()->LoadSound(1, "Resources/Sound/titleBGM.wav");
-	Audio::GetInstance()->LoopWave(1, 0.12f);
+	//AudioManager::GetInstance()->LoadSound(1, "Resources/Sound/titleBGM.wav");
+	//AudioManager::GetInstance()->LoopWave(1, 0.12f);
 	//srand(NULL);
 	// ライト生成
 	lightGroup = LightGroup::Create();
@@ -30,19 +30,15 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
 	//背景スプライト生成
-	sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
-	sprite[button] = Sprite::Create(ImageManager::button, buttonPos[0]);
-	sprite[button]->SetAnchorPoint({ 0.5f,0.5f });
-	//sprite[button]->SetScale(0.4f);
-	sprite[select] = Sprite::Create(ImageManager::Tselect, { 76.0f,418.0f });
+	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
 	//スプライト生成
-	Actor* Act_[2]{};
-	Act_[Player] = new Actor(std::string("player"));
-	Act_[Player]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
+	Actor* Act_[Chr_Max]{};
+	Act_[MPlayer] = new Actor(std::string("player"));
+	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player), player);
 	Act_[Enemy] = new Actor(std::string("enemy"));
 	Act_[Enemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
 	Act_[Enemy]->SetPosition({1,0,0});
-	actor[Player].reset(Act_[Player]);
+	actor[MPlayer].reset(Act_[MPlayer]);
 	actor[Enemy].reset(Act_[Enemy]);
 }
 //開放処理
@@ -56,18 +52,16 @@ void TitleScene::Finalize() {
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	camera->Update();
-	actor[Player]->Update();
+	actor[MPlayer]->Update();
 	actor[Enemy]->Update();
 
 
 	for (int i = 0; i < Chr_Max;i++) {
 		for (int j = 1; j < Chr_Max; j++) {
-			if(i!=j){
-				if (actor[i]->Collide(actor[j].get())) {
-					int a = 0;
-					a++;
-				}
-			}
+			if (i == j) { return; }
+			if (!actor[i]->Collide(actor[j].get())) { return; }
+			int a = 0;
+			a++;
 		}
 	}
 
@@ -75,19 +69,14 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 }
 //描画
 void TitleScene::Draw(DirectXCommon* dxCommon) {
-	//ImGui::Begin("test");
-	////ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
-	//ImGui::Text("P::%d", P);
-	//ImGui::Unindent();
-	//ImGui::End();
+	ImGui::Begin("test");
+	//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
+	ImGui::Text("P::%f", buttonPos[1].x);
+	ImGui::Unindent();
+	ImGui::End();
 	Sprite::PreDraw();
 	//背景用
-	sprite[back]->Draw();
-	sprite[select]->Draw();
-	sprite[select]->Draw();
-	sprite[button]->Draw();
-
-	actor[Player]->Draw();
+	actor[MPlayer]->Draw();
 	actor[Enemy]->Draw();
 
 }

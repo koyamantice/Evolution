@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "Actor.h"
+#include "Player.h"
 
 /// <summary>
 /// タイトルシーン
@@ -30,12 +31,12 @@ public:
 private:
 	//メンバ変数
 	enum {
-		Player,
+		MPlayer,
 		Enemy,
 		Chr_Max
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
-
+	Player* player = new Player();
 	enum {
 		back,
 		button,
@@ -47,11 +48,6 @@ private:
 	Sprite* sprite[SpriteMax]{};
 	//各クラスのもの
 	DebugCamera* camera = { nullptr };
-	enum Select {
-		Start,
-		Select,
-		Exit,
-	};
 	XMFLOAT2 buttonPos[2]{
 		{ 320.0f,600.0f },
 		{ 440.0f,600.0f }

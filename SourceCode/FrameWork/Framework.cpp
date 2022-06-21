@@ -32,7 +32,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	input = Input::GetInstance();
 	input->Initialize(winApp);
 
-	audio = Audio::GetInstance();
+	audio = AudioManager::GetInstance();
 	audio->Initialize();	
 	
 	fps = FPSManager::GetInstance();
