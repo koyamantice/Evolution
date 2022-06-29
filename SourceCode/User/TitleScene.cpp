@@ -7,6 +7,7 @@
 #include"ImageManager.h"
 #include"ModelManager.h"
 #include <TisGame.h>
+#include"Player.h"
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
@@ -33,9 +34,9 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
 	//スプライト生成
 	Actor* Act_[Chr_Max]{};
-	Act_[MPlayer] = new Actor(std::string("player"));
-	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player), player);
-	Act_[Enemy] = new Actor(std::string("enemy"));
+	Act_[MPlayer] = new Player();
+	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
+	Act_[Enemy] = new Actor();
 	Act_[Enemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
 	Act_[Enemy]->SetPosition({1,0,0});
 	actor[MPlayer].reset(Act_[MPlayer]);

@@ -25,15 +25,22 @@ void Actor::Initialize(Model* model, ActorComponent* compornent) {
 	obj_->SetModel(model);
 	obj_->Initialize();
 	obj.reset(obj_);
+	OnInit();
 }
 
 void Actor::Update() {
 	if (compornent) { compornent->Update(); }
 	obj->Update();
+	OnUpda();
 }
 
 void Actor::Draw() {
 	if (compornent) { compornent->Draw(); }
 	Object3d::PreDraw();
 	obj->Draw();
+	OnDraw();
+}
+
+void Actor::Finalize() {
+	OnFinal();
 }

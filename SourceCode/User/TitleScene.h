@@ -1,7 +1,6 @@
 #pragma once
 #include "SceneManager.h"
 #include "Actor.h"
-#include "Player.h"
 
 /// <summary>
 /// タイトルシーン
@@ -36,7 +35,6 @@ private:
 		Chr_Max
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
-	Player* player = new Player();
 	enum {
 		back,
 		button,

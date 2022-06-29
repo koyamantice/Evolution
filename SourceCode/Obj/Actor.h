@@ -11,7 +11,14 @@ class Actor
 {
 private:
 	static int ID;
-
+protected: // エイリアス
+// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 protected:
 	//名前
 	std::string name;
@@ -25,9 +32,7 @@ private:
 	//削除
 	bool isRemove = false;
 public:
-	Actor(const std::string& Name) { SetName(Name); SetTag(Name); id = ID++; }
-
-	virtual ~Actor() {}
+	virtual ~Actor() = default;
 
 	void SetPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
@@ -59,10 +64,14 @@ public:
 	void Update();		//更新処理
 	void Draw();	//描画処理
 	void Finalize();	//終了処理
-	//
-	//コンポーネント
-	ActorComponent* compornent = nullptr;
+
+	virtual void OnInit() {};
+	virtual void OnUpda() {};
+	virtual void OnDraw() {};
+	virtual void OnFinal() {};
 
 protected:
 	std::unique_ptr<Object3d> obj;
+	//コンポーネント
+	ActorComponent* compornent = nullptr;
 };

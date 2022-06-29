@@ -18,8 +18,6 @@ class SceneManager;
 /// シーン規定
 /// </summary>
 class BaseScene {
-public:
-	const bool& GetEnd() { return end; }
 protected:
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -28,7 +26,6 @@ protected:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 protected:
-	Input* input = Input::GetInstance();
 	LightGroup* lightGroup = nullptr;
 	float ambientColor0[3] = { 1,1,1 };
 
@@ -57,36 +54,7 @@ protected:
 	XMFLOAT3 cameratargetPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Aftereyepos;
 	XMFLOAT3 Aftertargetpos;
-	float frame = 0.0f;
-	int Interval = 0;
-	bool end = false;
-	int EndNumber = 0;
-	int EndTimer = 0;
-	bool gameover = false;
-	int overNumber = 0;
-	int overTimer = 0;
-	float overframe = 0.0f;
-	float nameframe = 0.0f;
-	float clearframe = 0.0f;
-	//スキップのための演出
-	bool Skip = false;
-	int SkipTimer = 0;
-	//スプライトやテクスチャ
-	Sprite* WhiteFilter = nullptr;
-	Sprite* BlackFilter = nullptr;
-	Sprite* bossName = nullptr;
-	Sprite* SkipSprite = nullptr;
-	Sprite* GameOverSprite = nullptr;
-	Sprite* GameClearSprite = nullptr;
-	XMFLOAT4 WhiteColor = { 1.0f,1.0f,1.0f,0.0f };
-	XMFLOAT4 BlackColor = { 0.0f,0.0f,0.0f,1.0f };
-	XMFLOAT4 GameOverColor = { 1.0f,1.0f,1.0f,0.0f };
-	XMFLOAT2 Skippos = { 640.0f,360.0f, };
-	XMFLOAT2 namePos = { 0.0f,0.0f };
-	XMFLOAT2 overPos = { 240.0f,140.0f };
-	XMFLOAT2 clearSize = { 0.0f, 0.0f };
 public:
-
 	virtual ~BaseScene()=default;
 
 	/// <summary>

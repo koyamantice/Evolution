@@ -1,16 +1,13 @@
 #pragma once
-#include"ActorComponent.h"
-#include <Input.h>
+#include"Actor.h"
 
-class Player: public ActorComponent {
-public :
-	void OnInitialize();	//初期化処理(継承版)
-	void OnUpdate();	//更新処理(継承版)
-	void OnFinalize();	//終了処理(継承版)
-	void OnDraw();	//描画処理(継承版)
-	void OnAttached();	//ゲームオブジェクトにアタッチされたときに呼ばれる関数
-	Input* input = Input::GetInstance();
-	
+class Player :public Actor {
+public:
+	Player(){};
+	void OnInit()override {};
+	void OnUpda()override {};
+	void OnDraw()override {};
+	void OnFinal()override {};
 
 
 };
