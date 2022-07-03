@@ -35,21 +35,10 @@ private:
 		Chr_Max
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
-	enum {
-		back,
-		button,
-		select,
-		ground,
-		tutorial,
-		SpriteMax
-	};
-	Sprite* sprite[SpriteMax]{};
+	std::unique_ptr<Object3d> skydome{};
+
 	//ŠeƒNƒ‰ƒX‚Ì‚à‚Ì
 	DebugCamera* camera = { nullptr };
-	XMFLOAT2 buttonPos[2]{
-		{ 320.0f,600.0f },
-		{ 440.0f,600.0f }
-	};
 	int SelectNumber = 0;
 };
 

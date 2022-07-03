@@ -15,25 +15,7 @@ public:
 
 	enum ModelName {
 		Player,
-		EHub,
-		Enemy,
-		Fork,
-		Water,
-		Kyusu,
-		LeftShoes,
-		RightShoes,
-		Pastel,
-		Platform,
 		skydome,
-		Piyopiyo,
-		Particle,
-		Mill,
-		SiroMotti,
-		LeftHand_Open,
-		LeftHand_Close,
-		RightHand_Open,
-		RightHand_Close,
-		Motti_Bullet
 	};
 	enum FBXName {
 		MottiMove,

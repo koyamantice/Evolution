@@ -11,6 +11,8 @@ ModelManager* ModelManager::GetIns() {
 
 void ModelManager::Initialize() {
 	LoadModel(Player, "chr_knight");
+	LoadModel(skydome, "skydome");
+
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName) {
