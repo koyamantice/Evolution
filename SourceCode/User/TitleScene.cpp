@@ -9,27 +9,7 @@
 #include <TisGame.h>
 #include"Player.h"
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
-	// カメラ生成
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
-	Texture::SetCamera(camera);
-	// 3Dオブジェクトにカメラをセット
-	Object3d::SetCamera(camera);
-	// モデル読み込み
-	//AudioManager::GetInstance()->LoadSound(1, "Resources/Sound/titleBGM.wav");
-	//AudioManager::GetInstance()->LoopWave(1, 0.12f);
-	//srand(NULL);
-	// ライト生成
-	lightGroup = LightGroup::Create();
-	// 3Dオブエクトにライトをセット
-	Object3d::SetLightGroup(lightGroup);
-
-	//この順番で書かないと例外スローになります
-	// デバイスをセット
-	FBXObject3d::SetDevice(dxCommon->GetDev());
-	// カメラをセット
-	FBXObject3d::SetCamera(camera);
-	// グラフィックスパイプライン生成
-	FBXObject3d::CreateGraphicsPipeline();
+	InitCommon(dxCommon);
 	//背景スプライト生成
 	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
 	//スプライト生成
@@ -42,6 +22,12 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
 	Sky->Initialize();
 	skydome.reset(Sky);
+
+	Object3d* Ground{};
+	Ground = new Object3d();
+	Ground->SetModel(ModelManager::GetIns()->GetModel(ModelManager::Ground));
+	Ground->Initialize();
+	ground.reset(Ground);
 	camera->SetTarget(actor[MPlayer]->GetPosition());
 }
 //開放処理
@@ -57,6 +43,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 	camera->Update();
 	actor[MPlayer]->Update();
 	skydome->Update();
+	ground->Update();
 	if (input->PushKey(DIK_0)) {
 		int a = 0;
 		a++;
@@ -72,6 +59,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	//Sprite::PreDraw();
 	Object3d::PreDraw();
 	skydome->Draw();
+	ground->Draw();
 	//背景用
 	actor[MPlayer]->Draw();
 }

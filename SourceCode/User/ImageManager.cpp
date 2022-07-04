@@ -7,7 +7,7 @@ ImageManager* ImageManager::GetIns() {
 
 void ImageManager::Load2D() {
 	// テクスチャ読み込み
-	//Sprite::LoadTexture(0, L"Resources/2d/PlayerHP.png");
+	Sprite::LoadTexture(Test, L"Resources/2d/Test.png");
 }
 
 void ImageManager::LoadTex2D() {

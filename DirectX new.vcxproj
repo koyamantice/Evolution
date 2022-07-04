@@ -254,6 +254,7 @@
     <ClCompile Include="SourceCode\Obj\light\PointLight.cpp" />
     <ClCompile Include="SourceCode\Obj\light\SpotLight.cpp" />
     <ClCompile Include="SourceCode\System\AbstractSceneFactory.cpp" />
+    <ClCompile Include="SourceCode\System\BaseScene.cpp" />
     <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />

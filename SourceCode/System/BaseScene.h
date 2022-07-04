@@ -27,6 +27,9 @@ protected:
 	using XMMATRIX = DirectX::XMMATRIX;
 protected:
 	LightGroup* lightGroup = nullptr;
+	//各クラスのもの
+	DebugCamera* camera = { nullptr };
+
 	float ambientColor0[3] = { 1,1,1 };
 
 	// 光線方向初期値
@@ -60,7 +63,13 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	virtual void Initialize(DirectXCommon* dxCommon) =0;
+	virtual void Initialize(DirectXCommon* dxCommon) = 0;
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	void InitCommon(DirectXCommon* dxCommon);
+
 	/// <summary>
 	/// 終了
 	/// </summary>

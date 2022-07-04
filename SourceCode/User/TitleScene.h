@@ -36,9 +36,7 @@ private:
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
 	std::unique_ptr<Object3d> skydome{};
-
-	//ŠeƒNƒ‰ƒX‚Ì‚à‚Ì
-	DebugCamera* camera = { nullptr };
+	std::unique_ptr<Object3d> ground{};
 	int SelectNumber = 0;
 };
 

@@ -169,6 +169,7 @@
     <ClCompile Include="SourceCode\User\Player.cpp">
       <Filter>User</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\System\BaseScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />

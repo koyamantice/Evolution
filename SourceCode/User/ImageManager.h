@@ -13,6 +13,7 @@ private:
 public:
 
 	enum texName {
+		Test,
 	};
 	enum tex2dName {
 	};

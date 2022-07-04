@@ -16,6 +16,7 @@ public:
 	enum ModelName {
 		Player,
 		skydome,
+		Ground,
 	};
 	enum FBXName {
 		MottiMove,

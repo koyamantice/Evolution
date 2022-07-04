@@ -12,6 +12,7 @@ ModelManager* ModelManager::GetIns() {
 void ModelManager::Initialize() {
 	LoadModel(Player, "chr_knight");
 	LoadModel(skydome, "skydome");
+	LoadModel(Ground, "ground");
 
 }
 
