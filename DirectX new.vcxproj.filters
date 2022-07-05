@@ -170,6 +170,9 @@
       <Filter>User</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\BaseScene.cpp" />
+    <ClCompile Include="SourceCode\User\PlayScene.cpp">
+      <Filter>User\プレイシーン</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -335,6 +338,9 @@
     <ClInclude Include="SourceCode\User\Player.h">
       <Filter>User</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\User\PlayScene.h">
+      <Filter>User\プレイシーン</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -401,6 +407,9 @@
     </Filter>
     <Filter Include="Obj\Actor">
       <UniqueIdentifier>{f7055635-e251-4d2c-865e-88a6b7793e5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\プレイシーン">
+      <UniqueIdentifier>{15917c61-7c40-4156-8fc8-aaeb3b6207da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

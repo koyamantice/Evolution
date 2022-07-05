@@ -6,7 +6,7 @@
 /// タイトルシーン
 /// </summary>
 
-class TitleScene : public BaseScene {
+class PlayScene : public BaseScene {
 public:
 
 	/// <summary>
@@ -30,9 +30,13 @@ public:
 private:
 	//メンバ変数
 	enum {
-		Button,
-		SpriteMax,
+		MPlayer,
+		Enemy,
+		Chr_Max
 	};
-	std::unique_ptr<Sprite> UI[SpriteMax];
+	std::unique_ptr<Actor> actor[Chr_Max]{};
+	std::unique_ptr<Object3d> skydome{};
+	std::unique_ptr<Object3d> ground{};
+	int SelectNumber = 0;
 };
 
