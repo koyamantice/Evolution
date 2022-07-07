@@ -16,6 +16,7 @@ public:
 		Test,
 	};
 	enum tex2dName {
+		Lock,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

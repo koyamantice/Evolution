@@ -54,7 +54,7 @@ public: // 静的メンバ関数
 	/// 描画後処理
 	static void PostDraw();
 	//テクスチャ生成
-	static Texture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
+	static Texture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size={1.0f,1.0f,1.0f}, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
 	/// 視点座標の取得
 	static const XMFLOAT3& GetEye() { return eye; }
 
@@ -151,7 +151,7 @@ private:// 静的メンバ関数
 public: // メンバ関数
 	void TextureCreate();
 	//コンストラクタ
-	Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
+	Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size = { 1.0f,1.0f,1.0f }, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
 	bool Initialize();
 	/// 毎フレーム処理
 	void Update();

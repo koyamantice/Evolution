@@ -24,7 +24,7 @@ protected:
 	std::string name;
 	//付与されているタグへのポインタ
 	std::string tag = "None";
-private:
+protected:
 	//オブジェクト識別番号(絶対に被ることはない数字)
 	int id;
 	//機能中か

@@ -3,6 +3,9 @@
 
 
 
+Bullet::Bullet() {
+}
+
 void Bullet::OnInit() {
 }
 

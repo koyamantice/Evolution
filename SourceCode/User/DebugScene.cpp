@@ -8,6 +8,12 @@
 #include"ModelManager.h"
 #include <TisGame.h>
 #include"Player.h"
+
+
+#include <string>
+#include <fstream>
+#include <sstream>
+
 void DebugScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
@@ -43,6 +49,15 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 			Select--;
 		}
 	}
+	if (Select==0) {
+		if (input->TriggerKey(DIK_0)) {
+			save = true;
+		}
+	}
+	if (save) {
+		Save();
+		save = false;
+	}
 	if (input->TriggerKey(DIK_D)) {
 		if (Select == 0) {
 			Select++;
@@ -55,8 +70,8 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 void DebugScene::Draw(DirectXCommon* dxCommon) {
 	//mGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.2f, 1.0f));
 	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 1.0f));
-	ImGui::SetNextWindowPos(ImVec2(980, 0));
-	ImGui::SetNextWindowSize(ImVec2(280, 300));
+	ImGui::SetNextWindowPos(ImVec2(980, 0),1);
+	ImGui::SetNextWindowSize(ImVec2(280, 300),1);
 	ImGui::Begin("test");
 	ImGui::SliderFloat("rotation.x", &rot.x, 0, 360);
 	ImGui::SliderFloat("rotation.y", &rot.y, 0, 360);
@@ -67,7 +82,18 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 		ImGui::SetNextWindowPos(ImVec2(1000, 300));
 		ImGui::SetNextWindowSize(ImVec2(350, 300));
 		ImGui::Begin("parameter");
-		//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
+		ImGui::SliderInt("hp", &hp, 0, 360);
+		ImGui::SliderFloat("vel", &vel, 0, 5);
+		if (ImGui::Button("SAVE", ImVec2(50, 40))) {
+			save = true;
+		}
+		if (ImGui::Button("PlayScene", ImVec2(100, 30))) {
+			SceneManager::GetInstance()->ChangeScene("PLAY");
+		}
+		if (ImGui::Button("TitleScene", ImVec2(100, 30))) {
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
+
 		ImGui::Unindent();
 		ImGui::End();
 	}	if (Select == 1) {
@@ -81,5 +107,16 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 	//Sprite::PreDraw();
 	//”wŒi—p
 	actor[Select]->Draw();
+}
+
+void DebugScene::Save() {
+	std::ofstream file("Resources/csv/status.csv");
+	file << "HP" << ',';
+	file << hp << ',';
+	file << std::endl;
+	file << "VEL" << ',';
+	file << vel << ',';
+	file << std::endl;
+	file.close();
 }
 

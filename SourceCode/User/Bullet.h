@@ -3,7 +3,7 @@
 class Player;
 class Bullet : public Actor{
 public:
-	Bullet() {};
+	Bullet();
 	~Bullet(){};
 
 private:

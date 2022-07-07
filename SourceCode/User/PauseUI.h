@@ -21,10 +21,14 @@ public:
 private:
 	enum {
 		Sheet,
+		TitleBack,
+		Option,
+		ZBack,
 		Max
 	};
 	std::unique_ptr<Sprite> UI[Max];
 	bool ease = false;
 	float frame = 0;
-	XMFLOAT2 pos={640,-360};
+	XMFLOAT2 pos={640,360};
+	XMFLOAT2 size = { 0,0 };
 };

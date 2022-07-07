@@ -27,6 +27,7 @@ public:
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
 
+	void Save();
 private:
 	//ƒƒ“ƒo•Ï”
 	enum {
@@ -36,6 +37,9 @@ private:
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
 	XMFLOAT3 rot;
+	int hp;
+	float vel;
 	int Select = 0;
+	bool save = false;
 };
 

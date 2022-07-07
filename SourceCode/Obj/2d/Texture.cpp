@@ -98,7 +98,7 @@ Texture* Texture::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLO
 		// テクスチャ情報取得
 		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
 		// スプライトのサイズをテクスチャのサイズに設定
-		size = { 10,10, 10 };
+		
 	}
 
 	// Spriteのインスタンスを生成

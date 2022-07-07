@@ -68,15 +68,6 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 }
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
-	ImGui::Begin("test");
-	//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
-	ImGui::Unindent();
-	ImGui::End();
-	ImGui::Begin("tett");
-	//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
-	ImGui::Unindent();
-	ImGui::End();
-	//Sprite::PreDraw();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
