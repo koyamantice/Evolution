@@ -60,7 +60,7 @@ void Player::Move() {
 }
 
 void Player::Shot() {
-	if (input->TriggerKey(DIK_SPACE)||input->PushButton(input->Button_A)) {
+	if (input->TriggerKey(DIK_SPACE)||input->TriggerButton(input->Button_A)) {
 		std::unique_ptr<Bullet> newBullet = std::make_unique<Bullet>();
 		newBullet->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole));
 		newBullet->SetPosition(obj->GetPosition());
