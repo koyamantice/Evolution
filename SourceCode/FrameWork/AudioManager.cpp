@@ -115,7 +115,7 @@ void AudioManager::PlayWave(const char* filename,const float Volume) {
 	}
 
 	// Formatチャンクの読み込み
-	FormatChunk format;
+	FormatChunk format{};
 	file.read((char*)&format, sizeof(format));
 
 	// Dataチャンクの読み込み

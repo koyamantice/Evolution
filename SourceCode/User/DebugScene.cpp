@@ -64,8 +64,8 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 	ImGui::Unindent();
 	ImGui::End();
 	if (Select==0) {
-		ImGui::SetNextWindowPos(ImVec2(980, 300));
-		ImGui::SetNextWindowSize(ImVec2(280, 300));
+		ImGui::SetNextWindowPos(ImVec2(1000, 300));
+		ImGui::SetNextWindowSize(ImVec2(350, 300));
 		ImGui::Begin("parameter");
 		//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
 		ImGui::Unindent();
