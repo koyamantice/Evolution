@@ -17,6 +17,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Act_[MPlayer] = new Player();
 	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
 	actor[MPlayer].reset(Act_[MPlayer]);
+
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
@@ -28,6 +29,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Ground->SetModel(ModelManager::GetIns()->GetModel(ModelManager::Ground));
 	Ground->Initialize();
 	ground.reset(Ground);
+
+
+	PauseUI* pause_ui = new PauseUI();
+	pauseUi.reset(pause_ui);
 	camera->SetTarget(actor[MPlayer]->GetPosition());
 }
 //ŠJ•úˆ—
@@ -41,6 +46,17 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	camera->SetTarget(XMFLOAT3{plaPos.x,plaPos.y,plaPos.z});
 	camera->SetEye(XMFLOAT3{ plaPos.x,plaPos.y+10.0f,plaPos.z+10.0f});
 	camera->Update();
+	if (pause) {
+		pauseUi->Update();
+		if (input->TriggerButton(input->Start)) {
+			pauseUi->Reset();
+			pause = false;
+		}
+		return;
+	}
+	if (input->TriggerButton(input->Start)) {
+		pause = true;
+	}
 	actor[MPlayer]->Update();
 	skydome->Update();
 	ground->Update();
@@ -56,11 +72,18 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
 	ImGui::Unindent();
 	ImGui::End();
+	ImGui::Begin("tett");
+	//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
+	ImGui::Unindent();
+	ImGui::End();
 	//Sprite::PreDraw();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
 	//”wŒi—p
 	actor[MPlayer]->Draw();
+	if (pause) {
+		pauseUi->Draw();
+	}
 }
 

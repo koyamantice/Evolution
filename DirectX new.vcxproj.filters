@@ -173,6 +173,15 @@
     <ClCompile Include="SourceCode\User\PlayScene.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\Bullet.cpp">
+      <Filter>User</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\DebugScene.cpp">
+      <Filter>User\デバック</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\PauseUI.cpp">
+      <Filter>User\ポーズメニュー</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -341,6 +350,15 @@
     <ClInclude Include="SourceCode\User\PlayScene.h">
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\User\Bullet.h">
+      <Filter>User</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\DebugScene.h">
+      <Filter>User\デバック</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\PauseUI.h">
+      <Filter>User\ポーズメニュー</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -410,6 +428,12 @@
     </Filter>
     <Filter Include="User\プレイシーン">
       <UniqueIdentifier>{15917c61-7c40-4156-8fc8-aaeb3b6207da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\デバック">
+      <UniqueIdentifier>{d6a6130d-88fb-44e9-b239-382c7f4719a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\ポーズメニュー">
+      <UniqueIdentifier>{0012f487-6006-4812-b40d-62da62a658da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

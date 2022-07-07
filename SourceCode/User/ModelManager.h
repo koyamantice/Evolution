@@ -17,6 +17,7 @@ public:
 		Player,
 		skydome,
 		Ground,
+		hole,
 	};
 	enum FBXName {
 		MottiMove,

@@ -29,7 +29,7 @@ protected:
 	LightGroup* lightGroup = nullptr;
 	//各クラスのもの
 	DebugCamera* camera = { nullptr };
-
+	bool pause = false;
 	float ambientColor0[3] = { 1,1,1 };
 
 	// 光線方向初期値

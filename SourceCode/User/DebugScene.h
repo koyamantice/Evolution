@@ -1,13 +1,12 @@
 #pragma once
 #include "SceneManager.h"
 #include "Actor.h"
-#include"PauseUI.h"
 
 /// <summary>
 /// タイトルシーン
 /// </summary>
 
-class PlayScene : public BaseScene {
+class DebugScene : public BaseScene {
 public:
 
 	/// <summary>
@@ -36,9 +35,7 @@ private:
 		Chr_Max
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
-	std::unique_ptr<Object3d> skydome{};
-	std::unique_ptr<Object3d> ground{};
-	std::unique_ptr<PauseUI> pauseUi{};
-	int SelectNumber = 0;
+	XMFLOAT3 rot;
+	int Select = 0;
 };
 

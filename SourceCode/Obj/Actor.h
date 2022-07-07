@@ -33,9 +33,12 @@ private:
 	bool isRemove = false;
 public:
 	virtual ~Actor() = default;
-
+	//À•W‚ÌŽæ“¾
 	void SetPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
+	//Šp“x‚ÌŽæ“¾
+	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
+	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
 
 	//IDŽæ“¾
 	const int& GetID()const { return id; }

@@ -33,6 +33,10 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 	if (input->PushKey(DIK_SPACE)) {
 		SceneManager::GetInstance()->ChangeScene("PLAY");
 	}
+	if (input->PushKey(DIK_RETURN)) {
+		SceneManager::GetInstance()->ChangeScene("DEBUG");
+	}
+
 }
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {

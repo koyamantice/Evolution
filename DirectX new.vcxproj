@@ -258,8 +258,11 @@
     <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />
+    <ClCompile Include="SourceCode\User\Bullet.cpp" />
+    <ClCompile Include="SourceCode\User\DebugScene.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
+    <ClCompile Include="SourceCode\User\PauseUI.cpp" />
     <ClCompile Include="SourceCode\User\Player.cpp" />
     <ClCompile Include="SourceCode\User\PlayScene.cpp" />
     <ClCompile Include="SourceCode\User\TitleScene.cpp" />
@@ -321,8 +324,11 @@
     <ClInclude Include="SourceCode\System\DirectXCommon.h" />
     <ClInclude Include="SourceCode\System\SceneFactory.h" />
     <ClInclude Include="SourceCode\TisGame.h" />
+    <ClInclude Include="SourceCode\User\Bullet.h" />
+    <ClInclude Include="SourceCode\User\DebugScene.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />
+    <ClInclude Include="SourceCode\User\PauseUI.h" />
     <ClInclude Include="SourceCode\User\Player.h" />
     <ClInclude Include="SourceCode\User\PlayScene.h" />
     <ClInclude Include="SourceCode\User\TitleScene.h" />
