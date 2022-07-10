@@ -32,7 +32,7 @@ private:
 	//ƒƒ“ƒo•Ï”
 	enum {
 		MPlayer,
-		Enemy,
+		MEnemy,
 		Chr_Max
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};

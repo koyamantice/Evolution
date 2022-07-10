@@ -15,21 +15,21 @@ PauseUI::PauseUI() {
 	UI_[TitleBack]->SetAnchorPoint({ 0.5f,0.5f });
 	UI_[TitleBack]->SetPosition({ pos.x,pos.y - 110 });
 	UI_[TitleBack]->SetSize({ 440,80 });
-	UI_[TitleBack]->SetColor({1,0,0,1});
+	UI_[TitleBack]->SetColor({1,1,0,1});
 	UI[TitleBack].reset(UI_[TitleBack]);
 	
 	UI_[Option] = Sprite::Create(ImageManager::Test, { 0.0f,0.0f });
 	UI_[Option]->SetAnchorPoint({ 0.5f,0.5f });
 	UI_[Option]->SetPosition(pos);
 	UI_[Option]->SetSize({440,80});
-	UI_[Option]->SetColor({ 0,1,0,1 });
+	UI_[Option]->SetColor({ 0,1,1,1 });
 	UI[Option].reset(UI_[Option]);
 
 	UI_[ZBack] = Sprite::Create(ImageManager::Test, { 0.0f,0.0f });
 	UI_[ZBack]->SetAnchorPoint({ 0.5f,0.5f });
 	UI_[ZBack]->SetPosition({ pos.x,pos.y + 110 });
 	UI_[ZBack]->SetSize({ 440,80 });
-	UI_[ZBack]->SetColor({ 0,0,1,1 });
+	UI_[ZBack]->SetColor({ 1,0,1,1 });
 	UI[ZBack].reset(UI_[ZBack]);
 	ease = true;
 }

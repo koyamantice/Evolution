@@ -8,6 +8,8 @@
 #include"ModelManager.h"
 #include <TisGame.h>
 #include"Player.h"
+#include"Enemy.h"
+
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
@@ -17,6 +19,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Act_[MPlayer] = new Player();
 	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
 	actor[MPlayer].reset(Act_[MPlayer]);
+
+	Act_[MEnemy] = new Enemy();
+	Act_[MEnemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy));
+	actor[MEnemy].reset(Act_[MEnemy]);
+
 
 	Object3d* Sky{};
 	Sky = new Object3d();
@@ -54,10 +61,13 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 		return;
 	}
-	if (input->TriggerButton(input->Start)) {
+	if (input->TriggerButton(input->Start)||
+		input->TriggerKey(DIK_1)) {
 		pause = true;
 	}
-	actor[MPlayer]->Update();
+	for (int i = 0; i < Chr_Max; i++) {
+		actor[i]->Update();
+	}
 	skydome->Update();
 	ground->Update();
 	if (input->PushKey(DIK_0)) {
@@ -72,7 +82,9 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	skydome->Draw();
 	ground->Draw();
 	//”wŒi—p
-	actor[MPlayer]->Draw();
+	for (int i = 0; i < Chr_Max;i++) {
+		actor[i]->Draw();
+	}
 	if (pause) {
 		pauseUi->Draw();
 	}

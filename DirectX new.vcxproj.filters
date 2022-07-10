@@ -166,21 +166,24 @@
     <ClCompile Include="SourceCode\Obj\ActorComponent.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\Player.cpp">
-      <Filter>User</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\System\BaseScene.cpp" />
     <ClCompile Include="SourceCode\User\PlayScene.cpp">
       <Filter>User\プレイシーン</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\User\Bullet.cpp">
-      <Filter>User</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\DebugScene.cpp">
       <Filter>User\デバック</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\PauseUI.cpp">
       <Filter>User\ポーズメニュー</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Bullet.cpp">
+      <Filter>User\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Player.cpp">
+      <Filter>User\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Enemy.cpp">
+      <Filter>User\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,20 +347,23 @@
     <ClInclude Include="SourceCode\Obj\ActorComponent.h">
       <Filter>Obj\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\Player.h">
-      <Filter>User</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\PlayScene.h">
       <Filter>User\プレイシーン</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\User\Bullet.h">
-      <Filter>User</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\DebugScene.h">
       <Filter>User\デバック</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\PauseUI.h">
       <Filter>User\ポーズメニュー</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Bullet.h">
+      <Filter>User\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Player.h">
+      <Filter>User\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Enemy.h">
+      <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -434,6 +440,12 @@
     </Filter>
     <Filter Include="User\ポーズメニュー">
       <UniqueIdentifier>{0012f487-6006-4812-b40d-62da62a658da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\Player">
+      <UniqueIdentifier>{d7e0ad70-567d-4790-8c47-3debf3fd1da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\Enemy">
+      <UniqueIdentifier>{2905ce30-6a01-419b-b653-c07349da6df2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

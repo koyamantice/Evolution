@@ -11,6 +11,7 @@ ModelManager* ModelManager::GetIns() {
 
 void ModelManager::Initialize() {
 	LoadModel(Player, "chr_knight");
+	LoadModel(Enemy, "chr_sword");
 	LoadModel(skydome, "skydome");
 	LoadModel(Ground, "ground");
 	LoadModel(hole, "hole");

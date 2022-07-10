@@ -15,6 +15,7 @@ public:
 
 	enum ModelName {
 		Player,
+		Enemy,
 		skydome,
 		Ground,
 		hole,
