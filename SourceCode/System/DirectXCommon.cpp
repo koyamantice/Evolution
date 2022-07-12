@@ -14,6 +14,8 @@ void DirectXCommon::Finalize()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+
 }
 
 void DirectXCommon::Initialize(WinApp* winApp) {
@@ -377,5 +379,14 @@ bool DirectXCommon::InitImgui()
 	}
 
 	return true;
+}
+
+void DirectXCommon::Reset() {
+	ID3D12DebugDevice* debugInterface;
+
+	if (SUCCEEDED(dev->QueryInterface(&debugInterface))) {
+		debugInterface->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
+		debugInterface->Release();
+	}
 }
 

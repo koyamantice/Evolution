@@ -47,7 +47,7 @@ public:
 	//Imgui‰Šú‰»
 	bool InitImgui();
 
-
+	void Reset();
 	ID3D12Device* GetDev() { return dev.Get(); }
 
 	ID3D12GraphicsCommandList* GetCmdList() { return cmdList.Get(); }

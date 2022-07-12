@@ -28,7 +28,15 @@ public:
 	/// •`‰æ
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
-
+private:
+	/// <summary>
+	///	ƒJƒƒ‰ü‚è
+	/// </summary>
+	void CameraUpda();
+	float angle = 0;
+	const float PI=3.1452f;
+	XMFLOAT2 distance={0,10};
+	XMFLOAT2 dis = { 0,15 };
 private:
 	//ƒƒ“ƒo•Ï”
 	enum {
@@ -36,10 +44,14 @@ private:
 		MEnemy,
 		Chr_Max
 	};
+
 	std::unique_ptr<Actor> actor[Chr_Max]{};
-	std::unique_ptr<Object3d> skydome{};
+	std::unique_ptr<TouchableObject> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};
-	int SelectNumber = 0;
+	
+
+
+
 };
 

@@ -39,7 +39,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	fps->Init();
 	//スプライト関係
 	// スプライト静的初期化
-	Sprite::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(),WinApp::window_width, WinApp::window_height);
+	Sprite::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 
 	//const int debugTextTexNumber = 0;
 	// デバッグテキスト用テクスチャ読み込み
@@ -70,6 +70,7 @@ void Framework::Finalize() {
 	SceneManager::GetInstance()->Finalize();
 	delete sceneFactory_;
 	dxcommon->Finalize();
+	dxcommon->Reset();
 	delete dxcommon;
 	winApp->Finalize();
 	delete winApp;

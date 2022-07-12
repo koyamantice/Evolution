@@ -9,6 +9,7 @@
 #include <TisGame.h>
 #include"Player.h"
 #include"Enemy.h"
+#include <SourceCode/Common/Easing.h>
 
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
@@ -25,10 +26,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	actor[MEnemy].reset(Act_[MEnemy]);
 
 
-	Object3d* Sky{};
-	Sky = new Object3d();
-	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	Sky->Initialize();
+	TouchableObject* Sky{};
+	Sky = new TouchableObject();
+	//Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	Sky->Initialize(ModelManager::GetIns()->GetModel(ModelManager::skydome));
 	skydome.reset(Sky);
 
 	TouchableObject* Ground{};
@@ -48,10 +49,10 @@ void PlayScene::Finalize() {
 //XV
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	XMFLOAT3 plaPos = actor[MPlayer]->GetPosition();
-	camera->SetTarget(XMFLOAT3{plaPos.x,plaPos.y,plaPos.z});
-	camera->SetEye(XMFLOAT3{ plaPos.x,plaPos.y+10.0f,plaPos.z+10.0f});
-	camera->Update();
+	CameraUpda();
+	if (input->TriggerButton(input->Button_Y)) {
+		SceneManager::GetInstance()->ChangeScene("DEBUG");
+	}
 	if (pause) {
 		pauseUi->Update();
 		if (input->TriggerButton(input->Start)) {
@@ -77,6 +78,15 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 }
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
+	XMFLOAT3 rot= actor[MPlayer]->GetRotation();
+	ImGui::Begin("camera");
+	ImGui::SliderFloat("rotation", &angle, -360, 360);
+	ImGui::SliderFloat("rotation.x", &distance.x, -360, 360);
+	ImGui::SliderFloat("rotation.y", &distance.y, -360, 360);
+	ImGui::SliderFloat("rot", &dis.x, -360, 360);
+	ImGui::SliderFloat("rot", &dis.y, -360, 360);
+	ImGui::SliderFloat("rot", &rot.y, -360, 360);
+	ImGui::End();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -87,5 +97,33 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	if (pause) {
 		pauseUi->Draw();
 	}
+}
+
+void PlayScene::CameraUpda() {
+	Input* input = Input::GetInstance();
+	XMFLOAT3 plaPos = actor[MPlayer]->GetPosition();
+if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))){
+	if (input->PushButton(input->Button_RB)) {
+		angle-=1;
+	}
+	if (input->PushButton(input->Button_LB)) {
+		angle+=1;
+	}
+
+	if (input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB))) {
+		angle = actor[MPlayer]->GetRotation().y;
+	}
+
+	actor[MPlayer]->SetAngle(angle);
+	dis.x=sinf(angle * (PI / 180)) * 15.0f;
+	dis.y=cosf(angle*(PI/180)) * 15.0f;
+}
+
+distance.x=Ease(In,Quad,0.5f,distance.x,dis.x);
+distance.y=Ease(In,Quad,0.5f,distance.y,dis.y);
+
+	camera->SetTarget(XMFLOAT3{ plaPos.x,plaPos.y,plaPos.z });
+	camera->SetEye(XMFLOAT3{ plaPos.x+distance.x,plaPos.y + 10.0f,plaPos.z + distance.y });
+	camera->Update();
 }
 

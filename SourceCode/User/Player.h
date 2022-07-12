@@ -5,6 +5,7 @@
 #include"Bullet.h"
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
+#include<DirectXMath.h>
 
 class Player :public Actor {
 public:
@@ -27,6 +28,7 @@ private:
 	void Shot();
 
 	void ContactObj();
+	XMMATRIX rot2;
 
 	float hp=0;
 	float vel = 0;

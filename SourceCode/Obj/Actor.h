@@ -61,6 +61,8 @@ public:
 	bool GetIsRemove() { return isRemove; }
 	
 	bool Collide(Actor* actor);
+//
+	void SetAngle(const float& angle) { this->angle = angle; }
 
 	//virtualにしようか悩み中
 	void Initialize(Model* model,ActorComponent* compornent=nullptr);	//初期化処理
@@ -75,6 +77,8 @@ public:
 
 protected:
 	std::unique_ptr<Object3d> obj;
+
+	float angle = 0;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;
 };

@@ -30,10 +30,10 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 		int a = 0;
 		a++;
 	}
-	if (input->PushKey(DIK_SPACE)) {
+	if (input->PushKey(DIK_SPACE)||input->PushButton(input->Button_A)) {
 		SceneManager::GetInstance()->ChangeScene("PLAY");
 	}
-	if (input->PushKey(DIK_RETURN)) {
+	if (input->PushKey(DIK_RETURN) || input->PushButton(input->Button_B)) {
 		SceneManager::GetInstance()->ChangeScene("DEBUG");
 	}
 

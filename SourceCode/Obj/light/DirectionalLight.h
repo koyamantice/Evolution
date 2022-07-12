@@ -54,13 +54,13 @@ public: // メンバ関数
 	/// 有効フラグをセット
 	/// </summary>
 	/// <param name="active">有効フラグ</param>
-	inline void SetActive(bool active) { this->active = active; }
+	inline void SetActive(const bool& active) { this->active = active; }
 
 	/// <summary>
 	/// 有効チェック
 	/// </summary>
 	/// <returns>有効フラグ</returns>
-	inline bool IsActive() { return active; }
+	inline const bool& IsActive() { return active; }
 
 private: // メンバ変数
 	// ライト方向（単位ベクトル）

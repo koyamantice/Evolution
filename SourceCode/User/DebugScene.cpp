@@ -70,6 +70,9 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 			Select++;
 		}
 	}
+	if (input->TriggerButton(input->Select)) {
+		SceneManager::GetInstance()->ChangeScene("PLAY");
+	}
 	actor[Select]->SetRotation(rot);
 	actor[Select]->Update();
 }
