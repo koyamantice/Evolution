@@ -3,8 +3,6 @@
 #include"ImageManager.h"
 #include<fstream>
 
-
-
 void Enemy::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/EnemyStatus.csv");
@@ -61,6 +59,7 @@ void Enemy::DebugUpdate() {
 
 void Enemy::OnInit() {
 	obj->SetRotation(XMFLOAT3{0,0,0});
+	obj->SetScale(XMFLOAT3(2.0f,2.0f,2.0f));
 	LoadData();
 	UpdateCommand();
 }

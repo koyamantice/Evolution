@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Actor.h"
 #include"PauseUI.h"
+#include <SourceCode/FrameWork/collision/TouchableObject.h>
 
 /// <summary>
 /// タイトルシーン
@@ -37,7 +38,7 @@ private:
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
 	std::unique_ptr<Object3d> skydome{};
-	std::unique_ptr<Object3d> ground{};
+	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};
 	int SelectNumber = 0;
 };

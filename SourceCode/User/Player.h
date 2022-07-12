@@ -26,6 +26,15 @@ private:
 	void Move();
 	void Shot();
 
+	void ContactObj();
+
 	float hp=0;
 	float vel = 0;
+
+	bool onGround = false;
+	//
+	// —Ž‰ºƒxƒNƒgƒ‹
+	DirectX::XMVECTOR fallV{};
+
+
 };

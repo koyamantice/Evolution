@@ -28,18 +28,34 @@ public:
 	void Draw(DirectXCommon* dxCommon) override;
 
 	void Save();
+
+	void EnemySave();
+
 private:
+	enum :int {
+		Approch,
+		Leave,
+		Wait,
+	};
 	//メンバ変数
 	enum {
 		MPlayer,
-		Enemy,
+		MBullet,
+		MEnemy,
 		Chr_Max
 	};
 	std::unique_ptr<Actor> actor[Chr_Max]{};
 	XMFLOAT3 rot;
+	//調整するキャラ
+	int Select = 0;
+
+	//共通ステ
 	int hp;
 	float vel;
-	int Select = 0;
+	//敵ステ
+	float waitTimer;
+	int phase=0;
+
 	bool save = false;
 };
 

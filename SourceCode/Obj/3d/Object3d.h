@@ -257,12 +257,11 @@ public: // メンバ関数
 	/// <param name="info">衝突情報</param>
 	virtual void OnCollision(const CollisionInfo& info){}
 
+	BaseCollider* collider = nullptr;
 
 //private: // メンバ変数
 protected: // メンバ変数
 	const char* name = nullptr;
-
-	BaseCollider* collider = nullptr;
 
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色

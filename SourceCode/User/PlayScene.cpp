@@ -31,10 +31,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Sky->Initialize();
 	skydome.reset(Sky);
 
-	Object3d* Ground{};
-	Ground = new Object3d();
-	Ground->SetModel(ModelManager::GetIns()->GetModel(ModelManager::Ground));
-	Ground->Initialize();
+	TouchableObject* Ground{};
+	Ground = new TouchableObject();
+	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
 	ground.reset(Ground);
 
 
