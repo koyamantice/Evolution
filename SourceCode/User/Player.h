@@ -25,6 +25,12 @@ private:
 	void OnDraw()override;
 	void OnFinal()override;
 	void Move();
+
+	void RightMove();
+	void LeftMove();
+
+	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
+
 	void Shot();
 
 	void ContactObj();

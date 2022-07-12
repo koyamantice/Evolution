@@ -102,15 +102,17 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 void PlayScene::CameraUpda() {
 	Input* input = Input::GetInstance();
 	XMFLOAT3 plaPos = actor[MPlayer]->GetPosition();
-if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))){
-	if (input->PushButton(input->Button_RB)) {
+if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))
+	||input->PushKey(DIK_RIGHT)||input->PushKey(DIK_LEFT)){
+	if (input->PushButton(input->Button_RB) || input->PushKey(DIK_RIGHT)) {
 		angle-=1;
 	}
-	if (input->PushButton(input->Button_LB)) {
+	if (input->PushButton(input->Button_LB) || input->PushKey(DIK_LEFT)) {
 		angle+=1;
 	}
 
-	if (input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB))) {
+	if ((input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB)))
+		||(input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
 		angle = actor[MPlayer]->GetRotation().y;
 	}
 

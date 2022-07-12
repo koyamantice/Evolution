@@ -6,7 +6,6 @@
 #include <SourceCode/FrameWork/collision/SphereCollider.h>
 #include "CollisionAttribute.h"
 #include<fstream>
-#include<DirectXMath.h>
 void Player::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/status.csv");
@@ -93,41 +92,63 @@ void Player::Move() {
 	const float PI = 3.14159f;
 
 	if (input->PushKey(DIK_W)) {
-		XMVECTOR v = { 0,0,1,0 };
-		rot2 = XMMatrixRotationY(XMConvertToRadians(angle));
-		v = XMVector3TransformNormal(v, rot2);
-		XMFLOAT3 pos2 = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
-		//pos.x -= sin(atan2(StickX, StickY)) * vel;
-		pos.x -= pos2.x;
-		pos.y -= pos2.y;
-		pos.z -= pos2.z;
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, angle);
+		pos.x -= vecvel.x;
+		pos.y -= vecvel.y;
+		pos.z -= vecvel.z;
 		rot.y = angle;
 	}
 	if (input->PushKey(DIK_S)) {
-		pos.z = obj->GetPosition().z + vel;
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-1,0 }, angle);
+		pos.x -= vecvel.x;
+		pos.y -= vecvel.y;
+		pos.z -= vecvel.z;
+		rot.y = angle-180;
 	}
 	if (input->PushKey(DIK_D)) {
-		pos.x = obj->GetPosition().x - vel;
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 1,0,0,0 }, angle);
+		pos.x -= vecvel.x;
+		pos.y -= vecvel.y;
+		pos.z -= vecvel.z;
+		rot.y = angle+90;
 	}
 	if (input->PushKey(DIK_A)) {
-		pos.x = obj->GetPosition().x + vel;
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-1,0,0,0 }, angle);
+		pos.x -= vecvel.x;
+		pos.y -= vecvel.y;
+		pos.z -= vecvel.z;
+		rot.y = angle-90;
 	}
 
-	if (!(StickX<100 && StickX>-100)) {
-		XMVECTOR v = { 0,0,1,0 };
-		rot2 = XMMatrixRotationY(XMConvertToRadians(angle));
-		v = XMVector3TransformNormal(v, rot2);
-		XMFLOAT3 pos2 = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
-		//pos.x -= sin(atan2(StickX, StickY)) * vel;
-		pos.x += pos2.x;
-		pos.y += pos2.y;
-		pos.z += pos2.z;
-		rot.y = ((-atan2(StickX, StickY) * (180.0f / PI))) + 180;
+	if (!(StickX < 100 && StickX > -100)) {
+		XMFLOAT3 vecvel =MoveVECTOR(XMVECTOR{0,0,1,0},rot.y);
+		pos.x += vecvel.x;
+		pos.y += vecvel.y;
+		pos.z += vecvel.z;
+		rot.y = angle;
 	}
 
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
 }
+
+void Player::RightMove() {
+}
+
+void Player::LeftMove() {
+}
+
+
+XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
+
+	rot2 = XMMatrixRotationY(XMConvertToRadians(angle));
+	v = XMVector3TransformNormal(v, rot2);
+	XMFLOAT3 pos = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
+
+	return pos;
+}
+
+
 
 void Player::Shot() {
 	if (input->TriggerKey(DIK_SPACE) || input->TriggerButton(input->Button_A)) {
