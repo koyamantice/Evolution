@@ -23,6 +23,6 @@ public:
 
 	void Load2D();
 	void LoadTex2D();
-
+	void Finalize();
 };
 

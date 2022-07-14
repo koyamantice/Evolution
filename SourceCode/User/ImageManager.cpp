@@ -14,3 +14,4 @@ void ImageManager::LoadTex2D() {
 	// テクスチャ読み込み
 	Texture::LoadTexture(Lock, L"Resources/2d/Lock.png");
 }
+

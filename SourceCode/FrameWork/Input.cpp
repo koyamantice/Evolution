@@ -172,6 +172,17 @@ void Input::Update() {
 	}
 }
 
+void Input::Finalize() {
+	dinput.Reset();
+	devKeyboard.Reset();
+	devMouse.Reset();
+	devGamePad.Reset();
+
+
+
+
+}
+
 bool Input::PushKey(BYTE keyNumber) {
 	// ˆÙí‚Èˆø”‚ğŒŸo
 	assert(0 <= keyNumber && keyNumber <= 256);

@@ -397,6 +397,13 @@ bool Sprite::Initialize() {
 	return true;
 }
 
+bool Sprite::Finalize() {
+	for (int i = srvCount-1; i <  0; i--) {
+		texBuff[i].Reset();
+	}
+	return true;
+}
+
 void Sprite::SetRotation(float rotation) {
 	this->rotation = rotation;
 

@@ -61,9 +61,9 @@ public: // 静的メンバ関数
 	/// 視点座標の設定
 	static void SetEye(XMFLOAT3 eye);
 	/// <summary>
-/// カメラセット
-/// </summary>
-/// <returns></returns>
+	/// カメラセット
+	/// </summary>
+	/// <returns></returns>
 	static void SetCamera(Camera* camera) {
 		Texture::camera = camera;
 	}
@@ -158,7 +158,7 @@ public: // メンバ関数
 
 	/// 描画
 	void Draw();
-
+	static void Finalize();
 	/// 座標の取得
 	const XMFLOAT3& GetPosition() { return position; }
 

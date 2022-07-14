@@ -12,8 +12,7 @@
 class Input {
 public:
 	//ゲームパッド（ボタン）
-	enum ButtonKind
-	{
+	enum ButtonKind {
 		Button_A,
 		Button_B,
 		Button_X,
@@ -32,8 +31,7 @@ public:
 	};
 
 	//スティック
-	enum StickKind
-	{
+	enum StickKind {
 		Up, Down, Right, Left
 	};
 
@@ -57,13 +55,17 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <returns>成否</returns>
-	bool Initialize(WinApp*winApp);
+	bool Initialize(WinApp* winApp);
 
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
 
+	/// <summary>
+	///終了
+	/// </summary>
+	void Finalize();
 	/// <summary>
 	/// キーの押下をチェック
 	/// </summary>

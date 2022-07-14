@@ -65,7 +65,9 @@ private:
 	ComPtr<ID3D12DescriptorHeap> rtvHeaps;
 	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	ComPtr<ID3D12Fence> fence;
-	UINT64 fenceVal = 0;
 	ComPtr<ID3D12DescriptorHeap> imguiHeap;
+
 	WinApp* winApp = nullptr;
+	UINT64 fenceVal = 0;
+
 };

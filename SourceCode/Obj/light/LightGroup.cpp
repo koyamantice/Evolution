@@ -2,11 +2,12 @@
 #include <assert.h>
 
 using namespace DirectX;
-
+template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
 ID3D12Device* LightGroup::device = nullptr;
+ComPtr<ID3D12Resource> LightGroup::constBuff;
 
 void LightGroup::StaticInitialize(ID3D12Device* device)
 {
@@ -61,6 +62,10 @@ void LightGroup::Update()
 		TransferConstBuffer();
 		dirty = false;
 	}
+}
+
+void LightGroup::Finalize() {
+	constBuff.Reset();
 }
 
 void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex)

@@ -29,6 +29,7 @@ public:
 	static ModelManager* GetIns();		//Žæ“¾—p
 
 	void Initialize();
+	void Finalize();
 	void LoadModel(const ModelName modelName, std::string fileName);
 	void LoadFBXModel(const FBXName modelName, std::string fileName);
 	Model* GetModel(ModelName modelName) { return model[modelName]; }

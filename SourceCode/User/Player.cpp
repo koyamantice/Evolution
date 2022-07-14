@@ -66,7 +66,6 @@ void Player::OnUpda() {
 	Shot();
 	ContactObj();
 	LockOn->Update();
-	LockOn->SetPosition({ obj->GetPosition().x, obj->GetPosition().y + 0.1f, obj->GetPosition().z });
 	for (std::unique_ptr<Bullet>& bullet : bullets) {
 		bullet->Update();
 	}
@@ -151,12 +150,25 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
-	if (input->TriggerKey(DIK_SPACE) || input->TriggerButton(input->Button_A)) {
+	if (input->ReleaseKey(DIK_SPACE)) {
 		std::unique_ptr<Bullet> newBullet = std::make_unique<Bullet>();
 		newBullet->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole));
 		newBullet->SetPosition(obj->GetPosition());
+		newBullet->SetLanding(LockOn->GetPosition());
 		bullets.push_back(std::move(newBullet));
+		LockOn->SetPosition(obj->GetPosition());
 	}
+	if (input->PushKey(DIK_SPACE) || input->PushButton(input->Button_A)) {
+		XMFLOAT3 rockpos=LockOn->GetPosition();
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, obj->GetRotation().y);
+		rockpos.x -= vecvel.x;
+		rockpos.y = 0.1f;
+		rockpos.z -= vecvel.z;
+		LockOn->SetPosition(rockpos);
+	} else {
+		LockOn->SetPosition(obj->GetPosition());
+	}
+
 }
 
 void Player::ContactObj() {

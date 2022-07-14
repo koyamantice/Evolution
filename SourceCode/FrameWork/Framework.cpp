@@ -67,7 +67,12 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 }
 
 void Framework::Finalize() {
+	ModelManager::GetIns()->Finalize();
+	Sprite::Finalize();
+	Texture::Finalize();
+	LightGroup::Finalize();
 	SceneManager::GetInstance()->Finalize();
+	input->GetInstance()->Finalize();
 	delete sceneFactory_;
 	dxcommon->Finalize();
 	dxcommon->Reset();

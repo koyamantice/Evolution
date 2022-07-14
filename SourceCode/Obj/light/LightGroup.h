@@ -65,7 +65,10 @@ public: // メンバ関数
 	/// 更新
 	/// </summary>
 	void Update();
-
+	/// <summary>
+/// 更新
+/// </summary>
+	static void Finalize();
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -110,7 +113,7 @@ public: // メンバ関数
 
 private: // メンバ変数
 	// 定数バッファ
-	ComPtr<ID3D12Resource> constBuff;
+	static ComPtr<ID3D12Resource> constBuff;
 
 	// 環境光の色
 	XMFLOAT3 ambientColor = { 1,1,1 };

@@ -14,7 +14,18 @@ void DirectXCommon::Finalize()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-
+	dxgiFactory.Reset();
+	cmdList.Reset();
+	cmdAllocator.Reset();
+	cmdQueue.Reset();
+	swapchain.Reset();
+	backBuffers.clear();
+	depthBuffer.Reset();
+	rtvHeaps.Reset();
+	dsvHeap.Reset();
+	fence.Reset();
+	fence.Reset();
+	imguiHeap.Reset();
 
 }
 

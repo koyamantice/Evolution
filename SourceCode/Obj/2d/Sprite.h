@@ -112,6 +112,12 @@ public: // ƒƒ“ƒoŠÖ”
 	bool Initialize();
 
 	/// <summary>
+/// ‰Šú‰»
+/// </summary>
+/// <returns>¬”Û</returns>
+	static bool Finalize();
+
+	/// <summary>
 	/// Šp“x‚Ìİ’è
 	/// </summary>
 	/// <param name="rotation">Šp“x</param>

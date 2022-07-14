@@ -663,6 +663,18 @@ void Texture::Draw()
 	cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 }
 
+void Texture::Finalize() {
+	rootsignature.Reset();
+	descHeap.Reset();
+	vertBuff.Reset();
+	indexBuff.Reset();
+	for(int i = srvCount - 1; i <= 0;i--) {
+		texbuff[i].Reset();
+	}
+	
+
+}
+
 void Texture::SetIsBillboard(const bool& isBillboard) { 
 	this->isBillboard = isBillboard; 
 	UpdateViewMatrix();

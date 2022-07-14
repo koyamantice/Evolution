@@ -18,6 +18,11 @@ void ModelManager::Initialize() {
 
 }
 
+void ModelManager::Finalize() {
+	model.clear();
+	fbxModel.clear();
+}
+
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName) {
 	model[modelName] = new Model();
 	model[modelName] = Model::CreateFromOBJ(fileName);
