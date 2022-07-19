@@ -2,7 +2,7 @@
 #include <list>
 #include <memory>
 #include<cassert>
-#include <SourceCode/Obj/Actor.h>
+#include"ActorFactory.h"
 
 
 class ActorManager {
@@ -26,11 +26,13 @@ public:
 	/// </summary>
 	void Finalize();
 
-	void AttachList(Actor* actor) { 
-		std::unique_ptr<Actor> act;act.reset(actor);
-		Actors.push_back(std::move(act)); }
-private:
 
+	void AttachActor(const std::string& ActorName);
+
+
+	Actor* SearchActor(const std::string& tag);
+private:
+	ActorFactory* actorFactory_ = nullptr;
 	std::list<std::unique_ptr<Actor>> Actors;
 
 	ActorManager()=default;

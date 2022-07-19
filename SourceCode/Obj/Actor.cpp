@@ -19,14 +19,15 @@ bool Actor::Collide(Actor* actor) {
 	}
 }
 
-void Actor::Initialize(Model* model, ActorComponent* compornent) {
+void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* compornent) {
 	this->compornent = compornent;
+	this->tag = tag;
 	if (this->compornent) { this->compornent->Initialize(); }
 	Object3d* obj_ = new Object3d();
 	obj_->SetModel(model);
 	obj_->Initialize();
 	obj.reset(obj_);
-	ActorManager::GetInstance()->AttachList(this);
+	//ActorManager::GetInstance()->AttachList(this);
 	OnInit();
 }
 

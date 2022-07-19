@@ -38,20 +38,10 @@ private:
 	XMFLOAT2 distance={0,10};
 	XMFLOAT2 dis = { 0,15 };
 private:
-	//ƒƒ“ƒo•Ï”
-	enum {
-		MPlayer,
-		MEnemy,
-		Chr_Max
-	};
-
-	Actor* actor[Chr_Max]{};
+	Actor* player_shadow = nullptr;
 	std::unique_ptr<TouchableObject> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};
 	
-
-
-
 };
 

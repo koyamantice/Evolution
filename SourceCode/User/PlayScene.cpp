@@ -17,14 +17,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//背景スプライト生成
 	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
 	//スプライト生成
-	Actor* Act_[Chr_Max]{};
-	Act_[MPlayer] = new Player();
-	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
-	actor[MPlayer]=Act_[MPlayer];
-
-	Act_[MEnemy] = new Enemy();
-	Act_[MEnemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy));
-	actor[MEnemy]=Act_[MEnemy];
+	ActorManager::GetInstance()->AttachActor("Player");
+	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
+	ActorManager::GetInstance()->AttachActor("Enemy");
 
 
 	TouchableObject* Sky{};
@@ -42,7 +37,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
-	camera->SetTarget(actor[MPlayer]->GetPosition());
+	camera->SetTarget(player_shadow->GetPosition());
 }
 //開放処理
 void PlayScene::Finalize() {
@@ -81,15 +76,6 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 }
 //描画
 void PlayScene::Draw(DirectXCommon* dxCommon) {
-	XMFLOAT3 rot= actor[MPlayer]->GetRotation();
-	ImGui::Begin("camera");
-	ImGui::SliderFloat("rotation", &angle, -360, 360);
-	ImGui::SliderFloat("rotation.x", &distance.x, -360, 360);
-	ImGui::SliderFloat("rotation.y", &distance.y, -360, 360);
-	ImGui::SliderFloat("rot", &dis.x, -360, 360);
-	ImGui::SliderFloat("rot", &dis.y, -360, 360);
-	ImGui::SliderFloat("rot", &rot.y, -360, 360);
-	ImGui::End();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -104,7 +90,6 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 
 void PlayScene::CameraUpda() {
 	Input* input = Input::GetInstance();
-	XMFLOAT3 plaPos = actor[MPlayer]->GetPosition();
 if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))
 	||input->PushKey(DIK_RIGHT)||input->PushKey(DIK_LEFT)){
 	if (input->PushButton(input->Button_RB) || input->PushKey(DIK_RIGHT)) {
@@ -114,21 +99,22 @@ if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))
 		angle+=1;
 	}
 
-	//if ((input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB)))
-	//	||(input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
-	//	angle = actor[MPlayer]->GetRotation().y;
-	//}
+	if ((input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB)))
+		||(input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
+		angle = player_shadow->GetRotation().y;
+	}
 
-	actor[MPlayer]->SetAngle(angle);
 	dis.x=sinf(angle * (PI / 180)) * 15.0f;
 	dis.y=cosf(angle*(PI/180)) * 15.0f;
 }
 
-distance.x=Ease(In,Quad,0.5f,distance.x,dis.x);
-distance.y=Ease(In,Quad,0.5f,distance.y,dis.y);
+	distance.x=Ease(In,Quad,0.5f,distance.x,dis.x);
+	distance.y=Ease(In,Quad,0.5f,distance.y,dis.y);
 
-	camera->SetTarget(XMFLOAT3{ plaPos.x,plaPos.y,plaPos.z });
-	camera->SetEye(XMFLOAT3{ plaPos.x+distance.x,plaPos.y + 10.0f,plaPos.z + distance.y });
+	player_shadow->SetAngle(angle);
+	
+	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z });
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x+distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 

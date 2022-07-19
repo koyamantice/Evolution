@@ -65,7 +65,7 @@ public:
 	void SetAngle(const float& angle) { this->angle = angle; }
 
 	//virtual‚É‚µ‚æ‚¤‚©”Y‚İ’†
-	void Initialize(Model* model,ActorComponent* compornent=nullptr);	//‰Šú‰»ˆ—
+	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//‰Šú‰»ˆ—
 	void Update();		//XVˆ—
 	void Draw();	//•`‰æˆ—
 	void Finalize();	//I—¹ˆ—

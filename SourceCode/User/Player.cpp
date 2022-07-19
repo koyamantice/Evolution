@@ -6,6 +6,7 @@
 #include <SourceCode/FrameWork/collision/SphereCollider.h>
 #include "CollisionAttribute.h"
 #include<fstream>
+#include <SourceCode/FrameWork/ActorManager.h>
 void Player::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/status.csv");
@@ -74,17 +75,11 @@ void Player::OnUpda() {
 
 	ContactObj();
 	LockOn->Update();
-	for (std::unique_ptr<Bullet>& bullet : bullets) {
-		bullet->Update();
-	}
 }
 
 void Player::OnDraw() {
 	Texture::PreDraw();
 	LockOn->Draw();
-	for (std::unique_ptr<Bullet>& bullet : bullets) {
-		bullet->Draw();
-	}
 }
 
 void Player::OnFinal() {
@@ -152,11 +147,7 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 void Player::Shot() {
 	if (input->ReleaseKey(DIK_SPACE)|| input->ReleaseButton(input->Button_A)) {
-		std::unique_ptr<Bullet> newBullet = std::make_unique<Bullet>();
-		newBullet->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole));
-		newBullet->SetPosition(obj->GetPosition());
-		newBullet->SetLanding(LockOn->GetPosition());
-		bullets.push_back(std::move(newBullet));
+		ActorManager::GetInstance()->AttachActor("Bullet");
 		LockOn->SetPosition(obj->GetPosition());
 	}
 	if (input->PushKey(DIK_SPACE) || input->PushButton(input->Button_A)) {

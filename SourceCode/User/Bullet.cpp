@@ -5,6 +5,7 @@
 
 
 Bullet::Bullet() {
+
 	ease = true;
 }
 

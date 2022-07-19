@@ -15,7 +15,7 @@ public:
 	void DebugUpdate();
 private:
 	Input* input =Input::GetInstance();
-	std::list<std::unique_ptr<Bullet>> bullets;
+	std::list<Bullet> bullets;
 	std::stringstream parameterCommands;
 	std::unique_ptr<Texture> LockOn{};
 

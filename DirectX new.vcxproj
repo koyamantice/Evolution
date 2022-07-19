@@ -256,6 +256,7 @@
     <ClCompile Include="SourceCode\Obj\light\PointLight.cpp" />
     <ClCompile Include="SourceCode\Obj\light\SpotLight.cpp" />
     <ClCompile Include="SourceCode\System\AbstractSceneFactory.cpp" />
+    <ClCompile Include="SourceCode\System\ActorFactory.cpp" />
     <ClCompile Include="SourceCode\System\BaseScene.cpp" />
     <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="SourceCode\Obj\light\PointLight.h" />
     <ClInclude Include="SourceCode\Obj\light\SpotLight.h" />
     <ClInclude Include="SourceCode\System\AbstractSceneFactory.h" />
+    <ClInclude Include="SourceCode\System\ActorFactory.h" />
     <ClInclude Include="SourceCode\System\BaseScene.h" />
     <ClInclude Include="SourceCode\System\DirectXCommon.h" />
     <ClInclude Include="SourceCode\System\SceneFactory.h" />

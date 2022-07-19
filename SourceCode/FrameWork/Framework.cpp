@@ -1,5 +1,6 @@
 ﻿#include "Framework.h"
 #include "FbxLoader.h"
+#include <SourceCode/FrameWork/ActorManager.h>
 //#include "FPSManager.h"
 void Framework::Run() {
 	
@@ -55,6 +56,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	Texture::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	ImageManager::GetIns()->LoadTex2D();
 	Object3d::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
+	ActorManager::GetInstance()->Initialize();
 	// マウスカーソルの非表示
 	ShowCursor(TRUE);
 	//XorShiftの初期化

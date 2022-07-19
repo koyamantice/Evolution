@@ -7,25 +7,27 @@
 #include"ImageManager.h"
 #include"ModelManager.h"
 #include <TisGame.h>
-#include"Player.h"
+#include"ActorManager.h"
+
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	//背景スプライト生成
 	Sprite* sprite_ = Sprite::Create(ImageManager::Test, { 0.0f,0.0f });
 	UI[Button].reset(sprite_);
 	//スプライト生成
-
+	ActorManager::GetInstance()->AttachActor("Player");
 }
 //開放処理
 void TitleScene::Finalize() {
 	//３ｄのモデルのデリート
+	ActorManager::GetInstance()->Finalize();
 }
 //更新
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 
 	camera->Update();
-
+	ActorManager::GetInstance()->Update();
 	if (input->PushKey(DIK_0)) {
 		int a = 0;
 		a++;
@@ -47,6 +49,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	Sprite::PreDraw();
 	UI[Button]->Draw();
 	Object3d::PreDraw();
-
+	ActorManager::GetInstance()->Draw();
 }
 
