@@ -38,7 +38,9 @@ void Player::UpdateCommand() {
 		} else if (word.find("VEL") == 0) {
 			getline(line_stream, word, ',');
 			vel = (float)std::atof(word.c_str());
-
+			if (vel>5) {
+				vel = 5;
+			}
 			break;
 		}
 	}
@@ -49,8 +51,13 @@ void Player::DebugUpdate() {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
+	
 	LoadData();
 	UpdateCommand();
+
+	vel /= 5.0f;
+
+
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
@@ -91,28 +98,28 @@ void Player::Move() {
 	const float PI = 3.14159f;
 
 	if (input->PushKey(DIK_W)||input->LeftTiltStick(input->Up)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, angle);
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle;
 	}
 	if (input->PushKey(DIK_S) || input->LeftTiltStick(input->Down)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-1,0 }, angle);
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle-180;
 	}
 	if (input->PushKey(DIK_D) || input->LeftTiltStick(input->Right)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 1,0,0,0 }, angle);
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle+90;
 	}
 	if (input->PushKey(DIK_A) || input->LeftTiltStick(input->Left)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-1,0,0,0 }, angle);
+		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;

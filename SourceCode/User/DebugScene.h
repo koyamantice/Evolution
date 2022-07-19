@@ -44,7 +44,7 @@ private:
 		MEnemy,
 		Chr_Max
 	};
-	std::unique_ptr<Actor> actor[Chr_Max]{};
+	Actor* actor[Chr_Max]{};
 	XMFLOAT3 rot;
 	//’²®‚·‚éƒLƒƒƒ‰
 	int Select = 0;

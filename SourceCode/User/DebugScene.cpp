@@ -24,19 +24,19 @@ void DebugScene::Initialize(DirectXCommon* dxCommon) {
 	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
 	rot = { 0,180,0 };
 	Act_[MPlayer]->SetRotation(rot);
-	actor[MPlayer].reset(Act_[MPlayer]);
+	actor[MPlayer]=Act_[MPlayer];
 
 	Act_[MBullet] = new Bullet();
 	Act_[MBullet]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole));
 	rot = { 0,180,0 };
 	Act_[MBullet]->SetRotation(rot);
-	actor[MBullet].reset(Act_[MBullet]);
+	actor[MBullet]=Act_[MBullet];
 
 	Act_[MEnemy] = new Enemy();
 	Act_[MEnemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy));
 	rot = { 0,180,0 };
 	Act_[MEnemy]->SetRotation(rot);
-	actor[MEnemy].reset(Act_[MEnemy]);
+	actor[MEnemy]=Act_[MEnemy];
 	camera->SetEye({0, 0, -10});
 	camera->SetTarget(actor[MPlayer]->GetPosition());
 }
