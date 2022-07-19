@@ -216,6 +216,7 @@
   <ItemGroup>
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\ActorManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\AudioManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\BaseCollider.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\Collision.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
     <ClInclude Include="SourceCode\Common\XorShift.h" />
+    <ClInclude Include="SourceCode\FrameWork\ActorManager.h" />
     <ClInclude Include="SourceCode\FrameWork\AudioManager.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\BaseCollider.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\Collision.h" />

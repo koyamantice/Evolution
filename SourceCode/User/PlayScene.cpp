@@ -10,6 +10,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include <SourceCode/Common/Easing.h>
+#include"ActorManager.h"
 
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
@@ -45,6 +46,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 //開放処理
 void PlayScene::Finalize() {
 	//３ｄのモデルのデリート
+	ActorManager::GetInstance()->Finalize();
 }
 //更新
 void PlayScene::Update(DirectXCommon* dxCommon) {
@@ -65,9 +67,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		input->TriggerKey(DIK_1)) {
 		pause = true;
 	}
-	for (int i = 0; i < Chr_Max; i++) {
-		actor[i]->Update();
-	}
+	ActorManager::GetInstance()->Update();
 	skydome->Update();
 	ground->Update();
 	if (input->PushKey(DIK_0)) {
@@ -91,9 +91,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	skydome->Draw();
 	ground->Draw();
 	//背景用
-	for (int i = 0; i < Chr_Max;i++) {
-		actor[i]->Draw();
-	}
+	ActorManager::GetInstance()->Draw();
 	if (pause) {
 		pauseUi->Draw();
 	}

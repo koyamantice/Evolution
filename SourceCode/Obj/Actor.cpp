@@ -2,6 +2,7 @@
 #include <SourceCode/FrameWork/collision/Collision.h>
 #include"ActorComponent.h"
 #include <memory>
+#include <SourceCode/FrameWork/ActorManager.h>
 
 int Actor::ID = 0;
 
@@ -26,6 +27,7 @@ void Actor::Initialize(Model* model, ActorComponent* compornent) {
 	obj_->Initialize();
 	obj.reset(obj_);
 	OnInit();
+	ActorManager::GetInstance()->AttachList(this);
 }
 
 void Actor::Update() {

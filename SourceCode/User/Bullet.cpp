@@ -28,6 +28,8 @@ void Bullet::OnUpda() {
 			ease = false;
 		}
 		obj->SetPosition(pos);
+	} else {
+
 	}
 }
 
