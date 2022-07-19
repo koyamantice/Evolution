@@ -20,11 +20,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Actor* Act_[Chr_Max]{};
 	Act_[MPlayer] = new Player();
 	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
-	actor[MPlayer].reset(Act_[MPlayer]);
+	actor[MPlayer]=Act_[MPlayer];
 
 	Act_[MEnemy] = new Enemy();
 	Act_[MEnemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy));
-	actor[MEnemy].reset(Act_[MEnemy]);
+	actor[MEnemy]=Act_[MEnemy];
 
 
 	TouchableObject* Sky{};

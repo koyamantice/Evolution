@@ -45,7 +45,7 @@ private:
 		Chr_Max
 	};
 
-	std::unique_ptr<Actor> actor[Chr_Max]{};
+	Actor* actor[Chr_Max]{};
 	std::unique_ptr<TouchableObject> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};
