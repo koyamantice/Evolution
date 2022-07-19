@@ -1,8 +1,8 @@
 //体力
-HP,268,
+HP,120,
 //基本速さ
-VEL,5.5,
+VEL,4.061,
 //最初のフェーズ
-PHASE,WAIT,
+PHASE,LEAVE,
 //待機時間
-WAITTIMER,30,
+WAITTIMER,0,
