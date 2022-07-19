@@ -8,7 +8,10 @@
 class ActorManager {
 public:
 	static ActorManager* GetInstance();
-
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Initialize();
 
 	/// <summary>
 	/// 更新

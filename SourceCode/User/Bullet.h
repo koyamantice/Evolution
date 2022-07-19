@@ -1,6 +1,8 @@
 #pragma once
 #include"Actor.h"
+#include"Enemy.h"
 class Player;
+
 class Bullet : public Actor {
 public:
 	Bullet();
@@ -17,5 +19,6 @@ private:
 
 	float vel = 0.4f;
 
+	Enemy* enemy = nullptr;
 	XMFLOAT3 landing{};
 };

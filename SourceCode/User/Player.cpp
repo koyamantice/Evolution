@@ -71,6 +71,7 @@ void Player::OnInit() {
 void Player::OnUpda() {
 	Move();
 	Shot();
+
 	ContactObj();
 	LockOn->Update();
 	for (std::unique_ptr<Bullet>& bullet : bullets) {
@@ -150,7 +151,7 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
-	if (input->ReleaseKey(DIK_SPACE)) {
+	if (input->ReleaseKey(DIK_SPACE)|| input->ReleaseButton(input->Button_A)) {
 		std::unique_ptr<Bullet> newBullet = std::make_unique<Bullet>();
 		newBullet->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole));
 		newBullet->SetPosition(obj->GetPosition());

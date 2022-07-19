@@ -5,6 +5,12 @@ ActorManager* ActorManager::GetInstance() {
 	return &instance;
 }
 
+void ActorManager::Initialize() {
+	for (std::unique_ptr<Actor>& actor : Actors) {
+		//actor->Initialize();
+	}
+}
+
 void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();

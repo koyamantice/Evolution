@@ -36,6 +36,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
+	Ground->SetPosition(XMFLOAT3(0,-0.1f,0));
 	ground.reset(Ground);
 
 
@@ -67,7 +68,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		input->TriggerKey(DIK_1)) {
 		pause = true;
 	}
+	
 	ActorManager::GetInstance()->Update();
+
 	skydome->Update();
 	ground->Update();
 	if (input->PushKey(DIK_0)) {
@@ -91,7 +94,9 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	skydome->Draw();
 	ground->Draw();
 	//”wŒi—p
+
 	ActorManager::GetInstance()->Draw();
+
 	if (pause) {
 		pauseUi->Draw();
 	}
@@ -109,10 +114,10 @@ if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))
 		angle+=1;
 	}
 
-	if ((input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB)))
-		||(input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
-		angle = actor[MPlayer]->GetRotation().y;
-	}
+	//if ((input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB)))
+	//	||(input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
+	//	angle = actor[MPlayer]->GetRotation().y;
+	//}
 
 	actor[MPlayer]->SetAngle(angle);
 	dis.x=sinf(angle * (PI / 180)) * 15.0f;

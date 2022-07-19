@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Easing.h"
+#include"ActorManager.h"
 
 
 
@@ -8,6 +9,7 @@ Bullet::Bullet() {
 }
 
 void Bullet::OnInit() {
+	//ActorManager::GetInstance()->DettachList();
 }
 
 void Bullet::OnUpda() {

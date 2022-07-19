@@ -26,8 +26,8 @@ void Actor::Initialize(Model* model, ActorComponent* compornent) {
 	obj_->SetModel(model);
 	obj_->Initialize();
 	obj.reset(obj_);
-	OnInit();
 	ActorManager::GetInstance()->AttachList(this);
+	OnInit();
 }
 
 void Actor::Update() {
