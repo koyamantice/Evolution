@@ -13,12 +13,14 @@ private:
 	void OnUpda()override;
 	void OnDraw()override;
 	void OnFinal()override;
+	void Follow();
 
 	bool ease = false;
 	float frame = 0.0f;
 
 	float vel = 0.4f;
 
-	Enemy* enemy = nullptr;
+	Actor* enemy = nullptr;
 	XMFLOAT3 landing{};
+	XMFLOAT2 vel_follow{};
 };

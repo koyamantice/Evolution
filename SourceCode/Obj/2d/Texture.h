@@ -96,9 +96,9 @@ private: // 静的メンバ変数
 	// デスクリプタヒープ
 	static ComPtr<ID3D12DescriptorHeap> descHeap;
 	// 頂点バッファ
-	static ComPtr<ID3D12Resource> vertBuff;
+	static ComPtr<ID3D12Resource> vertBuff;//
 	// インデックスバッファ
-	static ComPtr<ID3D12Resource> indexBuff;
+	static ComPtr<ID3D12Resource> indexBuff;//アンカー作成時static除外
 	// テクスチャバッファ
 	static ComPtr<ID3D12Resource> texbuff[srvCount];
 	// シェーダリソースビューのハンドル(CPU)

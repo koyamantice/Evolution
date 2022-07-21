@@ -41,7 +41,6 @@ private:
 	Actor* player_shadow = nullptr;
 	std::unique_ptr<TouchableObject> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
-	std::unique_ptr<PauseUI> pauseUi{};
-	
+	std::unique_ptr<PauseUI> pauseUi{};	
 };
 

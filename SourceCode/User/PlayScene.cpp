@@ -53,7 +53,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	}
 	if (pause) {
 		pauseUi->Update();
-		if (input->TriggerButton(input->Start)) {
+		if (input->TriggerButton(input->Button_A)) {
 			pauseUi->Reset();
 			pause = false;
 		}

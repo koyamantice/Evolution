@@ -21,7 +21,7 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName) {
 	}
 	if (sceneName == "Bullet") {
 		newActor = new Bullet();
-		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole),"Bullet");
+		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player),"Bullet");
 
 	}
 	
