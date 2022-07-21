@@ -29,11 +29,12 @@ public:
 
 	void AttachActor(const std::string& ActorName);
 
-
+	void RemoveActor();
 	Actor* SearchActor(const std::string& tag);
 private:
 	ActorFactory* actorFactory_ = nullptr;
 	std::list<std::unique_ptr<Actor>> Actors;
+	std::list<std::unique_ptr<Actor>> removeActors;
 
 	ActorManager()=default;
 	~ActorManager()=default;

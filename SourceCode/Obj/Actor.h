@@ -40,6 +40,8 @@ public:
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
 
+	//
+	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
 	//IDŽæ“¾
 	const int& GetID()const { return id; }
 

@@ -151,7 +151,7 @@ void Player::Shot() {
 		LockOn->SetPosition(obj->GetPosition());
 	}
 	if (input->PushKey(DIK_SPACE) || input->PushButton(input->Button_A)) {
-		XMFLOAT3 rockpos=LockOn->GetPosition();
+		rockpos=LockOn->GetPosition();
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, obj->GetRotation().y);
 		rockpos.x -= vecvel.x;
 		rockpos.y = 0.1f;

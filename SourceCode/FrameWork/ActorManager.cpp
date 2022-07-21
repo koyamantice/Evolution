@@ -16,6 +16,7 @@ void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
 	}
+	RemoveActor();
 }
 
 void ActorManager::Draw() {
@@ -39,6 +40,12 @@ void ActorManager::AttachActor(const std::string& ActorName) {
 	newActor.reset(actorFactory_->CreateActor(ActorName));
 
 	Actors.push_back(std::move(newActor));
+}
+
+void ActorManager::RemoveActor() {
+	Actors.remove_if([](std::unique_ptr<Actor>& actor){
+		return actor->GetIsRemove();
+		});
 }
 
 Actor* ActorManager::SearchActor(const std::string& tag) {

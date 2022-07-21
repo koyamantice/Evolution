@@ -13,13 +13,16 @@ public:
 	void LoadData();
 	void UpdateCommand();
 	void DebugUpdate();
+
+	
+	const XMFLOAT3& GetLockPos()override { return rockpos;}
 private:
 	Input* input =Input::GetInstance();
-	std::list<Bullet> bullets;
+
 	std::stringstream parameterCommands;
 	std::unique_ptr<Texture> LockOn{};
 
-
+	XMFLOAT3 rockpos;
 	void OnInit()override;
 	void OnUpda()override;
 	void OnDraw()override;

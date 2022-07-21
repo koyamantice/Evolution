@@ -21,6 +21,7 @@ private:
 	float vel = 0.4f;
 
 	Actor* enemy = nullptr;
+	Actor* player = nullptr;
 	XMFLOAT3 landing{};
 	XMFLOAT2 vel_follow{};
 };
