@@ -40,8 +40,12 @@ public:
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
 
+	//isAliveセッタ＆ゲッタ
+	void SetHp(const float& hp) { this->hp = hp; };
+	const float& GetHp() { return hp; }
+
 	//
-	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
+	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); }
 	//ID取得
 	const int& GetID()const { return id; }
 
@@ -55,8 +59,8 @@ public:
 	const std::string& GetTag() { return tag; }
 
 	//isAliveセッタ＆ゲッタ
-	void SetIsActive(bool Active) {isActive = Active;};
-	bool GetIsActive() { return isActive; }
+	void SetIsActive(const bool& Active) {isActive = Active;};
+	const bool& GetIsActive() { return isActive; }
 
 	//isRemoveセッタ＆ゲッタ
 	void SetIsRemove(bool Remove) {isRemove = Remove;};
@@ -79,6 +83,7 @@ public:
 
 protected:
 	std::unique_ptr<Object3d> obj;
+	float hp = 0;
 
 	float angle = 0;
 	//コンポーネント

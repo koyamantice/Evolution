@@ -146,10 +146,6 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
-	if (input->ReleaseKey(DIK_SPACE)|| input->ReleaseButton(input->Button_A)) {
-		ActorManager::GetInstance()->AttachActor("Bullet");
-		LockOn->SetPosition(obj->GetPosition());
-	}
 	if (input->PushKey(DIK_SPACE) || input->PushButton(input->Button_A)) {
 		rockpos=LockOn->GetPosition();
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, obj->GetRotation().y);
@@ -157,8 +153,13 @@ void Player::Shot() {
 		rockpos.y = 0.1f;
 		rockpos.z -= vecvel.z;
 		LockOn->SetPosition(rockpos);
+		charge++;
 	} else {
+		if (charge>4) {
+			ActorManager::GetInstance()->AttachActor("Bullet");
+		}
 		LockOn->SetPosition(obj->GetPosition());
+		charge = 0;
 	}
 
 }

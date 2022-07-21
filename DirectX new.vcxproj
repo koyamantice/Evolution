@@ -262,6 +262,7 @@
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />
     <ClCompile Include="SourceCode\User\Bullet.cpp" />
+    <ClCompile Include="SourceCode\User\Crystal.cpp" />
     <ClCompile Include="SourceCode\User\DebugScene.cpp" />
     <ClCompile Include="SourceCode\User\Enemy.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
@@ -331,6 +332,7 @@
     <ClInclude Include="SourceCode\System\SceneFactory.h" />
     <ClInclude Include="SourceCode\TisGame.h" />
     <ClInclude Include="SourceCode\User\Bullet.h" />
+    <ClInclude Include="SourceCode\User\Crystal.h" />
     <ClInclude Include="SourceCode\User\DebugScene.h" />
     <ClInclude Include="SourceCode\User\Enemy.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />

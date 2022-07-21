@@ -191,6 +191,9 @@
     <ClCompile Include="SourceCode\System\ActorFactory.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\Crystal.cpp">
+      <Filter>User\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\System\ActorFactory.h">
       <Filter>Obj\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Crystal.h">
+      <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

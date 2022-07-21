@@ -20,18 +20,19 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
+	ActorManager::GetInstance()->AttachActor("Crystal");
 
 
-	TouchableObject* Sky{};
-	Sky = new TouchableObject();
-	//Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	Sky->Initialize(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	skydome.reset(Sky);
+	//TouchableObject* Sky{};
+	//Sky = new TouchableObject();
+	////Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	//Sky->Initialize(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	//skydome.reset(Sky);
 
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
-	Ground->SetPosition(XMFLOAT3(0,-0.1f,0));
+	Ground->SetPosition(XMFLOAT3(0,0,0));
 	ground.reset(Ground);
 
 
@@ -66,7 +67,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	
 	ActorManager::GetInstance()->Update();
 
-	skydome->Update();
+	//skydome->Update();
 	ground->Update();
 	if (input->PushKey(DIK_0)) {
 		int a = 0;
@@ -77,7 +78,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 //ï`âÊ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
-	skydome->Draw();
+	//skydome->Draw();
 	ground->Draw();
 	//îwåióp
 

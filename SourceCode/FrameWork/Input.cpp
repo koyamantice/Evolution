@@ -560,10 +560,10 @@ bool Input::TriggerCrossKey(int CrossKey)
 
 bool Input::ReleaseButton(int Button) {
 	for (int i = 0; i < 32; i++) {
-		if (!(gamePadState.rgbButtons[i] & 0x80)) {
+		if ((gamePadState.rgbButtons[i] & 0x80)) {
 			continue;
 		}
-		if (oldGamePadState.rgbButtons[i] & 0x80) {
+		if (!(oldGamePadState.rgbButtons[i] & 0x80)) {
 			continue;
 		}
 
@@ -578,8 +578,6 @@ bool Input::ReleaseButton(int Button) {
 			is_push[ButtonKind::Button_X] = true;
 			break;
 		case 3:
-			is_push[ButtonKind::Button_Y] = true;
-			break;
 			is_push[ButtonKind::Button_Y] = true;
 			break;
 		case 4:
@@ -608,7 +606,7 @@ bool Input::ReleaseButton(int Button) {
 	for (int i = 0; i < Cross_Up; i++) {
 		if (is_push[i] == true) {
 			if (is_push[i] == is_push[Button]) {
-				return false;
+				return true;
 			}
 		}
 	}

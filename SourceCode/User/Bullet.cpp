@@ -38,8 +38,11 @@ void Bullet::OnUpda() {
 		}
 		obj->SetPosition(pos);
 	} else {
-		Follow();
+		if (enemy->GetIsActive()) {
+			Follow();
+		}
 		if(Collision::SphereCollision2(obj->GetPosition(),1.0f, enemy->GetPosition(),1.0f)){
+			enemy->SetHp(enemy->GetHp()-1);
 			isRemove = true;
 		}
 	}

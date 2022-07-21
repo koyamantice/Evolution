@@ -39,9 +39,8 @@ private:
 	void ContactObj();
 	XMMATRIX rot2;
 
-	float hp=0;
 	float vel = 0;
-
+	int charge = 0;
 	bool onGround = false;
 	//
 	// —Ž‰ºƒxƒNƒgƒ‹

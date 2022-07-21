@@ -11,11 +11,11 @@ ModelManager* ModelManager::GetIns() {
 
 void ModelManager::Initialize() {
 	LoadModel(Player, "chr_knight");
-	LoadModel(Enemy, "chr_sword");
+	LoadModel(Enemy, "ball");
 	LoadModel(skydome, "skydome");
 	LoadModel(Ground, "map");
 	LoadModel(hole, "hole");
-
+	LoadModel(Crystal, "Crystal");
 }
 
 void ModelManager::Finalize() {

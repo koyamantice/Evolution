@@ -19,6 +19,7 @@ public:
 		skydome,
 		Ground,
 		hole,
+		Crystal,
 	};
 	enum FBXName {
 		MottiMove,

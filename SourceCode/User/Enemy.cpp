@@ -58,14 +58,17 @@ void Enemy::DebugUpdate() {
 }
 
 void Enemy::OnInit() {
-	obj->SetRotation(XMFLOAT3{0,0,0});
+	obj->SetRotation(XMFLOAT3{0,-98,0});
 	obj->SetScale(XMFLOAT3(2.0f,2.0f,2.0f));
 	LoadData();
 	UpdateCommand();
 }
 
 void Enemy::OnUpda() {
+	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y-1,0});
+
 	PhaseMove();
+	LifeCommon();
 }
 
 void Enemy::OnDraw() {
@@ -100,5 +103,12 @@ void Enemy::LeaveUpdate() {
 
 void Enemy::WaitUpdate() {
 
+}
+
+void Enemy::LifeCommon() {
+	if (hp<0) {
+		isActive = false;
+		//isRemove = true;
+	}
 }
 

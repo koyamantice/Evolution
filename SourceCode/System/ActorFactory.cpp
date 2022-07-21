@@ -3,6 +3,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"Bullet.h"
+#include "Crystal.h"
 
 
 
@@ -24,6 +25,11 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName) {
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player),"Bullet");
 
 	}
-	
+	if (sceneName == "Crystal") {
+		newActor = new Crystal();
+		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Crystal), "Crystal");
+
+	}
+
 	return newActor;
 }

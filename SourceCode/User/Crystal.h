@@ -5,21 +5,20 @@
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
 
-class Bullet;
 
-class Enemy :public Actor {
-	enum class Phase{
+class Crystal :public Actor {
+	enum class Phase {
 		Approch,
 		Leave,
 		Wait,
 	};
 public:
-	Enemy(){};
-	void LoadData();
-	void UpdateCommand();
-	void DebugUpdate();
+	Crystal() {};
+	//void LoadData();
+	//void UpdateCommand();
+	//void DebugUpdate();
 private:
-	Input* input =Input::GetInstance();
+	Input* input = Input::GetInstance();
 	std::stringstream parameterCommands;
 
 
@@ -29,14 +28,13 @@ private:
 	void OnFinal()override;
 
 	//フェーズまとめ
-	void PhaseMove();
-	void ApprochUpdate();
-	void LeaveUpdate();
-	void WaitUpdate();
-	//
-	void LifeCommon();
+	//void PhaseMove();
+	//void ApprochUpdate();
+	//void LeaveUpdate();
+	//void WaitUpdate();
+	////
+	//void LifeCommon();
 
-	Phase phase_= Enemy::Phase::Approch;
 	float waitTimer = 0;
 	float vel = 0;
 };
