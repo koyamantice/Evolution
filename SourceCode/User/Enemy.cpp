@@ -58,6 +58,7 @@ void Enemy::DebugUpdate() {
 }
 
 void Enemy::OnInit() {
+	obj->SetPosition(XMFLOAT3(0, 2, 0));
 	obj->SetRotation(XMFLOAT3{0,-98,0});
 	obj->SetScale(XMFLOAT3(2.0f,2.0f,2.0f));
 	LoadData();
@@ -94,7 +95,7 @@ void Enemy::PhaseMove() {
 }
 
 void Enemy::ApprochUpdate() {
-
+	
 }
 
 void Enemy::LeaveUpdate() {

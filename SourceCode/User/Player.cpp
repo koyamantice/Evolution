@@ -7,6 +7,7 @@
 #include "CollisionAttribute.h"
 #include<fstream>
 #include <SourceCode/FrameWork/ActorManager.h>
+
 void Player::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/status.csv");
@@ -42,6 +43,11 @@ void Player::UpdateCommand() {
 			if (vel>5) {
 				vel = 5;
 			}
+		}
+		else if (word.find("STOCK") == 0) {
+			getline(line_stream, word, ',');
+			stock = (int)std::atof(word.c_str());
+			
 			break;
 		}
 	}
@@ -52,7 +58,6 @@ void Player::DebugUpdate() {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
-	
 	LoadData();
 	UpdateCommand();
 
@@ -66,6 +71,7 @@ void Player::OnInit() {
 	Texture* Lock_ = Texture::Create(ImageManager::Lock, obj->GetPosition(), { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	Lock_->TextureCreate();
 	Lock_->SetRotation({ 90,0,0 });
+	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f});
 	LockOn.reset(Lock_);
 }
 
@@ -146,6 +152,7 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
+	if (stock <= 0) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
 	if (input->PushKey(DIK_SPACE) || input->PushButton(input->Button_A)) {
 		rockpos=LockOn->GetPosition();
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, obj->GetRotation().y);
@@ -157,6 +164,7 @@ void Player::Shot() {
 	} else {
 		if (charge>4) {
 			ActorManager::GetInstance()->AttachActor("Bullet");
+			stock--;
 		}
 		LockOn->SetPosition(obj->GetPosition());
 		charge = 0;

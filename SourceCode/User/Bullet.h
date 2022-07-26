@@ -19,6 +19,7 @@ private:
 	float frame = 0.0f;
 
 	float vel = 0.4f;
+	std::unique_ptr<Texture> Status{};
 
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;

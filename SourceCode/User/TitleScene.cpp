@@ -12,10 +12,10 @@
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	//背景スプライト生成
-	Sprite* sprite_ = Sprite::Create(ImageManager::Test, { 0.0f,0.0f });
+	Sprite* sprite_ = Sprite::Create(ImageManager::Title, { 0.0f,0.0f });
 	UI[Button].reset(sprite_);
 	//スプライト生成
-	ActorManager::GetInstance()->AttachActor("Player");
+//	ActorManager::GetInstance()->AttachActor("Player");
 }
 //開放処理
 void TitleScene::Finalize() {

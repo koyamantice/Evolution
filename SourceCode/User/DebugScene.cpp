@@ -13,30 +13,16 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <SourceCode/FrameWork/ActorManager.h>
 
 void DebugScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	//背景スプライト生成
-	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
-	//スプライト生成
-	Actor* Act_[Chr_Max]{};
-	Act_[MPlayer] = new Player();
-	Act_[MPlayer]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player));
-	rot = { 0,180,0 };
-	Act_[MPlayer]->SetRotation(rot);
-	actor[MPlayer]=Act_[MPlayer];
+	//back = Sprite::Create(ImageManager::DebugBack, { 0.0f,0.0f });
+	ActorManager::GetInstance()->AttachActor("Player");
+	ActorManager::GetInstance()->AttachActor("Enemy");
+	ActorManager::GetInstance()->AttachActor("Crystal");
 
-	Act_[MBullet] = new Bullet();
-	Act_[MBullet]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::hole));
-	rot = { 0,180,0 };
-	Act_[MBullet]->SetRotation(rot);
-	actor[MBullet]=Act_[MBullet];
-
-	Act_[MEnemy] = new Enemy();
-	Act_[MEnemy]->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy));
-	rot = { 0,180,0 };
-	Act_[MEnemy]->SetRotation(rot);
-	actor[MEnemy]=Act_[MEnemy];
 	camera->SetEye({0, 0, -10});
 	camera->SetTarget(actor[MPlayer]->GetPosition());
 }
@@ -158,6 +144,10 @@ void DebugScene::Save() {
 	file << "//速度" << std::endl;
 	file << "VEL" << ',';
 	file << vel << ',';
+	file << std::endl;
+	file << "//弾のストック" << std::endl;
+	file << "STOCK" << ',';
+	file << stock << ',';
 	file << std::endl;
 	file.close();
 }

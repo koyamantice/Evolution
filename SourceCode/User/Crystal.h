@@ -4,6 +4,7 @@
 #include<list>
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
+#include"Player.h"
 
 
 class Crystal :public Actor {
@@ -28,12 +29,17 @@ private:
 	void OnFinal()override;
 
 	//フェーズまとめ
-	//void PhaseMove();
+	void PhaseMove();
 	//void ApprochUpdate();
 	//void LeaveUpdate();
 	//void WaitUpdate();
 	////
 	//void LifeCommon();
+
+	Player* player{};
+
+
+
 
 	float waitTimer = 0;
 	float vel = 0;

@@ -2,6 +2,7 @@
 #include "Easing.h"
 #include"ActorManager.h"
 #include <SourceCode/FrameWork/collision/Collision.h>
+#include"ImageManager.h"
 using namespace DirectX;
 
 
@@ -14,9 +15,16 @@ Bullet::Bullet() {
 void Bullet::OnInit() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActor("Enemy");
-	obj->SetScale(XMFLOAT3(0.5,0.5,0.5));
+	obj->SetScale(XMFLOAT3(1, 1, 1));
 	obj->SetPosition(player->GetPosition());
 	landing = player->GetLockPos();
+	Texture* Lock_ = Texture::Create(ImageManager::Battle, {obj->GetPosition().x,obj->GetPosition().y+1.0f,obj->GetPosition().z
+}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+	Lock_->SetIsBillboard(true);
+	Lock_->TextureCreate();
+	Lock_->SetRotation({ 0,0,0 });
+	//Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
+	Status.reset(Lock_);
 }
 
 void Bullet::OnUpda() {
@@ -39,13 +47,21 @@ void Bullet::OnUpda() {
 		obj->SetPosition(pos);
 	} else {
 		if (enemy->GetIsActive()) {
-			Follow();
+			if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z,20.0f, enemy->GetPosition().x, enemy->GetPosition().z,1.0f)) {
+				Follow();
+			}
 		}
-		if(Collision::SphereCollision2(obj->GetPosition(),1.0f, enemy->GetPosition(),1.0f)){
+		if(Collision::SphereCollision2(obj->GetPosition(),1.5f, enemy->GetPosition(),1.5f)){
 			enemy->SetHp(enemy->GetHp()-1);
 			isRemove = true;
 		}
+		if (Collision::SphereCollision2(obj->GetPosition(), 1.0f, player->GetPosition(), 1.0f)) {
+			player->SetStock(player->GetStock()+1);
+			isRemove = true;
+		}
 	}
+	Status->Update();
+	Status->SetPosition({ obj->GetPosition().x,obj->GetPosition().y + 2.5f,obj->GetPosition().z });
 }
 void Bullet::Follow() {
 	XMFLOAT3 pos = obj->GetPosition();
@@ -63,6 +79,12 @@ void Bullet::Follow() {
 
 
 void Bullet::OnDraw() {
+	if (enemy->GetIsActive()) {
+		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 20.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+			Texture::PreDraw();
+			Status->Draw();
+		}
+	}
 }
 
 void Bullet::OnFinal() {

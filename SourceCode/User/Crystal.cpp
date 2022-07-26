@@ -1,7 +1,7 @@
 #include"Crystal.h"
 
 void Crystal::OnInit() {
-	obj->SetPosition(XMFLOAT3(5,0,0));
+	obj->SetPosition(XMFLOAT3(5,3,0));
 }
 
 void Crystal::OnUpda() {

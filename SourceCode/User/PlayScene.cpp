@@ -20,21 +20,27 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
+	enemy_shadow= ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("Crystal");
 
 
-	//TouchableObject* Sky{};
-	//Sky = new TouchableObject();
-	////Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	//Sky->Initialize(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	//skydome.reset(Sky);
+	TouchableObject* Sky{};
+	Sky = new TouchableObject();
+	//Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	Sky->Initialize(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	skydome.reset(Sky);
 
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
 	Ground->SetPosition(XMFLOAT3(0,0,0));
+	Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
 
+	Sprite* _clear = nullptr;
+	//_clear->SetAnchorPoint(0);
+	_clear = Sprite::Create(ImageManager::Clear, clearPos);
+	Clear.reset(_clear);
 
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
@@ -67,25 +73,43 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	
 	ActorManager::GetInstance()->Update();
 
-	//skydome->Update();
+	skydome->Update();
 	ground->Update();
 	if (input->PushKey(DIK_0)) {
 		int a = 0;
 		a++;
 	}
+	if (enemy_shadow->GetHp()< 0) {
+		if (!clear) {
+			clear = true;
+		}
+	}
+	if (clear) {
 
+		if (Cframe >= 1.0f) {
+			Cframe = 1.0f;
+		} else {
+			Cframe += 1.0f / 90.0f;
+		}
+		clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
+		Clear->SetPosition(clearPos);
+	}
 }
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
-	//skydome->Draw();
+	skydome->Draw();
 	ground->Draw();
 	//”wŒi—p
 
 	ActorManager::GetInstance()->Draw();
-
 	if (pause) {
 		pauseUi->Draw();
+	}
+
+	Sprite::PreDraw();
+	if (clear) {
+		Clear->Draw();
 	}
 }
 

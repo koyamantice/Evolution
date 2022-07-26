@@ -23,7 +23,7 @@ void ActorComponent::Finalize() {
 		OnFinalize();
 	}
 }
-void ActorComponent::SetAttachActor(std::weak_ptr<Actor> Actor) {
+void ActorComponent::SetAttachActor(Actor* Actor) {
 	attachActor = Actor;
 	OnAttached();
 }

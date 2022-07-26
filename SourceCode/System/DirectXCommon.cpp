@@ -163,6 +163,14 @@ bool DirectXCommon::InitializeDevice() {
 		dredSettings->SetAutoBreadcrumbsEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
 		dredSettings->SetPageFaultEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
 	}
+	// DREDレポートをオンに
+	//ID3D12Debug* debugController;
+	//if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+	//	debugController->EnableDebugLayer();
+	//	//debugController->SetEnableGPUBasedValidation(TRUE);
+	//}
+
+
 #endif
 	//dxgiファクトリーの生成
 	result = CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory));
@@ -212,6 +220,21 @@ bool DirectXCommon::InitializeDevice() {
 		assert(0);
 		return false;
 	}
+
+
+#ifdef _DEBUG
+	ComPtr<ID3D12InfoQueue>infoQueue;
+	if (SUCCEEDED(dev->QueryInterface(IID_PPV_ARGS (&infoQueue)))) {
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION,true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+
+	}
+
+
+#endif // _DEBUG
+
+
 
 	return true;
 }
@@ -393,11 +416,11 @@ bool DirectXCommon::InitImgui()
 }
 
 void DirectXCommon::Reset() {
-	ID3D12DebugDevice* debugInterface;
+	//ID3D12DebugDevice* debugInterface;
 
-	if (SUCCEEDED(dev->QueryInterface(&debugInterface))) {
-		debugInterface->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
-		debugInterface->Release();
-	}
+	//if (SUCCEEDED(dev->QueryInterface(&debugInterface))) {
+	//	debugInterface->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
+	//	debugInterface->Release();
+	//}
 }
 

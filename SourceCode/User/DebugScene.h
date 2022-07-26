@@ -45,6 +45,7 @@ private:
 		Chr_Max
 	};
 	Actor* actor[Chr_Max]{};
+//	std::unique_ptr<Sprite>back=nullptr;
 	XMFLOAT3 rot;
 	//調整するキャラ
 	int Select = 0;
@@ -52,6 +53,7 @@ private:
 	//共通ステ
 	int hp;
 	float vel;
+	int stock;
 	//敵ステ
 	float waitTimer;
 	int phase=0;

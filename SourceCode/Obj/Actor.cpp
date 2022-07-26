@@ -23,13 +23,13 @@ void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* com
 	if (isActive) {
 		this->compornent = compornent;
 		this->tag = tag;
-		if (this->compornent) { this->compornent->Initialize(); }
 		Object3d* obj_ = new Object3d();
 		obj_->SetModel(model);
 		obj_->Initialize();
 		obj.reset(obj_);
 		//ActorManager::GetInstance()->AttachList(this);
 		OnInit();
+		if (this->compornent) { this->compornent->Initialize(); }
 	}
 }
 

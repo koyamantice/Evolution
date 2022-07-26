@@ -63,14 +63,17 @@ public:
 	const bool& GetIsActive() { return isActive; }
 
 	//isRemoveセッタ＆ゲッタ
-	void SetIsRemove(bool Remove) {isRemove = Remove;};
-	bool GetIsRemove() { return isRemove; }
-	
+	void SetIsRemove(const bool& Remove) {isRemove = Remove;};
+	const bool& GetIsRemove() { return isRemove; }
+	//
 	bool Collide(Actor* actor);
-//
+	//カメラ角度のセッタ＆ゲッタ
 	void SetAngle(const float& angle) { this->angle = angle; }
+	//
+	void SetStock(const int& Stock) {this->stock = Stock;};
+	const int& GetStock() { return stock; }
 
-	//virtualにしようか悩み中
+	//virtualにしようか悩み中//解決済み
 	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Draw();	//描画処理
@@ -80,12 +83,13 @@ public:
 	virtual void OnUpda() {};
 	virtual void OnDraw() {};
 	virtual void OnFinal() {};
-
 protected:
 	std::unique_ptr<Object3d> obj;
 	float hp = 0;
-
 	float angle = 0;
+
+	int stock = 0;
+
 	//コンポーネント
 	ActorComponent* compornent = nullptr;
 };

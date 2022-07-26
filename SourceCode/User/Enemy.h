@@ -4,7 +4,7 @@
 #include<list>
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
-
+#include "Player.h"
 class Bullet;
 
 class Enemy :public Actor {
@@ -22,6 +22,7 @@ private:
 	Input* input =Input::GetInstance();
 	std::stringstream parameterCommands;
 
+	Actor* player;
 
 	void OnInit()override;
 	void OnUpda()override;

@@ -1,13 +1,13 @@
 #pragma once
 #include<memory>
 #include<string>
-
-class Actor;
+#include<memory>
+#include "Actor.h"
 
 class ActorComponent {
 protected:
 	//アタッチしたアクター（所有権はもたない）
-	std::weak_ptr<Actor> attachActor;
+	Actor* attachActor;
 
 	//仮想関数
 	virtual void OnInitialize() {}	//初期化処理(継承版)
@@ -30,7 +30,7 @@ public:
 	void Draw();	//描画処理(アクター版)
 	void Finalize();	//終了処理(アクター版)
 		//ゲームオブジェクトにアタッチ
-	void SetAttachActor(std::weak_ptr<Actor> Actor);
+	void SetAttachActor(Actor* Actor);
 
 		//isAliveセッタ＆ゲッタ
 	void SetIsActive(bool Active) { isActive = Active; }

@@ -14,9 +14,13 @@ public:
 
 	enum texName {
 		Test,
+		DebugBack,
+		Title,
+		Clear,
 	};
 	enum tex2dName {
 		Lock,
+		Battle,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

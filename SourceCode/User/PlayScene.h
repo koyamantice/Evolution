@@ -37,8 +37,13 @@ private:
 	const float PI=3.1452f;
 	XMFLOAT2 distance={0,10};
 	XMFLOAT2 dis = { 0,15 };
+	bool clear = false;
+	float Cframe = 0.0f;
+	XMFLOAT2 clearPos = { 0,-720 };
 private:
 	Actor* player_shadow = nullptr;
+	Actor* enemy_shadow = nullptr;
+	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<TouchableObject> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};	
