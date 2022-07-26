@@ -26,6 +26,10 @@ public:
 	/// </summary>
 	void Finalize();
 
+	/// <summary>
+/// Õ“Ë”»’è‚Æ‰“š
+/// </summary>
+	void CheckAllCollisions();
 
 	void AttachActor(const std::string& ActorName);
 
@@ -33,8 +37,8 @@ public:
 	Actor* SearchActor(const std::string& tag);
 private:
 	ActorFactory* actorFactory_ = nullptr;
+
 	std::list<std::unique_ptr<Actor>> Actors;
-	std::list<std::unique_ptr<Actor>> removeActors;
 
 	ActorManager()=default;
 	~ActorManager()=default;

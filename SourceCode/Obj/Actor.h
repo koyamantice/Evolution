@@ -26,7 +26,7 @@ protected:
 	std::string tag = "None";
 protected:
 	//オブジェクト識別番号(絶対に被ることはない数字)
-	int id;
+	static int id;
 	//機能中か
 	bool isActive = true;
 	//削除
@@ -83,6 +83,8 @@ public:
 	virtual void OnUpda() {};
 	virtual void OnDraw() {};
 	virtual void OnFinal() {};
+
+	virtual void OnCollision(){};
 protected:
 	std::unique_ptr<Object3d> obj;
 	float hp = 0;

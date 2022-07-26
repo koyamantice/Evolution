@@ -28,6 +28,7 @@ public:
 	/// •`‰æ
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
+
 private:
 	/// <summary>
 	///	ƒJƒƒ‰ü‚è

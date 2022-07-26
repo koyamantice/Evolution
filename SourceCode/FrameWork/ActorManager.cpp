@@ -1,4 +1,6 @@
 #include"ActorManager.h"
+#include <algorithm>
+#include <SourceCode/FrameWork/collision/Collision.h>
 
 ActorManager* ActorManager::GetInstance() {
 	static ActorManager instance;
@@ -30,6 +32,38 @@ void ActorManager::Finalize() {
 		actor->Finalize();
 	}
 	Actors.clear();
+}
+
+void ActorManager::CheckAllCollisions() {
+	DirectX::XMFLOAT3 posA, posB;
+	Actor* ActA;
+	Actor* ActB;
+#pragma region
+	for (auto itrA = Actors.begin(); itrA != Actors.end(); ++itrA) {
+		for (auto itrB = Actors.end(); itrB != Actors.begin(); --itrB) {
+			ActA = itrA->get();
+			ActB = itrB->get();
+			if (ActA->GetID() == ActB->GetID()) { break; }
+			posA= ActA->GetPosition();
+			posB= ActB->GetPosition();
+			if (Collision::SphereCollision2(posA, 1.0f, posB, 1.0f)) {}
+
+
+
+
+		}
+	}
+
+#pragma endregion
+
+#pragma region
+#pragma endregion
+
+#pragma region
+#pragma endregion
+
+
+
 }
 
 void ActorManager::AttachActor(const std::string& ActorName) {

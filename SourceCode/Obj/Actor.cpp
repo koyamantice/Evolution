@@ -20,6 +20,8 @@ bool Actor::Collide(Actor* actor) {
 }
 
 void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* compornent) {
+	id++;
+	ID++;
 	if (isActive) {
 		this->compornent = compornent;
 		this->tag = tag;

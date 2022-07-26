@@ -2,6 +2,9 @@
 #include"ModelManager.h"
 #include"ImageManager.h"
 #include<fstream>
+#include <SourceCode/FrameWork/collision/CollisionManager.h>
+#include <SourceCode/FrameWork/collision/SphereCollider.h>
+#include <SourceCode/FrameWork/collision/CollisionAttribute.h>
 
 void Enemy::LoadData() {
 	std::ifstream file;
@@ -63,6 +66,10 @@ void Enemy::OnInit() {
 	obj->SetScale(XMFLOAT3(2.0f,2.0f,2.0f));
 	LoadData();
 	UpdateCommand();
+	float radius = 1.0f;
+	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
+	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
+
 }
 
 void Enemy::OnUpda() {
@@ -70,12 +77,62 @@ void Enemy::OnUpda() {
 
 	PhaseMove();
 	LifeCommon();
+	//Collide();
 }
 
 void Enemy::OnDraw() {
 }
 
 void Enemy::OnFinal() {
+}
+
+void Enemy::Collide() {
+	XMFLOAT3 pos = obj->GetPosition();
+	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(obj->collider);
+	assert(sphereCollider);
+	obj->collider->Update();
+
+	// クエリーコールバッククラス
+	class PlayerQueryCallback : public QueryCallback {
+	public:
+		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
+
+		// 衝突時コールバック関数
+		bool OnQueryHit(const QueryHit& info) {
+
+			const XMVECTOR up = { 0,1,0,0 };
+
+			XMVECTOR rejectDir = XMVector3Normalize(info.reject);
+			float cos = XMVector3Dot(rejectDir, up).m128_f32[0];
+
+			// 地面判定しきい値
+			const float threshold = cosf(XMConvertToRadians(30.0f));
+
+			if (-threshold < cos && cos < threshold) {
+
+				sphere->center += info.reject;
+				move += info.reject;
+			}
+
+			return true;
+		}
+
+		Sphere* sphere = nullptr;
+		DirectX::XMVECTOR move = {};
+	};
+
+	PlayerQueryCallback callback(sphereCollider);
+
+	// 球と地形の交差を全検索
+	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISIONSHAPE_MESH);
+	// 交差による排斥分動かす
+	pos.x += callback.move.m128_f32[0];
+	pos.y += callback.move.m128_f32[1];
+	pos.z += callback.move.m128_f32[2];
+	// ワールド行列更新
+	obj->UpdateWorldMatrix();
+	obj->SetPosition(pos);
+	obj->collider->Update();
 }
 
 void Enemy::PhaseMove() {

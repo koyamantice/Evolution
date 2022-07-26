@@ -28,7 +28,7 @@ private:
 	void OnUpda()override;
 	void OnDraw()override;
 	void OnFinal()override;
-
+	void Collide();
 	//フェーズまとめ
 	void PhaseMove();
 	void ApprochUpdate();

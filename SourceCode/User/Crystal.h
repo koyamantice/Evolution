@@ -36,8 +36,8 @@ private:
 	////
 	//void LifeCommon();
 
-	Player* player{};
-
+	Actor* player;
+	Actor* enemy;
 
 
 
