@@ -5,6 +5,7 @@
 #include <SourceCode/FrameWork/collision/CollisionManager.h>
 #include <SourceCode/FrameWork/collision/SphereCollider.h>
 #include <SourceCode/FrameWork/collision/CollisionAttribute.h>
+#include <SourceCode/FrameWork/ActorManager.h>
 
 void Enemy::LoadData() {
 	std::ifstream file;
@@ -69,7 +70,7 @@ void Enemy::OnInit() {
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
-
+	player = ActorManager::GetInstance()->SearchActor("Player");
 }
 
 void Enemy::OnUpda() {
@@ -152,11 +153,21 @@ void Enemy::PhaseMove() {
 }
 
 void Enemy::ApprochUpdate() {
-	
+	XMFLOAT3 pos = obj->GetPosition();
+
 }
 
 void Enemy::LeaveUpdate() {
-
+	XMFLOAT3 pos = obj->GetPosition();
+	XMFLOAT3 plapos = player->GetPosition();
+	XMFLOAT3 position{};
+	position.x = (plapos.x - pos.x);
+	position.z = (plapos.z - pos.z);
+	angle++;
+	pos.x = plapos .x+ sinf(angle * (XM_PI / 180)) * 5.0f;
+	pos.y = sinf(angle*0.1f)*2.0f;
+	pos.z = plapos .z+ cosf(angle * (XM_PI / 180)) * 5.0f;
+	obj->SetPosition(pos);
 }
 
 void Enemy::WaitUpdate() {

@@ -4,20 +4,9 @@
 #include <memory>
 #include <SourceCode/FrameWork/ActorManager.h>
 
+int Actor::id = 0;
 int Actor::ID = 0;
 
-bool Actor::Collide(Actor* actor) {
-	//セットポジションとのコリジョン
-	if (Collision::SphereCollision2(obj->GetPosition(), 1.0f, actor->obj->GetPosition(), 1.0f)) {
-		if (actor->GetTag() == std::string("enemy")) {//タグcheck
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
-}
 
 void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* compornent) {
 	id++;
@@ -43,12 +32,25 @@ void Actor::Update() {
 	}
 }
 
+void Actor::Demo() {
+	if (isActive) {
+		obj->Update();
+	}
+}
+
 void Actor::Draw() {
 	if (isActive) {
 		if (compornent) { compornent->Draw(); }
 		Object3d::PreDraw();
 		obj->Draw();
 		OnDraw();
+	}
+}
+
+void Actor::DemoDraw() {
+	if (isActive) {
+		Object3d::PreDraw();
+		obj->Draw();
 	}
 }
 

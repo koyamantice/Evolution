@@ -20,22 +20,21 @@ void DebugScene::Initialize(DirectXCommon* dxCommon) {
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
 	//back = Sprite::Create(ImageManager::DebugBack, { 0.0f,0.0f });
 	ActorManager::GetInstance()->AttachActor("Player");
+	Chara[MPlayer] = ActorManager::GetInstance()->SearchActor("Player");
+	ActorManager::GetInstance()->AttachActor("Bullet");
+	Chara[MBullet] = ActorManager::GetInstance()->SearchActor("Bullet");
 	ActorManager::GetInstance()->AttachActor("Enemy");
-	ActorManager::GetInstance()->AttachActor("Crystal");
-
+	Chara[MEnemy]=ActorManager::GetInstance()->SearchActor("Enemy");
 	camera->SetEye({0, 0, -10});
-	camera->SetTarget(actor[MPlayer]->GetPosition());
 }
 //ŠJ•úˆ—
 void DebugScene::Finalize() {
 	//‚R‚„‚Ìƒ‚ƒfƒ‹‚ÌƒfƒŠ[ƒg
+	ActorManager::GetInstance()->Finalize();
 }
 //XV
 void DebugScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	XMFLOAT3 plaPos = actor[Select]->GetPosition();
-	camera->SetTarget(XMFLOAT3{plaPos.x,plaPos.y,plaPos.z});
-	camera->SetEye(XMFLOAT3{ plaPos.x,plaPos.y,plaPos.z+10.0f});
 	camera->Update();
 	if (save) {
 		if (Select==0) {
@@ -56,11 +55,14 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 			Select++;
 		}
 	}
+	if (input->PushKey(DIK_0)) {
+		int a = 0;
+		a++;
+	}
+	Chara[Select]->Demo();
 	if (input->TriggerButton(input->Select)) {
 		SceneManager::GetInstance()->ChangeScene("PLAY");
 	}
-	actor[Select]->SetRotation(rot);
-	actor[Select]->Update();
 }
 //•`‰æ
 void DebugScene::Draw(DirectXCommon* dxCommon) {
@@ -75,8 +77,8 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 	ImGui::Unindent();
 	ImGui::End();
 	if (Select==0) {
-		ImGui::SetNextWindowPos(ImVec2(1000, 300));
-		ImGui::SetNextWindowSize(ImVec2(350, 300));
+		ImGui::SetNextWindowPos(ImVec2(980, 300), 1);
+		ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
 		ImGui::Begin("parameter");
 		ImGui::SliderInt("hp", &hp, 0, 360);
 		ImGui::SliderFloat("vel", &vel, 0, 5);
@@ -94,16 +96,16 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 		ImGui::End();
 	}	
 	if (Select == 1) {
-		ImGui::SetNextWindowPos(ImVec2(980, 300));
-		ImGui::SetNextWindowSize(ImVec2(280, 300));
+		ImGui::SetNextWindowPos(ImVec2(980, 300), 1);
+		ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
 		ImGui::Begin("bulletParameter");
 		//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
 		ImGui::Unindent();
 		ImGui::End();
 	}
 	if (Select == 2) {
-		ImGui::SetNextWindowPos(ImVec2(1000, 300));
-		ImGui::SetNextWindowSize(ImVec2(350, 300));
+		ImGui::SetNextWindowPos(ImVec2(980, 300), 1);
+		ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("parameter");
 		ImGui::SliderInt("hp", &hp, 0, 360);
@@ -131,8 +133,8 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 	}
 
 	//Sprite::PreDraw();
-	//”wŒi—p
-	actor[Select]->Draw();
+	Chara[Select]->DemoDraw();
+
 }
 
 void DebugScene::Save() {

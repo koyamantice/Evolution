@@ -76,7 +76,9 @@ void Player::OnInit() {
 }
 
 void Player::OnUpda() {
-	Move();
+	if (canMove) {
+		Move();
+	}
 	Shot();
 
 	ContactObj();

@@ -65,15 +65,17 @@ void Bullet::OnUpda() {
 }
 void Bullet::Follow() {
 	XMFLOAT3 pos = obj->GetPosition();
+	XMFLOAT3 rot = obj->GetRotation();
 	XMFLOAT3 position{};
 	position.x = (enemy->GetPosition().x - pos.x);
 	position.z = (enemy->GetPosition().z - pos.z);
-	//rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 90;// *(XM_PI / 180.0f);
+	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI))-180; //- 90;// *(XM_PI / 180.0f);
 	vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.3f;
 	vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.3f;
 	pos.x -= vel_follow.x;
 	pos.z += vel_follow.y;
 	obj->SetPosition(pos);
+	obj->SetRotation(rot);
 
 }
 

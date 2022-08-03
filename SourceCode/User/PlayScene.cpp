@@ -24,10 +24,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Crystal");
 
 
-	TouchableObject* Sky{};
-	Sky = new TouchableObject();
+	Object3d* Sky{};
+	Sky = new Object3d();
+	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
 	//Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	Sky->Initialize(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	Sky->Initialize();
 	skydome.reset(Sky);
 
 	TouchableObject* Ground{};
@@ -88,6 +89,10 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 		if (Cframe >= 1.0f) {
 			Cframe = 1.0f;
+			if (input->PushKey(DIK_SPACE)) {
+				SceneManager::GetInstance()->ChangeScene("TITLE");
+			}
+
 		} else {
 			Cframe += 1.0f / 90.0f;
 		}
@@ -124,9 +129,12 @@ if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))
 		angle+=1;
 	}
 
-	if ((input->PushButton(input->Button_RB)&& (input->PushButton(input->Button_LB)))
-		||(input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
+	if ((input->PushButton(input->Button_RB) && (input->PushButton(input->Button_LB)))
+		|| (input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
+		player_shadow->SetCanMove(false);
 		angle = player_shadow->GetRotation().y;
+	} else {
+		player_shadow->SetCanMove(true);
 	}
 
 	dis.x=sinf(angle * (PI / 180)) * 15.0f;

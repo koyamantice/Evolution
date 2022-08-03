@@ -19,14 +19,23 @@ void ActorManager::Update() {
 		actor->Update();
 	}
 	RemoveActor();
+	//CheckAllCollisions();
 }
-
+void ActorManager::DemoUpdate() {
+	for (std::unique_ptr<Actor>& actor : Actors) {
+		actor->Demo();
+	}
+}
 void ActorManager::Draw() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Draw();
 	}
 }
-
+void ActorManager::DemoDraw() {
+	for (std::unique_ptr<Actor>& actor : Actors) {
+		actor->DemoDraw();
+	}
+}
 void ActorManager::Finalize() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Finalize();
@@ -46,7 +55,10 @@ void ActorManager::CheckAllCollisions() {
 			if (ActA->GetID() == ActB->GetID()) { break; }
 			posA= ActA->GetPosition();
 			posB= ActB->GetPosition();
-			if (Collision::SphereCollision2(posA, 1.0f, posB, 1.0f)) {}
+			if (Collision::SphereCollision2(posA, 1.0f, posB, 1.0f)) {
+			
+				int a = 0;
+			}
 
 
 

@@ -204,6 +204,7 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;%(AdditionalIncludeDirectories);$(SolutionDir)enemy;$(SolutionDir)FPSManager</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

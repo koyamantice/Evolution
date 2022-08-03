@@ -30,5 +30,5 @@ private:
 	bool ease = false;
 	float frame = 0;
 	XMFLOAT2 pos={640,360};
-	XMFLOAT2 size = { 0,0 };
+	XMFLOAT2 size[Max]{  };
 };

@@ -18,9 +18,19 @@ public:
 	/// </summary>
 	void Update();
 	/// <summary>
+	/// 更新
+	/// </summary>
+	void DemoUpdate();
+
+	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();
+	/// <summary>
+/// 更新
+/// </summary>
+	void DemoDraw();
+
 	/// <summary>
 	/// 終了処理
 	/// </summary>

@@ -17,6 +17,11 @@ public:
 		DebugBack,
 		Title,
 		Clear,
+		UISheet,
+		TitleBack,
+		ZBack,
+		Option,
+
 	};
 	enum tex2dName {
 		Lock,

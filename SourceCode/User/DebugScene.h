@@ -44,7 +44,7 @@ private:
 		MEnemy,
 		Chr_Max
 	};
-	Actor* actor[Chr_Max]{};
+	Actor* Chara[Chr_Max];
 //	std::unique_ptr<Sprite>back=nullptr;
 	XMFLOAT3 rot;
 	//’²®‚·‚éƒLƒƒƒ‰
@@ -56,7 +56,7 @@ private:
 	int stock;
 	//“GƒXƒe
 	float waitTimer;
-	int phase=0;
+	int phase = 0;
 
 	bool save = false;
 };

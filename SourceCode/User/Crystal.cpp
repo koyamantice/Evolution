@@ -11,7 +11,8 @@ void Crystal::OnInit() {
 
 void Crystal::OnUpda() {
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
-
+	obj->SetPosition(XMFLOAT3{ 0,sinf(angle * 0.05f) * 0.3f+3.5f,0 });
+	angle++;
 	//if (Collision::SphereCollision2()) {
 
 	//}
