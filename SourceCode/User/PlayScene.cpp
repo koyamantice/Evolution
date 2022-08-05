@@ -39,9 +39,13 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ground.reset(Ground);
 
 	Sprite* _clear = nullptr;
-	//_clear->SetAnchorPoint(0);
 	_clear = Sprite::Create(ImageManager::Clear, clearPos);
 	Clear.reset(_clear);
+
+	Sprite* _Vignette = nullptr;
+	_Vignette = Sprite::Create(ImageManager::Vignette, {0,0});
+	Vignette.reset(_Vignette);
+	Vignette->SetColor(XMFLOAT4{1,1,1,0.2f});
 
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
@@ -113,6 +117,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	}
 
 	Sprite::PreDraw();
+	Vignette->Draw();
 	if (clear) {
 		Clear->Draw();
 	}

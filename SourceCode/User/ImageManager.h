@@ -21,6 +21,8 @@ public:
 		TitleBack,
 		ZBack,
 		Option,
+		Vignette,
+		CharaCover
 
 	};
 	enum tex2dName {

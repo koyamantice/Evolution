@@ -45,6 +45,7 @@ private:
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
 	std::unique_ptr<Sprite> Clear{};
+	std::unique_ptr<Sprite>	Vignette{};
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};	

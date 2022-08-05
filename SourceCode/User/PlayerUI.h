@@ -18,4 +18,6 @@ public:
 
 private:
 	std::unique_ptr<Sprite> Hp;
+	std::unique_ptr<Sprite> Chara;
+	std::unique_ptr<Sprite> Bullet;
 };
