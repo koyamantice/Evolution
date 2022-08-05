@@ -45,7 +45,7 @@ private:
 		Chr_Max
 	};
 	Actor* Chara[Chr_Max];
-//	std::unique_ptr<Sprite>back=nullptr;
+	std::unique_ptr<Sprite>back=nullptr;
 	XMFLOAT3 rot;
 	//’²®‚·‚éƒLƒƒƒ‰
 	int Select = 0;

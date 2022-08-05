@@ -12,7 +12,6 @@ public:
 	Player(){};
 	void LoadData();
 	void UpdateCommand();
-	void DebugUpdate();
 
 	
 	const XMFLOAT3& GetLockPos()override { return rockpos;}
@@ -27,6 +26,7 @@ private:
 	void OnUpda()override;
 	void OnDraw()override;
 	void OnFinal()override;
+	void DebugUpdate()override;
 	void Move();
 
 	void RightMove();

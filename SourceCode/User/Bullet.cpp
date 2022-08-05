@@ -46,9 +46,14 @@ void Bullet::OnUpda() {
 		}
 		obj->SetPosition(pos);
 	} else {
+		if (follow) {
+			Follow();
+		}
 		if (enemy->GetIsActive()) {
-			if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z,20.0f, enemy->GetPosition().x, enemy->GetPosition().z,1.0f)) {
-				Follow();
+			if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 20.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+				if (!follow) {
+					follow=true;
+				}
 			}
 		}
 		if(Collision::SphereCollision2(obj->GetPosition(),1.5f, enemy->GetPosition(),1.5f)){
@@ -82,7 +87,7 @@ void Bullet::Follow() {
 
 void Bullet::OnDraw() {
 	if (enemy->GetIsActive()) {
-		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 20.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+		if (follow) {
 			Texture::PreDraw();
 			Status->Draw();
 		}

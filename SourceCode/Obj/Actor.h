@@ -89,6 +89,7 @@ public:
 	virtual void OnUpda() {};
 	virtual void OnDraw() {};
 	virtual void OnFinal() {};
+	virtual void DebugUpdate() {};
 
 	virtual void OnCollision(){};
 protected:

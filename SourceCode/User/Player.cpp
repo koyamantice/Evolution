@@ -54,6 +54,7 @@ void Player::UpdateCommand() {
 }
 
 void Player::DebugUpdate() {
+	obj->SetScale({ 2.0f,2.0f,2.0f });
 }
 
 void Player::OnInit() {

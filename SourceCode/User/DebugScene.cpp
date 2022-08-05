@@ -18,7 +18,9 @@
 void DebugScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
-	//back = Sprite::Create(ImageManager::DebugBack, { 0.0f,0.0f });
+	Sprite* back_ = Sprite::Create(ImageManager::DebugBack, { 0.0f,0.0f });
+	back.reset(back_);
+	
 	ActorManager::GetInstance()->AttachActor("Player");
 	Chara[MPlayer] = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Bullet");
@@ -132,7 +134,8 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 		ImGui::End();
 	}
 
-	//Sprite::PreDraw();
+	Sprite::PreDraw();
+	back->Draw();
 	Chara[Select]->DemoDraw();
 
 }

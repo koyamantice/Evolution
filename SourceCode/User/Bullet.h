@@ -21,6 +21,7 @@ private:
 	float vel = 0.4f;
 	std::unique_ptr<Texture> Status{};
 
+	bool follow = false;
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
 	XMFLOAT3 landing{};

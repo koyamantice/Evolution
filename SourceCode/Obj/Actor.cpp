@@ -52,6 +52,7 @@ void Actor::DemoDraw() {
 		Object3d::PreDraw();
 		obj->Draw();
 	}
+	DebugUpdate();
 }
 
 void Actor::Finalize() {
