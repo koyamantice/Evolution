@@ -126,6 +126,8 @@ public: // メンバ関数
 public:
 	const float& GetPosX() { return posX; }
 	const float& GetPosY() { return posY; }
+	const float& GetRPosX() { return RposX; }
+	const float& GetRPosY() { return RposY; }
 	/// <summary>
 	/// マウス移動量を取得
 	/// </summary>

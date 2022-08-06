@@ -161,7 +161,11 @@ void Player::Shot() {
 		stock--;
 	}
 	rockpos=LockOn->GetPosition();
-	XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, obj->GetRotation().y);
+	XMFLOAT2 Controller= {input->GetRPosX(),input->GetRPosY() };
+	float radius = atan2f(Controller.x,Controller.y);
+
+	XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ sinf(Controller.x),0,1,0}, obj->GetRotation().y);
+
 	rockpos.x -= vecvel.x;
 	rockpos.y = 0.1f;
 	rockpos.z -= vecvel.z;
@@ -177,13 +181,6 @@ void Player::Shot() {
 	//	rockpos.z -= vecvel.z;
 	//	LockOn->SetPosition(rockpos);
 	//	charge++;
-	//} else {
-	//	if (charge>4) {
-	//		ActorManager::GetInstance()->AttachActor("Bullet");
-	//		stock--;
-	//	}
-	//	LockOn->SetPosition(obj->GetPosition());
-	//	charge = 0;
 	//}
 
 }
