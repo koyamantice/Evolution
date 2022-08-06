@@ -32,7 +32,7 @@ public:
 
 	//スティック
 	enum StickKind {
-		Up, Down, Right, Left
+		Up=0, Down=1, Right=2, Left=3
 	};
 
 	struct MouseMove {
@@ -111,8 +111,11 @@ public: // メンバ関数
 	bool TriggerMouseMiddle();
 
 	//ゲームパッド
-	bool LeftTiltStick(int stick);
-	bool LeftTriggerStick(int stick);
+	bool LeftTiltStick(StickKind stick);
+	bool LeftTriggerStick(StickKind stick);
+	bool RightTiltStick(StickKind stick);
+	bool RightTriggerStick(StickKind stick);
+
 	bool PushButton(int Button);
 	bool TriggerButton(int Button);
 	bool PushCrossKey(int CrossKey);
@@ -146,9 +149,15 @@ private: // メンバ変数
 	DIJOYSTATE oldGamePadState = {};
 	bool is_push[32] = {};
 	//スティックの無反応範囲
-	LONG unresponsive_range = 650;
+	LONG unresponsive_range_right = 27500;
+	LONG unresponsive_range_left = 650;
+
+
 	float posX = 0;
 	float posY = 0;
+	float RposX = 0;
+	float RposY = 0;
+
 	WinApp* winApp;
 };
 

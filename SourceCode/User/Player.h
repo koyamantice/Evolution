@@ -39,6 +39,8 @@ private:
 	void ContactObj();
 	XMMATRIX rot2;
 
+	float angle = 0;
+	float radius = 0;
 	float vel = 0;
 	int charge = 0;
 	bool onGround = false;

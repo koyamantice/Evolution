@@ -169,6 +169,9 @@ void Input::Update() {
 		}
 		posX = (float)gamePadState.lX;
 		posY = (float)gamePadState.lY;
+		RposX = (float)gamePadState.lRx;
+		RposY = (float)gamePadState.lRy;
+
 	}
 }
 
@@ -277,25 +280,25 @@ Input::MousePoint Input::GetPoint() {
 	return tmp;
 }
 
-bool Input::LeftTiltStick(int stick)
+bool Input::LeftTiltStick(StickKind stick)
 {
 	//左
-	if (gamePadState.lX < -unresponsive_range && stick == Left)
+	if (gamePadState.lX < -unresponsive_range_left && stick == Left)
 	{
 		return true;
 	}
 	//右
-	else if (gamePadState.lX > unresponsive_range && stick == Right)
+	else if (gamePadState.lX > unresponsive_range_left && stick == Right)
 	{
 		return true;
 	}
 	//後ろ
-	if (gamePadState.lY > unresponsive_range && stick == Down)
+	if (gamePadState.lY > unresponsive_range_left && stick == Down)
 	{
 		return true;
 	}
 	//前
-	else if (gamePadState.lY < -unresponsive_range && stick == Up)
+	else if (gamePadState.lY < -unresponsive_range_left && stick == Up)
 	{
 		return true;
 	}
@@ -303,26 +306,68 @@ bool Input::LeftTiltStick(int stick)
 	return false;
 }
 
-bool Input::LeftTriggerStick(int stick)
+bool Input::LeftTriggerStick(StickKind stick)
 {
 	//左
-	if (gamePadState.lX < -unresponsive_range && !(oldGamePadState.lX < -unresponsive_range) && stick == Left)
+	if (gamePadState.lX <  -unresponsive_range_left && !(oldGamePadState.lX < 32767 -unresponsive_range_left) && stick == Left)
 	{
 		return true;
 	}
 	//右
-	else if (gamePadState.lX > unresponsive_range && !(oldGamePadState.lX > unresponsive_range) && stick == Right)
+	else if (gamePadState.lX > unresponsive_range_left && !(oldGamePadState.lX > 32767 + unresponsive_range_left) && stick == Right)
 	{
 		return true;
 	}
 	//後ろ
-	if (gamePadState.lY > unresponsive_range && !(oldGamePadState.lY > unresponsive_range) && stick == Down)
+	if (gamePadState.lY >unresponsive_range_left && !(oldGamePadState.lY > 32767 + unresponsive_range_left) && stick == Down)
 	{
 		return true;
 	}
 	//前
-	else if (gamePadState.lY < -unresponsive_range && !(oldGamePadState.lY < -unresponsive_range) && stick == Up)
+	else if (gamePadState.lY <  -unresponsive_range_left && !(oldGamePadState.lY < 32767 -unresponsive_range_left) && stick == Up)
 	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::RightTiltStick(StickKind stick) {
+	//左
+	if (gamePadState.lRx < 32767 -unresponsive_range_right && stick == Left) {
+		return true;
+	}
+	//右
+	else if (gamePadState.lRx > 32767 + unresponsive_range_right&& stick == Right) {
+		return true;
+	}
+	//後ろ
+	if (gamePadState.lRy > 32767 + unresponsive_range_right&& stick == Down) {
+		return true;
+	}
+	//前
+	else if (gamePadState.lRy < 32767 -unresponsive_range_right && stick == Up) {
+		return true;
+	}
+
+	return false;
+}
+
+bool Input::RightTriggerStick(StickKind stick) {
+	//左
+	if (gamePadState.lRx < 32767 -unresponsive_range_right && !(oldGamePadState.lRx < 32767-unresponsive_range_right) && stick == Left) {
+		return true;
+	}
+	//右
+	else if (gamePadState.lRx > 32767 + unresponsive_range_right&& !(oldGamePadState.lRx > 32767 + unresponsive_range_right) && stick == Right) {
+		return true;
+	}
+	//後ろ
+	if (gamePadState.lRy > 32767 + unresponsive_range_right&& !(oldGamePadState.lRy > 32767 + unresponsive_range_right) && stick == Down) {
+		return true;
+	}
+	//前
+	else if (gamePadState.lRy < 32767 -unresponsive_range_right && !(oldGamePadState.lRy < 32767 -unresponsive_range_right) && stick == Up) {
 		return true;
 	}
 
@@ -602,7 +647,7 @@ bool Input::ReleaseButton(int Button) {
 			break;
 		}
 	}
-
+	//欠陥
 	for (int i = 0; i < Cross_Up; i++) {
 		if (is_push[i] == true) {
 			if (is_push[i] == is_push[Button]) {
@@ -664,9 +709,9 @@ bool Input::AllNoPush() {
 		}
 	}
 	for (int i = 0; i < 4; i++) {
-		if (LeftTiltStick(i)) {
+		StickKind j = static_cast<StickKind>(i);
+		if (LeftTiltStick(j)) {
 			return false;
-			//break;
 		}
 	}
 	return true;
