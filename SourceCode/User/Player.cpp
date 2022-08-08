@@ -78,7 +78,7 @@ void Player::OnInit() {
 
 void Player::OnUpda() {
 	if (canMove) {
-		Move();
+		//Move();
 	}
 	Shot();
 
@@ -156,19 +156,32 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 void Player::Shot() {
 	if (stock <= 0) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
-	if (input->TriggerButton(input->Button_A)) {
+	if (input->TriggerButton(input->Button_A)|| input->TriggerKey(DIK_SPACE)) {
 		ActorManager::GetInstance()->AttachActor("Bullet");
 		stock--;
 	}
+	if (input->PushKey(DIK_UP) || input->LeftTiltStick(input->Up)) {
+	
+	}
+	if (input->PushKey(DIK_DOWN) || input->LeftTiltStick(input->Down)) {
+	
+	}
+	if (input->PushKey(DIK_RIGHT) || input->LeftTiltStick(input->Right)) {
+	
+	}
+	if (input->PushKey(DIK_LEFT) || input->LeftTiltStick(input->Left)) {
+	
+	}
+
 	rockpos=LockOn->GetPosition();
-	XMFLOAT2 Controller= {input->GetRPosX(),input->GetRPosY() };
-	float radius = atan2f(Controller.x,Controller.y);
+	//XMFLOAT2 Controller= {input->GetRPosX(),input->GetRPosY() };
+	//float radius = atan2f(Controller.x,Controller.y);
 
-	XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ sinf(Controller.x),0,1,0}, obj->GetRotation().y);
+	//XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ sinf(Controller.x),0,,0}, obj->GetRotation().y);
 
-	rockpos.x -= vecvel.x;
-	rockpos.y = 0.1f;
-	rockpos.z -= vecvel.z;
+	//rockpos.x -= vecvel.x;
+	//rockpos.y = 0.1f;
+	//rockpos.z -= vecvel.z;
 
 
 	LockOn->SetPosition(rockpos);

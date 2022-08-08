@@ -125,17 +125,16 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 
 void PlayScene::CameraUpda() {
 	Input* input = Input::GetInstance();
-if((input->PushButton(input->Button_RB))|| (input->PushButton(input->Button_LB))
-	||input->PushKey(DIK_RIGHT)||input->PushKey(DIK_LEFT)){
-	if (input->PushButton(input->Button_RB) || input->PushKey(DIK_RIGHT)) {
+if((input->RightTiltStick(input->Right)||input->RightTiltStick(input->Left))
+	||(input->PushKey(DIK_RIGHT)||input->PushKey(DIK_LEFT))|| input->TriggerButton(input->Button_LS)){
+	if (input->RightTiltStick(input->Right)) {
 		angle-=1;
 	}
-	if (input->PushButton(input->Button_LB) || input->PushKey(DIK_LEFT)) {
+	if (input->RightTiltStick(input->Left)) {
 		angle+=1;
 	}
 
-	if ((input->PushButton(input->Button_RB) && (input->PushButton(input->Button_LB)))
-		|| (input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT))) {
+	if (input->TriggerButton(input->Button_LS)){
 		player_shadow->SetCanMove(false);
 		angle = player_shadow->GetRotation().y;
 	} else {
