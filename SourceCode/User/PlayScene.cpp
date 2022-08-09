@@ -134,7 +134,7 @@ if((input->RightTiltStick(input->Right)||input->RightTiltStick(input->Left))
 		angle+=1;
 	}
 
-	if (input->TriggerButton(input->Button_LS)){
+	if (input->TriggerButton(input->Button_LB)){
 		player_shadow->SetCanMove(false);
 		angle = player_shadow->GetRotation().y;
 	} else {

@@ -45,6 +45,7 @@ public:
 
 	void RemoveActor();
 	Actor* SearchActor(const std::string& tag);
+	Actor* SearchActorBack(const std::string& tag);
 private:
 	ActorFactory* actorFactory_ = nullptr;
 

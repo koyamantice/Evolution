@@ -17,6 +17,7 @@ void ActorManager::Initialize() {
 void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
+		int a = actor->GetID();
 	}
 	RemoveActor();
 	//CheckAllCollisions();
@@ -99,6 +100,15 @@ Actor* ActorManager::SearchActor(const std::string& tag) {
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();
 		if (actor->GetTag()==tag) {
+			return actor;
+		}
+	}
+	return nullptr;
+}
+Actor* ActorManager::SearchActorBack(const std::string& tag) {
+	for (auto itr = Actors.rbegin(); itr != Actors.rend(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() == tag) {
 			return actor;
 		}
 	}

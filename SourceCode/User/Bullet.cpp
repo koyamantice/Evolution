@@ -14,7 +14,7 @@ Bullet::Bullet() {
 
 void Bullet::OnInit() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
-	enemy = ActorManager::GetInstance()->SearchActor("Enemy");
+	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
 	obj->SetScale(XMFLOAT3(1, 1, 1));
 	obj->SetPosition(player->GetPosition());
 	landing = player->GetLockPos();

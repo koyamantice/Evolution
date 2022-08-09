@@ -98,7 +98,7 @@ protected:
 	float angle = 0;
 	bool canMove = true;
 
-	int stock = 0;
+	int stock = 30;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;
 };

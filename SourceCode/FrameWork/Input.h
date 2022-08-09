@@ -13,7 +13,7 @@ class Input {
 public:
 	//ゲームパッド（ボタン）
 	enum ButtonKind {
-		Button_A,
+		Button_A=0,
 		Button_B,
 		Button_X,
 		Button_Y,

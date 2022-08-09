@@ -21,7 +21,7 @@ private:
 	std::stringstream parameterCommands;
 	std::unique_ptr<Texture> LockOn{};
 
-	XMFLOAT3 rockpos;
+	XMFLOAT3 rockpos={0.0f,0.5f,0.0f};
 	void OnInit()override;
 	void OnUpda()override;
 	void OnDraw()override;
@@ -39,6 +39,7 @@ private:
 	void ContactObj();
 	XMMATRIX rot2;
 
+	Actor* Picmin[30]{};
 	float angle = 0;
 	float radius = 0;
 	float vel = 0;
