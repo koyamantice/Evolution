@@ -214,6 +214,8 @@ public: // メンバ関数
 	/// </summary>
 	/// <returns>座標</returns>
 	const XMFLOAT3& GetPosition() { return position; }
+	/// <returns>座標</returns>
+	const XMFLOAT3& GetOldPosition() { return oldPosition; }
 
 	const XMFLOAT3& GetRotation() { return rotation; }
 
@@ -222,6 +224,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position">座標</param>
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
+	void SetoldPosition(XMFLOAT3 oldPosition) { this->oldPosition = oldPosition; }
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 
@@ -272,6 +275,8 @@ protected: // メンバ変数
 	XMFLOAT3 rotation = { 0,0,0 };
 	// ローカル座標
 	XMFLOAT3 position = { 0,0,0 };
+	//fps
+	XMFLOAT3 oldPosition = position;
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
 	// 親オブジェクト

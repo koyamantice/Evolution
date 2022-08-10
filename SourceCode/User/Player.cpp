@@ -78,7 +78,7 @@ void Player::OnInit() {
 
 void Player::OnUpda() {
 	if (canMove) {
-		//Move();
+		Move();
 	}
 	Shot();
 
@@ -89,6 +89,13 @@ void Player::OnUpda() {
 void Player::OnDraw() {
 	Texture::PreDraw();
 	LockOn->Draw();
+	//
+	int a=ActorManager::GetInstance()->SearchNum("Bullet");
+	ImGui::Begin("test");
+	ImGui::SliderInt("bullet", &a, 0, 360);
+	ImGui::Unindent();
+	ImGui::End();
+
 }
 
 void Player::OnFinal() {
@@ -173,7 +180,7 @@ void Player::Shot() {
 	
 	}
 
-	rockpos=LockOn->GetPosition();
+	//rockpos=LockOn->GetPosition();
 	//XMFLOAT2 Controller= {input->GetRPosX(),input->GetRPosY() };
 	//float radius = atan2f(Controller.x,Controller.y);
 

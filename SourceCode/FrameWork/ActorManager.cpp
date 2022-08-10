@@ -95,11 +95,22 @@ void ActorManager::RemoveActor() {
 		});
 }
 
+const int& ActorManager::SearchNum(const std::string& tag) {
+	num = 0;
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() == tag) {
+			num++;
+		}
+	}
+	return num;
+}
+
 Actor* ActorManager::SearchActor(const std::string& tag) {
 
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();
-		if (actor->GetTag()==tag) {
+		if (actor->GetTag()== tag) {
 			return actor;
 		}
 	}

@@ -22,6 +22,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	enemy_shadow= ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("Crystal");
+	ActorManager::GetInstance()->AttachActor("Bullet");
+	ActorManager::GetInstance()->AttachActor("Bullet");
+	ActorManager::GetInstance()->AttachActor("Bullet");
 
 
 	Object3d* Sky{};

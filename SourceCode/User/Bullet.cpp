@@ -9,7 +9,7 @@ using namespace DirectX;
 
 Bullet::Bullet() {
 
-	ease = true;
+	//ease = true;
 }
 
 void Bullet::OnInit() {
@@ -56,14 +56,14 @@ void Bullet::OnUpda() {
 				}
 			}
 		}
-		if(Collision::SphereCollision2(obj->GetPosition(),1.5f, enemy->GetPosition(),1.5f)){
-			enemy->SetHp(enemy->GetHp()-1);
-			isRemove = true;
-		}
-		if (Collision::SphereCollision2(obj->GetPosition(), 1.0f, player->GetPosition(), 1.0f)) {
-			player->SetStock(player->GetStock()+1);
-			isRemove = true;
-		}
+		//if(Collision::SphereCollision2(obj->GetPosition(),1.5f, enemy->GetPosition(),1.5f)){
+		//	enemy->SetHp(enemy->GetHp()-1);
+		//	isRemove = true;
+		//}
+		//if (Collision::SphereCollision2(obj->GetPosition(), 1.0f, player->GetPosition(), 1.0f)) {
+		//	player->SetStock(player->GetStock()+1);
+		//	isRemove = true;
+		//}
 	}
 	Status->Update();
 	Status->SetPosition({ obj->GetPosition().x,obj->GetPosition().y + 2.5f,obj->GetPosition().z });
@@ -81,7 +81,6 @@ void Bullet::Follow() {
 	pos.z += vel_follow.y;
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
-
 }
 
 

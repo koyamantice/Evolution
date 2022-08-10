@@ -171,7 +171,7 @@ void Enemy::LeaveUpdate() {
 }
 
 void Enemy::WaitUpdate() {
-
+	obj->SetPosition({-5,0,0});
 }
 
 void Enemy::LifeCommon() {
