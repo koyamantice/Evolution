@@ -5,12 +5,10 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 
 int Actor::id = 0;
-int Actor::ID = 0;
 
 
 void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* compornent) {
 	id++;
-	ID++;
 	if (isActive) {
 		this->compornent = compornent;
 		this->tag = tag;

@@ -13,6 +13,7 @@ Bullet::Bullet() {
 }
 
 void Bullet::OnInit() {
+	ID = ActorManager::GetInstance()->SearchNum("Bullet");
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
 	obj->SetScale(XMFLOAT3(1, 1, 1));

@@ -27,6 +27,9 @@ private:
 	void OnDraw()override;
 	void OnFinal()override;
 	void DebugUpdate()override;
+
+	void OnCollision(const std::string& Tag)override;
+
 	void Move();
 
 	void RightMove();

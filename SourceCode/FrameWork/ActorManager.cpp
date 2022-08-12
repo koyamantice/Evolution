@@ -20,7 +20,7 @@ void ActorManager::Update() {
 		int a = actor->GetID();
 	}
 	RemoveActor();
-	//CheckAllCollisions();
+	CheckAllCollisions();
 }
 void ActorManager::DemoUpdate() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
@@ -45,38 +45,17 @@ void ActorManager::Finalize() {
 }
 
 void ActorManager::CheckAllCollisions() {
-	DirectX::XMFLOAT3 posA, posB;
-	Actor* ActA;
-	Actor* ActB;
-#pragma region
 	for (auto itrA = Actors.begin(); itrA != Actors.end(); ++itrA) {
-		for (auto itrB = Actors.end(); itrB != Actors.begin(); --itrB) {
-			ActA = itrA->get();
-			ActB = itrB->get();
-			if (ActA->GetID() == ActB->GetID()) { break; }
-			posA= ActA->GetPosition();
-			posB= ActB->GetPosition();
-			if (Collision::SphereCollision2(posA, 1.0f, posB, 1.0f)) {
-			
-				int a = 0;
+		for (auto itrB = Actors.rbegin(); itrB != Actors.rend(); ++itrB) {
+			Actor* actorA = itrA->get();
+			Actor* actorB = itrB->get();
+			//if (actorA->GetID() == actorB->GetID()) { return; }
+			if (Collision::SphereCollision2(actorA->GetPosition(),1.0f,actorB->GetPosition(),1.0f)) {
+				actorA->OnCollision(actorB->GetTag());
+				actorB->OnCollision(actorA->GetTag());
 			}
-
-
-
-
 		}
 	}
-
-#pragma endregion
-
-#pragma region
-#pragma endregion
-
-#pragma region
-#pragma endregion
-
-
-
 }
 
 void ActorManager::AttachActor(const std::string& ActorName) {

@@ -9,8 +9,9 @@ class ActorComponent;
 
 class Actor 
 {
-private:
-	static int ID;
+protected:
+	//エネミー専用
+	int ID;
 protected: // エイリアス
 // Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -91,7 +92,7 @@ public:
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 
-	virtual void OnCollision(){};
+	virtual void OnCollision(const std::string& Tag){};
 protected:
 	std::unique_ptr<Object3d> obj;
 	float hp = 0;

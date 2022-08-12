@@ -148,6 +148,12 @@ void Player::RightMove() {
 
 void Player::LeftMove() {
 }
+void Player::OnCollision(const std::string& Tag) {
+	if (Tag == "Enemy") {
+		int a = 0;
+		a++;
+	}
+}
 
 
 XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
