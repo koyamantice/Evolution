@@ -4,6 +4,12 @@
 class Player;
 
 class Bullet : public Actor {
+private:
+	enum class Pattern {
+		Approch,
+		Leave,
+		Wait,
+	};
 public:
 	Bullet();
 	~Bullet() {};
@@ -13,10 +19,13 @@ private:
 	void OnUpda()override;
 	void OnDraw()override;
 	void OnFinal()override;
+	void OnCollision(const std::string& Tag) override;
 	void Follow();
 
 	bool ease = false;
 	float frame = 0.0f;
+
+	int CoolTime = 0;
 
 	float vel = 0.4f;
 	std::unique_ptr<Texture> Status{};

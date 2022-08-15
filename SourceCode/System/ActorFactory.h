@@ -6,7 +6,7 @@ public:
 	ActorFactory(){};
 	~ActorFactory(){};
 
-	Actor* CreateActor(const std::string& sceneName);
+	Actor* CreateActor(const std::string& sceneName, ActorComponent* newActorCompornent=nullptr);
 private:
 
 };

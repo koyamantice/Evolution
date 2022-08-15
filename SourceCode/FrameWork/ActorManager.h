@@ -41,11 +41,14 @@ public:
 /// </summary>
 	void CheckAllCollisions();
 
-	void AttachActor(const std::string& ActorName);
+	void AttachActor(const std::string& ActorName, ActorComponent* newActorCompornent=nullptr);
 
 	void RemoveActor();
 
 	const int& SearchNum(const std::string& tag);
+
+	Actor* CommandActor(const int& ID);
+
 
 	Actor* SearchActor(const std::string& tag);
 	Actor* SearchActorBack(const std::string& tag);

@@ -17,7 +17,6 @@ void ActorManager::Initialize() {
 void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
-		int a = actor->GetID();
 	}
 	RemoveActor();
 	CheckAllCollisions();
@@ -28,8 +27,9 @@ void ActorManager::DemoUpdate() {
 	}
 }
 void ActorManager::Draw() {
-	for (std::unique_ptr<Actor>& actor : Actors) {
-		actor->Draw();
+	for (auto itrA = Actors.rbegin(); itrA != Actors.rend(); ++itrA) {
+		Actor* ActorA = itrA->get();
+		ActorA->Draw();
 	}
 }
 void ActorManager::DemoDraw() {
@@ -50,7 +50,7 @@ void ActorManager::CheckAllCollisions() {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
 			//if (actorA->GetID() == actorB->GetID()) { return; }
-			if (Collision::SphereCollision2(actorA->GetPosition(),1.0f,actorB->GetPosition(),1.0f)) {
+			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
 				actorA->OnCollision(actorB->GetTag());
 				actorB->OnCollision(actorA->GetTag());
 			}
@@ -58,12 +58,12 @@ void ActorManager::CheckAllCollisions() {
 	}
 }
 
-void ActorManager::AttachActor(const std::string& ActorName) {
+void ActorManager::AttachActor(const std::string& ActorName, ActorComponent* newActorCompornent) {
 	assert(actorFactory_);
 	
 	std::unique_ptr<Actor> newActor;
 	
-	newActor.reset(actorFactory_->CreateActor(ActorName));
+	newActor.reset(actorFactory_->CreateActor(ActorName,newActorCompornent));
 
 	Actors.push_back(std::move(newActor));
 }
@@ -83,6 +83,18 @@ const int& ActorManager::SearchNum(const std::string& tag) {
 		}
 	}
 	return num;
+}
+
+Actor* ActorManager::CommandActor(const int& ID) {
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() == "Enemy") {
+			if (actor->GetID() == ID) {
+				return actor;
+			}
+		}
+	}
+	return nullptr;
 }
 
 Actor* ActorManager::SearchActor(const std::string& tag) {

@@ -16,11 +16,11 @@ void Bullet::OnInit() {
 	ID = ActorManager::GetInstance()->SearchNum("Bullet");
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-	obj->SetScale(XMFLOAT3(1, 1, 1));
-	obj->SetPosition(player->GetPosition());
+	obj->SetScale(XMFLOAT3(0.7f, 0.7f, 0.7f));
+	obj->SetPosition({ ID * 1.0f,0,ID * 1.0f });
 	landing = player->GetLockPos();
-	Texture* Lock_ = Texture::Create(ImageManager::Battle, {obj->GetPosition().x,obj->GetPosition().y+1.0f,obj->GetPosition().z
-}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+	Texture* Lock_ = Texture::Create(ImageManager::Battle, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
+		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Lock_->SetIsBillboard(true);
 	Lock_->TextureCreate();
 	Lock_->SetRotation({ 0,0,0 });
@@ -30,15 +30,21 @@ void Bullet::OnInit() {
 
 void Bullet::OnUpda() {
 	XMFLOAT3 pos = obj->GetPosition();
+	if (CoolTime != 0) {
+		CoolTime++;
+		if (CoolTime >= 120) {
+			CoolTime = 0;
+		}
+	}
 	if (ease) {
-		pos.x = Ease(InOut,Quad,frame,pos.x,landing.x);
+		pos.x = Ease(InOut, Quad, frame, pos.x, landing.x);
 		pos.y += vel; //+
 		vel -= 0.05f;//
-		if (pos.y<0.0f) {
-			pos.y = 0; 
+		if (pos.y < 0.0f) {
+			pos.y = 0;
 		}
-		pos.z = Ease(InOut,Quad,frame,pos.z,landing.z);
-		if (frame<1.0f) {
+		pos.z = Ease(InOut, Quad, frame, pos.z, landing.z);
+		if (frame < 1.0f) {
 			frame += 0.02f;
 		} else {
 			frame = 1.0f;
@@ -48,23 +54,15 @@ void Bullet::OnUpda() {
 		obj->SetPosition(pos);
 	} else {
 		if (follow) {
-			Follow();
+			//Follow();
 		}
 		if (enemy->GetIsActive()) {
 			if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 20.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 				if (!follow) {
-					follow=true;
+					follow = true;
 				}
 			}
 		}
-		//if(Collision::SphereCollision2(obj->GetPosition(),1.5f, enemy->GetPosition(),1.5f)){
-		//	enemy->SetHp(enemy->GetHp()-1);
-		//	isRemove = true;
-		//}
-		//if (Collision::SphereCollision2(obj->GetPosition(), 1.0f, player->GetPosition(), 1.0f)) {
-		//	player->SetStock(player->GetStock()+1);
-		//	isRemove = true;
-		//}
 	}
 	Status->Update();
 	Status->SetPosition({ obj->GetPosition().x,obj->GetPosition().y + 2.5f,obj->GetPosition().z });
@@ -75,7 +73,7 @@ void Bullet::Follow() {
 	XMFLOAT3 position{};
 	position.x = (enemy->GetPosition().x - pos.x);
 	position.z = (enemy->GetPosition().z - pos.z);
-	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI))-180; //- 90;// *(XM_PI / 180.0f);
+	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
 	vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.3f;
 	vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.3f;
 	pos.x -= vel_follow.x;
@@ -95,4 +93,25 @@ void Bullet::OnDraw() {
 }
 
 void Bullet::OnFinal() {
+}
+
+void Bullet::OnCollision(const std::string& Tag) {
+
+	if (Tag == "Player") {
+		//player->SetStock(player->GetStock() + 1);
+		isRemove = true;
+	}
+
+	if (Collision::SphereCollision2(obj->GetPosition(), 1.5f, enemy->GetPosition(), 1.5f)) {
+		if (CoolTime == 0) {
+			//	obj->SetPosition({ obj->GetPosition(), , obj->GetPosition()});
+			enemy->SetHp(enemy->GetHp() - 1);
+			CoolTime++;
+		}
+		follow = false;
+	}
+
+
+
+
 }

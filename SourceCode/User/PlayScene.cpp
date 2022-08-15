@@ -8,6 +8,7 @@
 #include"ModelManager.h"
 #include <TisGame.h>
 #include"Player.h"
+#include"PlayerUI.h"
 #include"Enemy.h"
 #include <SourceCode/Common/Easing.h>
 #include"ActorManager.h"
@@ -17,15 +18,15 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//背景スプライト生成
 	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
 	//スプライト生成
+	PlayerComp = new PlayerUI();
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	enemy_shadow= ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("Crystal");
-	ActorManager::GetInstance()->AttachActor("Bullet");
-	ActorManager::GetInstance()->AttachActor("Bullet");
-	ActorManager::GetInstance()->AttachActor("Bullet");
-
+	for (int i = 0; i < 30;i++) {
+		ActorManager::GetInstance()->AttachActor("Bullet");
+	}
 
 	Object3d* Sky{};
 	Sky = new Object3d();

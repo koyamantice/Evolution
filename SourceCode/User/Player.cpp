@@ -7,6 +7,7 @@
 #include "CollisionAttribute.h"
 #include<fstream>
 #include <SourceCode/FrameWork/ActorManager.h>
+#include"PlayerUI.h"
 
 void Player::LoadData() {
 	std::ifstream file;
@@ -74,6 +75,9 @@ void Player::OnInit() {
 	Lock_->SetRotation({ 90,0,0 });
 	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f});
 	LockOn.reset(Lock_);
+
+	compornent = new PlayerUI();
+	compornent->Initialize();
 }
 
 void Player::OnUpda() {
@@ -81,7 +85,6 @@ void Player::OnUpda() {
 		Move();
 	}
 	Shot();
-
 	ContactObj();
 	LockOn->Update();
 }
@@ -168,10 +171,11 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
-	if (stock <= 0) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
+	if (stock >= 30) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
 	if (input->TriggerButton(input->Button_A)|| input->TriggerKey(DIK_SPACE)) {
-		ActorManager::GetInstance()->AttachActor("Bullet");
-		stock--;
+		//Actor* Act=ActorManager::GetInstance()->CommandActor(stock);
+		//
+		//stock++;
 	}
 	if (input->PushKey(DIK_UP) || input->LeftTiltStick(input->Up)) {
 	

@@ -16,9 +16,10 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(ZBack, L"Resources/2d/PauseUi/ZBack.png");
 	Sprite::LoadTexture(Option, L"Resources/2d/PauseUi/Option.png");
 	Sprite::LoadTexture(Vignette, L"Resources/2d/Vignette.png");
-	Sprite::LoadTexture(CharaCover, L"Resources/2d/CharaCover.png");
-
-
+	Sprite::LoadTexture(CharaCover, L"Resources/2d/CharaCover2.png");
+	Sprite::LoadTexture(Num, L"Resources/2d/Num.png"); 
+	Sprite::LoadTexture(numBack, L"Resources/2d/numBack.png");
+	Sprite::LoadTexture(slash, L"Resources/2d/slash.png");
 }
 
 void ImageManager::LoadTex2D() {

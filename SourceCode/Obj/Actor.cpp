@@ -10,7 +10,7 @@ int Actor::id = 0;
 void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* compornent) {
 	id++;
 	if (isActive) {
-		this->compornent = compornent;
+		//this->compornent = compornent;
 		this->tag = tag;
 		Object3d* obj_ = new Object3d();
 		obj_->SetModel(model);
@@ -18,7 +18,7 @@ void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* com
 		obj.reset(obj_);
 		//ActorManager::GetInstance()->AttachList(this);
 		OnInit();
-		if (this->compornent) { this->compornent->Initialize(); }
+		//if (this->compornent) { this->compornent->Initialize(); }
 	}
 }
 
@@ -38,10 +38,10 @@ void Actor::Demo() {
 
 void Actor::Draw() {
 	if (isActive) {
-		if (compornent) { compornent->Draw(); }
 		Object3d::PreDraw();
 		obj->Draw();
 		OnDraw();
+		if (compornent) { compornent->Draw(); }
 	}
 }
 

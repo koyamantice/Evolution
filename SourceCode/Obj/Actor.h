@@ -50,6 +50,9 @@ public:
 	//ID取得
 	const int& GetID()const { return id; }
 
+	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
+	const float& GetSize()const { return obj->GetSize(); }
+
 	//名前セッタ＆ゲッタ
 	void SetName(const std::string& Name) { name = Name; }
 	const std::string& GetName() { return name; }
@@ -83,6 +86,7 @@ public:
 	void Update();		//更新処理
 	void Demo();		//更新処理
 	void Draw();	//描画処理
+
 	void DemoDraw();	//描画処理
 	void Finalize();	//終了処理
 
@@ -100,7 +104,7 @@ protected:
 	bool canMove = true;
 
 	
-	int stock = 30;
+	int stock = 0;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;
 };

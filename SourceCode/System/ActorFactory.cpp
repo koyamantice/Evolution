@@ -9,13 +9,13 @@
 
 
 
-Actor* ActorFactory::CreateActor(const std::string& sceneName) {
+Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* newActorCompornent) {
 	//ŽŸ‚ÌƒV[ƒ“‚Ìì¬
 	Actor* newActor = nullptr;
-	
+
 	if (sceneName == "Player") {
 		newActor = new Player();
-		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player),"Player",new PlayerUI());
+		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player),"Player", newActorCompornent);
 	}
 	if (sceneName == "Enemy") {
 		newActor = new Enemy();

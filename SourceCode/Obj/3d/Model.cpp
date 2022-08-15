@@ -270,6 +270,7 @@ void Model::Initialize(const std::string& modelname)
 void Model::LoadMaterial(const std::string & directoryPath, const std::string & filename)
 {
 	// ファイルストリーム
+
 	std::ifstream file;
 	// マテリアルファイルを開く
 	file.open(directoryPath + filename);

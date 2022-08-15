@@ -22,8 +22,10 @@ public:
 		ZBack,
 		Option,
 		Vignette,
-		CharaCover
-
+		CharaCover,
+		Num,
+		numBack,
+		slash,
 	};
 	enum tex2dName {
 		Lock,
