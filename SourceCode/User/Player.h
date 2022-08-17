@@ -43,7 +43,6 @@ private:
 	XMMATRIX rot2;
 
 	Actor* Picmin[30]{};
-	float angle = 0;
 	float radius = 0;
 	float vel = 0;
 	int charge = 0;

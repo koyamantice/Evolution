@@ -98,11 +98,10 @@ void Bullet::OnFinal() {
 void Bullet::OnCollision(const std::string& Tag) {
 
 	if (Tag == "Player") {
-		//player->SetStock(player->GetStock() + 1);
 		isRemove = true;
 	}
 
-	if (Collision::SphereCollision2(obj->GetPosition(), 1.5f, enemy->GetPosition(), 1.5f)) {
+	if (Tag == "Enemy") {
 		if (CoolTime == 0) {
 			//	obj->SetPosition({ obj->GetPosition(), , obj->GetPosition()});
 			enemy->SetHp(enemy->GetHp() - 1);

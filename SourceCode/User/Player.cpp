@@ -96,6 +96,7 @@ void Player::OnDraw() {
 	int a=ActorManager::GetInstance()->SearchNum("Bullet");
 	ImGui::Begin("test");
 	ImGui::SliderInt("bullet", &a, 0, 360);
+	ImGui::SliderFloat("Anglet", &angle, 0, 360);
 	ImGui::Unindent();
 	ImGui::End();
 
@@ -141,9 +142,12 @@ void Player::Move() {
 		rot.y = angle-90;
 	}
 
+//	XMFLOAT3 objPos = obj->GetPosition();
+	LockOn->SetPosition(pos.x, 0.1f, pos.z);
 
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
+
 }
 
 void Player::RightMove() {
@@ -151,11 +155,21 @@ void Player::RightMove() {
 
 void Player::LeftMove() {
 }
+
 void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Enemy") {
+		hp--;
 		int a = 0;
 		a++;
 	}
+	if (Tag == "Bullet") {
+		//player->SetStock(player->GetStock() + 1);
+	}
+	if (Tag == "Crystal") {
+		int a = 0;
+		a++;
+	}
+
 }
 
 
@@ -177,16 +191,16 @@ void Player::Shot() {
 		//
 		//stock++;
 	}
-	if (input->PushKey(DIK_UP) || input->LeftTiltStick(input->Up)) {
+	if(input->LeftTiltStick(input->Up)) {
 	
 	}
-	if (input->PushKey(DIK_DOWN) || input->LeftTiltStick(input->Down)) {
+	if (input->LeftTiltStick(input->Down)) {
 	
 	}
-	if (input->PushKey(DIK_RIGHT) || input->LeftTiltStick(input->Right)) {
+	if (input->LeftTiltStick(input->Right)) {
 	
 	}
-	if (input->PushKey(DIK_LEFT) || input->LeftTiltStick(input->Left)) {
+	if (input->LeftTiltStick(input->Left)) {
 	
 	}
 
@@ -200,8 +214,8 @@ void Player::Shot() {
 	//rockpos.y = 0.1f;
 	//rockpos.z -= vecvel.z;
 
-
-	LockOn->SetPosition(rockpos);
+	XMFLOAT3 objPos = obj->GetPosition();
+	LockOn->SetPosition(objPos.x,0.5f,objPos.z);
 							   
 	//if (input->RightTiltStick(input->Left)){
 	//	rockpos=LockOn->GetPosition();

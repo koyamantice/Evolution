@@ -49,7 +49,6 @@ void ActorManager::CheckAllCollisions() {
 		for (auto itrB = Actors.rbegin(); itrB != Actors.rend(); ++itrB) {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
-			//if (actorA->GetID() == actorB->GetID()) { return; }
 			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
 				actorA->OnCollision(actorB->GetTag());
 				actorB->OnCollision(actorA->GetTag());
