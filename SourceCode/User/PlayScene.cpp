@@ -111,6 +111,38 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		Clear->SetPosition(clearPos);
 	}
 }
+
+void PlayScene::CameraUpda() {
+	Input* input = Input::GetInstance();
+	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
+		if (input->PushKey(DIK_RIGHT)) {
+			angle -= 1;
+		}
+		if (input->PushKey(DIK_LEFT)) {
+			angle += 1;
+		}
+
+		if (input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT)) {
+			player_shadow->SetCanMove(false);
+			angle = player_shadow->GetRotation().y;
+		} else {
+			player_shadow->SetCanMove(true);
+		}
+
+		dis.x = sinf(angle * (PI / 180)) * 15.0f;
+		dis.y = cosf(angle * (PI / 180)) * 15.0f;
+	}
+
+	distance.x = Ease(In, Quad, 0.5f, distance.x, dis.x);
+	distance.y = Ease(In, Quad, 0.5f, distance.y, dis.y);
+
+	player_shadow->SetAngle(angle);
+
+	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z });
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->Update();
+}
+
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
@@ -130,34 +162,4 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	}
 }
 
-void PlayScene::CameraUpda() {
-	Input* input = Input::GetInstance();
-if(input->PushKey(DIK_RIGHT)||input->PushKey(DIK_LEFT)){
-	if (input->PushKey(DIK_RIGHT)) {
-		angle-=1;
-	}
-	if (input->PushKey(DIK_LEFT)) {
-		angle+=1;
-	}
-
-	if (input->PushKey(DIK_RIGHT)&& input->PushKey(DIK_LEFT)){
-		player_shadow->SetCanMove(false);
-		angle = player_shadow->GetRotation().y;
-	} else {
-		player_shadow->SetCanMove(true);
-	}
-
-	dis.x=sinf(angle * (PI / 180)) * 15.0f;
-	dis.y=cosf(angle*(PI/180)) * 15.0f;
-}
-
-	distance.x=Ease(In,Quad,0.5f,distance.x,dis.x);
-	distance.y=Ease(In,Quad,0.5f,distance.y,dis.y);
-
-	player_shadow->SetAngle(angle);
-	
-	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z });
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x+distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
-	camera->Update();
-}
 

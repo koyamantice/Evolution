@@ -143,7 +143,7 @@ void Player::Move() {
 	}
 
 //	XMFLOAT3 objPos = obj->GetPosition();
-	LockOn->SetPosition(pos.x, 0.1f, pos.z);
+	//LockOn->SetPosition(pos.x, 0.1f, pos.z);
 
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
@@ -185,7 +185,7 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
-	if (stock >= 30) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
+	//if (stock >= 30) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
 	if (input->TriggerButton(input->Button_A)|| input->TriggerKey(DIK_SPACE)) {
 		//Actor* Act=ActorManager::GetInstance()->CommandActor(stock);
 		//
@@ -214,18 +214,17 @@ void Player::Shot() {
 	//rockpos.y = 0.1f;
 	//rockpos.z -= vecvel.z;
 
-	XMFLOAT3 objPos = obj->GetPosition();
-	LockOn->SetPosition(objPos.x,0.5f,objPos.z);
-							   
-	//if (input->RightTiltStick(input->Left)){
-	//	rockpos=LockOn->GetPosition();
-	//	XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,1,0 }, obj->GetRotation().y);
-	//	rockpos.x -= vecvel.x;
-	//	rockpos.y = 0.1f;
-	//	rockpos.z -= vecvel.z;
-	//	LockOn->SetPosition(rockpos);
-	//	charge++;
-	//}
+	XMFLOAT3 Lpos = LockOn->GetPosition();
+	XMFLOAT3 plapos = obj->GetPosition();
+	//XMFLOAT3 position{};
+	//position.x = (plapos.x - Lpos.x);
+	//position.z = (plapos.z - Lpos.z);
+	Langle++;
+	Lpos.x = plapos.x + sinf(Langle * (XM_PI / 180)) * distance;
+	Lpos.y = 0.18f;									   
+	Lpos.z = plapos.z + cosf(Langle * (XM_PI / 180)) * distance;
+	LockOn->SetPosition(Lpos);
+
 
 }
 

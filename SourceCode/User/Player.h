@@ -44,6 +44,10 @@ private:
 
 	Actor* Picmin[30]{};
 	float radius = 0;
+
+	float Langle = 0;
+	float distance = 5.0f;
+
 	float vel = 0;
 	int charge = 0;
 	bool onGround = false;
