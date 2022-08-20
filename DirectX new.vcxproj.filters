@@ -197,6 +197,9 @@
     <ClCompile Include="SourceCode\User\PlayerUI.cpp">
       <Filter>User\Player</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Common\Vec.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\PlayerUI.h">
       <Filter>User\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Common\Vec.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

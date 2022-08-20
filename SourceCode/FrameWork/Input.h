@@ -142,7 +142,7 @@ private: // メンバ変数
 	ComPtr<IDirectInputDevice8> devMouse;
 	DIMOUSESTATE2 mouseState = {};
 	DIMOUSESTATE2 mouseStatePre = {};
-	POINT p;
+	POINT mousePoint;
 	//ゲームパッドデバイス
 	DWORD g_dxNumForoce;
 	ComPtr<IDirectInputDevice8> devGamePad;

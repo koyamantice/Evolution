@@ -145,9 +145,9 @@ void Input::Update() {
 		// 前回の入力を保存
 		mouseStatePre = mouseState;
 		// マウス座標を取得する
-		GetCursorPos(&p);
+		GetCursorPos(&mousePoint);
 		// スクリーン座標をクライアント座標に変換する
-		ScreenToClient(winApp->GetHwnd(), &p);
+		ScreenToClient(winApp->GetHwnd(), &mousePoint);
 
 
 		// マウスの入力
@@ -275,8 +275,8 @@ Input::MouseMove Input::GetMouseMove() {
 
 Input::MousePoint Input::GetPoint() {
 	MousePoint tmp{};
-	tmp.lX = p.x;
-	tmp.lY = p.y;
+	tmp.lX = mousePoint.x;
+	tmp.lY = mousePoint.y;
 	return tmp;
 }
 
