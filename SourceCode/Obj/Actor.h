@@ -25,6 +25,12 @@ protected:
 	std::string name;
 	//付与されているタグへのポインタ
 	std::string tag = "None";
+public:
+	int command = 0;
+	enum command {
+		Wait = 0,
+		Attack,
+	};
 protected:
 	//オブジェクト識別番号(絶対に被ることはない数字)
 	static int id;
@@ -80,6 +86,9 @@ public:
 	//
 	void SetStock(const int& Stock) {this->stock = Stock;};
 	const int& GetStock() { return stock; }
+	//
+	void SetCommand(const int& command, XMFLOAT3 pos);
+	const int& GetCommand() { return command; }
 
 	//virtualにしようか悩み中//解決済み
 	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
@@ -103,7 +112,7 @@ protected:
 	float angle = 0;
 	bool canMove = true;
 
-	
+	XMFLOAT3 AftaerPos{};
 	int stock = 0;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;

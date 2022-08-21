@@ -49,6 +49,7 @@ public:
 
 	Actor* CommandActor(const int& ID);
 
+	Actor* SearchWaitBullet();
 
 	Actor* SearchActor(const std::string& tag);
 	Actor* SearchActorBack(const std::string& tag);

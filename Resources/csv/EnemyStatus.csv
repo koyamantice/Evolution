@@ -3,6 +3,6 @@ HP,12,
 //基本速さ
 VEL,4.061,
 //最初のフェーズ
-PHASE,WAIT,
+PHASE,LEAVE,
 //待機時間
 WAITTIMER,0,

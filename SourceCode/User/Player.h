@@ -6,6 +6,7 @@
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
 #include<DirectXMath.h>
+#include"Aim.h"
 
 class Player :public Actor {
 public:
@@ -19,7 +20,8 @@ private:
 	Input* input =Input::GetInstance();
 
 	std::stringstream parameterCommands;
-	std::unique_ptr<Texture> LockOn{};
+	//std::unique_ptr<Texture> LockOn{};
+	std::unique_ptr<Aim> LockOn{};
 
 	XMFLOAT3 rockpos={0.0f,0.5f,0.0f};
 	void OnInit()override;
@@ -45,8 +47,6 @@ private:
 	Actor* Picmin[30]{};
 	float radius = 0;
 
-	float Langle = 0;
-	float distance = 5.0f;
 
 	float vel = 0;
 	int charge = 0;

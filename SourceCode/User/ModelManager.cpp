@@ -10,7 +10,7 @@ ModelManager* ModelManager::GetIns() {
 }
 
 void ModelManager::Initialize() {
-	LoadModel(Player, "chr_knight");
+	LoadModel(Player, "human");
 	LoadModel(Enemy, "ball");
 	LoadModel(skydome, "skydome");
 	LoadModel(Ground, "map");

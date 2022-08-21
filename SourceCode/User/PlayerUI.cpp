@@ -54,8 +54,8 @@ void PlayerUI::OnInitialize() {
 		}
 	}
 	for (int j = 0; j < 10; j++) {
-		num[0][j]->SetPosition({ 910 ,600 });
-		num[1][j]->SetPosition({ 820, 600 });
+		num[0][j]->SetPosition({ 1150 ,600 });
+		num[1][j]->SetPosition({ 1060, 600 });
 	}
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -71,8 +71,8 @@ void PlayerUI::OnInitialize() {
 		}
 	}
 	for (int j = 0; j < 10; j++) {
-		numBullet[0][j]->SetPosition({ 1150 ,600 });
-		numBullet[1][j]->SetPosition({ 1060, 600 });
+		numBullet[0][j]->SetPosition({ 910 ,600 });
+		numBullet[1][j]->SetPosition({ 820, 600 });
 	}
 }
 

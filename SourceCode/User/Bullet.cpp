@@ -14,9 +14,11 @@ Bullet::Bullet() {
 
 void Bullet::OnInit() {
 	ID = ActorManager::GetInstance()->SearchNum("Bullet");
+	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-	obj->SetScale(XMFLOAT3(0.7f, 0.7f, 0.7f));
+	obj->SetScale({ 0.3f, 0.3f, 0.3f });
+	obj->SetColor({ 1.0f, 1.0f, 1.0f,1.0f });
 	obj->SetPosition({ ID * 1.0f,0,ID * 1.0f });
 	landing = player->GetLockPos();
 	Texture* Lock_ = Texture::Create(ImageManager::Battle, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
@@ -30,44 +32,24 @@ void Bullet::OnInit() {
 
 void Bullet::OnUpda() {
 	XMFLOAT3 pos = obj->GetPosition();
-	if (CoolTime != 0) {
-		CoolTime++;
-		if (CoolTime >= 120) {
-			CoolTime = 0;
-		}
-	}
-	if (ease) {
-		pos.x = Ease(InOut, Quad, frame, pos.x, landing.x);
-		pos.y += vel; //+
-		vel -= 0.05f;//
-		if (pos.y < 0.0f) {
-			pos.y = 0;
-		}
-		pos.z = Ease(InOut, Quad, frame, pos.z, landing.z);
-		if (frame < 1.0f) {
-			frame += 0.02f;
-		} else {
-			frame = 1.0f;
-			pos.y = 0.0f;
-			ease = false;
-		}
-		obj->SetPosition(pos);
-	} else {
-		if (follow) {
-			//Follow();
-		}
-		if (enemy->GetIsActive()) {
-			if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 20.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-				if (!follow) {
-					follow = true;
-				}
-			}
-		}
+
+	switch (command) {
+	case Wait:
+
+		WaitUpda();
+		break;
+	case Attack:
+
+		AttackUpda();
+		break;
+	default:
+		assert(0);
+		break;
 	}
 	Status->Update();
 	Status->SetPosition({ obj->GetPosition().x,obj->GetPosition().y + 2.5f,obj->GetPosition().z });
 }
-void Bullet::Follow() {
+void Bullet::Follow2Enemy() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
 	XMFLOAT3 position{};
@@ -80,6 +62,23 @@ void Bullet::Follow() {
 	pos.z += vel_follow.y;
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
+}
+
+void Bullet::Follow2Player() {
+	XMFLOAT3 pos = obj->GetPosition();
+	XMFLOAT3 rot = obj->GetRotation();
+	float vel = (int)(rand() % 10+1) * 0.03f;
+	XMFLOAT3 position{};
+	position.x = (player->GetPosition().x - pos.x);
+	position.z = (player->GetPosition().z - pos.z);
+	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
+	vel_follow.x = sinf(-atan2f(position.x, position.z)) * vel;
+	vel_follow.y = cosf(-atan2f(position.x, position.z)) * vel;
+	pos.x -= vel_follow.x;
+	pos.z += vel_follow.y;
+	obj->SetPosition(pos);
+	obj->SetRotation(rot);
+
 }
 
 
@@ -113,4 +112,14 @@ void Bullet::OnCollision(const std::string& Tag) {
 
 
 
+}
+
+void Bullet::WaitUpda() {
+	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 8.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
+		Follow2Player();
+	}
+}
+
+void Bullet::AttackUpda() {
+	Follow2Enemy();
 }

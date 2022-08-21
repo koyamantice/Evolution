@@ -20,7 +20,11 @@ private:
 	void OnDraw()override;
 	void OnFinal()override;
 	void OnCollision(const std::string& Tag) override;
-	void Follow();
+	
+	void WaitUpda();
+	void AttackUpda();
+	void Follow2Enemy();
+	void Follow2Player();
 
 	bool ease = false;
 	float frame = 0.0f;

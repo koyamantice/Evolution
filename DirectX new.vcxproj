@@ -263,6 +263,7 @@
     <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />
+    <ClCompile Include="SourceCode\User\Aim.cpp" />
     <ClCompile Include="SourceCode\User\Bullet.cpp" />
     <ClCompile Include="SourceCode\User\Crystal.cpp" />
     <ClCompile Include="SourceCode\User\DebugScene.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="SourceCode\System\DirectXCommon.h" />
     <ClInclude Include="SourceCode\System\SceneFactory.h" />
     <ClInclude Include="SourceCode\TisGame.h" />
+    <ClInclude Include="SourceCode\User\Aim.h" />
     <ClInclude Include="SourceCode\User\Bullet.h" />
     <ClInclude Include="SourceCode\User\Crystal.h" />
     <ClInclude Include="SourceCode\User\DebugScene.h" />

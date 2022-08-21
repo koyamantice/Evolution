@@ -65,16 +65,16 @@ void Player::OnInit() {
 
 	vel /= 5.0f;
 
+	obj->SetScale({ 0.5f, 0.5f, 0.5f });
+	obj->SetColor({ 0.0f, 1.0f, 0.0f,1.0f });
 
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
 
-	Texture* Lock_ = Texture::Create(ImageManager::Lock, obj->GetPosition(), { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Lock_->TextureCreate();
-	Lock_->SetRotation({ 90,0,0 });
-	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f});
-	LockOn.reset(Lock_);
+	Aim* LockOn_=new Aim();
+	LockOn.reset(LockOn_);
+	LockOn->Init();
 
 	compornent = new PlayerUI();
 	compornent->Initialize();
@@ -86,13 +86,13 @@ void Player::OnUpda() {
 	}
 	Shot();
 	ContactObj();
-	LockOn->Update();
+	LockOn->Upda();
 }
 
 void Player::OnDraw() {
-	Texture::PreDraw();
-	LockOn->Draw();
 	//
+	LockOn->Draw();
+
 	int a=ActorManager::GetInstance()->SearchNum("Bullet");
 	ImGui::Begin("test");
 	ImGui::SliderInt("bullet", &a, 0, 360);
@@ -150,11 +150,7 @@ void Player::Move() {
 
 }
 
-void Player::RightMove() {
-}
 
-void Player::LeftMove() {
-}
 
 void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Enemy") {
@@ -185,47 +181,7 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 
 
 void Player::Shot() {
-	//if (stock >= 30) { return; }//’e–³‚¯‚ê‚Î‚¨‚í‚é
-	if (input->TriggerButton(input->Button_A)|| input->TriggerKey(DIK_SPACE)) {
-		//Actor* Act=ActorManager::GetInstance()->CommandActor(stock);
-		//
-		//stock++;
-	}
-	if(input->LeftTiltStick(input->Up)) {
-	
-	}
-	if (input->LeftTiltStick(input->Down)) {
-	
-	}
-	if (input->LeftTiltStick(input->Right)) {
-	
-	}
-	if (input->LeftTiltStick(input->Left)) {
-	
-	}
-
-	//rockpos=LockOn->GetPosition();
-	//XMFLOAT2 Controller= {input->GetRPosX(),input->GetRPosY() };
-	//float radius = atan2f(Controller.x,Controller.y);
-
-	//XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ sinf(Controller.x),0,,0}, obj->GetRotation().y);
-
-	//rockpos.x -= vecvel.x;
-	//rockpos.y = 0.1f;
-	//rockpos.z -= vecvel.z;
-
-	XMFLOAT3 Lpos = LockOn->GetPosition();
-	XMFLOAT3 plapos = obj->GetPosition();
-	//XMFLOAT3 position{};
-	//position.x = (plapos.x - Lpos.x);
-	//position.z = (plapos.z - Lpos.z);
-	Langle++;
-	Lpos.x = plapos.x + sinf(Langle * (XM_PI / 180)) * distance;
-	Lpos.y = 0.18f;									   
-	Lpos.z = plapos.z + cosf(Langle * (XM_PI / 180)) * distance;
-	LockOn->SetPosition(Lpos);
-
-
+	//LockOn->Move();
 }
 
 void Player::ContactObj() {

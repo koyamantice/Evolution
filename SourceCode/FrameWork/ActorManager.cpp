@@ -50,8 +50,10 @@ void ActorManager::CheckAllCollisions() {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
 			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
-				actorA->OnCollision(actorB->GetTag());
-				actorB->OnCollision(actorA->GetTag());
+				if (actorA->GetID()!= actorB->GetID()) {
+					actorA->OnCollision(actorB->GetTag());
+					actorB->OnCollision(actorA->GetTag());
+				}
 			}
 		}
 	}
@@ -92,6 +94,16 @@ Actor* ActorManager::CommandActor(const int& ID) {
 				return actor;
 			}
 		}
+	}
+	return nullptr;
+}
+
+Actor* ActorManager::SearchWaitBullet() {
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+	Actor* actor = itr->get();
+		if (actor->GetTag() !="Bullet") { continue; }
+		if (actor->GetCommand() == Actor::command::Attack) { continue; }
+		return actor;
 	}
 	return nullptr;
 }
