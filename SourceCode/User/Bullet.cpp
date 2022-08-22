@@ -115,11 +115,12 @@ void Bullet::OnCollision(const std::string& Tag) {
 }
 
 void Bullet::WaitUpda() {
-	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 8.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
+	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
 		Follow2Player();
 	}
 }
 
 void Bullet::AttackUpda() {
+
 	Follow2Enemy();
 }

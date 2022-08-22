@@ -14,7 +14,6 @@ void Aim::Init() {
 }
 
 void Aim::Upda() {
-	player = ActorManager::GetInstance()->SearchActor("Player");
 	LockOn->Update();
 	Move();
 
@@ -34,23 +33,22 @@ void Aim::Move() {
 			bullet->SetCommand(Actor::command::Attack,LockOn->GetPosition());
 		}
 	}
-	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
+	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)|| input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN)) {
 		if (input->PushKey(DIK_RIGHT)) {
 			angle -= 1;
 		}
 		if (input->PushKey(DIK_LEFT)) {
 			angle += 1;
 		}
-	}
-	if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN)) {
 		if (input->PushKey(DIK_UP)) {
 			distance -= 1;
 		}
 		if (input->PushKey(DIK_DOWN)) {
 			distance += 1;
 		}
-	}
 
+	}
+	player = ActorManager::GetInstance()->SearchActor("Player");
 	XMFLOAT3 Lpos = LockOn->GetPosition();
 	XMFLOAT3 plapos = player->GetPosition();
 	//Langle+=0.5f;
