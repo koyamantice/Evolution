@@ -26,12 +26,12 @@ private:
 	void Follow2Enemy();
 	void Follow2Player();
 
-	bool ease = false;
+	bool throwReady = false;
 	float frame = 0.0f;
 
 	int CoolTime = 0;
 
-	float vel = 0.4f;
+	float vel = 0.8f;
 	std::unique_ptr<Texture> Status{};
 
 	bool follow = false;

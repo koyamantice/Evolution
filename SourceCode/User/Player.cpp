@@ -159,7 +159,7 @@ void Player::OnCollision(const std::string& Tag) {
 		a++;
 	}
 	if (Tag == "Bullet") {
-		//player->SetStock(player->GetStock() + 1);
+		//SetStock(GetStock() + 1);
 	}
 	if (Tag == "Crystal") {
 		int a = 0;

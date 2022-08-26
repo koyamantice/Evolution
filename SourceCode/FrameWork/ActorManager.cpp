@@ -18,8 +18,8 @@ void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
 	}
-	RemoveActor();
 	CheckAllCollisions();
+	RemoveActor();
 }
 void ActorManager::DemoUpdate() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
@@ -50,7 +50,7 @@ void ActorManager::CheckAllCollisions() {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
 			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
-				if (actorA->GetID()!= actorB->GetID()) {
+				if (actorA->GetTag()!= actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());
 				}

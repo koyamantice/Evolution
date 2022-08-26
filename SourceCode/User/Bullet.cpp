@@ -17,7 +17,7 @@ void Bullet::OnInit() {
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-	obj->SetScale({ 0.3f, 0.3f, 0.3f });
+	obj->SetScale({ 0.5f, 0.5f, 0.5f });
 	obj->SetColor({ 1.0f, 1.0f, 1.0f,1.0f });
 	obj->SetPosition({ ID * 1.0f,0,ID * 1.0f });
 	landing = player->GetLockPos();
@@ -84,7 +84,8 @@ void Bullet::Follow2Player() {
 
 void Bullet::OnDraw() {
 	if (enemy->GetIsActive()) {
-		if (follow) {
+		if (command == Wait) { return; }
+		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Texture::PreDraw();
 			Status->Draw();
 		}
@@ -95,9 +96,22 @@ void Bullet::OnFinal() {
 }
 
 void Bullet::OnCollision(const std::string& Tag) {
-
 	if (Tag == "Player") {
-		isRemove = true;
+		switch (command) {
+		case Wait:
+			break;
+		case Attack:
+			player->SetStock(player->GetStock() + 1);
+			command = Wait;
+			break;
+		default:
+			assert(0);
+			break;
+		}
+
+
+
+
 	}
 
 	if (Tag == "Enemy") {
@@ -115,12 +129,37 @@ void Bullet::OnCollision(const std::string& Tag) {
 }
 
 void Bullet::WaitUpda() {
+	throwReady = true;
 	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
 		Follow2Player();
 	}
 }
 
 void Bullet::AttackUpda() {
+	if(throwReady) {
+		XMFLOAT3 pos = obj->GetPosition();
+			pos.x = Ease(InOut, Quad, frame, pos.x, AftaerPos.x);
+			pos.y += vel; //+
+			vel -= 0.05f;//
+			if (pos.y < 0.0f) {
+				pos.y = 0;
+			}
+			pos.z = Ease(InOut, Quad, frame, pos.z, AftaerPos.z);
+			if (frame < 1.0f) {
+				frame += 0.02f;
+			} else {
+				frame = 1.0f;
+				pos.y = 0.0f;
+				vel = 0.8f;
+				throwReady = false;
+			}
+			obj->SetPosition(pos);
 
-	Follow2Enemy();
+	} else {
+		frame = 0.0f;
+		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+			Follow2Enemy();
+		}
+	}
+
 }

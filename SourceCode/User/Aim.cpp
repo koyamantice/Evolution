@@ -33,18 +33,22 @@ void Aim::Move() {
 			bullet->SetCommand(Actor::command::Attack,LockOn->GetPosition());
 		}
 	}
+	if (input->TriggerKey(DIK_L)) {
+		LockOn->GetPosition();
+
+	}
 	if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)|| input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN)) {
 		if (input->PushKey(DIK_RIGHT)) {
-			angle -= 1;
+			angle -= 3;
 		}
 		if (input->PushKey(DIK_LEFT)) {
-			angle += 1;
+			angle += 3;
 		}
 		if (input->PushKey(DIK_UP)) {
-			distance -= 1;
+			distance += 1;
 		}
 		if (input->PushKey(DIK_DOWN)) {
-			distance += 1;
+			distance -= 1;
 		}
 
 	}
