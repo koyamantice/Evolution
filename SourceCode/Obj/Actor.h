@@ -4,6 +4,7 @@
 #include<string>
 #include"Object3d.h"
 #include<DirectXMath.h>
+#include"ParticleManager.h"
 
 class ActorComponent;
 
@@ -111,7 +112,6 @@ protected:
 	float hp = 0;
 	float angle = 0;
 	bool canMove = true;
-
 	XMFLOAT3 AftaerPos{};
 	int stock = 0;
 	//コンポーネント

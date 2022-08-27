@@ -232,6 +232,7 @@
     <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Framework.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Input.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\SceneManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\WinApp.cpp" />
     <ClCompile Include="SourceCode\imgui\imgui.cpp" />
@@ -303,6 +304,7 @@
     <ClInclude Include="SourceCode\FrameWork\FPSManager.h" />
     <ClInclude Include="SourceCode\FrameWork\Framework.h" />
     <ClInclude Include="SourceCode\FrameWork\Input.h" />
+    <ClInclude Include="SourceCode\FrameWork\ParticleManager.h" />
     <ClInclude Include="SourceCode\FrameWork\SceneManager.h" />
     <ClInclude Include="SourceCode\FrameWork\WinApp.h" />
     <ClInclude Include="SourceCode\imgui\imconfig.h" />

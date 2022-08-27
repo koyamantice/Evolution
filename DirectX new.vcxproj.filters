@@ -203,6 +203,9 @@
     <ClCompile Include="SourceCode\User\Aim.cpp">
       <Filter>User\Player</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\FrameWork\ParticleManager.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -400,6 +403,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\Aim.h">
       <Filter>User\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FrameWork\ParticleManager.h">
+      <Filter>FrameWork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

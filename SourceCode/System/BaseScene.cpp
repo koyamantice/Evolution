@@ -23,4 +23,7 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
 
+	particleMan = ParticleManager::GetInstance();
+	particleMan->SetCamera(camera);
+
 }

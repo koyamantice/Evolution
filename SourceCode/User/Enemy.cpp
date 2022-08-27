@@ -164,7 +164,7 @@ void Enemy::LeaveUpdate() {
 	position.x = (plapos.x - pos.x);
 	position.z = (plapos.z - pos.z);
 	angle++;
-	pos.x = plapos .x+ sinf(angle * (XM_PI / 180)) * 5.0f;
+	pos.x = plapos .x + sinf(angle * (XM_PI / 180)) * 5.0f;
 	pos.y = sinf(angle*0.1f)*2.0f;
 	pos.z = plapos .z+ cosf(angle * (XM_PI / 180)) * 5.0f;
 	obj->SetPosition(pos);

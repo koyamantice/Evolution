@@ -8,6 +8,7 @@
 #include<fstream>
 #include <SourceCode/FrameWork/ActorManager.h>
 #include"PlayerUI.h"
+#include "ParticleManager.h"
 
 void Player::LoadData() {
 	std::ifstream file;
@@ -78,6 +79,7 @@ void Player::OnInit() {
 
 	compornent = new PlayerUI();
 	compornent->Initialize();
+
 }
 
 void Player::OnUpda() {
@@ -87,6 +89,7 @@ void Player::OnUpda() {
 	Shot();
 	ContactObj();
 	LockOn->Upda();
+	ParticleManager::GetInstance()->Add(30, obj->GetPosition(), {0.1f,0.0f,0.1f}, XMFLOAT3(), 1.2f, 0.6f);
 }
 
 void Player::OnDraw() {

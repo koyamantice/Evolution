@@ -1,7 +1,7 @@
 ﻿#include "Framework.h"
 #include "FbxLoader.h"
 #include <SourceCode/FrameWork/ActorManager.h>
-//#include "FPSManager.h"
+
 void Framework::Run() {
 	
 	//初期化
@@ -66,6 +66,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
 	ModelManager::GetIns()->Initialize();
+	ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
 }
 
 void Framework::Finalize() {
@@ -87,18 +88,20 @@ void Framework::Update(DirectXCommon* dxCommon) {
 	input->Update();
 	XorShift::GetInstance()->initrand((unsigned int)time(NULL));
 	XorShift::GetInstance()->init_xor128((unsigned long)time(NULL));
-	if (winApp->ProcessMessage() || input->TriggerKey(DIK_ESCAPE)|| SceneManager::GetInstance()->IsEndRequst()) {
+	if (winApp->ProcessMessage() || input->TriggerKey(DIK_ESCAPE) || SceneManager::GetInstance()->IsEndRequst()) {
 		endResquest_ = true;
 		return;
 	}
 	SceneManager::GetInstance()->Update(dxCommon);
+	ParticleManager::GetInstance()->Update();
 }
+
 
 void Framework::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 
 	SceneManager::GetInstance()->Draw(dxCommon);
-
+	ParticleManager::GetInstance()->Draw(dxcommon->GetCmdList());
 	//debugText->DrawAll();
 	dxCommon->PostDraw();
 }

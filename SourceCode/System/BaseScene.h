@@ -13,6 +13,7 @@ class SceneManager;
 #include "input.h"
 #include "FPSManager.h"
 #include<memory>
+#include "ParticleManager.h"
 
 /// <summary>
 /// ƒV[ƒ“‹K’è
@@ -57,6 +58,7 @@ protected:
 	XMFLOAT3 cameratargetPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Aftereyepos;
 	XMFLOAT3 Aftertargetpos;
+	ParticleManager* particleMan;
 public:
 	virtual ~BaseScene()=default;
 
