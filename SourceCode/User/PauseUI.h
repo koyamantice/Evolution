@@ -18,6 +18,8 @@ public:
 	void Update();
 	void Draw();
 	void Reset();
+
+	const bool& GetEase() { return ease; }
 private:
 	enum {
 		Sheet,

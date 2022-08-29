@@ -23,7 +23,7 @@ private:
 	//std::unique_ptr<Texture> LockOn{};
 	std::unique_ptr<Aim> LockOn{};
 
-	XMFLOAT3 rockpos={0.0f,0.5f,0.0f};
+	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
 	void OnInit()override;
 	void OnUpda()override;
 	void OnDraw()override;

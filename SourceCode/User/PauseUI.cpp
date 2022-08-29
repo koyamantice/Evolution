@@ -47,16 +47,23 @@ void PauseUI::Update() {
 			size[i].x = Ease(InOut, Quad, frame, 0, 440);
 			size[i].y = Ease(InOut, Quad, frame, 0, 80);
 		}
-		if (frame<1.0f) {
+		for (int i = 0; i < Max; i++) {
+			UI[i]->SetSize(size[i]);
+		}
+		if (frame < 1.0f) {
 			frame += 0.05f;
 		} else {
 			ease = false;
 		}
-		for (int i = 0; i < Max; i++) {
-			UI[i]->SetSize(size[i]);
-		}
-	}
 
+	} /*else {
+		pos = { 360,180 };
+		UI[Sheet]->SetSize(pos);
+		for (int i = 1; i < Max; i++) {
+			size[i] = { 0,0 };
+			UI[Sheet]->SetSize(size[i]);
+		}
+	}*/
 }
 
 void PauseUI::Draw() {
@@ -67,11 +74,11 @@ void PauseUI::Draw() {
 }
 
 void PauseUI::Reset() {
-	pos = { 640,360 };
-	UI[Sheet]->SetPosition(pos);
-	for (int i = 0; i < Max; i++) {
+	size[Sheet] = {360,180};
+	UI[Sheet]->SetSize(size[Sheet]);
+	for (int i = 1; i < Max; i++) {
 		size[i] = {0,0};
-		UI[Sheet]->SetSize(size[i]);
+		UI[i]->SetSize(size[i]);
 	}
 	frame = 0;
 	ease = true;

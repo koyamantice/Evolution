@@ -72,12 +72,17 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	}
 	if (pause) {
 		pauseUi->Update();
-		if (input->TriggerButton(input->Button_A)) {
-			pauseUi->Reset();
-			pause = false;
+		if (!pauseUi->GetEase()) {
+			if (input->TriggerButton(input->Button_A) ||
+				input->TriggerKey(DIK_SPACE)) {
+				pauseUi->Reset();
+				pause = false;
+			}
 		}
 		return;
 	}
+	ParticleManager::GetInstance()->Update();
+
 	if (input->TriggerButton(input->Start)||
 		input->TriggerKey(DIK_1)) {
 		pause = true;
@@ -151,14 +156,15 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//”wŒi—p
 
 	ActorManager::GetInstance()->Draw();
-	if (pause) {
-		pauseUi->Draw();
-	}
-
+	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
+		    
 	Sprite::PreDraw();
 	Vignette->Draw();
 	if (clear) {
 		Clear->Draw();
+	}
+	if (pause) {
+		pauseUi->Draw();
 	}
 }
 

@@ -93,7 +93,6 @@ void Framework::Update(DirectXCommon* dxCommon) {
 		return;
 	}
 	SceneManager::GetInstance()->Update(dxCommon);
-	ParticleManager::GetInstance()->Update();
 }
 
 
@@ -101,7 +100,6 @@ void Framework::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 
 	SceneManager::GetInstance()->Draw(dxCommon);
-	ParticleManager::GetInstance()->Draw(dxcommon->GetCmdList());
 	//debugText->DrawAll();
 	dxCommon->PostDraw();
 }
