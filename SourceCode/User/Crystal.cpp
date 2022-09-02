@@ -19,7 +19,7 @@ void Crystal::OnUpda() {
 
 }
 
-void Crystal::OnDraw() {
+void Crystal::OnDraw(DirectXCommon* dxCommon) {
 }
 
 void Crystal::OnFinal() {

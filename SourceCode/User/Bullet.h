@@ -17,7 +17,7 @@ public:
 private:
 	void OnInit()override;
 	void OnUpda()override;
-	void OnDraw()override;
+	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
 	void OnCollision(const std::string& Tag) override;
 	

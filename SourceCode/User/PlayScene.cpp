@@ -81,7 +81,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 		return;
 	}
-	ParticleManager::GetInstance()->Update();
+	//if () {
+	//	return;
+	//}
 
 	if (input->TriggerButton(input->Start)||
 		input->TriggerKey(DIK_1)) {
@@ -89,20 +91,17 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	}
 	
 	ActorManager::GetInstance()->Update();
-
+	ParticleManager::GetInstance()->Update();
 	skydome->Update();
 	ground->Update();
-	if (input->PushKey(DIK_0)) {
-		int a = 0;
-		a++;
-	}
+
+#pragma region "Clear"
 	if (enemy_shadow->GetHp()< 0) {
 		if (!clear) {
 			clear = true;
 		}
 	}
 	if (clear) {
-
 		if (Cframe >= 1.0f) {
 			Cframe = 1.0f;
 			if (input->PushKey(DIK_SPACE)) {
@@ -115,6 +114,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
 		Clear->SetPosition(clearPos);
 	}
+#pragma endregion
 }
 
 void PlayScene::CameraUpda() {
@@ -155,7 +155,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ground->Draw();
 	//”wŒi—p
 
-	ActorManager::GetInstance()->Draw();
+	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 		    
 	Sprite::PreDraw();

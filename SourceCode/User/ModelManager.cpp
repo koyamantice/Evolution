@@ -16,6 +16,7 @@ void ModelManager::Initialize() {
 	LoadModel(Ground, "map");
 	LoadModel(hole, "hole");
 	LoadModel(Crystal, "Crystal");
+	LoadFBXModel(Mash,"Mash");
 }
 
 void ModelManager::Finalize() {

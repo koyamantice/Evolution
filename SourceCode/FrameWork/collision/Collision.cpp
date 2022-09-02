@@ -1,5 +1,4 @@
 #include "Collision.h"
-
 #include <d3dcompiler.h>
 #include <DirectXTex.h>
 
@@ -83,6 +82,7 @@ bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
 
 	return false;
 }
+
 
 bool Collision::CheckSphere2Plane(const Sphere& sphere, const Plane& plane, XMVECTOR* inter)
 {
@@ -336,5 +336,3 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 
 	return true;
 }
-
-

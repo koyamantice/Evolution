@@ -5,6 +5,7 @@
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
 #include "Player.h"
+#include "FBXObject3d.h"
 class Bullet;
 
 class Enemy :public Actor {
@@ -26,7 +27,7 @@ private:
 
 	void OnInit()override;
 	void OnUpda()override;
-	void OnDraw()override;
+	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
 	void Collide();
 	//フェーズまとめ
@@ -40,4 +41,5 @@ private:
 	Phase phase_= Enemy::Phase::Approch;
 	float waitTimer = 0;
 	float vel = 0;
+	std::unique_ptr<FBXObject3d> Mash;
 };

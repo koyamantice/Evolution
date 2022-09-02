@@ -26,7 +26,7 @@ private:
 	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
 	void OnInit()override;
 	void OnUpda()override;
-	void OnDraw()override;
+	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
 	void DebugUpdate()override;
 

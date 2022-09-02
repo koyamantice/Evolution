@@ -82,7 +82,7 @@ void Bullet::Follow2Player() {
 }
 
 
-void Bullet::OnDraw() {
+void Bullet::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
 		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {

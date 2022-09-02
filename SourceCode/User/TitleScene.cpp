@@ -49,6 +49,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	Sprite::PreDraw();
 	UI[Button]->Draw();
 	Object3d::PreDraw();
-	ActorManager::GetInstance()->Draw();
+	ActorManager::GetInstance()->Draw(dxCommon);
 }
 

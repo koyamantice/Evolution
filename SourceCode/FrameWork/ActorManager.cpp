@@ -26,10 +26,10 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::Draw() {
+void ActorManager::Draw(DirectXCommon* dxCommon) {
 	for (auto itrA = Actors.rbegin(); itrA != Actors.rend(); ++itrA) {
 		Actor* ActorA = itrA->get();
-		ActorA->Draw();
+		ActorA->Draw(dxCommon);
 	}
 }
 void ActorManager::DemoDraw() {

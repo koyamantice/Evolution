@@ -5,6 +5,7 @@
 #include"Object3d.h"
 #include<DirectXMath.h>
 #include"ParticleManager.h"
+#include "DirectXCommon.h"
 
 class ActorComponent;
 
@@ -39,6 +40,8 @@ protected:
 	bool isActive = true;
 	//削除
 	bool isRemove = false;
+	//objは必要化
+	bool isVisible = true;
 public:
 	virtual ~Actor() = default;
 	//座標の取得
@@ -95,14 +98,14 @@ public:
 	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Demo();		//更新処理
-	void Draw();	//描画処理
+	void Draw(DirectXCommon* dxCommon);	//描画処理
 
 	void DemoDraw();	//描画処理
 	void Finalize();	//終了処理
 
 	virtual void OnInit() {};
 	virtual void OnUpda() {};
-	virtual void OnDraw() {};
+	virtual void OnDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 

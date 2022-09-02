@@ -62,26 +62,42 @@ void Enemy::DebugUpdate() {
 }
 
 void Enemy::OnInit() {
+	isVisible = false;/*
 	obj->SetPosition(XMFLOAT3(0, 2, 0));
 	obj->SetRotation(XMFLOAT3{0,-98,0});
 	obj->SetScale(XMFLOAT3(2.0f,2.0f,2.0f));
-	LoadData();
-	UpdateCommand();
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
-	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
+	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);*/
+
+
+	FBXObject3d* Mash_= new FBXObject3d();
+	Mash_->Initialize();
+	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Mash));
+	Mash_->SetScale({0.01f,0.01f, 0.01f});
+	//move_object_->SetPosition(position);
+	//move_object_->SetRotation(rot);
+	Mash.reset(Mash_);
+
+	Mash->PlayAnimation();
+
+	LoadData();
+	UpdateCommand();
 	player = ActorManager::GetInstance()->SearchActor("Player");
 }
 
 void Enemy::OnUpda() {
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y-1,0});
-
+	Mash->Update();
 	PhaseMove();
 	LifeCommon();
 	//Collide();
 }
 
-void Enemy::OnDraw() {
+void Enemy::OnDraw(DirectXCommon* dxCommon) {
+	Object3d::PreDraw();
+	Mash->Draw(dxCommon->GetCmdList());
+
 }
 
 void Enemy::OnFinal() {
@@ -158,20 +174,13 @@ void Enemy::ApprochUpdate() {
 }
 
 void Enemy::LeaveUpdate() {
-	XMFLOAT3 pos = obj->GetPosition();
-	XMFLOAT3 plapos = player->GetPosition();
-	XMFLOAT3 position{};
-	position.x = (plapos.x - pos.x);
-	position.z = (plapos.z - pos.z);
-	angle++;
-	pos.x = plapos .x + sinf(angle * (XM_PI / 180)) * 5.0f;
-	pos.y = sinf(angle*0.1f)*2.0f;
-	pos.z = plapos .z+ cosf(angle * (XM_PI / 180)) * 5.0f;
-	obj->SetPosition(pos);
 }
 
 void Enemy::WaitUpdate() {
-	obj->SetPosition({-5,3,0});
+	//waitTimer++;
+	//if (waitTimer == 300) {//150fps’PˆÊ
+	//	Mash->ResetAnimation();
+	//}
 }
 
 void Enemy::LifeCommon() {

@@ -3,6 +3,7 @@
 #include <memory>
 #include<cassert>
 #include"ActorFactory.h"
+#include <SourceCode/System/DirectXCommon.h>
 
 
 class ActorManager {
@@ -25,7 +26,7 @@ public:
 	/// <summary>
 	/// ï`âÊ
 	/// </summary>
-	void Draw();
+	void Draw(DirectXCommon* dxCommon);
 	/// <summary>
 /// çXêV
 /// </summary>

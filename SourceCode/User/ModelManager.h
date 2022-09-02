@@ -22,8 +22,7 @@ public:
 		Crystal,
 	};
 	enum FBXName {
-		MottiMove,
-		Motti_No_Move
+		Mash,
 	};
 
 public:

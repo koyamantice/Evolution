@@ -104,14 +104,14 @@ void Player::OnUpda() {
 	//ParticleManager::GetInstance()->Add(30, obj->GetPosition(), {0.1f,0.0f,0.1f}, XMFLOAT3(), 1.2f, 0.6f);
 }
 
-void Player::OnDraw() {
+void Player::OnDraw(DirectXCommon* dxCommon) {
 	//
 	LockOn->Draw();
 
 	int a=ActorManager::GetInstance()->SearchNum("Bullet");
 	ImGui::Begin("test");
 	ImGui::SliderInt("bullet", &a, 0, 360);
-	ImGui::SliderFloat("Anglet", &angle, 0, 360);
+//	ImGui::SliderFloat("Anglet", &angle, 0, 360);
 	ImGui::Unindent();
 	ImGui::End();
 

@@ -315,3 +315,23 @@ void FBXObject3d::PlayAnimation()
 void FBXObject3d::StopAnimation() {
 	isPlay = false;
 }
+
+void FBXObject3d::ResetAnimation() {
+	FbxScene* fbxScene = model->GetFbxScene();
+	//0番のアニメーション取得
+	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
+	//アニメーションの名前取得
+	const char* animstackname = animstack->GetName();
+	//アニメーションの時間取得
+	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
+
+	//開始時間取得
+	startTime = takeinfo->mLocalTimeSpan.GetStart();
+	//終了時間取得
+	endTime = takeinfo->mLocalTimeSpan.GetStop();
+	//開始時間に合わせる
+	currentTime = startTime;
+	//再生中状態にする
+	isPlay = false;
+
+}

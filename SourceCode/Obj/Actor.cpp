@@ -15,22 +15,21 @@ void Actor::SetCommand(const int& command, XMFLOAT3 pos) {
 void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* compornent) {
 	id++;
 	if (isActive) {
-		//this->compornent = compornent;
 		this->tag = tag;
 		Object3d* obj_ = new Object3d();
 		obj_->SetModel(model);
 		obj_->Initialize();
 		obj.reset(obj_);
-		//ActorManager::GetInstance()->AttachList(this);
 		OnInit();
-		//if (this->compornent) { this->compornent->Initialize(); }
 	}
 }
 
 void Actor::Update() {
 	if (isActive) {
 		if (compornent) { compornent->Update(); }
-		obj->Update();
+		if (isVisible) {
+			obj->Update();
+		}
 		OnUpda();
 	}
 }
@@ -41,21 +40,25 @@ void Actor::Demo() {
 	}
 }
 
-void Actor::Draw() {
+void Actor::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
-		Object3d::PreDraw();
-		obj->Draw();
-		OnDraw();
+		if (isVisible) {
+			Object3d::PreDraw();
+			obj->Draw();
+		}
+		OnDraw(dxCommon);
 		if (compornent) { compornent->Draw(); }
 	}
 }
 
 void Actor::DemoDraw() {
 	if (isActive) {
-		Object3d::PreDraw();
-		obj->Draw();
+		DebugUpdate();
+		if (isVisible) {
+			Object3d::PreDraw();
+			obj->Draw();
+		}
 	}
-	DebugUpdate();
 }
 
 void Actor::Finalize() {
