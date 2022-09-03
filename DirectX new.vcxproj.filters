@@ -25,6 +25,12 @@
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectTestPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\User\TitleScene.cpp">
@@ -204,6 +210,9 @@
       <Filter>User\Player</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\FrameWork\ParticleManager.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\FrameWork\PostEffect.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
   </ItemGroup>
@@ -407,6 +416,9 @@
     <ClInclude Include="SourceCode\FrameWork\ParticleManager.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\FrameWork\PostEffect.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -426,6 +438,9 @@
     </None>
     <None Include="SourceCode\imgui\imgui.vcxproj.filters">
       <Filter>Imgui</Filter>
+    </None>
+    <None Include="Resources\shaders\PostEffectTest.hlsli">
+      <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

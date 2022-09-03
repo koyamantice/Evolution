@@ -233,6 +233,7 @@
     <ClCompile Include="SourceCode\FrameWork\Framework.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Input.cpp" />
     <ClCompile Include="SourceCode\FrameWork\ParticleManager.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\PostEffect.cpp" />
     <ClCompile Include="SourceCode\FrameWork\SceneManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\WinApp.cpp" />
     <ClCompile Include="SourceCode\imgui\imgui.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="SourceCode\FrameWork\Framework.h" />
     <ClInclude Include="SourceCode\FrameWork\Input.h" />
     <ClInclude Include="SourceCode\FrameWork\ParticleManager.h" />
+    <ClInclude Include="SourceCode\FrameWork\PostEffect.h" />
     <ClInclude Include="SourceCode\FrameWork\SceneManager.h" />
     <ClInclude Include="SourceCode\FrameWork\WinApp.h" />
     <ClInclude Include="SourceCode\imgui\imconfig.h" />
@@ -355,6 +357,7 @@
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
     <None Include="Resources\shaders\OBJShaderHeader.hlsli" />
+    <None Include="Resources\shaders\PostEffectTest.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
     <None Include="SourceCode\imgui\imgui.vcxproj" />
     <None Include="SourceCode\imgui\imgui.vcxproj.filters" />
@@ -431,6 +434,22 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='developer|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectTestPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='developer|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='developer|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='developer|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='developer|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

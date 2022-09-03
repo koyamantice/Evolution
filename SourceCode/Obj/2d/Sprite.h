@@ -9,7 +9,7 @@
 /// スプライト
 /// </summary>
 class Sprite {
-private: // エイリアス
+protected: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
@@ -22,7 +22,7 @@ public: // サブクラス
 	/// <summary>
 	/// 頂点データ構造体
 	/// </summary>
-	struct VertexPosUv 	{
+	struct VertexPosUv {
 		XMFLOAT3 pos; // xyz座標
 		XMFLOAT2 uv;  // uv座標
 	};
@@ -30,7 +30,7 @@ public: // サブクラス
 	/// <summary>
 	/// 定数バッファ用データ構造体
 	/// </summary>
-	struct ConstBufferData 	{
+	struct ConstBufferData {
 		XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 	};
@@ -44,7 +44,7 @@ public: // 静的メンバ関数
 	/// <param name="window_width">画面幅</param>
 	/// <param name="window_height">画面高さ</param>
 	/// <returns>成否</returns>
-	static bool StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,int window_width, int window_height);
+	static bool StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height);
 
 	/// <summary>
 	/// テクスチャ読み込み
@@ -76,8 +76,8 @@ public: // 静的メンバ関数
 	/// <param name="isFlipY">上下反転</param>
 	/// <returns>生成されたスプライト</returns>
 	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
-
-private: // 静的メンバ変数
+	static bool Finalize();
+protected: // 静的メンバ変数
 	// テクスチャの最大枚数
 	static const int srvCount = 512;
 	// 頂点数
@@ -112,12 +112,6 @@ public: // メンバ関数
 	bool Initialize();
 
 	/// <summary>
-/// 初期化
-/// </summary>
-/// <returns>成否</returns>
-	static bool Finalize();
-
-	/// <summary>
 	/// 角度の設定
 	/// </summary>
 	/// <param name="rotation">角度</param>
@@ -128,12 +122,6 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position">座標</param>
 	void SetPosition(XMFLOAT2 position);
-	/// <summary>
-	/// 座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	const XMFLOAT2& GetPosition() { return this->position; };
-
 
 	/// <summary>
 	/// サイズの設定
@@ -141,11 +129,10 @@ public: // メンバ関数
 	/// <param name="size">サイズ</param>
 	void SetSize(XMFLOAT2 size);
 	/// <summary>
-	/// 
+	/// サイズの設定
 	/// </summary>
-	/// <param name="scale"></param>
+	/// <param name="scale">サイズ</param>
 	void SetScale(float scale);
-
 	/// <summary>
 	/// サイズの設定
 	/// </summary>
@@ -188,7 +175,14 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-private: // メンバ変数
+
+
+	/// <summary>
+	/// 頂点バッファの生成
+	/// </summary>
+	bool CreateVertices();
+
+protected: // メンバ変数
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	// 定数バッファ

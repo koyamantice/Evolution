@@ -352,17 +352,7 @@ bool Sprite::Initialize() {
 	HRESULT result = S_FALSE;
 
 	// 頂点バッファ生成
-	result = device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPosUv) * vertNum),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&vertBuff));
-	if (FAILED(result)) {
-		assert(0);
-		return false;
-	}
+	CreateVertices();
 
 	// 頂点バッファへのデータ転送
 	TransferVertices();
@@ -397,13 +387,6 @@ bool Sprite::Initialize() {
 	return true;
 }
 
-bool Sprite::Finalize() {
-	for (int i = srvCount-1; i <  0; i--) {
-		texBuff[i].Reset();
-	}
-	return true;
-}
-
 void Sprite::SetRotation(float rotation) {
 	this->rotation = rotation;
 
@@ -421,13 +404,6 @@ void Sprite::SetPosition(XMFLOAT2 position) {
 void Sprite::SetSize(XMFLOAT2 size) {
 	this->size = size;
 
-	// 頂点バッファへのデータ転送
-	TransferVertices();
-}
-
-void Sprite::SetScale(float scale) {
-	size.x *= scale;
-	size.y *= scale;
 	// 頂点バッファへのデータ転送
 	TransferVertices();
 }
@@ -488,6 +464,24 @@ void Sprite::Draw() {
 	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
 	// 描画コマンド
 	cmdList->DrawInstanced(4, 1, 0, 0);
+}
+
+bool Sprite::CreateVertices() {
+	HRESULT result = S_FALSE;
+
+	// 頂点バッファ生成
+	result = device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPosUv) * vertNum),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&vertBuff));
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+	return true;
 }
 
 void Sprite::SetColor(XMFLOAT4 color) {
@@ -551,4 +545,16 @@ void Sprite::TransferVertices() {
 		memcpy(vertMap, vertices, sizeof(vertices));
 		vertBuff->Unmap(0, nullptr);
 	}
+}
+void Sprite::SetScale(float scale) {
+	size.x *= scale;
+	size.y *= scale;
+	// 頂点バッファへのデータ転送
+	TransferVertices();
+}
+bool Sprite::Finalize() {
+	for (int i = srvCount - 1; i < 0; i--) {
+		texBuff[i].Reset();
+	}
+	return true;
 }
