@@ -78,8 +78,12 @@ void PlayerUI::OnInitialize() {
 
 void PlayerUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Player");
-
-	Hp->SetSize({  AttachActor->GetHp() * 50 ,32});
+	
+	Hp->SetSize({AttachActor->GetHp() * 50 ,32});
+	if (AttachActor->GetHp()<0) {
+		Hp->SetSize({ 0 ,32 });
+	}
+	
 	//count++;
 	//Timer = count / 60.0f;
 
