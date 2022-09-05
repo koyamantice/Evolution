@@ -62,6 +62,7 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 		a++;
 	}
 	Chara[Select]->Demo();
+	Chara[Select]->SetRotation(rot);
 	if (input->TriggerButton(input->Select)) {
 		SceneManager::GetInstance()->ChangeScene("PLAY");
 	}
@@ -108,7 +109,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 	if (Select == 2) {
 		ImGui::SetNextWindowPos(ImVec2(980, 300), 1);
 		ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 		ImGui::Begin("parameter");
 		ImGui::SliderInt("hp", &hp, 0, 360);
 		ImGui::SliderFloat("vel", &vel, 0, 5);
@@ -136,7 +137,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 
 	Sprite::PreDraw();
 	back->Draw();
-	Chara[Select]->DemoDraw();
+	Chara[Select]->DemoDraw(dxCommon);
 
 }
 

@@ -100,7 +100,7 @@ public:
 	void Demo();		//XVˆ—
 	void Draw(DirectXCommon* dxCommon);	//•`‰æˆ—
 
-	void DemoDraw();	//•`‰æˆ—
+	void DemoDraw(DirectXCommon* dxCommon);	//•`‰æˆ—
 	void Finalize();	//I—¹ˆ—
 
 	virtual void OnInit() {};

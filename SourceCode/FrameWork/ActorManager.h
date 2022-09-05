@@ -30,7 +30,7 @@ public:
 	/// <summary>
 /// XV
 /// </summary>
-	void DemoDraw();
+	void DemoDraw(DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// I—¹ˆ—

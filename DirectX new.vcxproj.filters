@@ -215,6 +215,9 @@
     <ClCompile Include="SourceCode\FrameWork\PostEffect.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\FrameWork\SceneChanger.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -417,6 +420,9 @@
       <Filter>FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\FrameWork\PostEffect.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FrameWork\SceneChanger.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
   </ItemGroup>

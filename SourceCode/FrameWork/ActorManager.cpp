@@ -32,9 +32,9 @@ void ActorManager::Draw(DirectXCommon* dxCommon) {
 		ActorA->Draw(dxCommon);
 	}
 }
-void ActorManager::DemoDraw() {
+void ActorManager::DemoDraw(DirectXCommon* dxCommon) {
 	for (std::unique_ptr<Actor>& actor : Actors) {
-		actor->DemoDraw();
+		actor->DemoDraw(dxCommon);
 	}
 }
 void ActorManager::Finalize() {

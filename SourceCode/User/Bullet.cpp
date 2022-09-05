@@ -83,6 +83,7 @@ void Bullet::Follow2Player() {
 
 
 void Bullet::OnDraw(DirectXCommon* dxCommon) {
+	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
 		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
@@ -99,6 +100,7 @@ void Bullet::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
 		switch (command) {
 		case Wait:
+
 			break;
 		case Attack:
 			player->SetStock(player->GetStock() + 1);

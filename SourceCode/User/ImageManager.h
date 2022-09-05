@@ -15,6 +15,7 @@ public:
 	enum texName {
 		Test,
 		DebugBack,
+		Black,
 		Title,
 		Clear,
 		UISheet,

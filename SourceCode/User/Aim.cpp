@@ -52,6 +52,13 @@ void Aim::Move() {
 		}
 
 	}
+	if (distance < 3.0) {
+		distance = 3.0;
+	}
+	if (distance > 8.0) {
+		distance = 8.0;
+	}
+
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	XMFLOAT3 Lpos = LockOn->GetPosition();
 	XMFLOAT3 plapos = player->GetPosition();

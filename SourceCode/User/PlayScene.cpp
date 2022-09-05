@@ -119,24 +119,24 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 void PlayScene::CameraUpda() {
 	Input* input = Input::GetInstance();
-	//if (input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT)) {
-	//	if (input->PushKey(DIK_RIGHT)) {
-	//		angle -= 1;
-	//	}
-	//	if (input->PushKey(DIK_LEFT)) {
-	//		angle += 1;
-	//	}
+	if (input->PushKey(DIK_E) || input->PushKey(DIK_Q)) {
+		if (input->PushKey(DIK_E)) {
+			angle -= 1;
+		}
+		if (input->PushKey(DIK_Q)) {
+			angle += 1;
+		}
 
-	//	if (input->PushKey(DIK_RIGHT) && input->PushKey(DIK_LEFT)) {
-	//		player_shadow->SetCanMove(false);
-	//		angle = player_shadow->GetRotation().y;
-	//	} else {
-	//		player_shadow->SetCanMove(true);
-	//	}
+		if (input->PushKey(DIK_Q) && input->PushKey(DIK_E)) {
+			player_shadow->SetCanMove(false);
+			angle = player_shadow->GetRotation().y;
+		} else {
+			player_shadow->SetCanMove(true);
+		}
 
-	//	dis.x = sinf(angle * (PI / 180)) * 15.0f;
-	//	dis.y = cosf(angle * (PI / 180)) * 15.0f;
-	//}
+		dis.x = sinf(angle * (PI / 180)) * 15.0f;
+		dis.y = cosf(angle * (PI / 180)) * 15.0f;
+	}
 
 	distance.x = Ease(In, Quad, 0.5f, distance.x, dis.x);
 	distance.y = Ease(In, Quad, 0.5f, distance.y, dis.y);

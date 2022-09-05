@@ -9,6 +9,7 @@ void ImageManager::Load2D() {
 	// テクスチャ読み込み
 	Sprite::LoadTexture(Test, L"Resources/2d/Test.png");
 	Sprite::LoadTexture(DebugBack, L"Resources/2d/Back.png");
+	Sprite::LoadTexture(Black, L"Resources/2d/Effect/Blackfilter.png");
 	Sprite::LoadTexture(Title,L"Resources/2d/Title.png");
 	Sprite::LoadTexture(Clear, L"Resources/2d/GameClear.png");
 	Sprite::LoadTexture(UISheet, L"Resources/2d/PauseUi/UISheet.png");

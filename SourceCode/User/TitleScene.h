@@ -28,11 +28,19 @@ public:
 	void Draw(DirectXCommon* dxCommon) override;
 
 private:
+
+	void Feed(const std::string& sceneName);
+
 	//ƒƒ“ƒo•Ï”
 	enum {
 		Button,
 		SpriteMax,
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
+	std::unique_ptr<Sprite> Effect;
+	bool Change = false;
+	float alpha = 0.0f;
+	float frame = 0;
+	std::string SceneName = "null";
 };
 

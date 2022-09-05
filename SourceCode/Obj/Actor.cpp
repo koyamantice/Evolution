@@ -51,13 +51,14 @@ void Actor::Draw(DirectXCommon* dxCommon) {
 	}
 }
 
-void Actor::DemoDraw() {
+void Actor::DemoDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		DebugUpdate();
 		if (isVisible) {
 			Object3d::PreDraw();
 			obj->Draw();
 		}
+		OnDraw(dxCommon);
 	}
 }
 

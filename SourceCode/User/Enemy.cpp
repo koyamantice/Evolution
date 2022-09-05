@@ -59,6 +59,8 @@ void Enemy::UpdateCommand() {
 }
 
 void Enemy::DebugUpdate() {
+	Mash->Update();
+	Mash->SetPosition({0,-3,0});
 }
 
 void Enemy::OnInit() {
@@ -169,7 +171,21 @@ void Enemy::PhaseMove() {
 }
 
 void Enemy::ApprochUpdate() {
-	XMFLOAT3 pos = obj->GetPosition();
+	XMFLOAT3 pos = Mash->GetPosition();
+
+	angle += 2.5f;
+	pos.x =sinf(angle * (XM_PI / 180)) *15.0f;
+	pos.z =cosf(angle * (XM_PI / 180)) *15.0f;
+	Mash->SetPosition(pos);
+	obj->SetPosition(pos);
+	waitTimer++;
+	if (waitTimer == 300) {//150fps’PˆÊ
+		Mash->ResetAnimation();
+		phase_ = Enemy::Phase::Wait;
+		Mash->PlayAnimation();
+		waitTimer = 0;
+	}
+
 
 }
 
@@ -177,10 +193,12 @@ void Enemy::LeaveUpdate() {
 }
 
 void Enemy::WaitUpdate() {
-	//waitTimer++;
-	//if (waitTimer == 300) {//150fps’PˆÊ
-	//	Mash->ResetAnimation();
-	//}
+	waitTimer++;
+	if (waitTimer == 300) {//150fps’PˆÊ
+		Mash->ResetAnimation();
+		phase_ = Enemy::Phase::Approch;
+		waitTimer = 0;
+	}
 }
 
 void Enemy::LifeCommon() {

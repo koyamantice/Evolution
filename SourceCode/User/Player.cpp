@@ -56,7 +56,7 @@ void Player::UpdateCommand() {
 }
 
 void Player::DebugUpdate() {
-	obj->SetScale({ 2.0f,2.0f,2.0f });
+	obj->SetScale({ 1.0f,1.0f,1.0f });
 }
 
 void Player::OnInit() {
@@ -109,11 +109,11 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 	LockOn->Draw();
 
 	int a=ActorManager::GetInstance()->SearchNum("Bullet");
-	ImGui::Begin("test");
-	ImGui::SliderInt("bullet", &a, 0, 360);
-//	ImGui::SliderFloat("Anglet", &angle, 0, 360);
-	ImGui::Unindent();
-	ImGui::End();
+//	ImGui::Begin("test");
+//	ImGui::SliderInt("bullet", &a, 0, 360);
+////	ImGui::SliderFloat("Anglet", &angle, 0, 360);
+//	ImGui::Unindent();
+//	ImGui::End();
 
 }
 
