@@ -392,6 +392,7 @@ void ParticleManager::LoadTexture()
 
 	// WICテクスチャのロード
 	TexMetadata metadata{};
+	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(

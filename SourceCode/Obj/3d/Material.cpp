@@ -60,6 +60,7 @@ void Material::LoadTexture(const std::string& directoryPath, CD3DX12_CPU_DESCRIP
 
 	// WICテクスチャのロード
 	TexMetadata metadata{};
+	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
 	// ファイルパスを結合

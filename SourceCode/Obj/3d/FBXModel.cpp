@@ -58,6 +58,7 @@ void FBXModel::CreateBuffers(ID3D12Device* device)
     // テクスチャ画像データ
     const DirectX::Image* img = scratchImg.GetImage(0, 0, 0); // 生データ抽出
     assert(img);
+    metadata.format = DirectX::MakeSRGB(metadata.format);
 
     // リソース設定
     CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(

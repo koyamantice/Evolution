@@ -222,6 +222,7 @@ bool Sprite::LoadTexture(UINT texnumber, const wchar_t* filename) {
 	HRESULT result;
 	// WICテクスチャのロード
 	TexMetadata metadata{};
+	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
