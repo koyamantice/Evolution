@@ -306,20 +306,20 @@ bool DirectXCommon::InitializeRenderTargetView() {
 	}
 	//レンダーターゲットviewの生成
 	backBuffers.resize(2);
-	//for (int i = 0; i < 2; i++) {
-	//	result = swapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffers[i]));
-	//	if (FAILED(result)) {
-	//		assert(0);
-	//		return result;
-	//	}
+	for (int i = 0; i < 2; i++) {
+		result = swapchain->GetBuffer(i, IID_PPV_ARGS(&backBuffers[i]));
+		if (FAILED(result)) {
+			assert(0);
+			return result;
+		}
 
-	//	//ディスクリプタヒープのハンドルを取得
-	//	CD3DX12_CPU_DESCRIPTOR_HANDLE handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeaps->GetCPUDescriptorHandleForHeapStart(),
-	//		i, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
-	//	//D3D12_CPU_DESCRIPTOR_HANDLE handle = rtvHeaps->GetCPUDescriptorHandleForHeapStart();
-	//	//handle.ptr += i * dev->GetDescriptorHandleIncrementSize(heapDesc.Type);
-	//	dev->CreateRenderTargetView(backBuffers[i].Get(), nullptr, handle);
-	//}
+		//ディスクリプタヒープのハンドルを取得
+		CD3DX12_CPU_DESCRIPTOR_HANDLE handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeaps->GetCPUDescriptorHandleForHeapStart(),
+			i, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+		//D3D12_CPU_DESCRIPTOR_HANDLE handle = rtvHeaps->GetCPUDescriptorHandleForHeapStart();
+		//handle.ptr += i * dev->GetDescriptorHandleIncrementSize(heapDesc.Type);
+		dev->CreateRenderTargetView(backBuffers[i].Get(), nullptr, handle);
+	}
 
 
 
