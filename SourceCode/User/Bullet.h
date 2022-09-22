@@ -26,6 +26,12 @@ private:
 	void Follow2Enemy();
 	void Follow2Player();
 
+	void KnockBack();
+	bool knockBacking = false;
+	float back;
+	float Normalize(const XMFLOAT3& pos,const XMFLOAT3& pos2);
+	float fall=0.0f;
+
 	bool throwReady = false;
 	float frame = 0.0f;
 

@@ -39,8 +39,11 @@ void Bullet::OnUpda() {
 		WaitUpda();
 		break;
 	case Attack:
-
-		AttackUpda();
+		if (knockBacking) {
+			KnockBack();
+		} else {
+			AttackUpda();
+		}
 		break;
 	default:
 		assert(0);
@@ -67,7 +70,7 @@ void Bullet::Follow2Enemy() {
 void Bullet::Follow2Player() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
-	float vel = (int)(rand() % 10+1) * 0.03f;
+	float vel = (int)(rand() % 10 + 1) * 0.03f;
 	XMFLOAT3 position{};
 	position.x = (player->GetPosition().x - pos.x);
 	position.z = (player->GetPosition().z - pos.z);
@@ -81,6 +84,27 @@ void Bullet::Follow2Player() {
 
 }
 
+void Bullet::KnockBack() {
+	XMFLOAT3 pos = obj->GetPosition();
+	pos.x += (pos.x / back) * 0.1f;
+	pos.y += 0.5f - fall;
+	fall  += 0.5f / 15.0f;
+	pos.z += (pos.z / back) * 0.1f;
+	if (pos.y < 0) {
+		pos.y = 0;
+		fall = 0.0f;
+		knockBacking = false;
+	}
+	obj->SetPosition(pos);
+}
+
+float Bullet::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
+	XMFLOAT3 itr{}; 
+	itr = { pos.x - pos2.x,0,pos.z - pos2.z };
+	back =sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
+	//back = abs(back);
+	return back;
+}
 
 void Bullet::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy == NULL) { return; }
@@ -110,19 +134,24 @@ void Bullet::OnCollision(const std::string& Tag) {
 			assert(0);
 			break;
 		}
-
-
-
-
 	}
 
 	if (Tag == "Enemy") {
-		if (CoolTime == 0) {
-			//	obj->SetPosition({ obj->GetPosition(), , obj->GetPosition()});
-			enemy->SetHp(enemy->GetHp() - 1);
-			CoolTime++;
+		switch (command) {
+		case Wait:
+
+			break;
+		case Attack:
+			if (!knockBacking) {
+				knockBacking = true;
+				back = Normalize(obj->GetPosition(),enemy->GetPosition());
+			}
+			break;
+		default:
+			assert(0);
+			break;
 		}
-		follow = false;
+
 	}
 
 
@@ -138,24 +167,24 @@ void Bullet::WaitUpda() {
 }
 
 void Bullet::AttackUpda() {
-	if(throwReady) {
+	if (throwReady) {
 		XMFLOAT3 pos = obj->GetPosition();
-			pos.x = Ease(InOut, Quad, frame, pos.x, AftaerPos.x);
-			pos.y += vel; //+
-			vel -= 0.05f;//
-			if (pos.y < 0.0f) {
-				pos.y = 0;
-			}
-			pos.z = Ease(InOut, Quad, frame, pos.z, AftaerPos.z);
-			if (frame < 1.0f) {
-				frame += 0.02f;
-			} else {
-				frame = 1.0f;
-				pos.y = 0.0f;
-				vel = 0.8f;
-				throwReady = false;
-			}
-			obj->SetPosition(pos);
+		pos.x = Ease(InOut, Quad, frame, pos.x, AftaerPos.x);
+		pos.y += vel; //+
+		vel -= 0.05f;//
+		if (pos.y < 0.0f) {
+			pos.y = 0;
+		}
+		pos.z = Ease(InOut, Quad, frame, pos.z, AftaerPos.z);
+		if (frame < 1.0f) {
+			frame += 0.02f;
+		} else {
+			frame = 1.0f;
+			pos.y = 0.0f;
+			vel = 0.8f;
+			throwReady = false;
+		}
+		obj->SetPosition(pos);
 
 	} else {
 		frame = 0.0f;

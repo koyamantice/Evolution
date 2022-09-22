@@ -157,7 +157,7 @@ void Enemy::Collide() {
 void Enemy::PhaseMove() {
 	switch (phase_) {
 	case Enemy::Phase::Approch :
-		ApprochUpdate();
+		//ApprochUpdate();
 		break;
 	case Enemy::Phase::Leave:
 		LeaveUpdate();
