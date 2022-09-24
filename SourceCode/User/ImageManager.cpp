@@ -27,6 +27,7 @@ void ImageManager::LoadTex2D() {
 	// テクスチャ読み込み
 	Texture::LoadTexture(Lock, L"Resources/2d/Lock.png");
 	Texture::LoadTexture(Battle, L"Resources/2d/Battle.png");
+	Texture::LoadTexture(Fire, L"Resources/2d/Effect/Fire.png");
 
 }
 

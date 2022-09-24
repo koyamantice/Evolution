@@ -39,7 +39,11 @@ private:
 
 	float vel = 0.8f;
 	std::unique_ptr<Texture> Status{};
-
+	std::unique_ptr<Texture> Explo = nullptr;
+	bool burning = false;
+	void BurnOut();
+	float scale = 0.0f;
+	float effectRate = 0.0f;
 	bool follow = false;
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;

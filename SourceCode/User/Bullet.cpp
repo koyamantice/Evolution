@@ -26,8 +26,14 @@ void Bullet::OnInit() {
 	Lock_->SetIsBillboard(true);
 	Lock_->TextureCreate();
 	Lock_->SetRotation({ 0,0,0 });
-	//Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 	Status.reset(Lock_);
+
+	Texture* Explo_ = Texture::Create(ImageManager::Fire, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
+		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+	Explo_->SetIsBillboard(true);
+	Explo_->TextureCreate();
+	Explo_->SetRotation({ 0,0,0 });
+	Explo.reset(Explo_);
 }
 
 void Bullet::OnUpda() {
@@ -48,6 +54,10 @@ void Bullet::OnUpda() {
 	default:
 		assert(0);
 		break;
+	}
+	if (burning) {
+		Explo->Update();
+		BurnOut();
 	}
 	Status->Update();
 	Status->SetPosition({ obj->GetPosition().x,obj->GetPosition().y + 2.5f,obj->GetPosition().z });
@@ -88,7 +98,7 @@ void Bullet::KnockBack() {
 	XMFLOAT3 pos = obj->GetPosition();
 	pos.x += (pos.x / back) * 0.1f;
 	pos.y += 0.5f - fall;
-	fall  += 0.5f / 15.0f;
+	fall += 0.5f / 15.0f;
 	pos.z += (pos.z / back) * 0.1f;
 	if (pos.y < 0) {
 		pos.y = 0;
@@ -99,11 +109,26 @@ void Bullet::KnockBack() {
 }
 
 float Bullet::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
-	XMFLOAT3 itr{}; 
+	XMFLOAT3 itr{};
 	itr = { pos.x - pos2.x,0,pos.z - pos2.z };
-	back =sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
+	back = sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
 	//back = abs(back);
 	return back;
+}
+
+void Bullet::BurnOut() {
+	XMFLOAT3 pos = obj->GetPosition();
+	if (effectRate < 1.0f) {
+		effectRate += 0.08f;
+	} else {
+		effectRate = 0;
+		Explo->SetScale({ 0,0,0});
+		Explo->SetPosition({ pos.x,-100,pos.z });
+		burning = false;
+	}
+	scale = Ease(In, Quad, effectRate, 0.5f, 1.0f);
+	Explo->SetScale({ scale,scale,scale });
+	Explo->SetPosition({ pos.x,pos.y,pos.z });
 }
 
 void Bullet::OnDraw(DirectXCommon* dxCommon) {
@@ -113,6 +138,9 @@ void Bullet::OnDraw(DirectXCommon* dxCommon) {
 		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Texture::PreDraw();
 			Status->Draw();
+		}
+		if (burning) {
+			Explo->Draw();
 		}
 	}
 }
@@ -144,7 +172,8 @@ void Bullet::OnCollision(const std::string& Tag) {
 		case Attack:
 			if (!knockBacking) {
 				knockBacking = true;
-				back = Normalize(obj->GetPosition(),enemy->GetPosition());
+				burning = true;
+				back = Normalize(obj->GetPosition(), enemy->GetPosition());
 			}
 			break;
 		default:

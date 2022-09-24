@@ -31,6 +31,7 @@ public:
 	enum tex2dName {
 		Lock,
 		Battle,
+		Fire,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p
