@@ -464,7 +464,7 @@ void Sprite::Draw() {
 	// シェーダリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
 	// 描画コマンド
-	cmdList->DrawInstanced(2000, 1, 1, 0);
+	cmdList->DrawInstanced(4, 1, 0, 0);
 }
 
 bool Sprite::CreateVertices() {
