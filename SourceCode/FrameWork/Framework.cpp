@@ -1,6 +1,7 @@
 ﻿#include "Framework.h"
 #include "FbxLoader.h"
 #include <SourceCode/FrameWork/ActorManager.h>
+#include <SourceCode/Obj/2d/Gauge.h>
 
 void Framework::Run() {
 	
@@ -41,14 +42,9 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	//スプライト関係
 	// スプライト静的初期化
 	Sprite::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
-
-	//const int debugTextTexNumber = 0;
-	// デバッグテキスト用テクスチャ読み込み
-
 	ImageManager::GetIns()->Load2D();
 	// デバッグテキスト初期化
-	//debugText = DebugText::GetInstance();
-	//debugText->Initialize(ImageManager::debugText);
+	Gauge::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 
 	// ライト静的初期化
 	LightGroup::StaticInitialize(dxcommon->GetDev());

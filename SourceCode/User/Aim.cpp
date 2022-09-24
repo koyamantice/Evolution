@@ -50,22 +50,19 @@ void Aim::Move() {
 		if (input->PushKey(DIK_DOWN)) {
 			distance -= 1;
 		}
-
 	}
 	if (distance < 3.0) {
 		distance = 3.0;
 	}
-	if (distance > 8.0) {
-		distance = 8.0;
+	if (distance > 15.0) {
+		distance = 15.0;
 	}
 
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	XMFLOAT3 Lpos = LockOn->GetPosition();
 	XMFLOAT3 plapos = player->GetPosition();
-	//Langle+=0.5f;
 	Lpos.x = plapos.x + sinf(angle * (XM_PI / 180)) * distance;
 	Lpos.y = 0.18f;
 	Lpos.z = plapos.z + cosf(angle * (XM_PI / 180)) * distance;
 	LockOn->SetPosition(Lpos);
-
 }

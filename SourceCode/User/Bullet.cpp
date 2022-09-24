@@ -41,7 +41,6 @@ void Bullet::OnUpda() {
 
 	switch (command) {
 	case Wait:
-
 		WaitUpda();
 		break;
 	case Attack:

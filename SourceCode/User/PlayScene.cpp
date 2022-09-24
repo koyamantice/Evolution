@@ -54,6 +54,14 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Vignette.reset(_Vignette);
 	Vignette->SetColor(XMFLOAT4{1,1,1,0.2f});
 
+
+	Gauge::LoadTexture(0, L"Resources/2d/Lock.png");
+	Gauge* _Gauge = nullptr;
+	_Gauge = Gauge::Create(0, { 0,0 });
+	Demo.reset(_Gauge);
+	//Demo->SetColor(XMFLOAT4{ 1,1,1,0.2f });
+
+
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
 	camera->SetTarget(player_shadow->GetPosition());
@@ -159,13 +167,14 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 		    
 	Sprite::PreDraw();
-	Vignette->Draw();
+//	Vignette->Draw();
 	if (clear) {
 		Clear->Draw();
 	}
 	if (pause) {
 		pauseUi->Draw();
 	}
+	Demo->Draw();
 }
 
 

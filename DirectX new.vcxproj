@@ -244,6 +244,7 @@
     <ClCompile Include="SourceCode\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="SourceCode\imgui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
+    <ClCompile Include="SourceCode\Obj\2d\Gauge.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Texture.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp" />
@@ -319,6 +320,7 @@
     <ClInclude Include="SourceCode\imgui\imstb_rectpack.h" />
     <ClInclude Include="SourceCode\imgui\imstb_textedit.h" />
     <ClInclude Include="SourceCode\imgui\imstb_truetype.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Gauge.h" />
     <ClInclude Include="SourceCode\Obj\2d\Sprite.h" />
     <ClInclude Include="SourceCode\Obj\2d\Texture.h" />
     <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h" />
@@ -358,6 +360,7 @@
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
+    <None Include="Resources\shaders\Gauge.hlsli" />
     <None Include="Resources\shaders\OBJShaderHeader.hlsli" />
     <None Include="Resources\shaders\PostEffectTest.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
@@ -408,6 +411,22 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='developer|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\GaugePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='developer|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='developer|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\GaugeVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='developer|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='developer|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Resources\shaders\OBJPixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

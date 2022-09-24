@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "PauseUI.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
+#include "Gauge.h"
 
 /// <summary>
 /// タイトルシーン
@@ -47,6 +48,7 @@ private:
 	ActorComponent* PlayerComp = nullptr;
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite>	Vignette{};
+	std::unique_ptr<Gauge>	Demo;
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};	

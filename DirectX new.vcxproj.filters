@@ -31,6 +31,12 @@
     <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\GaugePS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\GaugeVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\User\TitleScene.cpp">
@@ -217,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\FrameWork\SceneChanger.cpp">
       <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\2d\Gauge.cpp">
+      <Filter>Obj\2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +434,9 @@
     <ClInclude Include="SourceCode\FrameWork\SceneChanger.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Obj\2d\Gauge.h">
+      <Filter>Obj\2d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -446,6 +458,9 @@
       <Filter>Imgui</Filter>
     </None>
     <None Include="Resources\shaders\PostEffectTest.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\Gauge.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
