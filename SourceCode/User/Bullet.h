@@ -26,12 +26,20 @@ private:
 	void Follow2Enemy();
 	void Follow2Player();
 
+<<<<<<< HEAD
 
 	void KnockBack();
 	XMFLOAT3& normalize(XMFLOAT3& pos, XMFLOAT3& pos2);
 	bool knocking = false;
 	//XMFLOAT3 
 
+=======
+	void KnockBack();
+	bool knockBacking = false;
+	float back;
+	float Normalize(const XMFLOAT3& pos,const XMFLOAT3& pos2);
+	float fall=0.0f;
+>>>>>>> Extra
 
 	bool throwReady = false;
 	float frame = 0.0f;
@@ -40,7 +48,11 @@ private:
 
 	float vel = 0.8f;
 	std::unique_ptr<Texture> Status{};
-
+	std::unique_ptr<Texture> Explo = nullptr;
+	bool burning = false;
+	void BurnOut();
+	float scale = 0.0f;
+	float effectRate = 0.0f;
 	bool follow = false;
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
