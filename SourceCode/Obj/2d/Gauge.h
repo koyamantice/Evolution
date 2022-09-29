@@ -206,7 +206,7 @@ protected: // メンバ変数
 	XMFLOAT4 color = { 1, 1, 1, 1 };
 	//アングル
 	float angle=0.0f;
-	float degree = 180.0f;
+	float degree = 0.0f;
 	// 左右反転
 	bool isFlipX = false;
 	// 上下反転

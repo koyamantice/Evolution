@@ -31,7 +31,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	//Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	Sky->SetScale(XMFLOAT3(0.5, 0.5, 0.5));
 	Sky->Initialize();
 	skydome.reset(Sky);
 
@@ -52,7 +52,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Sprite* _Vignette = nullptr;
 	_Vignette = Sprite::Create(ImageManager::Vignette, {0,0});
 	Vignette.reset(_Vignette);
-	Vignette->SetColor(XMFLOAT4{1,1,1,0.2f});
+	Vignette->SetColor(XMFLOAT4{0.0f,0.0f,0.0f,0.2f});
 
 
 	Gauge::LoadTexture(0, L"Resources/2d/Lock.png");
@@ -167,7 +167,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 		    
 	Sprite::PreDraw();
-//	Vignette->Draw();
+	Vignette->Draw();
 	if (clear) {
 		Clear->Draw();
 	}
