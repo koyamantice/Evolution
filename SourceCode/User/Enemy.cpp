@@ -86,6 +86,10 @@ void Enemy::OnInit() {
 	LoadData();
 	UpdateCommand();
 	player = ActorManager::GetInstance()->SearchActor("Player");
+
+	compornent = new EnemyUI();
+	compornent->Initialize();
+
 }
 
 void Enemy::OnUpda() {

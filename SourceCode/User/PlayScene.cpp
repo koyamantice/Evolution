@@ -65,6 +65,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
 	camera->SetTarget(player_shadow->GetPosition());
+
+//	postEffect = new PostEffect();
+//	postEffect->Initialize();
+
 }
 //ŠJ•úˆ—
 void PlayScene::Finalize() {
@@ -158,14 +162,13 @@ void PlayScene::CameraUpda() {
 
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
 	//”wŒi—p
-
 	ActorManager::GetInstance()->Draw(dxCommon);
-	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
-		    
+	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());	    
 	Sprite::PreDraw();
 	Vignette->Draw();
 	if (clear) {
@@ -175,6 +178,12 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		pauseUi->Draw();
 	}
 	Demo->Draw();
+//	postEffect->PostDrawScene(dxCommon->GetCmdList());
+//
+//	dxCommon->PreDraw();
+//	postEffect->Draw(dxCommon->GetCmdList());
+//	dxCommon->PostDraw();
+
 }
 
 

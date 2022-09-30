@@ -272,6 +272,7 @@
     <ClCompile Include="SourceCode\User\Crystal.cpp" />
     <ClCompile Include="SourceCode\User\DebugScene.cpp" />
     <ClCompile Include="SourceCode\User\Enemy.cpp" />
+    <ClCompile Include="SourceCode\User\EnemyUI.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
     <ClCompile Include="SourceCode\User\PauseUI.cpp" />
@@ -349,6 +350,7 @@
     <ClInclude Include="SourceCode\User\Crystal.h" />
     <ClInclude Include="SourceCode\User\DebugScene.h" />
     <ClInclude Include="SourceCode\User\Enemy.h" />
+    <ClInclude Include="SourceCode\User\EnemyUI.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />
     <ClInclude Include="SourceCode\User\PauseUI.h" />

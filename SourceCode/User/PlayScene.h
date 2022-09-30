@@ -4,6 +4,7 @@
 #include "PauseUI.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
 #include "Gauge.h"
+#include <PostEffect.h>
 
 /// <summary>
 /// タイトルシーン
@@ -52,5 +53,6 @@ private:
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};	
+	PostEffect* postEffect = nullptr;
 };
 

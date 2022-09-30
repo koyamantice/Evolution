@@ -44,10 +44,12 @@ void Bullet::OnUpda() {
 		WaitUpda();
 		break;
 	case Attack:
-		if (knockBacking) {
-			KnockBack();
-		} else {
-			AttackUpda();
+		if (enemy->GetIsActive()) {
+			if (knockBacking) {
+				KnockBack();
+			} else {
+				AttackUpda();
+			}
 		}
 		break;
 	default:
@@ -171,6 +173,7 @@ void Bullet::OnCollision(const std::string& Tag) {
 		case Attack:
 			if (!knockBacking) {
 				knockBacking = true;
+				enemy->SetHp(enemy->GetHp()-1);
 				burning = true;
 				back = Normalize(obj->GetPosition(), enemy->GetPosition());
 			}

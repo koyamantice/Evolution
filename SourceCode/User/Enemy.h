@@ -6,6 +6,8 @@
 #include <SourceCode/Obj/2d/Texture.h>
 #include "Player.h"
 #include "FBXObject3d.h"
+#include"EnemyUI.h"
+
 class Bullet;
 
 class Enemy :public Actor {

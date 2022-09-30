@@ -3,10 +3,10 @@
 #include <Player.h>
 #include <SourceCode/Obj/2d/Sprite.h>
 
-class PlayerUI : public  ActorComponent {
+class EnemyUI : public  ActorComponent {
 public:
-	PlayerUI();
-	~PlayerUI();
+	EnemyUI();
+	~EnemyUI();
 	void OnInitialize() override;	//‰Šú‰»ˆ—(Œp³”Å)
 	void OnUpdate() override;	//XVˆ—(Œp³”Å)
 	void OnFinalize() override;	//I—¹ˆ—(Œp³”Å)
