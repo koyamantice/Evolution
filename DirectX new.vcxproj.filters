@@ -188,9 +188,6 @@
     <ClCompile Include="SourceCode\User\PauseUI.cpp">
       <Filter>User\ポーズメニュー</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\Bullet.cpp">
-      <Filter>User\Player</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\Player.cpp">
       <Filter>User\Player</Filter>
     </ClCompile>
@@ -229,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\User\EnemyUI.cpp">
       <Filter>User\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Bullet.cpp">
+      <Filter>User\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -401,9 +401,6 @@
     <ClInclude Include="SourceCode\User\PauseUI.h">
       <Filter>User\ポーズメニュー</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\Bullet.h">
-      <Filter>User\Player</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\Player.h">
       <Filter>User\Player</Filter>
     </ClInclude>
@@ -442,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\EnemyUI.h">
       <Filter>User\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Bullet.h">
+      <Filter>User\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +530,9 @@
     </Filter>
     <Filter Include="User\Enemy">
       <UniqueIdentifier>{2905ce30-6a01-419b-b653-c07349da6df2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\Bullet">
+      <UniqueIdentifier>{e9bf7935-8691-4af8-8b2e-f2d10666ff8e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

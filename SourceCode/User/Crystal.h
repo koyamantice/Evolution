@@ -15,31 +15,17 @@ class Crystal :public Actor {
 	};
 public:
 	Crystal() {};
-	//void LoadData();
-	//void UpdateCommand();
-	//void DebugUpdate();
 private:
 	Input* input = Input::GetInstance();
 	std::stringstream parameterCommands;
 
-
 	void OnInit()override;
 	void OnUpda()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
+
 	void OnFinal()override;
 
-	//フェーズまとめ
-	void PhaseMove();
-	//void ApprochUpdate();
-	//void LeaveUpdate();
-	//void WaitUpdate();
-	////
-	//void LifeCommon();
-
-	Actor* player;
-	Actor* enemy;
-
-
+	Actor* player=nullptr;
 
 	float waitTimer = 0;
 	float vel = 0;
