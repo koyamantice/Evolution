@@ -128,28 +128,28 @@ void Player::Move() {
 	float StickY = input->GetPosY();
 	const float PI = 3.14159f;
 
-	if (input->PushKey(DIK_W)||input->LeftTiltStick(input->Up)) {
+	if (input->PushKey(DIK_W)||input->TiltStick(input->L_UP)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle;
 	}
-	if (input->PushKey(DIK_S) || input->LeftTiltStick(input->Down)) {
+	if (input->PushKey(DIK_S) || input->TiltStick(input->L_DOWN)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle-180;
 	}
-	if (input->PushKey(DIK_D) || input->LeftTiltStick(input->Right)) {
+	if (input->PushKey(DIK_D) || input->TiltStick(input->L_RIGHT)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle+90;
 	}
-	if (input->PushKey(DIK_A) || input->LeftTiltStick(input->Left)) {
+	if (input->PushKey(DIK_A) || input->TiltStick(input->L_LEFT)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;

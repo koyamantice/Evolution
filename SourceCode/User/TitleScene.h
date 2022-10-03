@@ -41,6 +41,8 @@ private:
 	bool Change = false;
 	float alpha = 0.0f;
 	float frame = 0;
+	float C;
+	float A;
 	std::string SceneName = "null";
 };
 

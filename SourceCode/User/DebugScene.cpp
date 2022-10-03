@@ -63,7 +63,7 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 	}
 	Chara[Select]->Demo();
 	Chara[Select]->SetRotation(rot);
-	if (input->TriggerButton(input->Select)) {
+	if (input->TriggerButton(input->BACK)) {
 		SceneManager::GetInstance()->ChangeScene("PLAY");
 	}
 }

@@ -66,8 +66,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	pauseUi.reset(pause_ui);
 	camera->SetTarget(player_shadow->GetPosition());
 
-//	postEffect = new PostEffect();
-//	postEffect->Initialize();
+	postEffect = new PostEffect();
+	postEffect->Initialize();
 
 }
 //ŠJ•úˆ—
@@ -79,13 +79,13 @@ void PlayScene::Finalize() {
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	CameraUpda();
-	if (input->TriggerButton(input->Button_Y)) {
+	if (input->TriggerButton(input->Y)) {
 		SceneManager::GetInstance()->ChangeScene("DEBUG");
 	}
 	if (pause) {
 		pauseUi->Update();
 		if (!pauseUi->GetEase()) {
-			if (input->TriggerButton(input->Button_A) ||
+			if (input->TriggerButton(input->A) ||
 				input->TriggerKey(DIK_SPACE)) {
 				pauseUi->Reset();
 				pause = false;
@@ -97,7 +97,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	//	return;
 	//}
 
-	if (input->TriggerButton(input->Start)||
+	if (input->TriggerButton(input->START)||
 		input->TriggerKey(DIK_1)) {
 		pause = true;
 	}
@@ -162,7 +162,7 @@ void PlayScene::CameraUpda() {
 
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -178,11 +178,11 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		pauseUi->Draw();
 	}
 	Demo->Draw();
-//	postEffect->PostDrawScene(dxCommon->GetCmdList());
-//
-//	dxCommon->PreDraw();
-//	postEffect->Draw(dxCommon->GetCmdList());
-//	dxCommon->PostDraw();
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
+
+	dxCommon->PreDraw();
+	postEffect->Draw(dxCommon->GetCmdList());
+	dxCommon->PostDraw();
 
 }
 

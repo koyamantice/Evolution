@@ -22,10 +22,12 @@ private:
 	void OnInit()override;
 	void OnUpda()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
-
 	void OnFinal()override;
 
 	Actor* player=nullptr;
+
+	//std::unique_ptr<Texture>
+
 
 	float waitTimer = 0;
 	float vel = 0;

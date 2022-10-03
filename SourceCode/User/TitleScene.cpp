@@ -27,18 +27,20 @@ void TitleScene::Finalize() {
 //XV
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
+	C = input->GetRPosX();
+	A = input->GetRPosY();
 
 	camera->Update();
 	ActorManager::GetInstance()->Update();
-	if (input->PushKey(DIK_0)) {
+	if (input->TiltStick(Input::R_RIGHT)||input->TriggerButton(Input::LT)) {
 		int a = 0;
 		a++;
 	}
-	if (input->TriggerKey(DIK_SPACE)||input->PushButton(input->Button_A)) {
+	if (input->TriggerKey(DIK_SPACE)||input->TriggerButton(input->A)) {
 		Change = true;
 		SceneName="PLAY";
 	}
-	if (input->TriggerKey(DIK_RETURN) || input->PushButton(input->Button_B)) {
+	if (input->TriggerKey(DIK_RETURN)) {
 		Change = true;
 		SceneName = "DEBUG";
 	}
@@ -46,16 +48,20 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 }
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
-	//ImGui::Begin("test");
-	//ImGui::SliderFloat("cameraPos.y", &cameraPos.y, 30, 0);
-	//ImGui::Unindent();
-	//ImGui::End();
+	dxCommon->PreDraw();
+	ImGui::Begin("test");
+	ImGui::SliderFloat("cameraPos.y", &C, 35000, 0);
+	ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
+	ImGui::Unindent();
+	ImGui::End();
 	Sprite::PreDraw();
 	UI[Button]->Draw();
 	Object3d::PreDraw();
 	ActorManager::GetInstance()->Draw(dxCommon);
 	Sprite::PreDraw();
 	Effect->Draw();
+	dxCommon->PostDraw();
+
 }
 
 void TitleScene::Feed(const std::string& sceneName) {

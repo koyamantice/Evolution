@@ -93,9 +93,5 @@ void Framework::Update(DirectXCommon* dxCommon) {
 
 
 void Framework::Draw(DirectXCommon* dxCommon) {
-	dxCommon->PreDraw();
-
 	SceneManager::GetInstance()->Draw(dxCommon);
-	//debugText->DrawAll();
-	dxCommon->PostDraw();
 }

@@ -26,7 +26,7 @@ void Aim::Draw() {
 }
 
 void Aim::Move() {
-	if (input->TriggerButton(input->Button_A) || input->TriggerKey(DIK_SPACE)) {
+	if (input->TriggerButton(input->A) || input->TriggerKey(DIK_SPACE)) {
 		player->SetStock(player->GetStock()-1);
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
 		if (bullet!=nullptr) {

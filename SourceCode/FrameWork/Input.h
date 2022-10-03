@@ -6,35 +6,37 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
+
+#include <Xinput.h>
+
 /// <summary>
 /// 入力
 /// </summary>
 class Input {
 public:
-	//ゲームパッド（ボタン）
-	enum ButtonKind {
-		Button_A=0,
-		Button_B,
-		Button_X,
-		Button_Y,
-		Button_LB,
-		Button_RB,
-		Select,
-		Start,
-		Button_LS,
-		Button_RS,
-		Cross_Up,
-		Cross_Down,
-		Cross_Right,
-		Cross_Left,
-		ButtonMax
+	enum XBOX {
+		B = XINPUT_GAMEPAD_B,
+		A = XINPUT_GAMEPAD_A,
+		X = XINPUT_GAMEPAD_X,
+		Y = XINPUT_GAMEPAD_Y,
+		START = XINPUT_GAMEPAD_START,
+		BACK = XINPUT_GAMEPAD_BACK,
+		LB = XINPUT_GAMEPAD_LEFT_SHOULDER,
+		RB = XINPUT_GAMEPAD_RIGHT_SHOULDER,
+		LT, RT
 	};
-
 	//スティック
-	enum StickKind {
-		Up=0, Down=1, Right=2, Left=3
+	enum STICK {
+		L_UP, L_DOWN, L_LEFT, L_RIGHT,
+		R_UP, R_DOWN, R_LEFT, R_RIGHT, XBOX_STICK_NUM
 	};
 
+
+	enum MouseButton {
+		LEFT = 0,
+		RIGHT,
+		MIDDLE,
+	};
 	struct MouseMove {
 		LONG    lX;
 		LONG    lY;
@@ -44,7 +46,10 @@ public:
 		LONG    lX;
 		LONG    lY;
 	};
-
+	struct StickPos {
+		float x;
+		float y;
+	};
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -87,53 +92,34 @@ public: // メンバ関数
 	bool ReleaseKey(BYTE keyNumber);
 
 	/// <summary>
-	/// キーの左ボタン押下をチェック
-	/// </summary>
-	/// <returns>押されているか</returns>
-	bool PushMouseLeft();
-
-	/// <summary>
 	/// キーの中ボタン押下をチェック
 	/// </summary>
 	/// <returns>押されているか</returns>
-	bool PushMouseMiddle();
+	bool PushMouse(MouseButton Button);
 
 	/// <summary>
 	/// キーの左ボタントリガーをチェック
 	/// </summary>
 	/// <returns>トリガーか</returns>
-	bool TriggerMouseLeft();
+	bool TriggerMouse(MouseButton Button);
 
-	/// <summary>
-	/// キーの中ボタントリガーをチェック
-	/// </summary>
-	/// <returns>トリガーか</returns>
-	bool TriggerMouseMiddle();
+	//ボタン配置
+	bool TriggerButton(XBOX Button);
+	bool TiltStick(STICK Stick);
 
-	//ゲームパッド
-	bool LeftTiltStick(StickKind stick);
-	bool LeftTriggerStick(StickKind stick);
-	bool RightTiltStick(StickKind stick);
-	bool RightTriggerStick(StickKind stick);
-
-	bool PushButton(int Button);
-	bool TriggerButton(int Button);
-	bool PushCrossKey(int CrossKey);
-	bool TriggerCrossKey(int CrossKey);
-	bool ReleaseButton(int Button);
-
-	bool AllNoPush();
 public:
 	const float& GetPosX() { return posX; }
 	const float& GetPosY() { return posY; }
-	const float& GetRPosX() { return RposX; }
-	const float& GetRPosY() { return RposY; }
+	const float& GetRPosX() { return (float)xinputState.Gamepad.sThumbLX; }
+	const float& GetRPosY() { return (float)xinputState.Gamepad.sThumbLY; }
 	/// <summary>
 	/// マウス移動量を取得
 	/// </summary>
 	/// <returns>マウス移動量</returns>
 	MouseMove GetMouseMove();
 	MousePoint GetPoint();
+
+
 private: // メンバ変数
 	ComPtr<IDirectInput8> dinput;
 	ComPtr<IDirectInputDevice8> devKeyboard;
@@ -143,16 +129,17 @@ private: // メンバ変数
 	DIMOUSESTATE2 mouseState = {};
 	DIMOUSESTATE2 mouseStatePre = {};
 	POINT mousePoint;
-	//ゲームパッドデバイス
-	DWORD g_dxNumForoce;
-	ComPtr<IDirectInputDevice8> devGamePad;
-	LPDIRECTINPUTEFFECT  g_lpDIEffect = NULL;
-	DIJOYSTATE gamePadState = {};
-	DIJOYSTATE oldGamePadState = {};
-	bool is_push[32] = {};
-	//スティックの無反応範囲
-	LONG unresponsive_range_right = 27500;
-	LONG unresponsive_range_left = 650;
+
+	//XINPUT(コントローラー用)
+	XINPUT_STATE xinputState;
+	XINPUT_STATE oldXinputState;
+	float shakePower = 0.0f;
+	int shakeTimer = 0;
+	bool CheckTrigger(XBOX Button);
+	bool CheckTilt(STICK Stick);
+
+	//デッドゾーンに入っているか(DeadRate : デッドゾーン判定の度合い、1.0fだとデフォルト)
+	bool StickInDeadZone(StickPos& Thumb);
 
 
 	float posX = 0;

@@ -74,6 +74,10 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 void DirectXCommon::PreDraw() {
 	//#pragma regin グラフィックスコマンド
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
+
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 	//実行
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(), D3D12_RESOURCE_STATE_PRESENT,
 	D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -90,15 +94,8 @@ void DirectXCommon::PreDraw() {
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//描画コマンド
-
 	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::window_width, WinApp::window_height));
-
 	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height));
-
-	// imgui開始
-	ImGui_ImplDX12_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
 }
 void DirectXCommon::ClearDepthBuffer() {
 	// 深度ステンシルビュー用デスクリプタヒープのハンドルを取得
@@ -422,7 +419,7 @@ bool DirectXCommon::InitImgui()
 		return false;
 	}
 	if (!ImGui_ImplDX12_Init(
-		GetDev(),
+		dev.Get(),
 		swcDesc.BufferCount,
 		swcDesc.BufferDesc.Format,
 		imguiHeap.Get(),

@@ -2,6 +2,9 @@
 #include <cassert>
 #pragma comment(lib, "dinput8.lib")
 
+#define STICK_MAX 32768.0f
+
+
 Input* Input::GetInstance() {
 	static Input instance;
 	return &instance;
@@ -60,68 +63,11 @@ bool Input::Initialize(WinApp* winApp) {
 	}
 
 	//ゲームパッドの生成
-	devGamePad = nullptr;
-	result = dinput->CreateDevice(GUID_Joystick, &devGamePad, NULL);
+	DWORD dwResult = XInputGetState(0, &xinputState);
+	XINPUT_VIBRATION vibration;
+	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 
-	if (devGamePad != nullptr)
-	{
-		//入力データ形式のセット
-		result = devGamePad->SetDataFormat(&c_dfDIJoystick);
-
-		// 軸モードを絶対値モードとして設定
-		DIPROPDWORD diprop;
-		ZeroMemory(&diprop, sizeof(diprop));
-		diprop.diph.dwSize = sizeof(diprop);
-		diprop.diph.dwHeaderSize = sizeof(diprop.diph);
-		diprop.diph.dwHow = DIPH_DEVICE;
-		diprop.diph.dwObj = 0;
-		diprop.dwData = DIPROPAXISMODE_ABS;
-
-		// 軸モードを変更
-		devGamePad->SetProperty(DIPROP_AXISMODE, &diprop.diph);
-
-		// X軸の値の範囲設定
-		DIPROPRANGE diprg;
-		ZeroMemory(&diprg, sizeof(diprg));
-		diprg.diph.dwSize = sizeof(diprg);
-		diprg.diph.dwHeaderSize = sizeof(diprg.diph);
-		diprg.diph.dwHow = DIPH_BYOFFSET;
-		diprg.lMin = -1000;
-		diprg.lMax = 1000;
-
-		// X軸の値の範囲設定
-		diprg.diph.dwObj = DIJOFS_X;
-		devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-
-		// Y軸の値の範囲設定
-		diprg.diph.dwObj = DIJOFS_Y;
-		devGamePad->SetProperty(DIPROP_RANGE, &diprg.diph);
-
-		//振動関係
-		DICONSTANTFORCE cf;
-		DIEFFECT eff;
-		DWORD rgdwAxes[2] = { DIJOFS_X , DIJOFS_Y };
-		LONG  rglDirection[2] = { 1 , 1 };
-
-		ZeroMemory(&eff, sizeof(eff));
-		eff.dwSize = sizeof(DIEFFECT);
-		eff.dwFlags = DIEFF_CARTESIAN | DIEFF_OBJECTOFFSETS;
-		eff.dwDuration = INFINITE;
-		eff.dwSamplePeriod = 0;
-		eff.dwGain = DI_FFNOMINALMAX;
-		eff.dwTriggerButton = DIEB_NOTRIGGER;
-		eff.dwTriggerRepeatInterval = 0;
-		eff.rgdwAxes = rgdwAxes;
-		eff.rglDirection = rglDirection;
-		eff.lpEnvelope = 0;
-		eff.cbTypeSpecificParams = sizeof(DICONSTANTFORCE);
-		eff.lpvTypeSpecificParams = &cf;
-		eff.dwStartDelay = 0;
-		
-		devGamePad->CreateEffect(GUID_ConstantForce, &eff, &g_lpDIEffect, NULL);
-		//排他制御レベルセット
-		result = devGamePad->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-	}
+	XInputSetState(dwResult, &vibration);
 
 	return true;
 }
@@ -154,24 +100,29 @@ void Input::Update() {
 		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
 	}
 
-	if (devGamePad != nullptr)
-	{
-		//ゲームパッド情報の取得開始
-		result = devGamePad->Acquire();
-		//前フレームの判定
-		oldGamePadState = gamePadState;
-		//全ボタンの情報を取得する
-		result = devGamePad->GetDeviceState(sizeof(DIJOYSTATE), &gamePadState);
-		//リセット
-		for (int i = 0; i < 32; i++)
-		{
-			is_push[i] = false;
-		}
-		posX = (float)gamePadState.lX;
-		posY = (float)gamePadState.lY;
-		RposX = (float)gamePadState.lRx;
-		RposY = (float)gamePadState.lRy;
+	//コントローラー
+	oldXinputState = xinputState;
+	ZeroMemory(&xinputState, sizeof(XINPUT_STATE));
 
+	DWORD dwResult = XInputGetState(0, &xinputState);
+	if (dwResult == ERROR_SUCCESS) {
+		//コントローラーが接続されている
+		if (0 < shakeTimer) {
+			shakeTimer--;
+			XINPUT_VIBRATION vibration;
+			ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+
+			if (shakeTimer == 0) {
+				vibration.wLeftMotorSpeed = (WORD) 0.0f; // use any value between 0-65535 here
+				vibration.wRightMotorSpeed =(WORD) 0.0f; // use any value between 0-65535 here
+			} else {
+				vibration.wLeftMotorSpeed =  (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
+				vibration.wRightMotorSpeed = (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
+			}
+			XInputSetState(dwResult, &vibration);
+		}
+	} else {
+		//コントローラーが接続されていない
 	}
 }
 
@@ -179,90 +130,39 @@ void Input::Finalize() {
 	dinput.Reset();
 	devKeyboard.Reset();
 	devMouse.Reset();
-	devGamePad.Reset();
-
-
-
-
 }
 
 bool Input::PushKey(BYTE keyNumber) {
 	// 異常な引数を検出
 	assert(0 <= keyNumber && keyNumber <= 256);
-
 	// 0でなければ押している
-	if (key[keyNumber]) {
-		return true;
-	}
-
-	// 押していない
-	return false;
+	return key[keyNumber];
 }
 
 bool Input::TriggerKey(BYTE keyNumber) {
 	// 異常な引数を検出
 	assert(0 <= keyNumber && keyNumber <= 256);
-
 	// 前回が0で、今回が0でなければトリガー
-	if (!keyPre[keyNumber] && key[keyNumber]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
+	return !keyPre[keyNumber] && key[keyNumber];
 }
 
 bool Input::ReleaseKey(BYTE keyNumber) {
 	// 異常な引数を検出
 	assert(0 <= keyNumber && keyNumber <= 256);
-
 	// 前回が1で、今回が0ならリリース
-	if (keyPre[keyNumber] && !key[keyNumber]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
+	return keyPre[keyNumber] && !key[keyNumber];
 }
 
-bool Input::PushMouseLeft() {
+bool Input::PushMouse(MouseButton Button) {
+	int key = Button;
 	// 0でなければ押している
-	if (mouseState.rgbButtons[0]) {
-		return true;
-	}
-
-	// 押していない
-	return false;
+	return mouseState.rgbButtons[key];
 }
 
-bool Input::PushMouseMiddle() {
-	// 0でなければ押している
-	if (mouseState.rgbButtons[2]) {
-		return true;
-	}
-
-	// 押していない
-	return false;
-}
-
-bool Input::TriggerMouseLeft() {
+bool Input::TriggerMouse(MouseButton Button) {
+	int key = Button;
 	// 前回が0で、今回が0でなければトリガー
-	if (!mouseStatePre.rgbButtons[0] && mouseState.rgbButtons[0]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
-}
-
-bool Input::TriggerMouseMiddle() {
-	// 前回が0で、今回が0でなければトリガー
-	if (!mouseStatePre.rgbButtons[2] && mouseState.rgbButtons[2]) {
-		return true;
-	}
-
-	// トリガーでない
-	return false;
+	return !mouseStatePre.rgbButtons[key] && mouseState.rgbButtons[key];
 }
 
 Input::MouseMove Input::GetMouseMove() {
@@ -280,441 +180,84 @@ Input::MousePoint Input::GetPoint() {
 	return tmp;
 }
 
-bool Input::LeftTiltStick(StickKind stick)
-{
-	//左
-	if (gamePadState.lX < -unresponsive_range_left && stick == Left)
-	{
-		return true;
+bool Input::TiltStick(STICK Stick) {
+	StickPos oldVec;
+	StickPos vec;
+	//右か左か
+	bool isLeftStick = Stick <= L_RIGHT;
+	if (isLeftStick) {
+		oldVec.x = oldXinputState.Gamepad.sThumbLX;
+		oldVec.y = oldXinputState.Gamepad.sThumbLY;
+		vec.x = xinputState.Gamepad.sThumbLX;
+		vec.y = xinputState.Gamepad.sThumbLY;
+	} else {
+		oldVec.x = oldXinputState.Gamepad.sThumbRX;
+		oldVec.y = oldXinputState.Gamepad.sThumbRY;
+		vec.x = xinputState.Gamepad.sThumbRX;
+		vec.y = xinputState.Gamepad.sThumbRY;
 	}
-	//右
-	else if (gamePadState.lX > unresponsive_range_left && stick == Right)
-	{
-		return true;
-	}
-	//後ろ
-	if (gamePadState.lY > unresponsive_range_left && stick == Down)
-	{
-		return true;
-	}
-	//前
-	else if (gamePadState.lY < -unresponsive_range_left && stick == Up)
-	{
-		return true;
+	if (!StickInDeadZone(oldVec))return false;
+	if (StickInDeadZone(vec))return false;
+
+	bool result = false;
+
+	if (Stick % 4 == L_UP) {
+		result =  0.3f < (vec.y / STICK_MAX);
+	} else if (Stick % 4 == L_DOWN) {
+		result = vec.y / STICK_MAX < -0.3f;
+	} else if (Stick % 4 == L_RIGHT) {
+		result = 0.3f < (vec.x / STICK_MAX);
+	} else if (Stick % 4 == L_LEFT) {
+		result =  vec.x / STICK_MAX < -0.3f;
+	} else {
+		assert(0);
 	}
 
+	return result;
+}
+
+bool Input::TriggerButton(XBOX Button) {
+	//トリガー
+	if (Button == LT) {
+		return oldXinputState.Gamepad.bLeftTrigger <= XINPUT_GAMEPAD_TRIGGER_THRESHOLD
+		&& CheckTrigger(Button);
+	} else if (Button == RT) {
+		return oldXinputState.Gamepad.bRightTrigger <= XINPUT_GAMEPAD_TRIGGER_THRESHOLD
+		&& CheckTrigger(Button);
+	} else {
+		return !(oldXinputState.Gamepad.wButtons & Button)
+		&& CheckTrigger(Button);
+	}
+	assert(0);
 	return false;
 }
 
-bool Input::LeftTriggerStick(StickKind stick)
-{
-	//左
-	if (gamePadState.lX <  -unresponsive_range_left && !(oldGamePadState.lX < 32767 -unresponsive_range_left) && stick == Left)
-	{
-		return true;
-	}
-	//右
-	else if (gamePadState.lX > unresponsive_range_left && !(oldGamePadState.lX > 32767 + unresponsive_range_left) && stick == Right)
-	{
-		return true;
-	}
-	//後ろ
-	if (gamePadState.lY >unresponsive_range_left && !(oldGamePadState.lY > 32767 + unresponsive_range_left) && stick == Down)
-	{
-		return true;
-	}
-	//前
-	else if (gamePadState.lY <  -unresponsive_range_left && !(oldGamePadState.lY < 32767 -unresponsive_range_left) && stick == Up)
-	{
-		return true;
-	}
+bool Input::CheckTrigger(XBOX Button) {
 
+	if (Button == LT) {
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bLeftTrigger;
+	} else if (Button == RT) {
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bRightTrigger;
+	} else {
+		return xinputState.Gamepad.wButtons & Button;
+	}
+	assert(0);
+	return false;
+
+}
+
+bool Input::StickInDeadZone(StickPos& Thumb) {
+	bool x = false, y = false;
+	if ((Thumb.x < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * 1.0f
+		&& Thumb.x > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * 1.0f)) {
+		Thumb.x = 0.0f;
+		x = true;
+	}
+	if ((Thumb.y < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * 1.0f
+		&& Thumb.y > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * 1.0f)) {
+		Thumb.y = 0.0f;
+		y = true;
+	}
+	if (x && y)return true;
 	return false;
 }
-
-bool Input::RightTiltStick(StickKind stick) {
-	//左
-	if (gamePadState.lRx < 32767 -unresponsive_range_right && stick == Left) {
-		return true;
-	}
-	//右
-	else if (gamePadState.lRx > 32767 + unresponsive_range_right&& stick == Right) {
-		return true;
-	}
-	//後ろ
-	if (gamePadState.lRy > 32767 + unresponsive_range_right&& stick == Down) {
-		return true;
-	}
-	//前
-	else if (gamePadState.lRy < 32767 -unresponsive_range_right && stick == Up) {
-		return true;
-	}
-
-	return false;
-}
-
-bool Input::RightTriggerStick(StickKind stick) {
-	//左
-	if (gamePadState.lRx < 32767 -unresponsive_range_right && !(oldGamePadState.lRx < 32767-unresponsive_range_right) && stick == Left) {
-		return true;
-	}
-	//右
-	else if (gamePadState.lRx > 32767 + unresponsive_range_right&& !(oldGamePadState.lRx > 32767 + unresponsive_range_right) && stick == Right) {
-		return true;
-	}
-	//後ろ
-	if (gamePadState.lRy > 32767 + unresponsive_range_right&& !(oldGamePadState.lRy > 32767 + unresponsive_range_right) && stick == Down) {
-		return true;
-	}
-	//前
-	else if (gamePadState.lRy < 32767 -unresponsive_range_right && !(oldGamePadState.lRy < 32767 -unresponsive_range_right) && stick == Up) {
-		return true;
-	}
-
-	return false;
-}
-
-bool Input::PushButton(int Button)
-{
-	for (int i = 0; i < 32; i++)
-	{
-		if (!(gamePadState.rgbButtons[i] & 0x80))
-		{
-			continue;
-		}
-
-		switch (i)
-		{
-		case 0:
-			is_push[ButtonKind::Button_A] = true;
-			break;
-		case 1:
-			is_push[ButtonKind::Button_B] = true;
-			break;
-		case 2:
-			is_push[ButtonKind::Button_X] = true;
-			break;
-		case 3:
-			is_push[ButtonKind::Button_Y] = true;
-			break;
-		case 4:
-			is_push[ButtonKind::Button_LB] = true;
-			break;
-		case 5:
-			is_push[ButtonKind::Button_RB] = true;
-			break;
-		case 6:
-			is_push[ButtonKind::Select] = true;
-			break;
-		case 7:
-			is_push[ButtonKind::Start] = true;
-			break;
-		case 8:
-			is_push[ButtonKind::Button_LS] = true;
-			break;
-		case 9:
-			is_push[ButtonKind::Button_RS] = true;
-			break;
-		default:
-			break;
-		}
-	}
-
-	for (int i = 0; i < Cross_Up; i++)
-	{
-		if (is_push[i] == true)
-		{
-			if (is_push[i] == is_push[Button])
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-bool Input::TriggerButton(int Button)
-{
-	for (int i = 0; i < 32; i++)
-	{
-		if (!(gamePadState.rgbButtons[i] & 0x80))
-		{
-			continue;
-		}
-		if (oldGamePadState.rgbButtons[i] & 0x80)
-		{
-			continue;
-		}
-
-		switch (i)
-		{
-		case 0:
-			is_push[ButtonKind::Button_A] = true;
-			break;
-		case 1:
-			is_push[ButtonKind::Button_B] = true;
-			break;
-		case 2:
-			is_push[ButtonKind::Button_X] = true;
-			break;
-		case 3:
-			is_push[ButtonKind::Button_Y] = true;
-			break;
-			is_push[ButtonKind::Button_Y] = true;
-			break;
-		case 4:
-			is_push[ButtonKind::Button_LB] = true;
-			break;
-		case 5:
-			is_push[ButtonKind::Button_RB] = true;
-			break;
-		case 6:
-			is_push[ButtonKind::Select] = true;
-			break;
-		case 7:
-			is_push[ButtonKind::Start] = true;
-			break;
-		case 8:
-			is_push[ButtonKind::Button_LS] = true;
-			break;
-		case 9:
-			is_push[ButtonKind::Button_RS] = true;
-			break;
-		default:
-			break;
-		}
-	}
-
-	for (int i = 0; i < Cross_Up; i++)
-	{
-		if (is_push[i] == true)
-		{
-			if (is_push[i] == is_push[Button])
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-bool Input::PushCrossKey(int CrossKey)
-{
-	if (gamePadState.rgdwPOV[0] != 0xFFFFFFFF)
-	{
-		switch (gamePadState.rgdwPOV[0])
-		{
-		case 0:
-			is_push[ButtonKind::Cross_Up] = true;
-			break;
-		case 4500:
-			is_push[ButtonKind::Cross_Up] = true;
-			is_push[ButtonKind::Cross_Right] = true;
-			break;
-		case 9000:
-			is_push[ButtonKind::Cross_Right] = true;
-			break;
-		case 13500:
-			is_push[ButtonKind::Cross_Right] = true;
-			is_push[ButtonKind::Cross_Down] = true;
-			break;
-		case 18000:
-			is_push[ButtonKind::Cross_Down] = true;
-			break;
-		case 22500:
-			is_push[ButtonKind::Cross_Down] = true;
-			is_push[ButtonKind::Cross_Left] = true;
-			break;
-		case 27000:
-			is_push[ButtonKind::Cross_Left] = true;
-			break;
-		case 31500:
-			is_push[ButtonKind::Cross_Left] = true;
-			is_push[ButtonKind::Cross_Up] = true;
-			break;
-		}
-
-		for (int i = Cross_Up; i < ButtonMax; i++)
-		{
-			if (is_push[i] == true)
-			{
-				if (is_push[i] == is_push[CrossKey])
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-
-	return false;
-}
-
-bool Input::TriggerCrossKey(int CrossKey)
-{
-	if (gamePadState.rgdwPOV[0] != 0xFFFFFFFF && oldGamePadState.rgdwPOV[0] == 0xFFFFFFFF)
-	{
-		switch (gamePadState.rgdwPOV[0])
-		{
-		case 0:
-			is_push[ButtonKind::Cross_Up] = true;
-			break;
-		case 4500:
-			is_push[ButtonKind::Cross_Up] = true;
-			is_push[ButtonKind::Cross_Right] = true;
-			break;
-		case 9000:
-			is_push[ButtonKind::Cross_Right] = true;
-			break;
-		case 13500:
-			is_push[ButtonKind::Cross_Right] = true;
-			is_push[ButtonKind::Cross_Down] = true;
-			break;
-		case 18000:
-			is_push[ButtonKind::Cross_Down] = true;
-			break;
-		case 22500:
-			is_push[ButtonKind::Cross_Down] = true;
-			is_push[ButtonKind::Cross_Left] = true;
-			break;
-		case 27000:
-			is_push[ButtonKind::Cross_Left] = true;
-			break;
-		case 31500:
-			is_push[ButtonKind::Cross_Left] = true;
-			is_push[ButtonKind::Cross_Up] = true;
-			break;
-		}
-
-		for (int i = Cross_Up; i < ButtonMax; i++)
-		{
-			if (is_push[i] == true)
-			{
-				if (is_push[i] == is_push[CrossKey])
-				{
-					return true;
-				}
-			}
-		}
-	}
-
-	return false;
-}
-
-bool Input::ReleaseButton(int Button) {
-	for (int i = 0; i < 32; i++) {
-		if ((gamePadState.rgbButtons[i] & 0x80)) {
-			continue;
-		}
-		if (!(oldGamePadState.rgbButtons[i] & 0x80)) {
-			continue;
-		}
-
-		switch (i) {
-		case 0:
-			is_push[ButtonKind::Button_A] = true;
-			break;
-		case 1:
-			is_push[ButtonKind::Button_B] = true;
-			break;
-		case 2:
-			is_push[ButtonKind::Button_X] = true;
-			break;
-		case 3:
-			is_push[ButtonKind::Button_Y] = true;
-			break;
-		case 4:
-			is_push[ButtonKind::Button_LB] = true;
-			break;
-		case 5:
-			is_push[ButtonKind::Button_RB] = true;
-			break;
-		case 6:
-			is_push[ButtonKind::Select] = true;
-			break;
-		case 7:
-			is_push[ButtonKind::Start] = true;
-			break;
-		case 8:
-			is_push[ButtonKind::Button_LS] = true;
-			break;
-		case 9:
-			is_push[ButtonKind::Button_RS] = true;
-			break;
-		default:
-			break;
-		}
-	}
-	//欠陥
-	for (int i = 0; i < Cross_Up; i++) {
-		if (is_push[i] == true) {
-			if (is_push[i] == is_push[Button]) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-bool Input::AllNoPush() {
-	for (int i = 0; i < 32; i++) {
-		if (!(gamePadState.rgbButtons[i] & 0x80)) {
-			continue;
-		}
-
-		switch (i) {
-		case 0:
-			is_push[ButtonKind::Button_A] = true;
-			break;
-		case 1:
-			is_push[ButtonKind::Button_B] = true;
-			break;
-		case 2:
-			is_push[ButtonKind::Button_X] = true;
-			break;
-		case 3:
-			is_push[ButtonKind::Button_Y] = true;
-			break;
-		case 4:
-			is_push[ButtonKind::Button_LB] = true;
-			break;
-		case 5:
-			is_push[ButtonKind::Button_RB] = true;
-			break;
-		case 6:
-			is_push[ButtonKind::Select] = true;
-			break;
-		case 7:
-			is_push[ButtonKind::Start] = true;
-			break;
-		case 8:
-			is_push[ButtonKind::Button_LS] = true;
-			break;
-		case 9:
-			is_push[ButtonKind::Button_RS] = true;
-			break;
-		default:
-			break;
-		}
-	}
-
-	for (int i = 0; i < Cross_Up; i++) {
-		if (is_push[i] == true) {
-			if (is_push[i] == is_push[i]) {
-				return false;
-			}
-		}
-	}
-	for (int i = 0; i < 4; i++) {
-		StickKind j = static_cast<StickKind>(i);
-		if (LeftTiltStick(j)) {
-			return false;
-		}
-	}
-	return true;
-}
-
-
