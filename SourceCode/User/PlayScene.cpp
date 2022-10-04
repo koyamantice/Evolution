@@ -24,6 +24,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	enemy_shadow= ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("Crystal");
+	crystal_shadow= ActorManager::GetInstance()->SearchActor("Crystal");
 	for (int i = 0; i < 30;i++) {
 		ActorManager::GetInstance()->AttachActor("Bullet");
 	}
@@ -131,30 +132,30 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 void PlayScene::CameraUpda() {
 	Input* input = Input::GetInstance();
-	if (input->PushKey(DIK_E) || input->PushKey(DIK_Q)) {
-		if (input->PushKey(DIK_E)) {
+	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
+		if (input->TiltPushStick(Input::R_RIGHT)) {
 			angle -= 1;
 		}
-		if (input->PushKey(DIK_Q)) {
+		if (input->TiltPushStick(Input::R_LEFT)) {
 			angle += 1;
 		}
-
-		if (input->PushKey(DIK_Q) && input->PushKey(DIK_E)) {
-			player_shadow->SetCanMove(false);
-			angle = player_shadow->GetRotation().y;
-		} else {
-			player_shadow->SetCanMove(true);
-		}
-
 		dis.x = sinf(angle * (PI / 180)) * 15.0f;
 		dis.y = cosf(angle * (PI / 180)) * 15.0f;
+	}
+	if (input->TriggerButton(Input::LT)) {
+		player_shadow->SetCanMove(false);
+		angle = player_shadow->GetRotation().y;
+		dis.x = sinf(angle * (PI / 180)) * 15.0f;
+		dis.y = cosf(angle * (PI / 180)) * 15.0f;
+	} else {
+		player_shadow->SetCanMove(true);
 	}
 
 	distance.x = Ease(In, Quad, 0.5f, distance.x, dis.x);
 	distance.y = Ease(In, Quad, 0.5f, distance.y, dis.y);
 
 	player_shadow->SetAngle(angle);
-
+	crystal_shadow->SetAngle(angle);
 	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z });
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
@@ -162,7 +163,8 @@ void PlayScene::CameraUpda() {
 
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	dxCommon->PreDraw();
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -178,10 +180,10 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		pauseUi->Draw();
 	}
 	Demo->Draw();
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	dxCommon->PreDraw();
-	postEffect->Draw(dxCommon->GetCmdList());
+	//dxCommon->PreDraw();
+	//postEffect->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 
 }

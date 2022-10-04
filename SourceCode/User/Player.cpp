@@ -9,6 +9,7 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 #include"PlayerUI.h"
 #include "ParticleManager.h"
+#define STICK__MAX 32768.0f
 
 void Player::LoadData() {
 	std::ifstream file;
@@ -100,7 +101,6 @@ void Player::OnUpda() {
 		//sca = (float)rand() / RAND_MAX*rnd_sca;
 	ParticleManager::GetInstance()->Add(15, obj->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.6f);
 	//}
-
 	//ParticleManager::GetInstance()->Add(30, obj->GetPosition(), {0.1f,0.0f,0.1f}, XMFLOAT3(), 1.2f, 0.6f);
 }
 
@@ -127,29 +127,29 @@ void Player::Move() {
 	float StickX = input->GetPosX();
 	float StickY = input->GetPosY();
 	const float PI = 3.14159f;
-
-	if (input->PushKey(DIK_W)||input->TiltStick(input->L_UP)) {
+	
+	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle;
 	}
-	if (input->PushKey(DIK_S) || input->TiltStick(input->L_DOWN)) {
+	if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle-180;
 	}
-	if (input->PushKey(DIK_D) || input->TiltStick(input->L_RIGHT)) {
+	if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle+90;
 	}
-	if (input->PushKey(DIK_A) || input->TiltStick(input->L_LEFT)) {
+	if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;

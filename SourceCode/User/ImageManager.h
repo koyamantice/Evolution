@@ -32,6 +32,7 @@ public:
 		Lock,
 		Battle,
 		Fire,
+		InOut,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

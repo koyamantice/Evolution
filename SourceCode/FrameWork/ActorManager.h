@@ -7,6 +7,8 @@
 
 
 class ActorManager {
+private:
+	using XMFLOAT3 = DirectX::XMFLOAT3;
 public:
 	static ActorManager* GetInstance();
 	/// <summary>
@@ -52,7 +54,11 @@ public:
 
 	Actor* SearchWaitBullet();
 
+	DirectX::XMFLOAT3 Dist(XMFLOAT3 pos,XMFLOAT3 pos2);
+	float Length(XMFLOAT3 pos, XMFLOAT3 pos2);
+	Actor* SearchActorArea(XMFLOAT3 pos);
 	Actor* SearchActor(const std::string& tag);
+
 	Actor* SearchActorBack(const std::string& tag);
 private:
 	ActorFactory* actorFactory_ = nullptr;

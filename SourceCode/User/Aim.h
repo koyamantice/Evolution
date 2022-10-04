@@ -17,16 +17,15 @@ public:
 	void Init();
 	void Upda();
 	void Draw();
-
-	void Move();
-
 private:
 	std::unique_ptr<Texture> LockOn{};
 	Input* input = Input::GetInstance();
+
+	void Move();
+	void EnemySet();
 
 	float angle = 0;
 	float distance = 5.0f;
 	Actor* player = nullptr;
 	Actor* bullet = nullptr;
-
 };

@@ -62,12 +62,6 @@ bool Input::Initialize(WinApp* winApp) {
 		return result;
 	}
 
-	//ゲームパッドの生成
-	DWORD dwResult = XInputGetState(0, &xinputState);
-	XINPUT_VIBRATION vibration;
-	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-
-	XInputSetState(dwResult, &vibration);
 
 	return true;
 }
@@ -102,24 +96,24 @@ void Input::Update() {
 
 	//コントローラー
 	oldXinputState = xinputState;
-	ZeroMemory(&xinputState, sizeof(XINPUT_STATE));
+//	ZeroMemory(&xinputState, sizeof(XINPUT_STATE));
 
 	DWORD dwResult = XInputGetState(0, &xinputState);
 	if (dwResult == ERROR_SUCCESS) {
 		//コントローラーが接続されている
 		if (0 < shakeTimer) {
-			shakeTimer--;
-			XINPUT_VIBRATION vibration;
-			ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+			//shakeTimer--;
+			//XINPUT_VIBRATION vibration;
+			//ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 
-			if (shakeTimer == 0) {
-				vibration.wLeftMotorSpeed = (WORD) 0.0f; // use any value between 0-65535 here
-				vibration.wRightMotorSpeed =(WORD) 0.0f; // use any value between 0-65535 here
-			} else {
-				vibration.wLeftMotorSpeed =  (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
-				vibration.wRightMotorSpeed = (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
-			}
-			XInputSetState(dwResult, &vibration);
+			//if (shakeTimer == 0) {
+			//	vibration.wLeftMotorSpeed = (WORD) 0.0f; // use any value between 0-65535 here
+			//	vibration.wRightMotorSpeed =(WORD) 0.0f; // use any value between 0-65535 here
+			//} else {
+			//	vibration.wLeftMotorSpeed =  (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
+			//	vibration.wRightMotorSpeed = (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
+			//}
+			//XInputSetState(dwResult, &vibration);
 		}
 	} else {
 		//コントローラーが接続されていない
@@ -214,6 +208,47 @@ bool Input::TiltStick(STICK Stick) {
 	}
 
 	return result;
+}
+
+bool Input::TiltPushStick(STICK Stick) {
+	StickPos oldVec;
+	StickPos vec;
+	//右か左か
+	bool isLeftStick = Stick <= L_RIGHT;
+	if (isLeftStick) {
+		vec.x = xinputState.Gamepad.sThumbLX;
+		vec.y = xinputState.Gamepad.sThumbLY;
+	} else {
+		vec.x = xinputState.Gamepad.sThumbRX;
+		vec.y = xinputState.Gamepad.sThumbRY;
+	}
+
+	bool result = false;
+	if (Stick % 4 == L_UP) {
+		result = 0.3f < (vec.y / STICK_MAX);
+	} else if (Stick % 4 == L_DOWN) {
+		result = vec.y / STICK_MAX < -0.3f;
+	} else if (Stick % 4 == L_RIGHT) {
+		result = 0.3f < (vec.x / STICK_MAX);
+	} else if (Stick % 4 == L_LEFT) {
+		result = vec.x / STICK_MAX < -0.3f;
+	} else {
+		assert(0);
+	}
+
+	return result;
+}
+
+bool Input::PushButton(XBOX Button) {
+	if (Button == LT) {
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bLeftTrigger;
+	} else if (Button == RT) {
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bRightTrigger;
+	} else {
+		return xinputState.Gamepad.wButtons & Button;
+	}
+	assert(0);
+	return false;
 }
 
 bool Input::TriggerButton(XBOX Button) {

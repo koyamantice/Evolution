@@ -49,7 +49,15 @@ void ActorManager::CheckAllCollisions() {
 		for (auto itrB = Actors.rbegin(); itrB != Actors.rend(); ++itrB) {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
-			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
+			if (actorA->GetTag() == "Crystal" && actorB->GetTag() == "Player") {
+				if (Collision::CircleCollision(actorA->GetPosition().x, actorA->GetPosition().z, 1.5f, actorB->GetPosition().x, actorB->GetPosition().z, 1.5f)) {
+						actorA->OnCollision(actorB->GetTag());
+						actorB->OnCollision(actorA->GetTag());
+					
+				}
+				continue;
+			}
+			if (Collision::SphereCollision2(actorA->GetPosition(), 1.5f, actorB->GetPosition(), 1.5f)) {
 				if (actorA->GetTag()!= actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());
@@ -106,6 +114,41 @@ Actor* ActorManager::SearchWaitBullet() {
 		return actor;
 	}
 	return nullptr;
+}
+
+XMFLOAT3 ActorManager::Dist(XMFLOAT3 pos, XMFLOAT3 pos2) {
+	XMFLOAT3 itr;
+	itr.x = sqrtf(powf((pos2.x - pos.x),2));
+	itr.y = sqrtf(powf((pos2.y - pos.y),2));
+	itr.z = sqrtf(powf((pos2.z - pos.z),2));
+	return itr;
+}
+
+float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
+	float itr;
+
+	itr = sqrtf(powf((pos2.x - pos.x), 2)+powf((pos2.y - pos.y), 2)+powf((pos2.z - pos.z), 2));
+
+	return itr;
+}
+
+Actor* ActorManager::SearchActorArea(XMFLOAT3 pos) {
+	Actor* itrActor=SearchActor("Player");
+	const float limit = 30.0f;
+	float check = limit;
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() == "Player"||actor->GetTag() == "Bullet") { continue; }
+
+		XMFLOAT3 difPos = actor->GetPosition();
+		float dif;
+		dif = Length(difPos, pos);
+		if (check > dif) {
+			check = dif;
+			itrActor = itr->get();
+		}
+	}
+	return itrActor;
 }
 
 Actor* ActorManager::SearchActor(const std::string& tag) {

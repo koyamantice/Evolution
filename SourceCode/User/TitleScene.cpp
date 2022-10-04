@@ -32,7 +32,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 
 	camera->Update();
 	ActorManager::GetInstance()->Update();
-	if (input->TiltStick(Input::R_RIGHT)||input->TriggerButton(Input::LT)) {
+	if (input->TiltStick(Input::R_RIGHT)) {
 		int a = 0;
 		a++;
 	}
@@ -49,11 +49,11 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	ImGui::Begin("test");
-	ImGui::SliderFloat("cameraPos.y", &C, 35000, 0);
-	ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
-	ImGui::Unindent();
-	ImGui::End();
+	//ImGui::Begin("test");
+	//ImGui::SliderFloat("cameraPos.y", &C, 35000, 0);
+	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
+	//ImGui::Unindent();
+	//ImGui::End();
 	Sprite::PreDraw();
 	UI[Button]->Draw();
 	Object3d::PreDraw();

@@ -105,7 +105,12 @@ public: // メンバ関数
 
 	//ボタン配置
 	bool TriggerButton(XBOX Button);
+	bool PushButton(XBOX Button);
+	//トリガー
 	bool TiltStick(STICK Stick);
+	//プッシュ
+	bool TiltPushStick(STICK Stick);
+	bool TiltPushStick_L(STICK Stick);
 
 public:
 	const float& GetPosX() { return posX; }

@@ -23,12 +23,12 @@ private:
 	void OnUpda()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
-
+	void OnCollision(const std::string& Tag)override;
 	Actor* player=nullptr;
 
-	//std::unique_ptr<Texture>
-
-
+	std::unique_ptr<Texture> in_out = nullptr;
+	bool isCollide = false;
+	float rad = 0;
 	float waitTimer = 0;
 	float vel = 0;
 };
