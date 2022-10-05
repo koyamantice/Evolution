@@ -210,8 +210,7 @@ bool Input::TiltStick(STICK Stick) {
 	return result;
 }
 
-bool Input::TiltPushStick(STICK Stick) {
-	StickPos oldVec;
+bool Input::TiltPushStick(STICK Stick, float DeadZone) {
 	StickPos vec;
 	//âEÇ©ç∂Ç©
 	bool isLeftStick = Stick <= L_RIGHT;
@@ -225,13 +224,13 @@ bool Input::TiltPushStick(STICK Stick) {
 
 	bool result = false;
 	if (Stick % 4 == L_UP) {
-		result = 0.3f < (vec.y / STICK_MAX);
+		result = DeadZone < (vec.y / STICK_MAX);
 	} else if (Stick % 4 == L_DOWN) {
-		result = vec.y / STICK_MAX < -0.3f;
+		result = vec.y / STICK_MAX < -DeadZone;
 	} else if (Stick % 4 == L_RIGHT) {
-		result = 0.3f < (vec.x / STICK_MAX);
+		result = DeadZone < (vec.x / STICK_MAX);
 	} else if (Stick % 4 == L_LEFT) {
-		result = vec.x / STICK_MAX < -0.3f;
+		result = vec.x / STICK_MAX < -DeadZone;
 	} else {
 		assert(0);
 	}

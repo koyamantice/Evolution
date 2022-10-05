@@ -109,8 +109,7 @@ public: // メンバ関数
 	//トリガー
 	bool TiltStick(STICK Stick);
 	//プッシュ
-	bool TiltPushStick(STICK Stick);
-	bool TiltPushStick_L(STICK Stick);
+	bool TiltPushStick(STICK Stick,float DeadZone=0.3f);
 
 public:
 	const float& GetPosX() { return posX; }

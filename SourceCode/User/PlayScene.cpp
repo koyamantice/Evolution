@@ -139,14 +139,14 @@ void PlayScene::CameraUpda() {
 		if (input->TiltPushStick(Input::R_LEFT)) {
 			angle += 1;
 		}
-		dis.x = sinf(angle * (PI / 180)) * 15.0f;
-		dis.y = cosf(angle * (PI / 180)) * 15.0f;
+		dis.x = sinf(angle * (PI / 180)) * 10.0f;
+		dis.y = cosf(angle * (PI / 180)) * 10.0f;
 	}
 	if (input->TriggerButton(Input::LT)) {
 		player_shadow->SetCanMove(false);
 		angle = player_shadow->GetRotation().y;
-		dis.x = sinf(angle * (PI / 180)) * 15.0f;
-		dis.y = cosf(angle * (PI / 180)) * 15.0f;
+		dis.x = sinf(angle * (PI / 180)) * 13.0f;
+		dis.y = cosf(angle * (PI / 180)) * 13.0f;
 	} else {
 		player_shadow->SetCanMove(true);
 	}
@@ -156,8 +156,8 @@ void PlayScene::CameraUpda() {
 
 	player_shadow->SetAngle(angle);
 	crystal_shadow->SetAngle(angle);
-	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z });
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z-3});
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 13.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 

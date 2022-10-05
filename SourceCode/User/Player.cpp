@@ -84,6 +84,12 @@ void Player::OnInit() {
 }
 
 void Player::OnUpda() {
+	if (!first) {
+		LockOn->FirstSet();
+
+
+		first = true;
+	}
 	if (canMove) {
 		Move();
 	}
@@ -128,28 +134,28 @@ void Player::Move() {
 	float StickY = input->GetPosY();
 	const float PI = 3.14159f;
 	
-	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP)) {
+	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP, 0.99f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle;
 	}
-	if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN)) {
+	if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.99f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle-180;
 	}
-	if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT)) {
+	if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.99f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;
 		pos.z -= vecvel.z;
 		rot.y = angle+90;
 	}
-	if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT)) {
+	if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.99f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-vel,0,0,0 }, angle);
 		pos.x -= vecvel.x;
 		pos.y -= vecvel.y;

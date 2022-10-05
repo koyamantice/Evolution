@@ -24,6 +24,12 @@ void Aim::Draw() {
 
 }
 
+void Aim::FirstSet() {
+	player = ActorManager::GetInstance()->SearchActor("Player");
+	LockOn->SetPosition(player->GetPosition());
+
+}
+
 void Aim::Move() {
 	if (input->TriggerButton(input->B) || input->TriggerKey(DIK_SPACE)) {
 		player = ActorManager::GetInstance()->SearchActor("Player");
@@ -35,39 +41,47 @@ void Aim::Move() {
 	}
 
 
-	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT) || input->TiltPushStick(Input::R_UP) || input->TiltPushStick(Input::R_DOWN)) {
-		if (input->TiltPushStick(Input::R_RIGHT)) {
-			angle -= 3;
+	if (input->TiltPushStick(Input::L_RIGHT) || input->TiltPushStick(Input::L_LEFT) || input->TiltPushStick(Input::L_UP) || input->TiltPushStick(Input::L_DOWN)) {
+		if (input->TiltPushStick(Input::L_RIGHT, 0.01f)) {
+			angle -= abs(angle*0.1f);
+			if (angle<=0) {
+				angle -= (abs(angle) + 1) * 0.1f;
+			}
 		}
-		if (input->TiltPushStick(Input::R_LEFT)) {
-			angle += 3;
+		if (input->TiltPushStick(Input::L_LEFT, 0.01f)) {
+			angle += 0.3f;
 		}
-		if (input->TiltPushStick(Input::R_UP)) {
-			distance += 1;
+		if (input->TiltPushStick(Input::L_UP, 0.01f)) {
+			distance -= 0.3f;
 		}
-		if (input->TiltPushStick(Input::R_DOWN)) {
-			distance -= 1;
+		if (input->TiltPushStick(Input::L_DOWN, 0.01f)) {
+			distance += 0.3f;
 		}
-		player = ActorManager::GetInstance()->SearchActor("Player");
+		if (angle > 10.0) {
+			angle = 10.0;
+		}
+		if (distance > 10.0) {
+			distance = 10.0;
+		}
+		if (angle < -10.0) {
+			angle = -10.0;
+		}
+		if (distance < -10.0) {
+			distance = -10.0;
+		}
 		XMFLOAT3 Lpos = LockOn->GetPosition();
 		XMFLOAT3 plapos = player->GetPosition();
-		Lpos.x = plapos.x + sinf(angle * (XM_PI / 180)) * distance;
+		Lpos.x = plapos.x + angle;
 		Lpos.y = 0.18f;
-		Lpos.z = plapos.z + cosf(angle * (XM_PI / 180)) * distance;
+		Lpos.z = plapos.z +distance;
 		LockOn->SetPosition(Lpos);
 
 	}
-	//if (distance < 3.0) {
-	//	distance = 3.0;
-	//}
-	//if (distance > 15.0) {
-	//	distance = 15.0;
-	//}
+
 }
 
 void Aim::EnemySet() {
 	if (input->TriggerButton(Input::RT)) {
-		player = ActorManager::GetInstance()->SearchActor("Player");
 		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(player->GetPosition());
 		//->SearchActor("Enemy");
 

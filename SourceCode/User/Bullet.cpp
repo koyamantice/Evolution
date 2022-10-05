@@ -18,7 +18,7 @@ void Bullet::OnInit() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
 	obj->SetScale({ 0.5f, 0.5f, 0.5f });
-	obj->SetColor({ 1.0f, 1.0f, 1.0f,1.0f });
+	obj->SetColor({ 1.0f, 0.0f, 0.0f,1.0f });
 	obj->SetPosition({ ID * 1.0f,0,ID * 1.0f });
 	landing = player->GetLockPos();
 	Texture* Lock_ = Texture::Create(ImageManager::Battle, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
@@ -136,8 +136,8 @@ void Bullet::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
+		Texture::PreDraw();
 		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-			Texture::PreDraw();
 			Status->Draw();
 		}
 		if (burning) {

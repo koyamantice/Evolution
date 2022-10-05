@@ -94,6 +94,9 @@ public:
 	void SetCommand(const int& command, XMFLOAT3 pos);
 	const int& GetCommand() { return command; }
 
+	//
+	void SetPause(const bool& pause) { this->pause = pause; }
+	const bool& GetPause() { return pause; }
 	//virtualにしようか悩み中//解決済み
 	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
@@ -115,6 +118,8 @@ protected:
 	float hp = 0;
 	float angle = 0;
 	bool canMove = true;
+	bool pause = false;
+	bool first = false;
 	XMFLOAT3 AftaerPos{};
 	int stock = 0;
 	//コンポーネント

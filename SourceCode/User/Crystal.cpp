@@ -21,12 +21,22 @@ void Crystal::OnUpda() {
 	in_out->SetRotation(XMFLOAT3{ 0,180+angle,0 });
 
 	rad++;
+
+	if(isCollide){
+		if (Input::GetInstance()->TriggerButton(Input::A)) {
+			pause = true;
+		}
+	}
+
+
 	in_out->Update();
 
 }
 void Crystal::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
 		isCollide = true;
+	} else {
+		isCollide = false;
 	}
 
 }

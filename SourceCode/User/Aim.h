@@ -17,6 +17,7 @@ public:
 	void Init();
 	void Upda();
 	void Draw();
+	void FirstSet();
 private:
 	std::unique_ptr<Texture> LockOn{};
 	Input* input = Input::GetInstance();
