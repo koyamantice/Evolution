@@ -66,7 +66,7 @@ void PostEffect::Initialize() {
 	CreateGraphicsPipelineState();
 	//テクスチャリソース設定
 	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-	DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+	DXGI_FORMAT_R8G8B8A8_UNORM,
 	WinApp::window_width,
 	(UINT)WinApp::window_height,
 	1,0,1,0,D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
@@ -78,7 +78,7 @@ void PostEffect::Initialize() {
 		D3D12_HEAP_FLAG_NONE,
 		&texresDesc,
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,clearColor),
+		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM,clearColor),
 		IID_PPV_ARGS(&texBuff));
 	assert(SUCCEEDED(result));
 	{//テクスチャを赤
@@ -341,7 +341,9 @@ void PostEffect::CreateGraphicsPipelineState() {
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ

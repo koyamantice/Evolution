@@ -225,11 +225,8 @@ bool DirectXCommon::InitializeDevice() {
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION,true);
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-
 	}
-
-
-#endif // _DEBUG
+#endif _DEBUG
 
 
 
@@ -329,7 +326,8 @@ bool DirectXCommon::InitializeRenderTargetView() {
 		rtvHandle.ptr += i * dev->GetDescriptorHandleIncrementSize(heapDesc.Type);
 		//
 		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-		rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
 		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 		//
 		dev->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);
