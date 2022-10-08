@@ -91,7 +91,7 @@ public:
 	void SetStock(const int& Stock) {this->stock = Stock;};
 	const int& GetStock() { return stock; }
 	//
-	void SetCommand(const int& command, XMFLOAT3 pos);
+	void SetCommand(const int& command, XMFLOAT3 pos={0,0,0});
 	const int& GetCommand() { return command; }
 
 	//

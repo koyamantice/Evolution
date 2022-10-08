@@ -62,6 +62,7 @@ void Player::DebugUpdate() {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
+	obj->SetPosition({0,0,30});
 	LoadData();
 	UpdateCommand();
 

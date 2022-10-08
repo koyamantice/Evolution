@@ -24,7 +24,7 @@ private:
 
 	void Move();
 	void EnemySet();
-
+	float Area = 0.3f;
 	float angle = 0;
 	float distance = 5.0f;
 	Actor* player = nullptr;

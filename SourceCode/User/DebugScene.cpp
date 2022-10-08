@@ -69,6 +69,7 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 }
 //•`‰æ
 void DebugScene::Draw(DirectXCommon* dxCommon) {
+	dxCommon->PreDraw();
 	//mGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.2f, 1.0f));
 	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 1.0f));
 	ImGui::SetNextWindowPos(ImVec2(980, 0),1);
@@ -138,6 +139,8 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 	Sprite::PreDraw();
 	back->Draw();
 	Chara[Select]->DemoDraw(dxCommon);
+
+	dxCommon->PostDraw();
 
 }
 

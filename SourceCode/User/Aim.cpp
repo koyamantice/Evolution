@@ -31,7 +31,7 @@ void Aim::FirstSet() {
 }
 
 void Aim::Move() {
-	if (input->TriggerButton(input->B) || input->TriggerKey(DIK_SPACE)) {
+	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock()-1);
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
@@ -39,7 +39,12 @@ void Aim::Move() {
 			bullet->SetCommand(Actor::command::Attack,LockOn->GetPosition());
 		}
 	}
-
+	if (input->PushButton(Input::A)) {
+		Area += 0.02f;
+		ActorManager::GetInstance()->ChangeBulletCommand(LockOn->GetPosition(),Area);
+	} else {
+		Area = 0.3f;
+	}
 
 	if (input->TiltPushStick(Input::L_RIGHT) || input->TiltPushStick(Input::L_LEFT) || input->TiltPushStick(Input::L_UP) || input->TiltPushStick(Input::L_DOWN)) {
 		if (input->TiltPushStick(Input::L_RIGHT, 0.01f)) {

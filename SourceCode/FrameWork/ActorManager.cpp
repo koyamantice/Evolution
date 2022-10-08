@@ -132,6 +132,16 @@ float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 	return itr;
 }
 
+void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() != "Bullet") { continue; }
+		if(Collision::CircleCollision(pos.x, pos.z, scale, actor->GetPosition().x, actor->GetPosition().z, 1.0f)) {
+			actor->SetCommand(Actor::command::Wait);
+		}
+	}
+}
+
 Actor* ActorManager::SearchActorArea(XMFLOAT3 pos) {
 	Actor* itrActor=SearchActor("Player");
 	const float limit = 30.0f;
