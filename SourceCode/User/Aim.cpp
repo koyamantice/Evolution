@@ -27,7 +27,8 @@ void Aim::Draw() {
 
 void Aim::FirstSet() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
-	//LockOn->SetPosition(player->GetPosition());
+	XMFLOAT3 pos = player->GetPosition();
+	LockOn->SetPosition({ pos.x,pos.y + 0.1f,pos.z });
 
 }
 
@@ -54,9 +55,9 @@ void Aim::Move() {
 			pos.z = base.z + Area * cosf(angle);
 			const float rnd_vel = 0.4f;
 			XMFLOAT3 vel{};
-			//vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
-			//vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			ParticleManager::GetInstance()->Add(15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
@@ -65,38 +66,31 @@ void Aim::Move() {
 	}
 
 	if (input->TiltPushStick(Input::L_RIGHT) || input->TiltPushStick(Input::L_LEFT) || input->TiltPushStick(Input::L_UP) || input->TiltPushStick(Input::L_DOWN)) {
-		if (input->TiltPushStick(Input::L_RIGHT, 0.01f)) {
-			angle -= abs(angle * 0.1f);
-			if (angle <= 0) {
-				angle -= (abs(angle) + 1) * 0.1f;
-			}
-		}
-		if (input->TiltPushStick(Input::L_LEFT, 0.01f)) {
-			angle += 0.3f;
-		}
-		if (input->TiltPushStick(Input::L_UP, 0.01f)) {
-			distance -= 0.3f;
-		}
-		if (input->TiltPushStick(Input::L_DOWN, 0.01f)) {
-			distance += 0.3f;
-		}
-		if (angle > 10.0) {
-			angle = 10.0;
-		}
-		if (distance > 10.0) {
-			distance = 10.0;
-		}
-		if (angle < -10.0) {
-			angle = -10.0;
-		}
-		if (distance < -10.0) {
-			distance = -10.0;
-		}
 		XMFLOAT3 Lpos = LockOn->GetPosition();
-		XMFLOAT3 plapos = player->GetPosition();
-		Lpos.x = plapos.x + angle;
-		Lpos.y = 0.25f;
-		Lpos.z = plapos.z + distance;
+		float StickX = input->GetRPosX();
+		float StickY = input->GetRPosY();
+		const float PI = 3.14159f;
+		const float STICK_MAX = 32768.0f;
+		if (input->PushKey(DIK_W) || input->TiltPushStick(Input::L_UP, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,1,0 }, angle);
+			Lpos.x -= vecvel.x * (StickY / STICK_MAX);
+			Lpos.z -= vecvel.z * (StickY / STICK_MAX);
+		}
+		if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-1,0 }, angle);
+			Lpos.x += vecvel.x * (StickY / STICK_MAX);
+			Lpos.z += vecvel.z * (StickY / STICK_MAX);
+		}
+		if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 1,0,0,0 }, angle);
+			Lpos.x -= vecvel.x * (StickX / STICK_MAX);
+			Lpos.z -= vecvel.z * (StickX / STICK_MAX);
+		}
+		if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -1,0,0,0 }, angle);
+			Lpos.x += vecvel.x * (StickX / STICK_MAX);
+			Lpos.z += vecvel.z * (StickX / STICK_MAX);
+		}
 		LockOn->SetPosition(Lpos);
 
 	}
@@ -113,4 +107,13 @@ void Aim::EnemySet() {
 		Lpos.y = 0.18f;
 		LockOn->SetPosition(Lpos);
 	}
+}
+
+
+DirectX::XMFLOAT3 Aim::MoveVector(XMVECTOR v, float angle) {
+	XMMATRIX rot;
+	rot = XMMatrixRotationY(XMConvertToRadians(angle));
+	v = XMVector3TransformNormal(v, rot);
+	XMFLOAT3 pos = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
+	return pos;
 }

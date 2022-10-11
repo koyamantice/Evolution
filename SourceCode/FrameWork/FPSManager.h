@@ -25,8 +25,8 @@ public:
 
 	//‰Šú‰»
 	void Init();
-
 	//FPS’²®
 	bool Run();
-
+	//
+	const float& GetFps() { return fps; }
 };

@@ -21,6 +21,7 @@ public:
 private:
 	std::unique_ptr<Texture> LockOn{};
 	Input* input = Input::GetInstance();
+	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
 
 	void Move();
 	void EnemySet();

@@ -20,6 +20,7 @@ public:
 		Ground,
 		hole,
 		Crystal,
+		DeLorean,
 	};
 	enum FBXName {
 		Mash,

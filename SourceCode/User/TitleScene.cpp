@@ -54,11 +54,12 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	//ImGui::Begin("test");
-	//ImGui::SliderFloat("cameraPos.y", &C, 35000, 0);
+	ImGui::Begin("test");
+	float F = FPSManager::GetInstance()->GetFps();
+	ImGui::SliderFloat("fps", &F, 120, 0);
 	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
 	//ImGui::Unindent();
-	//ImGui::End();
+	ImGui::End();
 	Sprite::PreDraw();
 	UI[Button]->Draw();
 	Object3d::PreDraw();

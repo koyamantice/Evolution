@@ -69,7 +69,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-
+	miniMap = new  MiniMap();
+	miniMap->Initialize();
 }
 //ŠJ•úˆ—
 void PlayScene::Finalize() {
@@ -168,8 +169,9 @@ void PlayScene::CameraUpda() {
 
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
-	dxCommon->PreDraw();
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	//dxCommon->PreDraw();
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
+
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -185,10 +187,22 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		pauseUi->Draw();
 	}
 	Demo->Draw();
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	//dxCommon->PreDraw();
-	//postEffect->Draw(dxCommon->GetCmdList());
+	//miniMap->PreDraw();
+	miniMap->Draw(dxCommon->GetCmdList());
+	//miniMap->PostDraw();
+
+
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
+
+	dxCommon->PreDraw();
+	ImGui::Begin("test");
+	float F = FPSManager::GetInstance()->GetFps();
+	ImGui::SliderFloat("fps", &F, 120, 0);
+	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
+	//ImGui::Unindent();
+	ImGui::End();
+	postEffect->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 
 }

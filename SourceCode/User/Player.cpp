@@ -68,7 +68,7 @@ void Player::OnInit() {
 
 	vel /= 5.0f;
 
-	//obj->SetScale({ 0.5f, 0.5f, 0.5f });
+	obj->SetScale({ 0.1f, 0.1f, 0.1f });
 	//obj->SetColor({ 0.0f, 1.0f, 0.0f,1.0f });
 
 	float radius = 1.0f;
@@ -131,36 +131,32 @@ void Player::Move() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
 
-	float StickX = input->GetPosX();
-	float StickY = input->GetPosY();
+	float StickX = input->GetRPosX();
+	float StickY = input->GetRPosY();
 	const float PI = 3.14159f;
-	
-	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP, 0.99f)) {
+	const float STICK_MAX =32768.0f;
+	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
-		pos.x -= vecvel.x;
-		pos.y -= vecvel.y;
-		pos.z -= vecvel.z;
+		pos.x -= vecvel.x * (StickY/STICK_MAX);
+		pos.z -= vecvel.z * (StickY/STICK_MAX);
 		rot.y = angle;
 	}
-	if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.99f)) {
+	if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
-		pos.x -= vecvel.x;
-		pos.y -= vecvel.y;
-		pos.z -= vecvel.z;
+		pos.x += vecvel.x * (StickY/STICK_MAX);
+		pos.z += vecvel.z * (StickY/STICK_MAX);
 		rot.y = angle-180;
 	}
-	if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.99f)) {
+	if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
-		pos.x -= vecvel.x;
-		pos.y -= vecvel.y;
-		pos.z -= vecvel.z;
+		pos.x -= vecvel.x * (StickX/STICK_MAX);
+		pos.z -= vecvel.z * (StickX/STICK_MAX);
 		rot.y = angle+90;
 	}
-	if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.99f)) {
+	if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-vel,0,0,0 }, angle);
-		pos.x -= vecvel.x;
-		pos.y -= vecvel.y;
-		pos.z -= vecvel.z;
+		pos.x += vecvel.x * (StickX/STICK_MAX);
+		pos.z += vecvel.z * (StickX/STICK_MAX);
 		rot.y = angle-90;
 	}
 
@@ -192,11 +188,9 @@ void Player::OnCollision(const std::string& Tag) {
 
 
 XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
-
 	rot2 = XMMatrixRotationY(XMConvertToRadians(angle));
 	v = XMVector3TransformNormal(v, rot2);
 	XMFLOAT3 pos = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
-
 	return pos;
 }
 
@@ -255,7 +249,7 @@ void Player::ContactObj() {
 		Sphere* sphere = nullptr;
 		DirectX::XMVECTOR move = {};
 	};
-
+	
 	PlayerQueryCallback callback(sphereCollider);
 
 	// ãÖÇ∆ínå`ÇÃåç∑ÇëSåüçı

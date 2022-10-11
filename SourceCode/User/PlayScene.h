@@ -5,6 +5,7 @@
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
 #include "Gauge.h"
 #include <PostEffect.h>
+#include <SourceCode/Obj/2d/MiniMap.h>
 
 /// <summary>
 /// タイトルシーン
@@ -55,5 +56,6 @@ private:
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};	
 	PostEffect* postEffect = nullptr;
+	MiniMap* miniMap = nullptr;
 };
 

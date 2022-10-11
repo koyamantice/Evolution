@@ -37,6 +37,12 @@
     <FxCompile Include="Resources\shaders\GaugeVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\MiniMapTestPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\MiniMapTestVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\User\TitleScene.cpp">
@@ -232,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\User\MapScene.cpp">
       <Filter>User\プレイシーン</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obj\2d\MiniMap.cpp">
+      <Filter>Obj\2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -449,6 +458,9 @@
     <ClInclude Include="SourceCode\User\MapScene.h">
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Obj\2d\MiniMap.h">
+      <Filter>Obj\2d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -473,6 +485,9 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\Gauge.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\MiniMapTest.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
