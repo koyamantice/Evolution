@@ -79,6 +79,11 @@ void PlayScene::Finalize() {
 //XV
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
+	if (input->PushKey(DIK_0)) {
+		int a = 0;
+		a++;
+	}
+
 	CameraUpda();
 	if (input->TriggerButton(input->Y)) {
 		SceneManager::GetInstance()->ChangeScene("DEBUG");

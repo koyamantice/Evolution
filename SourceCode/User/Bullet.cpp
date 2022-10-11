@@ -38,6 +38,9 @@ void Bullet::OnInit() {
 	Explo_->TextureCreate();
 	Explo_->SetRotation({ 0,0,0 });
 	Explo.reset(Explo_);
+
+
+	WaitBullet();
 }
 
 void Bullet::OnUpda() {
@@ -57,7 +60,7 @@ void Bullet::OnUpda() {
 		}
 		break;
 	case Follow:
-		WaitBullet();
+		//WaitBullet();
 		break;
 	default:
 		assert(0);
@@ -204,9 +207,17 @@ void Bullet::OnCollision(const std::string& Tag) {
 
 void Bullet::WaitUpda() {
 	throwReady = true;
+	XMFLOAT3 pos = obj->GetPosition();
+	if (pos.y>0) {
+		pos.y -= 0.3f;
+	}else{
+		pos.y = 0;
+	}
+	obj->SetPosition(pos);
+
 	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
-		//Follow2Player();
-		WaitBullet();
+		Follow2Player();
+		//WaitBullet();
 	}
 }
 

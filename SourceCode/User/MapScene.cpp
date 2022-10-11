@@ -49,6 +49,10 @@ void MapScene::Finalize() {
 //XV
 void MapScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
+	if (input->PushKey(DIK_0)) {
+		int a = 0;
+		a++;
+	}
 	CameraUpda();
 	ActorManager::GetInstance()->Update();
 	//ParticleManager::GetInstance()->Update();

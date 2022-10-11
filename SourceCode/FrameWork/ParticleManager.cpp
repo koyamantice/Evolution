@@ -397,7 +397,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/2d/Effect/smoke.png", WIC_FLAGS_NONE,
+		L"Resources/2d/Effect/Charge.png", WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		assert(0);
