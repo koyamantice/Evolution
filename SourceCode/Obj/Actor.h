@@ -32,6 +32,7 @@ public:
 	enum command {
 		Wait = 0,
 		Attack,
+		Follow,
 	};
 protected:
 	//オブジェクト識別番号(絶対に被ることはない数字)

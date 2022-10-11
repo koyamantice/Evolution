@@ -39,11 +39,16 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 	if (input->TriggerKey(DIK_SPACE)||input->TriggerButton(input->A)) {
 		Change = true;
 		SceneName="PLAY";
-	}
-	if (input->TriggerKey(DIK_RETURN)) {
+	}else if (input->TriggerKey(DIK_RETURN) || input->TriggerButton(input->B)) {
 		Change = true;
 		SceneName = "DEBUG";
+	} else if (input->TriggerKey(DIK_M) || input->TriggerButton(input->Y)) {
+		Change = true;
+		SceneName = "MAP";
 	}
+
+
+
 	Feed(SceneName);
 }
 //•`‰æ

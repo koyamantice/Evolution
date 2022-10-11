@@ -17,8 +17,12 @@ void Bullet::OnInit() {
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-	obj->SetScale({ 0.5f, 0.5f, 0.5f });
-	obj->SetColor({ 1.0f, 0.0f, 0.0f,1.0f });
+//	obj->SetScale({ 0.5f, 0.5f, 0.5f });
+	//obj->SetColor({ 1.0f, 0.0f, 0.0f,1.0f });
+	XMFLOAT3 rot = obj->GetRotation();
+	rot.y = -180; //- 90;// *(XM_PI / 180.0f);
+	obj->SetRotation(rot);
+
 	obj->SetPosition({ ID * 1.0f,0,ID * 1.0f });
 	landing = player->GetLockPos();
 	Texture* Lock_ = Texture::Create(ImageManager::Battle, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
@@ -51,6 +55,9 @@ void Bullet::OnUpda() {
 				AttackUpda();
 			}
 		}
+		break;
+	case Follow:
+		WaitBullet();
 		break;
 	default:
 		assert(0);
@@ -93,6 +100,11 @@ void Bullet::Follow2Player() {
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
 
+}
+
+void Bullet::WaitBullet() {
+
+	obj->SetPosition({ ((int)ID % 10) * 3.0f, 0, ((int)ID / 10) * 5.0f });
 }
 
 void Bullet::KnockBack() {
@@ -193,7 +205,8 @@ void Bullet::OnCollision(const std::string& Tag) {
 void Bullet::WaitUpda() {
 	throwReady = true;
 	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
-		Follow2Player();
+		//Follow2Player();
+		WaitBullet();
 	}
 }
 

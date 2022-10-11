@@ -62,14 +62,14 @@ void Player::DebugUpdate() {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
-	obj->SetPosition({0,0,30});
+	obj->SetPosition({0,0,15});
 	LoadData();
 	UpdateCommand();
 
 	vel /= 5.0f;
 
-	obj->SetScale({ 0.5f, 0.5f, 0.5f });
-	obj->SetColor({ 0.0f, 1.0f, 0.0f,1.0f });
+	//obj->SetScale({ 0.5f, 0.5f, 0.5f });
+	//obj->SetColor({ 0.0f, 1.0f, 0.0f,1.0f });
 
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
@@ -181,7 +181,7 @@ void Player::OnCollision(const std::string& Tag) {
 		a++;
 	}
 	if (Tag == "Bullet") {
-		//SetStock(GetStock() + 1);
+		
 	}
 	if (Tag == "Crystal") {
 		int a = 0;

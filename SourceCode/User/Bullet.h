@@ -25,6 +25,7 @@ private:
 	void AttackUpda();
 	void Follow2Enemy();
 	void Follow2Player();
+	void WaitBullet();
 
 	void KnockBack();
 	bool knockBacking = false;

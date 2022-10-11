@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include "PlayScene.h"
 #include "DebugScene.h"
+#include "MapScene.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	//Ÿ‚ÌƒV[ƒ“‚Ìì¬
@@ -14,6 +15,9 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	}
 	if (sceneName == "DEBUG") {
 		newScene = new DebugScene();
+	}
+	if (sceneName=="MAP") {
+		newScene = new MapScene();
 	}
 	return newScene;
 }

@@ -10,12 +10,13 @@ void Aim::Init() {
 	Lock_->SetRotation({ 90,0,0 });
 	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 	LockOn.reset(Lock_);
+	LockOn->SetPosition({100,-50,0});
 }
 
 void Aim::Upda() {
 	LockOn->Update();
-	Move();
-	EnemySet();
+	//Move();
+	//EnemySet();
 }
 
 void Aim::Draw() {
@@ -39,6 +40,7 @@ void Aim::Move() {
 			bullet->SetCommand(Actor::command::Attack,LockOn->GetPosition());
 		}
 	}
+
 	if (input->PushButton(Input::A)) {
 		Area += 0.02f;
 		ActorManager::GetInstance()->ChangeBulletCommand(LockOn->GetPosition(),Area);
@@ -77,7 +79,7 @@ void Aim::Move() {
 		XMFLOAT3 Lpos = LockOn->GetPosition();
 		XMFLOAT3 plapos = player->GetPosition();
 		Lpos.x = plapos.x + angle;
-		Lpos.y = 0.18f;
+		Lpos.y = 0.25f;
 		Lpos.z = plapos.z +distance;
 		LockOn->SetPosition(Lpos);
 

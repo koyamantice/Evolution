@@ -137,6 +137,7 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 		Actor* actor = itr->get();
 		if (actor->GetTag() != "Bullet") { continue; }
 		if(Collision::CircleCollision(pos.x, pos.z, scale, actor->GetPosition().x, actor->GetPosition().z, 1.0f)) {
+
 			actor->SetCommand(Actor::command::Wait);
 		}
 	}
