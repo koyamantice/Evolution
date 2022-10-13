@@ -17,7 +17,7 @@ void ModelManager::Initialize() {
 	LoadModel(hole, "hole");
 	LoadModel(Crystal, "Crystal");
 	LoadFBXModel(Mash,"Mash");
-	//LoadModel(DeLorean,"DeLorean");
+	LoadFBXModel(Bird,"Eagle");
 }
 
 void ModelManager::Finalize() {

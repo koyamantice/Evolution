@@ -627,8 +627,15 @@ void Texture::Update() {
 		matWorld *= matRot; // ワールド行列に回転を反映
 		matWorld *= matBillboard;
 		matWorld *= matTrans; // ワールド行列に平行移動を反映
-	}
+	}else if (isBillboardY) {
+		const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
 
+		matWorld = XMMatrixIdentity();
+		matWorld *= matScale; // ワールド行列にスケーリングを反映
+		matWorld *= matRot; // ワールド行列に回転を反映
+		matWorld *= matBillboardY;
+		matWorld *= matTrans; // ワールド行列に平行移動を反映
+	}
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
@@ -679,6 +686,12 @@ void Texture::Finalize() {
 void Texture::SetIsBillboard(const bool& isBillboard) { 
 	this->isBillboard = isBillboard; 
 	UpdateViewMatrix();
+}
+
+void Texture::SetIsBillboardY(const bool& isBillboardY) {
+	this->isBillboardY = isBillboardY;
+	UpdateViewMatrix();
+
 }
 
 void Texture::SetColor(XMFLOAT4 color)

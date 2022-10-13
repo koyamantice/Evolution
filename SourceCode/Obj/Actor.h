@@ -6,6 +6,7 @@
 #include<DirectXMath.h>
 #include"ParticleManager.h"
 #include "DirectXCommon.h"
+#include "FBXObject3d.h"
 
 class ActorComponent;
 
@@ -28,11 +29,18 @@ protected:
 	//付与されているタグへのポインタ
 	std::string tag = "None";
 public:
-	int command = 0;
 	enum command {
 		Wait = 0,
 		Attack,
 		Follow,
+		Slow,
+		Dead,
+	};
+	enum Phase {
+		APPROCH = 0,
+		LEAVE,
+		WAIT,
+		ATTACK,
 	};
 protected:
 	//オブジェクト識別番号(絶対に被ることはない数字)
@@ -94,7 +102,8 @@ public:
 	//
 	void SetCommand(const int& command, XMFLOAT3 pos={0,0,0});
 	const int& GetCommand() { return command; }
-
+	//
+	void SetDeadFlag(const bool& DeadFlag) { this->DeadFlag = DeadFlag; }
 	//
 	void SetPause(const bool& pause) { this->pause = pause; }
 	const bool& GetPause() { return pause; }
@@ -115,12 +124,15 @@ public:
 
 	virtual void OnCollision(const std::string& Tag){};
 protected:
+	int command = 0;
 	std::unique_ptr<Object3d> obj;
 	float hp = 0;
 	float angle = 0;
 	bool canMove = true;
 	bool pause = false;
 	bool first = false;
+	bool DeadFlag = false;
+
 	XMFLOAT3 AftaerPos{};
 	int stock = 0;
 	//コンポーネント

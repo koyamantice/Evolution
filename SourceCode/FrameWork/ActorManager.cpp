@@ -116,6 +116,19 @@ Actor* ActorManager::SearchWaitBullet() {
 	return nullptr;
 }
 
+void ActorManager::DamageBullet(XMFLOAT3 pos,float radius) {
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() != "Bullet") { continue; }
+		if (actor->GetCommand() == Actor::command::Wait) { continue; }
+		XMFLOAT3 itrPos = actor->GetPosition();
+		if (itrPos.y > 0.1f) { continue; }
+		if(Collision::CircleCollision(pos.x,pos.z,1.0f,itrPos.x,itrPos.z,radius)){
+			actor->SetDeadFlag(true);
+		}
+	}
+}
+
 XMFLOAT3 ActorManager::Dist(XMFLOAT3 pos, XMFLOAT3 pos2) {
 	XMFLOAT3 itr;
 	itr.x = sqrtf(powf((pos2.x - pos.x),2));

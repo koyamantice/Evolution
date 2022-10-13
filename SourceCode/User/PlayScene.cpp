@@ -145,8 +145,8 @@ void PlayScene::CameraUpda() {
 		if (input->TiltPushStick(Input::R_LEFT)) {
 			angle += 1;
 		}
-		dis.x = sinf(angle * (PI / 180)) * 10.0f;
-		dis.y = cosf(angle * (PI / 180)) * 10.0f;
+		dis.x = sinf(angle * (PI / 180)) * 13.0f;
+		dis.y = cosf(angle * (PI / 180)) * 13.0f;
 	}
 	if (input->TriggerButton(Input::LT)) {
 		player_shadow->SetCanMove(false);
@@ -169,8 +169,8 @@ void PlayScene::CameraUpda() {
 
 //•`‰æ
 void PlayScene::Draw(DirectXCommon* dxCommon) {
-	//dxCommon->PreDraw();
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	dxCommon->PreDraw();
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 
 	Object3d::PreDraw();
 	skydome->Draw();
@@ -189,20 +189,20 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Demo->Draw();
 
 	//miniMap->PreDraw();
-	miniMap->Draw(dxCommon->GetCmdList());
+	//miniMap->Draw(dxCommon->GetCmdList());
 	//miniMap->PostDraw();
 
 
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	dxCommon->PreDraw();
+	//dxCommon->PreDraw();
 	ImGui::Begin("test");
 	float F = FPSManager::GetInstance()->GetFps();
 	ImGui::SliderFloat("fps", &F, 120, 0);
 	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
 	//ImGui::Unindent();
 	ImGui::End();
-	postEffect->Draw(dxCommon->GetCmdList());
+	//postEffect->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 
 }

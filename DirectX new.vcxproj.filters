@@ -242,6 +242,9 @@
     <ClCompile Include="SourceCode\Obj\2d\MiniMap.cpp">
       <Filter>Obj\2d</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\EnemyAttack.cpp">
+      <Filter>User\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Obj\2d\MiniMap.h">
       <Filter>Obj\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\EnemyAttack.h">
+      <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

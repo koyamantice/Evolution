@@ -15,7 +15,7 @@ private:
 
 public:
 	void Init();
-	void Upda();
+	void Upda(float angle);
 	void Draw();
 	void FirstSet();
 private:
@@ -23,10 +23,9 @@ private:
 	Input* input = Input::GetInstance();
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
 
-	void Move();
+	void Move(float angle);
 	void EnemySet();
 	float Area = 0.3f;
-	float angle = 0;
 	float distance = 5.0f;
 	Actor* player = nullptr;
 	Actor* bullet = nullptr;

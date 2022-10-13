@@ -24,6 +24,7 @@ public:
 	};
 	enum FBXName {
 		Mash,
+		Bird,
 	};
 
 public:

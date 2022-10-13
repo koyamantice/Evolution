@@ -170,6 +170,8 @@ public: // メンバ関数
 	this->position.z = z;
 	}
 	void SetIsBillboard(const bool& isBillboard);
+	void SetIsBillboardY(const bool& isBillboardY);
+
 	void Texture::SetColor(XMFLOAT4 color);
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
@@ -188,6 +190,8 @@ private: // メンバ変数
 	XMMATRIX matWorld;
 	// ビルボード
 	bool isBillboard = false;
+	// Y軸ビルボード
+	bool isBillboardY = false;
 
 };
 

@@ -38,7 +38,14 @@ public: // サブクラス
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
 		XMFLOAT4 color;	// 色 (RGBA)
 	};
-
+	// アニメーション用データ構造体
+	struct AnimationInfo {
+		std::string name;
+		FbxAnimStack* stack;
+		FbxTakeInfo* fbxinfo;
+		float start;
+		float end;
+	};
 public: // 静的メンバ関数
 	/// <summary>
 	/// グラフィックパイプラインの生成
@@ -106,6 +113,8 @@ public: // メンバ関数
 	void PlayAnimation();
 	void StopAnimation();
 	void ResetAnimation();
+	//複数fbxの読み込み
+	void LoadAnimation();
 protected: // メンバ変数
 	// 定数バッファ
 	ComPtr<ID3D12Resource> constBuffTransform;
@@ -134,5 +143,7 @@ protected: // メンバ変数
 	//アニメーション再生中
 	bool isPlay = false;
 
+
+	std::vector<AnimationInfo> Animations;
 };
 

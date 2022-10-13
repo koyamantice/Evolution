@@ -13,9 +13,9 @@ void Aim::Init() {
 	LockOn->SetPosition({ 100,-50,0 });
 }
 
-void Aim::Upda() {
+void Aim::Upda(float angle) {
 	LockOn->Update();
-	Move();
+	Move(angle);
 	EnemySet();
 }
 
@@ -32,7 +32,7 @@ void Aim::FirstSet() {
 
 }
 
-void Aim::Move() {
+void Aim::Move(float angle) {
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock() - 1);
@@ -65,10 +65,10 @@ void Aim::Move() {
 		Area = 0.0f;
 	}
 
-	if (input->TiltPushStick(Input::L_RIGHT) || input->TiltPushStick(Input::L_LEFT) || input->TiltPushStick(Input::L_UP) || input->TiltPushStick(Input::L_DOWN)) {
+	if (input->TiltPushStick(Input::L_RIGHT, 0.0f) || input->TiltPushStick(Input::L_LEFT, 0.0f) || input->TiltPushStick(Input::L_UP, 0.0f) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 		XMFLOAT3 Lpos = LockOn->GetPosition();
-		float StickX = input->GetRPosX();
-		float StickY = input->GetRPosY();
+		float StickX = input->GetLeftControllerX();
+		float StickY = input->GetLeftControllerY();
 		const float PI = 3.14159f;
 		const float STICK_MAX = 32768.0f;
 		if (input->PushKey(DIK_W) || input->TiltPushStick(Input::L_UP, 0.0f)) {

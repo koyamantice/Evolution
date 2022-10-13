@@ -27,8 +27,8 @@ void TitleScene::Finalize() {
 //XV
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	C = input->GetRPosX();
-	A = input->GetRPosY();
+	C = input->GetLeftControllerX();
+	A = input->GetLeftControllerY();
 
 	camera->Update();
 	ActorManager::GetInstance()->Update();

@@ -68,7 +68,7 @@ void Player::OnInit() {
 
 	vel /= 5.0f;
 
-	obj->SetScale({ 0.1f, 0.1f, 0.1f });
+	//obj->SetScale({ 0.1f, 0.1f, 0.1f });
 	//obj->SetColor({ 0.0f, 1.0f, 0.0f,1.0f });
 
 	float radius = 1.0f;
@@ -96,7 +96,7 @@ void Player::OnUpda() {
 	}
 	Shot();
 	ContactObj();
-	LockOn->Upda();
+	LockOn->Upda(angle);
 	//for (int i = 0; i < 3; ++i) {
 		const float rnd_vel = 0.1f;
 		XMFLOAT3 vel{};
@@ -131,8 +131,8 @@ void Player::Move() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
 
-	float StickX = input->GetRPosX();
-	float StickY = input->GetRPosY();
+	float StickX = input->GetLeftControllerX();
+	float StickY = input->GetLeftControllerY();
 	const float PI = 3.14159f;
 	const float STICK_MAX =32768.0f;
 	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP, 0.0f)) {

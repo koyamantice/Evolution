@@ -197,7 +197,7 @@ void FBXObject3d::Initialize()
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin));
 	//1フレーム分の時間を60FPSで設定
-	frameTime.SetTime(0, 0, 0, 1, 0, FbxTime::EMode::eFrames60);
+	frameTime = 1.0f;
 }
 
 void FBXObject3d::Update()
@@ -257,7 +257,7 @@ void FBXObject3d::Update()
 		//今の姿勢
 		XMMATRIX matCurrentPose;
 		//今の姿勢行列を取得
-		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime * FbxTime::GetOneFrameValue(FbxTime::eFrames60));
 		//XMMATRIXに変換
 		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
 		//合成してスキニング行列に
@@ -295,18 +295,21 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void FBXObject3d::PlayAnimation()
 {
-	FbxScene* fbxScene = model->GetFbxScene();
-	//0番のアニメーション取得
-	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
-	//アニメーションの名前取得
-	const char* animstackname = animstack->GetName();
-	//アニメーションの時間取得
-	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
+	//FbxScene* fbxScene = model->GetFbxScene();
+	////0番のアニメーション取得
+	//FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
+	//FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(num);
+	////アニメーションの名前取得
+	//const char* animstackname = animstack->GetName();
+	////アニメーションの時間取得
+	//FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
 
-	//開始時間取得
-	startTime = takeinfo->mLocalTimeSpan.GetStart();
-	//終了時間取得
-	endTime = takeinfo->mLocalTimeSpan.GetStop();
+	////開始時間取得
+	//startTime = takeinfo->mLocalTimeSpan.GetStart();
+	////終了時間取得
+	//endTime = takeinfo->mLocalTimeSpan.GetStop();
+	startTime = Animations[0].start;
+	endTime = Animations[0].end;
 	//開始時間に合わせる
 	currentTime = startTime;
 	//再生中状態にする
@@ -334,5 +337,41 @@ void FBXObject3d::ResetAnimation() {
 	currentTime = startTime;
 	//再生中状態にする
 	isPlay = false;
+
+}
+
+void FBXObject3d::LoadAnimation() {
+	FbxScene* fbxScene = model->GetFbxScene();
+	//アニメーションの数を取得
+	int animaStackCount = fbxScene->GetSrcObjectCount<FbxAnimStack>();
+	
+	for (int i = 0; i < animaStackCount; ++i) {
+
+		//
+		FbxAnimStack* stack = fbxScene->GetSrcObject<FbxAnimStack>(i);
+		//アニメーションの名前を取得
+		const char* animstackname = stack->GetName();
+		//アニメーション情報を取得する
+		FbxTakeInfo* takeInfo = fbxScene->GetTakeInfo(animstackname);
+		//基準点からの差を取得
+		auto importOffset = takeInfo->mImportOffset;
+		auto startTime = takeInfo->mLocalTimeSpan.GetStart();//アニメーション開始時間
+		auto stopTime = takeInfo->mLocalTimeSpan.GetStop();//アニメーション終了時間
+
+		float start = (importOffset.Get() + startTime.Get()) / FbxTime::GetOneFrameValue(FbxTime::eFrames60);	//60フレームでの開始時間を設定
+		float end = (importOffset.Get() + stopTime.Get()) / FbxTime::GetOneFrameValue(FbxTime::eFrames60);	//60フレームでの終了時間を設定
+
+		std::string name = takeInfo->mName;
+
+
+		AnimationInfo info;
+		info.name=name;
+		info.stack=stack;
+		info.fbxinfo=takeInfo;
+		info.start=start;
+		info.end=end;
+	
+		Animations.emplace_back(info);
+	}
 
 }

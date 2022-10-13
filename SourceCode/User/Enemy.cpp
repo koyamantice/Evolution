@@ -42,11 +42,11 @@ void Enemy::UpdateCommand() {
 		} else if (word.find("PHASE") == 0) {
 			getline(line_stream, word, ',');
 			if (word.find("APPROCH") == 0) {
-				phase_ = Enemy::Phase::Approch;
+				command = Actor::Phase::APPROCH;
 			}else if (word.find("LEAVE") == 0) {
-				phase_ = Enemy::Phase::Leave;
+				command = Actor::Phase::LEAVE;
 			}else if (word.find("WAIT") == 0) {
-				phase_ = Enemy::Phase::Wait;
+				command = Actor::Phase::WAIT;
 			} else {
 				assert(0);//フェーズを書こうな
 			}
@@ -71,16 +71,14 @@ void Enemy::OnInit() {
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);*/
-
-
 	FBXObject3d* Mash_= new FBXObject3d();
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Mash));
 	Mash_->SetScale({0.01f,0.01f, 0.01f});
+	Mash_->LoadAnimation();
 	//move_object_->SetPosition(position);
 	//move_object_->SetRotation(rot);
 	Mash.reset(Mash_);
-
 	Mash->PlayAnimation();
 
 	LoadData();
@@ -90,20 +88,32 @@ void Enemy::OnInit() {
 	compornent = new EnemyUI();
 	compornent->Initialize();
 
+	EnemyAttack* Attack_ = new EnemyAttack();
+	Attack_->Init();
+	Attack.reset(Attack_);
 }
 
 void Enemy::OnUpda() {
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y-1,0});
+	obj->SetPosition(Mash->GetPosition());
 	Mash->Update();
+	Attack->Upda();
 	PhaseMove();
 	LifeCommon();
 	//Collide();
 }
 
 void Enemy::OnDraw(DirectXCommon* dxCommon) {
+//	ImGui::Begin("test");
+	//ImGui::SliderInt("bullet", &a, 0, 360);
+	//ImGui::SliderFloat("Anglet", &angle, 0, 360);
+//	ImGui::Unindent();
+//	ImGui::End();
+
 	Object3d::PreDraw();
 	Mash->Draw(dxCommon->GetCmdList());
-
+	Texture::PreDraw();
+	Attack->Draw();
 }
 
 void Enemy::OnFinal() {
@@ -159,50 +169,75 @@ void Enemy::Collide() {
 }
 
 void Enemy::PhaseMove() {
-	switch (phase_) {
-	case Enemy::Phase::Approch :
-		//ApprochUpdate();
+	switch (command) {
+	case Actor::Phase::APPROCH:
+		ApprochUpda();
 		break;
-	case Enemy::Phase::Leave:
-		LeaveUpdate();
+	case Actor::Phase::LEAVE:
+		LeaveUpda();
 		break;
-	case Enemy::Phase::Wait:
-		WaitUpdate();
+	case Actor::Phase::WAIT:
+		WaitUpda();
+		break;
+	case Actor::Phase::ATTACK:
+		AttackUpda();
 		break;
 	default:
 		break;
 	}
 }
 
-void Enemy::ApprochUpdate() {
+void Enemy::ApprochUpda() {
 	XMFLOAT3 pos = Mash->GetPosition();
 
 	angle += 2.5f;
 	pos.x =sinf(angle * (XM_PI / 180)) *15.0f;
 	pos.z =cosf(angle * (XM_PI / 180)) *15.0f;
-	Mash->SetPosition(pos);
-	obj->SetPosition(pos);
+	if (pos.y >= 0) {
+		pos.y += speed;
+		speed -= accel;
+	} else {
+		pos.y = 0;
+		speed = accel * 30.0f;
+	}
 	waitTimer++;
 	if (waitTimer == 300) {//150fps単位
+		pos.y = 0;
+		speed = accel * 30.0f;
 		Mash->ResetAnimation();
-		phase_ = Enemy::Phase::Wait;
+		command = Actor::Phase::ATTACK;
 		Mash->PlayAnimation();
 		waitTimer = 0;
 	}
+	Mash->SetPosition(pos);
 
 
 }
 
-void Enemy::LeaveUpdate() {
+void Enemy::LeaveUpda() {
 }
 
-void Enemy::WaitUpdate() {
+void Enemy::WaitUpda() {
 	waitTimer++;
 	if (waitTimer == 300) {//150fps単位
 		Mash->ResetAnimation();
-		phase_ = Enemy::Phase::Approch;
+		command = Actor::Phase::APPROCH;
 		waitTimer = 0;
 	}
+}
+
+void Enemy::AttackUpda() {
+	XMFLOAT3 pos = Mash->GetPosition();
+	if (pos.y >= 0) {
+		pos.y += speed;
+		speed -= accel;
+	} else {
+		Attack->Stamp(pos);
+		pos.y = 0;
+		speed = accel * 30.0f;
+	}
+	Mash->SetRotation({0,-180,0});
+	Mash->SetPosition(pos);
 }
 
 void Enemy::LifeCommon() {
@@ -211,4 +246,3 @@ void Enemy::LifeCommon() {
 		//isRemove = true;
 	}
 }
-

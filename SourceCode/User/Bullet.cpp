@@ -3,6 +3,7 @@
 #include"ActorManager.h"
 #include <SourceCode/FrameWork/collision/Collision.h>
 #include"ImageManager.h"
+#include"ModelManager.h"
 using namespace DirectX;
 
 
@@ -17,7 +18,7 @@ void Bullet::OnInit() {
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-//	obj->SetScale({ 0.5f, 0.5f, 0.5f });
+	//obj->SetScale({ 0.5f, 0.5f, 0.5f });
 	//obj->SetColor({ 1.0f, 0.0f, 0.0f,1.0f });
 	XMFLOAT3 rot = obj->GetRotation();
 	rot.y = -180; //- 90;// *(XM_PI / 180.0f);
@@ -39,13 +40,29 @@ void Bullet::OnInit() {
 	Explo_->SetRotation({ 0,0,0 });
 	Explo.reset(Explo_);
 
+	FBXObject3d* Bird_ = new FBXObject3d();
+	Bird_->Initialize();
+	Bird_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
+	Bird_->SetScale({ 0.005f,0.005f, 0.005f });
+	//move_object_->SetPosition(position);
+	//move_object_->SetRotation(rot);
+	Bird.reset(Bird_);
+	Bird->LoadAnimation();
+	Bird->PlayAnimation();
 
 	WaitBullet();
 }
 
 void Bullet::OnUpda() {
 	XMFLOAT3 pos = obj->GetPosition();
+	Bird->Update();
+	Bird->SetPosition(pos);
+	Bird->SetRotation(obj->GetRotation());
 
+	if (DeadFlag) {
+		Dead();
+		return;
+	}
 	switch (command) {
 	case Wait:
 		WaitUpda();
@@ -124,12 +141,26 @@ void Bullet::KnockBack() {
 	obj->SetPosition(pos);
 }
 
+void Bullet::DamageInit() {
+	if (!knockBacking) {
+		knockBacking = true;
+		enemy->SetHp(enemy->GetHp() - 1);
+		burning = true;
+		back = Normalize(obj->GetPosition(), enemy->GetPosition());
+	}
+}
+
 float Bullet::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
 	XMFLOAT3 itr{};
+	float nor;
 	itr = { pos.x - pos2.x,0,pos.z - pos2.z };
-	back = sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
+	nor = sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
 	//back = abs(back);
-	return back;
+	return nor;
+}
+
+void Bullet::Dead() {
+	isRemove = true;
 }
 
 void Bullet::BurnOut() {
@@ -148,6 +179,12 @@ void Bullet::BurnOut() {
 }
 
 void Bullet::OnDraw(DirectXCommon* dxCommon) {
+	ImGui::Begin("test");
+	ImGui::SliderFloat("bullet", &back, 0, 360);
+	//ImGui::Unindent();
+	ImGui::End();
+	Object3d::PreDraw();
+	Bird->Draw(dxCommon->GetCmdList());
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
@@ -181,17 +218,32 @@ void Bullet::OnCollision(const std::string& Tag) {
 	}
 
 	if (Tag == "Enemy") {
+		int a = 0;
 		switch (command) {
 		case Wait:
-
 			break;
 		case Attack:
-			if (!knockBacking) {
-				knockBacking = true;
-				enemy->SetHp(enemy->GetHp()-1);
-				burning = true;
-				back = Normalize(obj->GetPosition(), enemy->GetPosition());
+			switch (enemy->GetCommand()) {
+			case Actor::Phase::WAIT:
+				DamageInit();
+					break;
+			case Actor::Phase::ATTACK:
+				break;
+			case Actor::Phase::LEAVE:
+				DamageInit();
+				break;
+			default:
+				break;
 			}
+
+
+
+
+
+
+
+
+
 			break;
 		default:
 			assert(0);

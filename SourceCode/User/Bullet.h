@@ -1,19 +1,16 @@
 #pragma once
 #include"Actor.h"
 #include"Enemy.h"
+
 class Player;
 
 class Bullet : public Actor {
-private:
-	enum class Pattern {
-		Approch,
-		Leave,
-		Wait,
-	};
 public:
 	Bullet();
 	~Bullet() {};
 	void SetLanding(XMFLOAT3 landing) { this->landing = landing; }
+
+
 private:
 	void OnInit()override;
 	void OnUpda()override;
@@ -29,15 +26,19 @@ private:
 
 	void KnockBack();
 	bool knockBacking = false;
+	void DamageInit();
 	float back = 0;
 	float Normalize(const XMFLOAT3& pos,const XMFLOAT3& pos2);
 	float fall=0.0f;
 	bool throwReady = false;
 	float frame = 0.0f;
 
+
+	void Dead();
 	int CoolTime = 0;
 
 	float vel = 0.8f;
+	std::unique_ptr<FBXObject3d> Bird;
 	std::unique_ptr<Texture> Status{};
 	std::unique_ptr<Texture> Explo = nullptr;
 	bool burning = false;

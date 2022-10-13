@@ -100,6 +100,9 @@ void Input::Update() {
 
 	DWORD dwResult = XInputGetState(0, &xinputState);
 	if (dwResult == ERROR_SUCCESS) {
+		LeftControllerX = (float)xinputState.Gamepad.sThumbLX;
+		LeftControllerY = (float)xinputState.Gamepad.sThumbLY;
+
 		//コントローラーが接続されている
 		if (0 < shakeTimer) {
 			//shakeTimer--;

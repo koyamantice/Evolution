@@ -5,17 +5,12 @@
 #include <sstream>
 #include <SourceCode/Obj/2d/Texture.h>
 #include "Player.h"
-#include "FBXObject3d.h"
 #include"EnemyUI.h"
+#include"EnemyAttack.h"
 
 class Bullet;
 
 class Enemy :public Actor {
-	enum class Phase{
-		Approch,
-		Leave,
-		Wait,
-	};
 public:
 	Enemy(){};
 	void LoadData();
@@ -34,13 +29,20 @@ private:
 	void Collide();
 	//フェーズまとめ
 	void PhaseMove();
-	void ApprochUpdate();
-	void LeaveUpdate();
-	void WaitUpdate();
+	void ApprochUpda();
+	void LeaveUpda();
+	void WaitUpda();
+	void AttackUpda();
 	//
 	void LifeCommon();
+	std::unique_ptr<EnemyAttack> Attack;
 
-	Phase phase_= Enemy::Phase::Approch;
+
+	float speed = 0.2f;
+	const float accel = speed / 30.0f;
+	std::unique_ptr<Texture> Explo = nullptr;
+
+
 	float waitTimer = 0;
 	float vel = 0;
 	std::unique_ptr<FBXObject3d> Mash;

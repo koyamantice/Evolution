@@ -54,7 +54,7 @@ public:
 
 	Actor* SearchWaitBullet();
 
-
+	void DamageBullet(XMFLOAT3 pos, float radius = 1.0f);
 
 	DirectX::XMFLOAT3 Dist(XMFLOAT3 pos,XMFLOAT3 pos2);
 	float Length(XMFLOAT3 pos, XMFLOAT3 pos2);

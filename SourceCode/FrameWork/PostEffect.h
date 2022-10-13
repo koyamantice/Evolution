@@ -1,5 +1,7 @@
 #pragma once
 #include "Sprite.h"
+#include <imgui.h>
+
 class PostEffect :
     public Sprite {
 public:

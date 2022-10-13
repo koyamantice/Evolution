@@ -114,8 +114,8 @@ public: // メンバ関数
 public:
 	const float& GetPosX() { return posX; }
 	const float& GetPosY() { return posY; }
-	const float& GetRPosX() { return (float)xinputState.Gamepad.sThumbLX; }
-	const float& GetRPosY() { return (float)xinputState.Gamepad.sThumbLY; }
+	const float& GetLeftControllerX() { return LeftControllerX; }
+	const float& GetLeftControllerY() { return LeftControllerY; }
 	/// <summary>
 	/// マウス移動量を取得
 	/// </summary>
@@ -148,8 +148,8 @@ private: // メンバ変数
 
 	float posX = 0;
 	float posY = 0;
-	float RposX = 0;
-	float RposY = 0;
+	float LeftControllerX = 0;
+	float LeftControllerY = 0;
 
 	WinApp* winApp;
 };
