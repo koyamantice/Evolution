@@ -21,6 +21,12 @@ public:
 		hole,
 		Crystal,
 		DeLorean,
+		textG,
+		textN,
+		textO,
+		textM,
+		textE,
+
 	};
 	enum FBXName {
 		Mash,

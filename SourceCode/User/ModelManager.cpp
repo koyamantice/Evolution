@@ -16,8 +16,17 @@ void ModelManager::Initialize() {
 	LoadModel(Ground, "map");
 	LoadModel(hole, "hole");
 	LoadModel(Crystal, "Crystal");
+	
+	LoadModel(textG, "text01G");
+	LoadModel(textN, "text02N");
+	LoadModel(textO, "text03O");
+	LoadModel(textM, "text04M");
+	LoadModel(textE, "text05E");
+	
+	
 	LoadFBXModel(Mash,"Mash");
-	LoadFBXModel(Bird,"Eagle");
+	LoadFBXModel(Bird,"Player");
+
 }
 
 void ModelManager::Finalize() {

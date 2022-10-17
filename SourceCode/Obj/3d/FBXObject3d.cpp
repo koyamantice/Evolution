@@ -197,7 +197,7 @@ void FBXObject3d::Initialize()
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin));
 	//1フレーム分の時間を60FPSで設定
-	frameTime = 1.0f;
+	frameTime = (FbxLongLong)1.0f;
 }
 
 void FBXObject3d::Update()
@@ -257,7 +257,7 @@ void FBXObject3d::Update()
 		//今の姿勢
 		XMMATRIX matCurrentPose;
 		//今の姿勢行列を取得
-		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime * FbxTime::GetOneFrameValue(FbxTime::eFrames60));
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime * (int)FbxTime::GetOneFrameValue(FbxTime::eFrames60));
 		//XMMATRIXに変換
 		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
 		//合成してスキニング行列に
@@ -308,8 +308,8 @@ void FBXObject3d::PlayAnimation()
 	//startTime = takeinfo->mLocalTimeSpan.GetStart();
 	////終了時間取得
 	//endTime = takeinfo->mLocalTimeSpan.GetStop();
-	startTime = Animations[0].start;
-	endTime = Animations[0].end;
+	startTime = (FbxLongLong)Animations[0].start;
+	endTime = (FbxLongLong)Animations[0].end;
 	//開始時間に合わせる
 	currentTime = startTime;
 	//再生中状態にする
@@ -346,8 +346,7 @@ void FBXObject3d::LoadAnimation() {
 	int animaStackCount = fbxScene->GetSrcObjectCount<FbxAnimStack>();
 	
 	for (int i = 0; i < animaStackCount; ++i) {
-
-		//
+		//i番目のアニメーションを取得
 		FbxAnimStack* stack = fbxScene->GetSrcObject<FbxAnimStack>(i);
 		//アニメーションの名前を取得
 		const char* animstackname = stack->GetName();
@@ -358,11 +357,10 @@ void FBXObject3d::LoadAnimation() {
 		auto startTime = takeInfo->mLocalTimeSpan.GetStart();//アニメーション開始時間
 		auto stopTime = takeInfo->mLocalTimeSpan.GetStop();//アニメーション終了時間
 
-		float start = (importOffset.Get() + startTime.Get()) / FbxTime::GetOneFrameValue(FbxTime::eFrames60);	//60フレームでの開始時間を設定
-		float end = (importOffset.Get() + stopTime.Get()) / FbxTime::GetOneFrameValue(FbxTime::eFrames60);	//60フレームでの終了時間を設定
-
+		float start = (static_cast<float>(importOffset.Get()) + startTime.Get()) / FbxTime::GetOneFrameValue(FbxTime::eFrames60);	//60フレームでの開始時間を設定
+		float end = (static_cast<float>(importOffset.Get() + stopTime.Get()) / FbxTime::GetOneFrameValue(FbxTime::eFrames60));	//60フレームでの終了時間を設定
+		//名前の取得
 		std::string name = takeInfo->mName;
-
 
 		AnimationInfo info;
 		info.name=name;
@@ -370,7 +368,7 @@ void FBXObject3d::LoadAnimation() {
 		info.fbxinfo=takeInfo;
 		info.start=start;
 		info.end=end;
-	
+		//格納する
 		Animations.emplace_back(info);
 	}
 
