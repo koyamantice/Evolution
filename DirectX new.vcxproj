@@ -289,6 +289,7 @@
     <ClCompile Include="SourceCode\User\PlayerUI.cpp" />
     <ClCompile Include="SourceCode\User\PlayScene.cpp" />
     <ClCompile Include="SourceCode\User\TitleScene.cpp" />
+    <ClCompile Include="SourceCode\User\TitleText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -370,6 +371,7 @@
     <ClInclude Include="SourceCode\User\PlayerUI.h" />
     <ClInclude Include="SourceCode\User\PlayScene.h" />
     <ClInclude Include="SourceCode\User\TitleScene.h" />
+    <ClInclude Include="SourceCode\User\TitleText.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />

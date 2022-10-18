@@ -228,6 +228,16 @@ void Enemy::WaitUpda() {
 
 void Enemy::AttackUpda() {
 	XMFLOAT3 pos = Mash->GetPosition();
+	waitTimer++;
+	if (waitTimer==450) {
+		pos.y = 0;
+		Mash->ResetAnimation();
+		Mash->PlayAnimation();
+		command = Actor::Phase::WAIT;
+		waitTimer = 0;
+		Mash->SetPosition(pos);
+		return;
+	}
 	if (pos.y >= 0) {
 		pos.y += speed;
 		speed -= accel;

@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "Actor.h"
+#include"TitleText.h"
 
 /// <summary>
 /// タイトルシーン
@@ -38,11 +39,16 @@ private:
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
 	std::unique_ptr<Sprite> Effect;
+	std::unique_ptr<TitleText> text;
 	bool Change = false;
 	float alpha = 0.0f;
 	float frame = 0;
 	float C;
 	float A;
+
+	
+
+
 	std::string SceneName = "null";
 };
 

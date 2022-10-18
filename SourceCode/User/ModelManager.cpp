@@ -13,7 +13,7 @@ void ModelManager::Initialize() {
 	LoadModel(Player, "chr_knight");
 	LoadModel(Enemy, "ball");
 	LoadModel(skydome, "skydome");
-	LoadModel(Ground, "map");
+	LoadModel(Ground, "Dungeon");
 	LoadModel(hole, "hole");
 	LoadModel(Crystal, "Crystal");
 	

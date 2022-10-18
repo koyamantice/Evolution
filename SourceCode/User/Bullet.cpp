@@ -43,13 +43,13 @@ void Bullet::OnInit() {
 	FBXObject3d* Bird_ = new FBXObject3d();
 	Bird_->Initialize();
 	Bird_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
-	Bird_->SetScale({ 0.005f,0.005f, 0.005f });
+	Bird_->SetScale({ 0.003f,0.003f, 0.003f });
 	//move_object_->SetPosition(position);
 	//move_object_->SetRotation(rot);
 	Bird.reset(Bird_);
 	Bird->LoadAnimation();
 	Bird->PlayAnimation();
-
+	isVisible = false;
 	WaitBullet();
 }
 

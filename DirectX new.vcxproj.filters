@@ -245,6 +245,9 @@
     <ClCompile Include="SourceCode\User\EnemyAttack.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\TitleText.cpp">
+      <Filter>User\タイトル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -466,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\EnemyAttack.h">
       <Filter>User\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\TitleText.h">
+      <Filter>User\タイトル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

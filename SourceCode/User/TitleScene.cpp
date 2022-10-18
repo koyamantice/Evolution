@@ -18,6 +18,10 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
 	Effect.reset(Effect_);
 	Effect->SetColor({1,1,1,alpha});
+
+	TitleText* text_ = new TitleText();
+	text_->Init();
+	text.reset(text_);
 }
 //ŠJ•úˆ—
 void TitleScene::Finalize() {
@@ -27,9 +31,6 @@ void TitleScene::Finalize() {
 //XV
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	C = input->GetLeftControllerX();
-	A = input->GetLeftControllerY();
-
 	camera->Update();
 	ActorManager::GetInstance()->Update();
 	if (input->TiltStick(Input::R_RIGHT)) {
@@ -46,10 +47,8 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 		Change = true;
 		SceneName = "MAP";
 	}
-
-
-
 	Feed(SceneName);
+	text->Upda();
 }
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
@@ -63,6 +62,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	Sprite::PreDraw();
 	UI[Button]->Draw();
 	Object3d::PreDraw();
+	text->Draw(dxCommon);
 	ActorManager::GetInstance()->Draw(dxCommon);
 	Sprite::PreDraw();
 	Effect->Draw();
