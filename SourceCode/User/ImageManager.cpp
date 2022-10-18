@@ -29,6 +29,7 @@ void ImageManager::LoadTex2D() {
 	Texture::LoadTexture(Battle, L"Resources/2d/Battle.png");
 	Texture::LoadTexture(Fire, L"Resources/2d/Effect/Fire.png");
 	Texture::LoadTexture(InOut, L"Resources/2d/Effect/Base.png");
+	Texture::LoadTexture(Guid, L"Resources/2d/Effect/Diamond.png");
 
 }
 

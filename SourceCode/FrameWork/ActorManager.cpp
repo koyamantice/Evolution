@@ -194,3 +194,15 @@ Actor* ActorManager::SearchActorBack(const std::string& tag) {
 	}
 	return nullptr;
 }
+
+Actor* ActorManager::SearchID(int ID) {
+	if (ID < 0) { return nullptr; }
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() != "Bullet") { continue; }
+		if (actor->GetID() == ID) {
+			return actor;
+		}
+	}
+	return nullptr;
+}

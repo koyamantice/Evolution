@@ -33,6 +33,7 @@ public:
 		Battle,
 		Fire,
 		InOut,
+		Guid,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

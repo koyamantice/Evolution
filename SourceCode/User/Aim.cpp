@@ -2,6 +2,7 @@
 #include"ImageManager.h"
 #include"ActorManager.h"
 #include<DirectXMath.h>
+#include <SourceCode/Common/Easing.h>
 using namespace DirectX;
 
 void Aim::Init() {
@@ -11,18 +12,39 @@ void Aim::Init() {
 	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 	LockOn.reset(Lock_);
 	LockOn->SetPosition({ 100,-50,0 });
+
+	for (int i = 0; i < GuidNum; i++) {
+		Texture* Guid_ = Texture::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+		Guid_->TextureCreate();
+		Guid_->SetRotation({ 90,0,0 });
+		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.6f });
+		Guid[i].reset(Guid_);
+	}
 }
 
 void Aim::Upda(float angle) {
 	LockOn->Update();
+	for (int i = 0; i < GuidNum; i++) {
+		Guid[i]->Update();
+	}
 	Move(angle);
 	EnemySet();
+
 }
 
 void Aim::Draw() {
+//ImGui::Begin("test");
+//for (int i = 0; i < GuidNum; i++) {
+//	ImGui::SliderFloat("@:@", &GuidPos[i].y, 0, 360);
+//}
+//////ImGui::Unindent();
+//ImGui::End();
+
 	Texture::PreDraw();
 	LockOn->Draw();
-
+	for (int i = 0; i < GuidNum; i++) {
+		Guid[i]->Draw();
+	}
 }
 
 void Aim::FirstSet() {
@@ -47,7 +69,7 @@ void Aim::Move(float angle) {
 			Area += 0.08f;
 		}
 		XMFLOAT3 base = LockOn->GetPosition();
-		for (int i = 0; i < 1;i++) {
+		for (int i = 0; i < 1; i++) {
 			const float rnd_rad = 360.0f;
 			XMFLOAT3 pos{};
 			float angle = (float)rand() / RAND_MAX * rnd_rad;
@@ -72,28 +94,40 @@ void Aim::Move(float angle) {
 		const float PI = 3.14159f;
 		const float STICK_MAX = 32768.0f;
 		if (input->PushKey(DIK_W) || input->TiltPushStick(Input::L_UP, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,1,0 }, angle);
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,2,0 }, angle);
 			Lpos.x -= vecvel.x * (StickY / STICK_MAX);
 			Lpos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
 		if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-1,0 }, angle);
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-2,0 }, angle);
 			Lpos.x += vecvel.x * (StickY / STICK_MAX);
 			Lpos.z += vecvel.z * (StickY / STICK_MAX);
 		}
 		if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 1,0,0,0 }, angle);
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 2,0,0,0 }, angle);
 			Lpos.x -= vecvel.x * (StickX / STICK_MAX);
 			Lpos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
 		if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -1,0,0,0 }, angle);
+			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -2,0,0,0 }, angle);
 			Lpos.x += vecvel.x * (StickX / STICK_MAX);
 			Lpos.z += vecvel.z * (StickX / STICK_MAX);
 		}
 		LockOn->SetPosition(Lpos);
 
 	}
+
+	XMFLOAT3 Lpos = LockOn->GetPosition();
+	XMFLOAT3 pos = player->GetPosition();
+
+	for (int i = 0; i < GuidNum; i++) {
+		GuidPos[i].x = Ease(InOut, Quad, (i + 1) * 0.1f, pos.x, Lpos.x);
+		GuidPos[i].y = 0.1f;
+		GuidPos[i].z = Ease(InOut, Quad, (i + 1) * 0.1f, pos.z, Lpos.z);
+		Guid[i]->SetPosition(GuidPos[i]);
+	}
+
+
 
 }
 

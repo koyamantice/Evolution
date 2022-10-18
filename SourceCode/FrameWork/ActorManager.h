@@ -65,6 +65,8 @@ public:
 	Actor* SearchActor(const std::string& tag);
 
 	Actor* SearchActorBack(const std::string& tag);
+
+	Actor* SearchID(int ID);
 private:
 	ActorFactory* actorFactory_ = nullptr;
 

@@ -32,7 +32,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
-	Sky->SetScale(XMFLOAT3(0.5, 0.5, 0.5));
+	Sky->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
 	Sky->Initialize();
 	skydome.reset(Sky);
 
@@ -83,6 +83,10 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	if (input->PushKey(DIK_0)) {
 		int a = 0;
 		a++;
+	}
+	if (input->PushKey(DIK_P)) {
+		ActorManager::GetInstance()->AttachActor("Bullet");
+
 	}
 
 	CameraUpda();
@@ -173,7 +177,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 
 	Object3d::PreDraw();
-	//skydome->Draw();
+	skydome->Draw();
 	ground->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);

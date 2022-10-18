@@ -108,23 +108,26 @@ void Bullet::Follow2Enemy() {
 void Bullet::Follow2Player() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
-	float vel = (int)(rand() % 10 + 1) * 0.03f;
 	XMFLOAT3 position{};
 	position.x = (player->GetPosition().x - pos.x);
 	position.z = (player->GetPosition().z - pos.z);
-	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
+	{
+		rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
+		obj->SetRotation(rot);
+	}
+	float vel = (int)(rand() % 10 + 1) * 0.03f;
+
 	vel_follow.x = sinf(-atan2f(position.x, position.z)) * vel;
 	vel_follow.y = cosf(-atan2f(position.x, position.z)) * vel;
 	pos.x -= vel_follow.x;
 	pos.z += vel_follow.y;
 	obj->SetPosition(pos);
-	obj->SetRotation(rot);
 
 }
 
 void Bullet::WaitBullet() {
 
-	obj->SetPosition({ ((int)ID % 10) * 3.0f, 0, ((int)ID / 10) * 5.0f });
+	obj->SetPosition({ ((int)ID % 10) * 3.0f, 0, (((int)ID / 10) * 5.0f) - 30.0f });
 }
 
 void Bullet::KnockBack() {
@@ -179,10 +182,10 @@ void Bullet::BurnOut() {
 }
 
 void Bullet::OnDraw(DirectXCommon* dxCommon) {
-	ImGui::Begin("test");
-	ImGui::SliderFloat("bullet", &back, 0, 360);
-	//ImGui::Unindent();
-	ImGui::End();
+	//ImGui::Begin("test");
+	//ImGui::SliderFloat("bullet", &back, 0, 360);
+	////ImGui::Unindent();
+	//ImGui::End();
 	Object3d::PreDraw();
 	Bird->Draw(dxCommon->GetCmdList());
 	if (enemy == NULL) { return; }
@@ -252,9 +255,6 @@ void Bullet::OnCollision(const std::string& Tag) {
 
 	}
 
-
-
-
 }
 
 void Bullet::WaitUpda() {
@@ -268,8 +268,8 @@ void Bullet::WaitUpda() {
 	obj->SetPosition(pos);
 
 	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
-		Follow2Player();
-		//WaitBullet();
+		//Follow2Player();
+		WaitBullet();
 	}
 }
 

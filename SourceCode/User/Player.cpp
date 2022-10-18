@@ -115,12 +115,12 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 	//
 	LockOn->Draw();
 
-	int a=ActorManager::GetInstance()->SearchNum("Bullet");
-//	ImGui::Begin("test");
-//	ImGui::SliderInt("bullet", &a, 0, 360);
-////	ImGui::SliderFloat("Anglet", &angle, 0, 360);
-//	ImGui::Unindent();
-//	ImGui::End();
+	//int a=ActorManager::GetInstance()->SearchNum("Bullet");
+	//	ImGui::Begin("test");
+	//	ImGui::SliderInt("bullet", &a, 0, 360);
+	////	ImGui::SliderFloat("Anglet", &angle, 0, 360);
+	//	ImGui::Unindent();
+	//	ImGui::End();
 
 }
 
@@ -160,9 +160,8 @@ void Player::Move() {
 		rot.y = angle-90;
 	}
 
-//	XMFLOAT3 objPos = obj->GetPosition();
+	//XMFLOAT3 objPos = obj->GetPosition();
 	//LockOn->SetPosition(pos.x, 0.1f, pos.z);
-
 	obj->SetPosition(pos);
 	obj->SetRotation(rot);
 

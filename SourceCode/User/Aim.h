@@ -2,7 +2,6 @@
 #include <SourceCode/Obj/2d/Texture.h>
 #include<list>
 #include <sstream>
-#include <SourceCode/Obj/2d/Texture.h>
 #include<DirectXMath.h>
 #include"Input.h"
 #include"Actor.h"
@@ -20,6 +19,9 @@ public:
 	void FirstSet();
 private:
 	std::unique_ptr<Texture> LockOn{};
+	static const int GuidNum = 8;
+	std::unique_ptr<Texture> Guid[GuidNum]{};
+	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
 

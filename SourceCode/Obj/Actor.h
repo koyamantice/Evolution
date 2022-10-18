@@ -43,7 +43,7 @@ public:
 		ATTACK,
 	};
 protected:
-	//オブジェクト識別番号(絶対に被ることはない数字)
+	//オブジェクト識別番号
 	static int id;
 	//機能中か
 	bool isActive = true;
@@ -67,7 +67,7 @@ public:
 	//
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); }
 	//ID取得
-	const int& GetID()const { return id; }
+	const int& GetID()const { return ID; }
 
 	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
 	const float& GetSize()const { return obj->GetSize(); }
