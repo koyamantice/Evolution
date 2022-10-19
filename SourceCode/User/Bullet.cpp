@@ -108,26 +108,26 @@ void Bullet::Follow2Enemy() {
 void Bullet::Follow2Player() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
+	XMFLOAT3 plapos = player->GetPosition();
 	XMFLOAT3 position{};
-	position.x = (player->GetPosition().x - pos.x);
-	position.z = (player->GetPosition().z - pos.z);
+	position.x = (plapos.x - pos.x);
+	position.z = (plapos.z - pos.z);
 	{
 		rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
 		obj->SetRotation(rot);
 	}
-	float vel = (int)(rand() % 10 + 1) * 0.03f;
-
-	vel_follow.x = sinf(-atan2f(position.x, position.z)) * vel;
-	vel_follow.y = cosf(-atan2f(position.x, position.z)) * vel;
-	pos.x -= vel_follow.x;
+	//float vel = (int)(rand() % 10 + 1) * 0.03f;
+	vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.3f;
+	vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.3f;
+	//pos.x -= vel_follow.x;
 	pos.z += vel_follow.y;
-	obj->SetPosition(pos);
 
+	obj->SetPosition(pos);
 }
 
 void Bullet::WaitBullet() {
 
-	obj->SetPosition({ ((int)ID % 10) * 3.0f, 0, (((int)ID / 10) * 5.0f) - 30.0f });
+	obj->SetPosition({ ((int)ID % 10) * 3.0f, 0, (((int)ID / 10) * 3.0f) - 30.0f });
 }
 
 void Bullet::KnockBack() {
@@ -172,7 +172,7 @@ void Bullet::BurnOut() {
 		effectRate += 0.08f;
 	} else {
 		effectRate = 0;
-		Explo->SetScale({ 0,0,0});
+		Explo->SetScale({ 0,0,0 });
 		Explo->SetPosition({ pos.x,-100,pos.z });
 		burning = false;
 	}
@@ -229,7 +229,7 @@ void Bullet::OnCollision(const std::string& Tag) {
 			switch (enemy->GetCommand()) {
 			case Actor::Phase::WAIT:
 				DamageInit();
-					break;
+				break;
 			case Actor::Phase::ATTACK:
 				break;
 			case Actor::Phase::LEAVE:
@@ -260,16 +260,16 @@ void Bullet::OnCollision(const std::string& Tag) {
 void Bullet::WaitUpda() {
 	throwReady = true;
 	XMFLOAT3 pos = obj->GetPosition();
-	if (pos.y>0) {
+	if (pos.y > 0) {
 		pos.y -= 0.3f;
-	}else{
+	} else {
 		pos.y = 0;
 	}
 	obj->SetPosition(pos);
 
-	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
-		//Follow2Player();
-		WaitBullet();
+	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, (3-(ID/10)) * 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
+		Follow2Player();
+	//	WaitBullet();
 	}
 }
 

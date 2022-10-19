@@ -15,7 +15,7 @@ void PlayerUI::OnInitialize() {
 	Hp.reset(_Hp);
 
 	Sprite* _Chara;
-	_Chara = Sprite::Create(ImageManager::CharaCover, { 10,582 });
+	_Chara = Sprite::Create(ImageManager::PlayerCover, { 10,582 });
 	Chara.reset(_Chara);
 
 	Sprite* _Bullet;

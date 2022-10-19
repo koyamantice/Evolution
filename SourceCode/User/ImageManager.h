@@ -23,6 +23,7 @@ public:
 		ZBack,
 		Option,
 		Vignette,
+		PlayerCover,
 		CharaCover,
 		Num,
 		numBack,

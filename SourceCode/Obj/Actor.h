@@ -43,6 +43,15 @@ public:
 		ATTACK,
 	};
 protected:
+	struct FlockSystem{
+		float isolateRadius = 2.0f;
+		XMFLOAT2 vel;
+		float weight;
+
+
+	};
+
+protected:
 	//オブジェクト識別番号
 	static int id;
 	//機能中か
@@ -64,8 +73,9 @@ public:
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
 
-	//
+	//Player固有の処理
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); }
+	
 	//ID取得
 	const int& GetID()const { return ID; }
 
@@ -132,7 +142,7 @@ protected:
 	bool pause = false;
 	bool first = false;
 	bool DeadFlag = false;
-
+	XMFLOAT3 oldPos = {};
 	XMFLOAT3 AftaerPos{};
 	int stock = 0;
 	//コンポーネント

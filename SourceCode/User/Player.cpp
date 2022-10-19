@@ -97,18 +97,6 @@ void Player::OnUpda() {
 	Shot();
 	ContactObj();
 	LockOn->Upda(angle);
-	//for (int i = 0; i < 3; ++i) {
-		const float rnd_vel = 0.1f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//const float rnd_sca = 0.1f;
-		//float sca{};
-		//sca = (float)rand() / RAND_MAX*rnd_sca;
-	ParticleManager::GetInstance()->Add(15, obj->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.6f);
-	//}
-	//ParticleManager::GetInstance()->Add(30, obj->GetPosition(), {0.1f,0.0f,0.1f}, XMFLOAT3(), 1.2f, 0.6f);
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
@@ -135,35 +123,45 @@ void Player::Move() {
 	float StickY = input->GetLeftControllerY();
 	const float PI = 3.14159f;
 	const float STICK_MAX =32768.0f;
-	if (input->PushKey(DIK_W)|| input->TiltPushStick(Input::L_UP, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
-		pos.x -= vecvel.x * (StickY/STICK_MAX);
-		pos.z -= vecvel.z * (StickY/STICK_MAX);
-		rot.y = angle;
-	}
-	if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
-		pos.x += vecvel.x * (StickY/STICK_MAX);
-		pos.z += vecvel.z * (StickY/STICK_MAX);
-		rot.y = angle-180;
-	}
-	if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
-		pos.x -= vecvel.x * (StickX/STICK_MAX);
-		pos.z -= vecvel.z * (StickX/STICK_MAX);
-		rot.y = angle+90;
-	}
-	if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{-vel,0,0,0 }, angle);
-		pos.x += vecvel.x * (StickX/STICK_MAX);
-		pos.z += vecvel.z * (StickX/STICK_MAX);
-		rot.y = angle-90;
-	}
+	if (input->TiltPushStick(Input::L_UP, 0.0f)||
+		input->TiltPushStick(Input::L_DOWN, 0.0f)||
+		input->TiltPushStick(Input::L_RIGHT, 0.0f)||
+		input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
+			pos.x -= vecvel.x * (StickY / STICK_MAX);
+			pos.z -= vecvel.z * (StickY / STICK_MAX);
+			rot.y = angle;
+		}
+		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
+			pos.x += vecvel.x * (StickY / STICK_MAX);
+			pos.z += vecvel.z * (StickY / STICK_MAX);
+			rot.y = angle - 180;
+		}
+		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
+			pos.x -= vecvel.x * (StickX / STICK_MAX);
+			pos.z -= vecvel.z * (StickX / STICK_MAX);
+			rot.y = angle + 90;
+		}
+		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
+			pos.x += vecvel.x * (StickX / STICK_MAX);
+			pos.z += vecvel.z * (StickX / STICK_MAX);
+			rot.y = angle - 90;
+		}
+		const float rnd_vel = 0.1f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		ParticleManager::GetInstance()->Add(15, oldPos, vel, XMFLOAT3(), 1.2f, 0.6f);
 
-	//XMFLOAT3 objPos = obj->GetPosition();
-	//LockOn->SetPosition(pos.x, 0.1f, pos.z);
-	obj->SetPosition(pos);
-	obj->SetRotation(rot);
+
+		obj->SetPosition(pos);
+		obj->SetRotation(rot);
+	}
 
 }
 

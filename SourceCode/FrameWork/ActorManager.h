@@ -71,7 +71,7 @@ private:
 	ActorFactory* actorFactory_ = nullptr;
 
 	std::list<std::unique_ptr<Actor>> Actors;
-
+	std::list<std::unique_ptr<Actor>> Bullets;
 	int num = 0;
 
 	ActorManager()=default;

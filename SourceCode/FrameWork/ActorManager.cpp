@@ -53,7 +53,6 @@ void ActorManager::CheckAllCollisions() {
 				if (Collision::CircleCollision(actorA->GetPosition().x, actorA->GetPosition().z, 1.5f, actorB->GetPosition().x, actorB->GetPosition().z, 1.5f)) {
 						actorA->OnCollision(actorB->GetTag());
 						actorB->OnCollision(actorA->GetTag());
-					
 				}
 				continue;
 			}
@@ -73,7 +72,6 @@ void ActorManager::AttachActor(const std::string& ActorName, ActorComponent* new
 	std::unique_ptr<Actor> newActor;
 	
 	newActor.reset(actorFactory_->CreateActor(ActorName,newActorCompornent));
-
 	Actors.push_back(std::move(newActor));
 }
 
@@ -206,3 +204,4 @@ Actor* ActorManager::SearchID(int ID) {
 	}
 	return nullptr;
 }
+
