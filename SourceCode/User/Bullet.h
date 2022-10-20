@@ -24,7 +24,6 @@ public:
 	enum command {
 		Wait = 0,
 		Attack,
-		Follow,
 		Slow,
 		Dead,
 	};

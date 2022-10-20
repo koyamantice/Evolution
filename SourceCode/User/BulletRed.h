@@ -16,6 +16,7 @@ private:
 	void OnCollision(const std::string& Tag) override;
 	
 	void WaitUpda();
+	void SlowUpda();
 	void AttackUpda();
 	void Follow2Enemy();
 	void Follow2Player();

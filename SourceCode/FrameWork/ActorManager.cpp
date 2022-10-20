@@ -128,7 +128,7 @@ Bullet* ActorManager::CommandBullet(const int& ID) {
 Bullet* ActorManager::SearchWaitBullet() {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 	Bullet* bullet = itr->get();
-		if (bullet->GetCommand() == Bullet::command::Attack) { continue; }
+	if (bullet->GetCommand() != Bullet::command::Wait) { continue; }
 		return bullet;
 	}
 	return nullptr;

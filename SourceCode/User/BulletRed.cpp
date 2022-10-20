@@ -52,8 +52,8 @@ void BulletRed::OnUpda() {
 			}
 		}
 		break;
-	case Follow:
-		//WaitBullet();
+	case Slow:
+		SlowUpda();
 		break;
 	default:
 		assert(0);
@@ -122,7 +122,7 @@ void BulletRed::DamageInit() {
 		knockBacking = true;
 		enemy->SetHp(enemy->GetHp() - 1);
 		burning = true;
-		back = 0.5f;
+		back = Normalize(fbxObj->GetPosition(), enemy->GetPosition());
 	}
 }
 
@@ -131,7 +131,6 @@ float BulletRed::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
 	float nor;
 	itr = { pos.x - pos2.x,0,pos.z - pos2.z };
 	nor = sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
-	//back = abs(back);
 	return nor;
 }
 
@@ -181,6 +180,10 @@ void BulletRed::OnCollision(const std::string& Tag) {
 			player->SetStock(player->GetStock() + 1);
 			command = Wait;
 			break;
+		case Slow:
+
+			break;
+
 		default:
 			assert(0);
 			break;
@@ -193,9 +196,24 @@ void BulletRed::OnCollision(const std::string& Tag) {
 		case Wait:
 			break;
 		case Attack:
-
+			switch (enemy->GetCommand()) {
+			case Actor::Phase::WAIT:
+				DamageInit();
+				break;
+			case Actor::Phase::ATTACK:
+				break;
+			case Actor::Phase::LEAVE:
+				DamageInit();
+				break;
+			default:
+				break;
+			}
 
 			break;
+		case Slow:
+
+			break;
+
 		default:
 			assert(0);
 			break;
@@ -224,7 +242,7 @@ void BulletRed::WaitUpda() {
 	}
 }
 
-void BulletRed::AttackUpda() {
+void BulletRed::SlowUpda() {
 	if (throwReady) {
 		XMFLOAT3 pos = fbxObj->GetPosition();
 		pos.x = Ease(InOut, Quad, frame, pos.x, AftaerPos.x);
@@ -246,9 +264,16 @@ void BulletRed::AttackUpda() {
 
 	} else {
 		frame = 0.0f;
+		command = Attack;
+	}
+
+}
+
+void BulletRed::AttackUpda() {
+
 		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Enemy();
 		}
-	}
+	
 
 }

@@ -48,7 +48,9 @@ public:
 	//角度の取得
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
-
+	//
+	void SetCommand(const int& command);
+	const int& GetCommand() { return command; }
 	//isAliveセッタ＆ゲッタ
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
