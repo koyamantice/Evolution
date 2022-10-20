@@ -276,6 +276,7 @@
     <ClCompile Include="SourceCode\TisGame.cpp" />
     <ClCompile Include="SourceCode\User\Aim.cpp" />
     <ClCompile Include="SourceCode\User\Bullet.cpp" />
+    <ClCompile Include="SourceCode\User\BulletRed.cpp" />
     <ClCompile Include="SourceCode\User\Crystal.cpp" />
     <ClCompile Include="SourceCode\User\DebugScene.cpp" />
     <ClCompile Include="SourceCode\User\Enemy.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="SourceCode\TisGame.h" />
     <ClInclude Include="SourceCode\User\Aim.h" />
     <ClInclude Include="SourceCode\User\Bullet.h" />
+    <ClInclude Include="SourceCode\User\BulletRed.h" />
     <ClInclude Include="SourceCode\User\Crystal.h" />
     <ClInclude Include="SourceCode\User\DebugScene.h" />
     <ClInclude Include="SourceCode\User\Enemy.h" />

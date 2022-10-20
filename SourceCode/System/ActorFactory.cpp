@@ -3,9 +3,9 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"Bullet.h"
+#include"BulletRed.h"
 #include "Crystal.h"
 #include"PlayerUI.h"
-#include "Aim.h"
 
 
 
@@ -22,11 +22,11 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 		newActor = new Enemy();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy), "Enemy");
 	}
-	if (sceneName == "Bullet") {
-		newActor = new Bullet();
-		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player),"Bullet");
+	//if (sceneName == "Bullet") {
+	//	newActor = new Bullet();
+	//	newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Player),"Bullet");
 
-	}
+	//}
 	if (sceneName == "Crystal") {
 		newActor = new Crystal();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Crystal), "Crystal");
@@ -34,4 +34,16 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 	}
 
 	return newActor;
+}
+
+Bullet* ActorFactory::CreateBullet(const std::string& BulletKind) {
+	Bullet* newBullet=nullptr;
+	if (BulletKind=="Red") {
+		newBullet = new BulletRed();
+		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
+	}
+
+
+
+	return newBullet;
 }

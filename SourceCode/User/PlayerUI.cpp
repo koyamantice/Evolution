@@ -114,7 +114,7 @@ void PlayerUI::OnDraw() {
 	Sprite::PreDraw();
 	Chara->Draw();
 	Bullet->Draw();
-	Hp->Draw();
+//	Hp->Draw();
 	Slash->Draw();
 	for (int i = 0; i < 2; i++) {
 		numBack[i]->Draw();

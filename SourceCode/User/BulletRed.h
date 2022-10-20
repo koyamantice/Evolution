@@ -1,8 +1,5 @@
 #pragma once
-#include"Actor.h"
-#include"Enemy.h"
-
-class Player;
+#include"Bullet.h"
 
 class BulletRed : public Bullet{
 public:
@@ -38,7 +35,6 @@ private:
 	int CoolTime = 0;
 
 	float vel = 0.8f;
-	std::unique_ptr<FBXObject3d> Bird;
 	std::unique_ptr<Texture> Status{};
 	std::unique_ptr<Texture> Explo = nullptr;
 	bool burning = false;
@@ -48,6 +44,5 @@ private:
 	bool follow = false;
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
-	XMFLOAT3 landing{};
 	XMFLOAT2 vel_follow{};
 };

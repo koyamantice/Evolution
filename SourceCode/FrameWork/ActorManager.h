@@ -42,17 +42,23 @@ public:
 	/// <summary>
 /// è’ìÀîªíËÇ∆âûìö
 /// </summary>
-	void CheckAllCollisions();
+	void CheckActorCollisions();
+	/// <summary>
+	/// è’ìÀîªíËÇ∆âûìö
+	/// </summary>
+	void CheckBulletCollisions();
 
 	void AttachActor(const std::string& ActorName, ActorComponent* newActorCompornent=nullptr);
+
+	void AttachBullet(const std::string& ActorName);
 
 	void RemoveActor();
 
 	const int& SearchNum(const std::string& tag);
 
-	Actor* CommandActor(const int& ID);
+	Bullet* CommandBullet(const int& ID);
 
-	Actor* SearchWaitBullet();
+	Bullet* SearchWaitBullet();
 
 	void DamageBullet(XMFLOAT3 pos, float radius = 1.0f);
 
@@ -66,12 +72,12 @@ public:
 
 	Actor* SearchActorBack(const std::string& tag);
 
-	Actor* SearchID(int ID);
+	Bullet* SearchID(int ID);
 private:
 	ActorFactory* actorFactory_ = nullptr;
 
 	std::list<std::unique_ptr<Actor>> Actors;
-	std::list<std::unique_ptr<Actor>> Bullets;
+	std::list<std::unique_ptr<Bullet>> Bullets;
 	int num = 0;
 
 	ActorManager()=default;

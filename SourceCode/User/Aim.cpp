@@ -60,7 +60,7 @@ void Aim::Move(float angle) {
 		player->SetStock(player->GetStock() - 1);
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
 		if (bullet != nullptr) {
-			bullet->SetCommand(Actor::command::Attack, LockOn->GetPosition());
+			bullet->SetCommand(Bullet::command::Attack, LockOn->GetPosition());
 		}
 	}
 

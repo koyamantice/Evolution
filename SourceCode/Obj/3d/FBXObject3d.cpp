@@ -293,12 +293,12 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	model->Draw(cmdList);
 }
 
-void FBXObject3d::PlayAnimation()
+void FBXObject3d::PlayAnimation(const int& num)
 {
 	////開始時間取得
-	startTime = (FbxLongLong)Animations[0].start;
+	startTime = (FbxLongLong)Animations[num].start;
 	////終了時間取得
-	endTime = (FbxLongLong)Animations[0].end;
+	endTime = (FbxLongLong)Animations[num].end;
 	//開始時間に合わせる
 	currentTime = startTime;
 	//再生中状態にする

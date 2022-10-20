@@ -1,53 +1,109 @@
 #pragma once
 #include"Actor.h"
-#include"Enemy.h"
+#include"FBXObject3d.h"
+#include"Texture.h"
+//#include""
+class Bullet {
+protected: // エイリアス
+// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 
-class Player;
+	struct FlockSystem {
+		float isolateRadius = 2.0f;
+		XMFLOAT2 vel;
+		float weight;
 
-class Bullet : public Actor {
+
+	};
+public:
+	enum command {
+		Wait = 0,
+		Attack,
+		Follow,
+		Slow,
+		Dead,
+	};
 public:
 	Bullet();
-	~Bullet() {};
-	void SetLanding(XMFLOAT3 landing) { this->landing = landing; }
+	virtual ~Bullet() = default;
 
+	//座標の取得
+	void SetPosition(const DirectX::XMFLOAT3& pos) { fbxObj->SetPosition(pos); }
+	const DirectX::XMFLOAT3& GetPosition() { return fbxObj->GetPosition(); }
+	//角度の取得
+	void SetRotation(const DirectX::XMFLOAT3& rot) { fbxObj->SetRotation(rot); }
+	const DirectX::XMFLOAT3& GetRotation() { return fbxObj->GetRotation(); }
 
-private:
-	void OnInit()override;
-	void OnUpda()override;
-	void OnDraw(DirectXCommon* dxCommon)override;
-	void OnFinal()override;
-	void OnCollision(const std::string& Tag) override;
-	
-	void WaitUpda();
-	void AttackUpda();
-	void Follow2Enemy();
-	void Follow2Player();
-	void WaitBullet();
+	//ID取得
+	const int& GetID()const { return ID; }
 
-	void KnockBack();
-	bool knockBacking = false;
-	void DamageInit();
-	float back = 0;
-	float Normalize(const XMFLOAT3& pos,const XMFLOAT3& pos2);
-	float fall=0.0f;
-	bool throwReady = false;
-	float frame = 0.0f;
+	//isAliveセッタ＆ゲッタ
+	void SetIsActive(const bool& Active) { isActive = Active; };
+	const bool& GetIsActive() { return isActive; }
 
+	//isRemoveセッタ＆ゲッタ
+	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
+	const bool& GetIsRemove() { return isRemove; }
 
-	void Dead();
-	int CoolTime = 0;
+	//カメラ角度のセッタ＆ゲッタ
+	void SetAngle(const float& angle) { this->angle = angle; }
+	const float& GetAngle() { return angle; }
 
-	float vel = 0.8f;
-	std::unique_ptr<FBXObject3d> Bird;
-	std::unique_ptr<Texture> Status{};
-	std::unique_ptr<Texture> Explo = nullptr;
-	bool burning = false;
-	void BurnOut();
-	float scale = 0.0f;
-	float effectRate = 0.0f;
-	bool follow = false;
+	//
+	void SetCommand(const int& command, XMFLOAT3 pos = { 0,0,0 });
+	const int& GetCommand() { return command; }
+	//
+	void SetDeadFlag(const bool& DeadFlag) { this->DeadFlag = DeadFlag; }
+	//基本処理
+	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
+	void Update();		//更新処理
+	void Demo();		//更新処理
+	void Draw(DirectXCommon* dxCommon);	//描画処理
+
+	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
+
+	void Finalize();	//終了処理
+
+	virtual void OnInit() {};
+	virtual void OnUpda() {};
+	virtual void OnDraw(DirectXCommon* dxCommon) {};
+	virtual void OnFinal() {};
+	virtual void DebugUpdate() {};
+
+	virtual void OnCollision(const std::string& Tag) {};
+protected:
+	//バレット専用
+	int ID;
+	//機能中か
+	bool isActive = true;
+	//削除
+	bool isRemove = false;
+	//
+	int command = 0;
+	std::unique_ptr<FBXObject3d> fbxObj;
+	float angle = 0;
+	bool DeadFlag = false;
+
+	XMFLOAT3 oldPos = {};
+	XMFLOAT3 AftaerPos{};
+
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
+
 	XMFLOAT3 landing{};
-	XMFLOAT2 vel_follow{};
+
+
+
+
+
+
+
+
+
 };
+

@@ -1,4 +1,4 @@
-#include "Bullet.h"
+#include"BulletRed.h"
 #include "Easing.h"
 #include"ActorManager.h"
 #include <SourceCode/FrameWork/collision/Collision.h>
@@ -8,57 +8,33 @@ using namespace DirectX;
 
 
 
-Bullet::Bullet() {
-
-	//ease = true;
+BulletRed::BulletRed() {
 }
 
-void Bullet::OnInit() {
-	ID = ActorManager::GetInstance()->SearchNum("Bullet");
+void BulletRed::OnInit() {
+	ID = ActorManager::GetInstance()->SearchNum("BulletRed");
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-	//obj->SetScale({ 0.5f, 0.5f, 0.5f });
-	//obj->SetColor({ 1.0f, 0.0f, 0.0f,1.0f });
-	XMFLOAT3 rot = obj->GetRotation();
-	rot.y = -180; //- 90;// *(XM_PI / 180.0f);
-	obj->SetRotation(rot);
-
-	obj->SetPosition({ ID * 1.0f,0,ID * 1.0f });
 	landing = player->GetLockPos();
-	Texture* Lock_ = Texture::Create(ImageManager::Battle, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
+	Texture* Lock_ = Texture::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Lock_->SetIsBillboard(true);
 	Lock_->TextureCreate();
 	Lock_->SetRotation({ 0,0,0 });
 	Status.reset(Lock_);
 
-	Texture* Explo_ = Texture::Create(ImageManager::Fire, { obj->GetPosition().x,obj->GetPosition().y + 1.0f,obj->GetPosition().z
+	Texture* Explo_ = Texture::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Explo_->SetIsBillboard(true);
 	Explo_->TextureCreate();
 	Explo_->SetRotation({ 0,0,0 });
 	Explo.reset(Explo_);
 
-	FBXObject3d* Bird_ = new FBXObject3d();
-	Bird_->Initialize();
-	Bird_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
-	Bird_->SetScale({ 0.005f,0.005f, 0.005f });
-	//move_object_->SetPosition(position);
-	//move_object_->SetRotation(rot);
-	Bird.reset(Bird_);
-	Bird->LoadAnimation();
-	Bird->PlayAnimation();
-
 	WaitBullet();
 }
 
-void Bullet::OnUpda() {
-	XMFLOAT3 pos = obj->GetPosition();
-	Bird->Update();
-	Bird->SetPosition(pos);
-	Bird->SetRotation(obj->GetRotation());
-
+void BulletRed::OnUpda() {
 	if (DeadFlag) {
 		Dead();
 		return;
@@ -88,11 +64,11 @@ void Bullet::OnUpda() {
 		BurnOut();
 	}
 	Status->Update();
-	Status->SetPosition({ obj->GetPosition().x,obj->GetPosition().y + 2.5f,obj->GetPosition().z });
+	Status->SetPosition({ fbxObj->GetPosition().x,fbxObj->GetPosition().y + 2.5f,fbxObj->GetPosition().z });
 }
-void Bullet::Follow2Enemy() {
-	XMFLOAT3 pos = obj->GetPosition();
-	XMFLOAT3 rot = obj->GetRotation();
+void BulletRed::Follow2Enemy() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 rot = fbxObj->GetRotation();
 	XMFLOAT3 position{};
 	position.x = (enemy->GetPosition().x - pos.x);
 	position.z = (enemy->GetPosition().z - pos.z);
@@ -101,13 +77,13 @@ void Bullet::Follow2Enemy() {
 	vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.3f;
 	pos.x -= vel_follow.x;
 	pos.z += vel_follow.y;
-	obj->SetPosition(pos);
-	obj->SetRotation(rot);
+	fbxObj->SetPosition(pos);
+	fbxObj->SetRotation(rot);
 }
 
-void Bullet::Follow2Player() {
-	XMFLOAT3 pos = obj->GetPosition();
-	XMFLOAT3 rot = obj->GetRotation();
+void BulletRed::Follow2Player() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 rot = fbxObj->GetRotation();
 	float vel = (int)(rand() % 10 + 1) * 0.03f;
 	XMFLOAT3 position{};
 	position.x = (player->GetPosition().x - pos.x);
@@ -117,18 +93,18 @@ void Bullet::Follow2Player() {
 	vel_follow.y = cosf(-atan2f(position.x, position.z)) * vel;
 	pos.x -= vel_follow.x;
 	pos.z += vel_follow.y;
-	obj->SetPosition(pos);
-	obj->SetRotation(rot);
+	fbxObj->SetPosition(pos);
+	fbxObj->SetRotation(rot);
 
 }
 
-void Bullet::WaitBullet() {
+void BulletRed::WaitBullet() {
 
-	obj->SetPosition({ ((int)ID % 10) * 3.0f, 0, ((int)ID / 10) * 5.0f });
+	fbxObj->SetPosition({ ((int)ID % 10) * 3.0f, 0, ((int)ID / 10) * 5.0f });
 }
 
-void Bullet::KnockBack() {
-	XMFLOAT3 pos = obj->GetPosition();
+void BulletRed::KnockBack() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
 	pos.x += (pos.x / back) * 0.1f;
 	pos.y += 0.5f - fall;
 	fall += 0.5f / 15.0f;
@@ -138,19 +114,19 @@ void Bullet::KnockBack() {
 		fall = 0.0f;
 		knockBacking = false;
 	}
-	obj->SetPosition(pos);
+	fbxObj->SetPosition(pos);
 }
 
-void Bullet::DamageInit() {
+void BulletRed::DamageInit() {
 	if (!knockBacking) {
 		knockBacking = true;
 		enemy->SetHp(enemy->GetHp() - 1);
 		burning = true;
-		back = Normalize(obj->GetPosition(), enemy->GetPosition());
+		back = 0.5f;
 	}
 }
 
-float Bullet::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
+float BulletRed::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
 	XMFLOAT3 itr{};
 	float nor;
 	itr = { pos.x - pos2.x,0,pos.z - pos2.z };
@@ -159,12 +135,12 @@ float Bullet::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
 	return nor;
 }
 
-void Bullet::Dead() {
+void BulletRed::Dead() {
 	isRemove = true;
 }
 
-void Bullet::BurnOut() {
-	XMFLOAT3 pos = obj->GetPosition();
+void BulletRed::BurnOut() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
 	if (effectRate < 1.0f) {
 		effectRate += 0.08f;
 	} else {
@@ -178,18 +154,12 @@ void Bullet::BurnOut() {
 	Explo->SetPosition({ pos.x,pos.y,pos.z });
 }
 
-void Bullet::OnDraw(DirectXCommon* dxCommon) {
-	ImGui::Begin("test");
-	ImGui::SliderFloat("bullet", &back, 0, 360);
-	//ImGui::Unindent();
-	ImGui::End();
-	Object3d::PreDraw();
-	Bird->Draw(dxCommon->GetCmdList());
+void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
 		Texture::PreDraw();
-		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Status->Draw();
 		}
 		if (burning) {
@@ -198,10 +168,10 @@ void Bullet::OnDraw(DirectXCommon* dxCommon) {
 	}
 }
 
-void Bullet::OnFinal() {
+void BulletRed::OnFinal() {
 }
 
-void Bullet::OnCollision(const std::string& Tag) {
+void BulletRed::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
 		switch (command) {
 		case Wait:
@@ -223,25 +193,6 @@ void Bullet::OnCollision(const std::string& Tag) {
 		case Wait:
 			break;
 		case Attack:
-			switch (enemy->GetCommand()) {
-			case Actor::Phase::WAIT:
-				DamageInit();
-					break;
-			case Actor::Phase::ATTACK:
-				break;
-			case Actor::Phase::LEAVE:
-				DamageInit();
-				break;
-			default:
-				break;
-			}
-
-
-
-
-
-
-
 
 
 			break;
@@ -257,25 +208,25 @@ void Bullet::OnCollision(const std::string& Tag) {
 
 }
 
-void Bullet::WaitUpda() {
+void BulletRed::WaitUpda() {
 	throwReady = true;
-	XMFLOAT3 pos = obj->GetPosition();
+	XMFLOAT3 pos = fbxObj->GetPosition();
 	if (pos.y>0) {
 		pos.y -= 0.3f;
 	}else{
 		pos.y = 0;
 	}
-	obj->SetPosition(pos);
+	fbxObj->SetPosition(pos);
 
-	if (!Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
+	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
 		Follow2Player();
 		//WaitBullet();
 	}
 }
 
-void Bullet::AttackUpda() {
+void BulletRed::AttackUpda() {
 	if (throwReady) {
-		XMFLOAT3 pos = obj->GetPosition();
+		XMFLOAT3 pos = fbxObj->GetPosition();
 		pos.x = Ease(InOut, Quad, frame, pos.x, AftaerPos.x);
 		pos.y += vel; //+
 		vel -= 0.05f;//
@@ -291,11 +242,11 @@ void Bullet::AttackUpda() {
 			vel = 0.8f;
 			throwReady = false;
 		}
-		obj->SetPosition(pos);
+		fbxObj->SetPosition(pos);
 
 	} else {
 		frame = 0.0f;
-		if (Collision::CircleCollision(obj->GetPosition().x, obj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Enemy();
 		}
 	}

@@ -18,7 +18,11 @@ void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
 	}
-	CheckAllCollisions();
+	for (std::unique_ptr<Bullet>& bullet : Bullets) {
+		bullet->Update();
+	}
+	CheckActorCollisions();
+	CheckBulletCollisions();
 	RemoveActor();
 }
 void ActorManager::DemoUpdate() {
@@ -27,10 +31,15 @@ void ActorManager::DemoUpdate() {
 	}
 }
 void ActorManager::Draw(DirectXCommon* dxCommon) {
+	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
+		Bullet* bullet = itr->get();
+		bullet->Draw(dxCommon);
+	}
 	for (auto itrA = Actors.rbegin(); itrA != Actors.rend(); ++itrA) {
 		Actor* ActorA = itrA->get();
 		ActorA->Draw(dxCommon);
 	}
+
 }
 void ActorManager::DemoDraw(DirectXCommon* dxCommon) {
 	for (std::unique_ptr<Actor>& actor : Actors) {
@@ -44,23 +53,29 @@ void ActorManager::Finalize() {
 	Actors.clear();
 }
 
-void ActorManager::CheckAllCollisions() {
+void ActorManager::CheckActorCollisions() {
 	for (auto itrA = Actors.begin(); itrA != Actors.end(); ++itrA) {
 		for (auto itrB = Actors.rbegin(); itrB != Actors.rend(); ++itrB) {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
-			if (actorA->GetTag() == "Crystal" && actorB->GetTag() == "Player") {
-				if (Collision::CircleCollision(actorA->GetPosition().x, actorA->GetPosition().z, 1.5f, actorB->GetPosition().x, actorB->GetPosition().z, 1.5f)) {
-						actorA->OnCollision(actorB->GetTag());
-						actorB->OnCollision(actorA->GetTag());
-				}
-				continue;
-			}
 			if (Collision::SphereCollision2(actorA->GetPosition(), 1.5f, actorB->GetPosition(), 1.5f)) {
 				if (actorA->GetTag()!= actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());
 				}
+			}
+		}
+	}
+}
+
+void ActorManager::CheckBulletCollisions() {
+	for (auto itrA = Actors.begin(); itrA != Actors.end(); ++itrA) {
+		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
+			Actor* actor = itrA->get();
+			Bullet* bullet = itrB->get();
+			if (Collision::SphereCollision2(actor->GetPosition(), 1.5f, bullet->GetPosition(), 1.5f)) {
+					actor->OnCollision("Bullet");
+					bullet->OnCollision(actor->GetTag());
 			}
 		}
 	}
@@ -74,55 +89,59 @@ void ActorManager::AttachActor(const std::string& ActorName, ActorComponent* new
 	newActor.reset(actorFactory_->CreateActor(ActorName,newActorCompornent));
 	Actors.push_back(std::move(newActor));
 }
+void ActorManager::AttachBullet(const std::string& ActorName) {
+	assert(actorFactory_);
+	std::unique_ptr<Bullet> newBullet;
+
+	newBullet.reset(actorFactory_->CreateBullet(ActorName));
+	
+	Bullets.push_back(std::move(newBullet));
+}
 
 void ActorManager::RemoveActor() {
 	Actors.remove_if([](std::unique_ptr<Actor>& actor){
 		return actor->GetIsRemove();
-		});
+	});
+	Bullets.remove_if([](std::unique_ptr<Bullet>& bullet) {
+		return bullet->GetIsRemove();
+	});
 }
 
 const int& ActorManager::SearchNum(const std::string& tag) {
-	num = 0;
-	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
-		Actor* actor = itr->get();
-		if (actor->GetTag() == tag) {
-			num++;
-		}
+	int num = 0;
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		num++;
 	}
 	return num;
 }
 
-Actor* ActorManager::CommandActor(const int& ID) {
-	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
-		Actor* actor = itr->get();
-		if (actor->GetTag() == "Enemy") {
-			if (actor->GetID() == ID) {
+Bullet* ActorManager::CommandBullet(const int& ID) {
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		Bullet* actor = itr->get();
+		if (actor->GetID() == ID) {
 				return actor;
-			}
 		}
 	}
 	return nullptr;
 }
 
-Actor* ActorManager::SearchWaitBullet() {
-	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
-	Actor* actor = itr->get();
-		if (actor->GetTag() !="Bullet") { continue; }
-		if (actor->GetCommand() == Actor::command::Attack) { continue; }
-		return actor;
+Bullet* ActorManager::SearchWaitBullet() {
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+	Bullet* bullet = itr->get();
+		if (bullet->GetCommand() == Bullet::command::Attack) { continue; }
+		return bullet;
 	}
 	return nullptr;
 }
 
 void ActorManager::DamageBullet(XMFLOAT3 pos,float radius) {
-	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
-		Actor* actor = itr->get();
-		if (actor->GetTag() != "Bullet") { continue; }
-		if (actor->GetCommand() == Actor::command::Wait) { continue; }
-		XMFLOAT3 itrPos = actor->GetPosition();
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		Bullet* bullet = itr->get();
+		if (bullet->GetCommand() == Bullet::command::Wait) { continue; }
+		XMFLOAT3 itrPos = bullet->GetPosition();
 		if (itrPos.y > 0.1f) { continue; }
 		if(Collision::CircleCollision(pos.x,pos.z,1.0f,itrPos.x,itrPos.z,radius)){
-			actor->SetDeadFlag(true);
+			bullet->SetDeadFlag(true);
 		}
 	}
 }
@@ -144,12 +163,10 @@ float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 }
 
 void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
-	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
-		Actor* actor = itr->get();
-		if (actor->GetTag() != "Bullet") { continue; }
-		if(Collision::CircleCollision(pos.x, pos.z, scale, actor->GetPosition().x, actor->GetPosition().z, 1.0f)) {
-
-			actor->SetCommand(Actor::command::Wait);
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		Bullet* bullet = itr->get();
+		if(Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
+			bullet->SetCommand(Bullet::command::Wait);
 		}
 	}
 }
@@ -193,11 +210,10 @@ Actor* ActorManager::SearchActorBack(const std::string& tag) {
 	return nullptr;
 }
 
-Actor* ActorManager::SearchID(int ID) {
-	if (ID < 0) { return nullptr; }
-	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
-		Actor* actor = itr->get();
-		if (actor->GetTag() != "Bullet") { continue; }
+Bullet* ActorManager::SearchID(int ID) {
+	if (ID < 0) { assert(0); }
+	for (auto itr = Bullets.begin(); itr !=	Bullets.end(); ++itr) {
+		Bullet* actor = itr->get();
 		if (actor->GetID() == ID) {
 			return actor;
 		}

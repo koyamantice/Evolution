@@ -12,9 +12,6 @@ class ActorComponent;
 
 class Actor 
 {
-protected:
-	//エネミー専用
-	int ID;
 protected: // エイリアス
 // Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -24,33 +21,16 @@ protected: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 protected:
-	//名前
-	std::string name;
 	//付与されているタグへのポインタ
 	std::string tag = "None";
 public:
-	enum command {
-		Wait = 0,
-		Attack,
-		Follow,
-		Slow,
-		Dead,
-	};
+
 	enum Phase {
 		APPROCH = 0,
 		LEAVE,
 		WAIT,
 		ATTACK,
 	};
-protected:
-	struct FlockSystem{
-		float isolateRadius = 2.0f;
-		XMFLOAT2 vel;
-		float weight;
-
-
-	};
-
 protected:
 	//オブジェクト識別番号
 	static int id;
@@ -74,17 +54,10 @@ public:
 	const float& GetHp() { return hp; }
 
 	//Player固有の処理
-	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); }
+	virtual const XMFLOAT3& GetLockPos() { return {0,0,0}; }
 	
-	//ID取得
-	const int& GetID()const { return ID; }
-
 	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
 	const float& GetSize()const { return obj->GetSize(); }
-
-	//名前セッタ＆ゲッタ
-	void SetName(const std::string& Name) { name = Name; }
-	const std::string& GetName() { return name; }
 
 	//タグのセット
 	void SetTag(const std::string& Tag){tag = Tag;};
@@ -109,11 +82,6 @@ public:
 	//
 	void SetStock(const int& Stock) {this->stock = Stock;};
 	const int& GetStock() { return stock; }
-	//
-	void SetCommand(const int& command, XMFLOAT3 pos={0,0,0});
-	const int& GetCommand() { return command; }
-	//
-	void SetDeadFlag(const bool& DeadFlag) { this->DeadFlag = DeadFlag; }
 	//
 	void SetPause(const bool& pause) { this->pause = pause; }
 	const bool& GetPause() { return pause; }
@@ -143,7 +111,6 @@ protected:
 	bool first = false;
 	bool DeadFlag = false;
 	XMFLOAT3 oldPos = {};
-	XMFLOAT3 AftaerPos{};
 	int stock = 0;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;

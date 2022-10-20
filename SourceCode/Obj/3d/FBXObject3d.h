@@ -110,7 +110,7 @@ public: // メンバ関数
 	/// <summary>
 	/// アニメーション
 	/// </summary>
-	void PlayAnimation();
+	void PlayAnimation(const int& num = 0);
 	void StopAnimation();
 	void ResetAnimation();
 	//複数fbxの読み込み

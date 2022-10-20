@@ -233,9 +233,6 @@
     <ClCompile Include="SourceCode\User\EnemyUI.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\Bullet.cpp">
-      <Filter>User\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\MapScene.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
@@ -247,6 +244,12 @@
     </ClCompile>
     <ClCompile Include="SourceCode\User\TitleText.cpp">
       <Filter>User\タイトル</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Bullet.cpp">
+      <Filter>User\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\BulletRed.cpp">
+      <Filter>User\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,9 +461,6 @@
     <ClInclude Include="SourceCode\User\EnemyUI.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\Bullet.h">
-      <Filter>User\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\MapScene.h">
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
@@ -472,6 +472,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\TitleText.h">
       <Filter>User\タイトル</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Bullet.h">
+      <Filter>User\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\BulletRed.h">
+      <Filter>User\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

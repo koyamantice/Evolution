@@ -5,7 +5,7 @@
 #include<DirectXMath.h>
 #include"Input.h"
 #include"Actor.h"
-
+#include"Bullet.h"
 class Player;
 
 class Aim {
@@ -30,5 +30,5 @@ private:
 	float Area = 0.3f;
 	float distance = 5.0f;
 	Actor* player = nullptr;
-	Actor* bullet = nullptr;
+	Bullet* bullet = nullptr;
 };

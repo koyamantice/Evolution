@@ -26,7 +26,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Crystal");
 	crystal_shadow= ActorManager::GetInstance()->SearchActor("Crystal");
 	for (int i = 0; i < 30;i++) {
-		ActorManager::GetInstance()->AttachActor("Bullet");
+		ActorManager::GetInstance()->AttachBullet("Red");
 	}
 
 	Object3d* Sky{};
@@ -85,7 +85,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		a++;
 	}
 	if (input->PushKey(DIK_P)) {
-		ActorManager::GetInstance()->AttachActor("Bullet");
+		ActorManager::GetInstance()->AttachBullet("Bullet");
 
 	}
 
