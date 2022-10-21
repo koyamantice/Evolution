@@ -3,7 +3,6 @@
 #include "AudioManager.h"
 #include "input.h"
 #include<string>
-#include "DebugText.h"
 #include"ImageManager.h"
 #include"ModelManager.h"
 #include <TisGame.h>

@@ -119,17 +119,17 @@ void BulletRed::KnockBack() {
 
 void BulletRed::DamageInit() {
 	if (!knockBacking) {
-		knockBacking = true;
 		enemy->SetHp(enemy->GetHp() - 1);
 		burning = true;
 		back = Normalize(fbxObj->GetPosition(), enemy->GetPosition());
+		knockBacking = true;
 	}
 }
 
 float BulletRed::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
 	XMFLOAT3 itr{};
 	float nor;
-	itr = { pos.x - pos2.x,0,pos.z - pos2.z };
+	itr = { pos2.x - pos.x,0,pos2.z - pos.z };
 	nor = sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
 	return nor;
 }

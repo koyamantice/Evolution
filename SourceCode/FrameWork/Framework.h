@@ -53,7 +53,6 @@ protected:
 	AudioManager* audio = nullptr;
 	FPSManager* fps = nullptr;
 	XorShift* xorShift=nullptr;
-	//DebugText* debugText = nullptr;
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 	ImageManager* imageManager = nullptr;
 	SceneManager* scaneMana = nullptr;
