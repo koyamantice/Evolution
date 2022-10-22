@@ -93,22 +93,22 @@ void Aim::Move(float angle) {
 		float StickY = input->GetLeftControllerY();
 		const float PI = 3.14159f;
 		const float STICK_MAX = 32768.0f;
-		if (input->PushKey(DIK_W) || input->TiltPushStick(Input::L_UP, 0.0f)) {
+		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,2,0 }, angle);
 			Lpos.x -= vecvel.x * (StickY / STICK_MAX);
 			Lpos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
+		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-2,0 }, angle);
 			Lpos.x += vecvel.x * (StickY / STICK_MAX);
 			Lpos.z += vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
+		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 2,0,0,0 }, angle);
 			Lpos.x -= vecvel.x * (StickX / STICK_MAX);
 			Lpos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
-		if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -2,0,0,0 }, angle);
 			Lpos.x += vecvel.x * (StickX / STICK_MAX);
 			Lpos.z += vecvel.z * (StickX / STICK_MAX);
@@ -135,7 +135,6 @@ void Aim::EnemySet() {
 	if (input->TriggerButton(Input::RT)) {
 		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(player->GetPosition());
 		//->SearchActor("Enemy");
-
 		XMFLOAT3 Lpos = LockOn->GetPosition();
 		Lpos = enemy->GetPosition();
 		Lpos.y = 0.18f;

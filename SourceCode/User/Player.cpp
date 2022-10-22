@@ -123,6 +123,10 @@ void Player::Move() {
 	float StickY = input->GetLeftControllerY();
 	const float PI = 3.14159f;
 	const float STICK_MAX =32768.0f;
+
+	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,8,0 }, angle);
+	cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
+
 	if (input->TiltPushStick(Input::L_UP, 0.0f)||
 		input->TiltPushStick(Input::L_DOWN, 0.0f)||
 		input->TiltPushStick(Input::L_RIGHT, 0.0f)||

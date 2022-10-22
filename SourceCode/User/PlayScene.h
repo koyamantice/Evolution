@@ -39,8 +39,8 @@ private:
 	void CameraUpda();
 	float angle = 0;
 	const float PI=3.1452f;
-	XMFLOAT2 distance={0,10};
-	XMFLOAT2 dis = { 0,15 };
+	XMFLOAT2 distance={0,0};
+	XMFLOAT2 dis = { 16,7 };
 	bool clear = false;
 	float Cframe = 0.0f;
 	XMFLOAT2 clearPos = { 0,-720 };

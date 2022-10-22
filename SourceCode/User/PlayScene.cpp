@@ -160,13 +160,14 @@ void PlayScene::CameraUpda() {
 		player_shadow->SetCanMove(true);
 	}
 
-	distance.x = Ease(In, Quad, 0.5f, distance.x, dis.x);
-	distance.y = Ease(In, Quad, 0.5f, distance.y, dis.y);
+	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
+	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 
 	player_shadow->SetAngle(angle);
 	crystal_shadow->SetAngle(angle);
-	camera->SetTarget(XMFLOAT3{ player_shadow->GetPosition().x,player_shadow->GetPosition().y,player_shadow->GetPosition().z-3});
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 13.0f,player_shadow->GetPosition().z + distance.y });
+	cameraPos = player_shadow->GetCameraPos();
+	camera->SetTarget(cameraPos);
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
@@ -174,7 +175,11 @@ void PlayScene::CameraUpda() {
 void PlayScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-
+	ImGui::Begin("playscene");
+	ImGui::SliderFloat("bulletX", &distance.x, 0, 360);
+	ImGui::SliderFloat("bulletY", &distance.y, 0, 360);
+	ImGui::SliderFloat("Anglet", &angle, 0, 360);
+	ImGui::End();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
