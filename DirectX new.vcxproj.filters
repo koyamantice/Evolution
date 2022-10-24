@@ -188,9 +188,6 @@
     <ClCompile Include="SourceCode\User\PlayScene.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\DebugScene.cpp">
-      <Filter>User\デバック</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\PauseUI.cpp">
       <Filter>User\ポーズメニュー</Filter>
     </ClCompile>
@@ -250,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\User\BulletRed.cpp">
       <Filter>User\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\DebugScene.cpp">
+      <Filter>User\デバック</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

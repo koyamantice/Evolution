@@ -2,7 +2,7 @@
 #include"Actor.h"
 #include"FBXObject3d.h"
 #include"Texture.h"
-//#include""
+using namespace DirectX;
 class Bullet {
 protected: // エイリアス
 // Microsoft::WRL::を省略
@@ -14,10 +14,20 @@ protected: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 	struct FlockSystem {
+		XMFLOAT3 average{};
+		//分離
 		float isolateRadius = 2.0f;
+	
+		float ctrDirX;
+		float ctrDirY;
+		float contX;
+		float contY;
 		XMFLOAT2 vel;
 		float weight;
-
+		float aveAngle;
+		float disvel=(float)(rand()%5);
+		float dx = disvel* cosf(aveAngle * (XM_PI / 180));
+		float dy = disvel* sinf(aveAngle * (XM_PI / 180));
 
 	};
 public:
@@ -52,6 +62,17 @@ public:
 	//カメラ角度のセッタ＆ゲッタ
 	void SetAngle(const float& angle) { this->angle = angle; }
 	const float& GetAngle() { return angle; }
+	//
+	void SetContX(const float& contX) { this->flocking.contX = contX; }
+	const float& GetContX() { return flocking.contX; }
+	//
+	void SetContY(const float& contY) { this->flocking.contY = contY; }
+	const float& GetContY() { return flocking.contY; }
+
+	void SetVel(const XMFLOAT2& vel) { this->flocking.vel= vel; }
+	const XMFLOAT2& GetVel() { return this->flocking.vel; }
+
+
 
 	//
 	void SetCommand(const int& command, XMFLOAT3 pos = { 0,0,0 });
@@ -75,6 +96,9 @@ public:
 	virtual void DebugUpdate() {};
 
 	virtual void OnCollision(const std::string& Tag) {};
+
+	void BoidAverage();
+	void Move();
 protected:
 	//バレット専用
 	int ID;
@@ -96,13 +120,8 @@ protected:
 
 	XMFLOAT3 landing{};
 
-
-
-
-
-
-
-
-
+	FlockSystem flocking;
+	float dx=0;
+	float dy=0;
 };
 

@@ -3,7 +3,7 @@
 #include <memory>
 #include<string>
 #include"Object3d.h"
-#include<DirectXMath.h>
+#include <DirectXMath.h>
 #include"ParticleManager.h"
 #include "DirectXCommon.h"
 #include "FBXObject3d.h"
@@ -53,14 +53,14 @@ public:
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
 	//
-	void SetCommand(const int& command);
+	void SetCommand(const int& command) { this->command = command; };
 	const int& GetCommand() { return command; }
 	//isAliveセッタ＆ゲッタ
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
 
 	//Player固有の処理
-	virtual const XMFLOAT3& GetLockPos() { return {0,0,0}; }
+	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
 	
 	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
 	const float& GetSize()const { return obj->GetSize(); }

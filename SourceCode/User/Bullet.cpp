@@ -1,5 +1,6 @@
 #include"Bullet.h"
 #include <SourceCode/User/ModelManager.h>
+#include <SourceCode/FrameWork/ActorManager.h>
 
 
 
@@ -14,7 +15,6 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	fbxObj.reset(fbxObj_);
 	fbxObj->LoadAnimation();
 	fbxObj->PlayAnimation();
-
 	OnInit();
 }
 
@@ -22,6 +22,7 @@ void Bullet::Update() {
 	if (isActive) {
 		fbxObj->Update();
 		oldPos = fbxObj->GetPosition();
+		//Move();
 		OnUpda();
 	}
 
@@ -48,6 +49,35 @@ void Bullet::DemoDraw(DirectXCommon* dxCommon) {
 }
 
 void Bullet::Finalize() {
+}
+
+void Bullet::BoidAverage() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	player = ActorManager::GetInstance()->SearchActor("Player");
+	flocking.average = player->GetPosition();
+	flocking.ctrDirX = flocking.average.x - pos.x;
+	flocking.ctrDirY = flocking.average.z - pos.z;
+}
+
+void Bullet::Move() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	BoidAverage();
+	float kX = 0.7f * flocking.ctrDirX + 0.2f * flocking.vel.x + 0.8f * flocking.contX;
+	float kY = 0.7f * flocking.ctrDirY + 0.2f * flocking.vel.x + 0.8f * flocking.contY;
+
+	float tempVel = sqrtf(kX * kX + kY * kY);
+	if (tempVel > 0.2f) {
+		kX = 0.2f * kX / tempVel;
+		kY = 0.2f * kY / tempVel;
+	}
+
+	dx += (kX - dx) * 0.02f;
+	dy += (kY - dy) * 0.02f;
+
+
+	pos.x += dx;
+	pos.z += dy;
+	fbxObj->SetPosition(pos);
 }
 
 

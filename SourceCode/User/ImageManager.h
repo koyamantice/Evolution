@@ -35,6 +35,7 @@ public:
 		Fire,
 		InOut,
 		Guid,
+		Shadow,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

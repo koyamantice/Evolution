@@ -18,6 +18,9 @@ void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
 	}
+
+	BoidAverage();
+	BoidIsolate();
 	for (std::unique_ptr<Bullet>& bullet : Bullets) {
 		bullet->Update();
 	}
@@ -59,7 +62,7 @@ void ActorManager::CheckActorCollisions() {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
 			if (Collision::SphereCollision2(actorA->GetPosition(), 1.5f, actorB->GetPosition(), 1.5f)) {
-				if (actorA->GetTag()!= actorB->GetTag()) {
+				if (actorA->GetTag() != actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());
 				}
@@ -74,8 +77,8 @@ void ActorManager::CheckBulletCollisions() {
 			Actor* actor = itrA->get();
 			Bullet* bullet = itrB->get();
 			if (Collision::SphereCollision2(actor->GetPosition(), 1.5f, bullet->GetPosition(), 1.5f)) {
-					actor->OnCollision("Bullet");
-					bullet->OnCollision(actor->GetTag());
+				actor->OnCollision("Bullet");
+				bullet->OnCollision(actor->GetTag());
 			}
 		}
 	}
@@ -83,10 +86,10 @@ void ActorManager::CheckBulletCollisions() {
 
 void ActorManager::AttachActor(const std::string& ActorName, ActorComponent* newActorCompornent) {
 	assert(actorFactory_);
-	
+
 	std::unique_ptr<Actor> newActor;
-	
-	newActor.reset(actorFactory_->CreateActor(ActorName,newActorCompornent));
+
+	newActor.reset(actorFactory_->CreateActor(ActorName, newActorCompornent));
 	Actors.push_back(std::move(newActor));
 }
 void ActorManager::AttachBullet(const std::string& ActorName) {
@@ -94,32 +97,32 @@ void ActorManager::AttachBullet(const std::string& ActorName) {
 	std::unique_ptr<Bullet> newBullet;
 
 	newBullet.reset(actorFactory_->CreateBullet(ActorName));
-	
+
 	Bullets.push_back(std::move(newBullet));
 }
 
 void ActorManager::RemoveActor() {
-	Actors.remove_if([](std::unique_ptr<Actor>& actor){
+	Actors.remove_if([](std::unique_ptr<Actor>& actor) {
 		return actor->GetIsRemove();
-	});
+		});
 	Bullets.remove_if([](std::unique_ptr<Bullet>& bullet) {
 		return bullet->GetIsRemove();
-	});
+		});
 }
 
 const int& ActorManager::SearchNum(const std::string& tag) {
-	int num = 0;
+	int Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
-		num++;
+		Bulletnum++;
 	}
-	return num;
+	return Bulletnum;
 }
 
 Bullet* ActorManager::CommandBullet(const int& ID) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* actor = itr->get();
 		if (actor->GetID() == ID) {
-				return actor;
+			return actor;
 		}
 	}
 	return nullptr;
@@ -127,37 +130,37 @@ Bullet* ActorManager::CommandBullet(const int& ID) {
 
 Bullet* ActorManager::SearchWaitBullet() {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
-	Bullet* bullet = itr->get();
-	if (bullet->GetCommand() != Bullet::command::Wait) { continue; }
+		Bullet* bullet = itr->get();
+		if (bullet->GetCommand() != Bullet::command::Wait) { continue; }
 		return bullet;
 	}
 	return nullptr;
 }
 
-void ActorManager::DamageBullet(XMFLOAT3 pos,float radius) {
+void ActorManager::DamageBullet(XMFLOAT3 pos, float radius) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
 		if (bullet->GetCommand() == Bullet::command::Wait) { continue; }
 		XMFLOAT3 itrPos = bullet->GetPosition();
 		if (itrPos.y > 0.1f) { continue; }
-		if(Collision::CircleCollision(pos.x,pos.z,1.0f,itrPos.x,itrPos.z,radius)){
+		if (Collision::CircleCollision(pos.x, pos.z, 1.0f, itrPos.x, itrPos.z, radius)) {
 			bullet->SetDeadFlag(true);
 		}
 	}
 }
 
 XMFLOAT3 ActorManager::Dist(XMFLOAT3 pos, XMFLOAT3 pos2) {
-	XMFLOAT3 itr;
-	itr.x = sqrtf(powf((pos2.x - pos.x),2));
-	itr.y = sqrtf(powf((pos2.y - pos.y),2));
-	itr.z = sqrtf(powf((pos2.z - pos.z),2));
+	XMFLOAT3 itr{};
+	itr.x = sqrtf(powf((pos2.x - pos.x), 2));
+	itr.y = sqrtf(powf((pos2.y - pos.y), 2));
+	itr.z = sqrtf(powf((pos2.z - pos.z), 2));
 	return itr;
 }
 
 float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 	float itr;
 
-	itr = sqrtf(powf((pos2.x - pos.x), 2)+powf((pos2.y - pos.y), 2)+powf((pos2.z - pos.z), 2));
+	itr = sqrtf(powf((pos2.x - pos.x), 2) + powf((pos2.y - pos.y), 2) + powf((pos2.z - pos.z), 2));
 
 	return itr;
 }
@@ -165,19 +168,73 @@ float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if(Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
+		if (Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
 			bullet->SetCommand(Bullet::command::Wait);
 		}
 	}
 }
 
+void ActorManager::BoidIsolate() {
+	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
+		float contX = 0;
+		float contY = 0;
+		for (auto j = Bullets.begin(); j != Bullets.end(); j++) {
+			if (i != j) {
+				Bullet* itrA = i->get();
+				Bullet* itrB = j->get();
+				XMFLOAT3 itrApos = itrA->GetPosition();
+				XMFLOAT3 itrBpos = itrB->GetPosition();
+				float dist = sqrtf((itrBpos.x - itrApos.x) * (itrBpos.x - itrApos.x) + (itrBpos.z - itrApos.z) * (itrBpos.z - itrApos.z));
+				if (0 < dist && dist < 3) {
+					contX = -1 * (itrBpos.x - itrApos.x);
+					contY = -1 * (itrBpos.z - itrApos.z);
+					float temp = sqrt(contX * contX + contY * contY);
+					contX /= temp;
+					contY /= temp;
+					itrA->SetContX(contX);
+					itrA->SetContY(contY);
+				}
+			}
+		}
+	}
+}
+void ActorManager::BoidAverage() {
+	float aveVel = 0;
+	float aveAngle = 0;
+	int num = 0;
+	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
+		num++;
+		Bullet* itr = i->get();
+		XMFLOAT3 pos = itr->GetPosition();
+		aveVel += sqrtf((pos.x * pos.x) + (pos.z * pos.z));
+		aveAngle += atan2f(pos.z, pos.x) * (180 / XM_PI);
+	}
+	aveVel /= (float)num;
+	aveAngle /= (float)num;
+	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
+		Bullet* itr = i->get();
+		itr->SetVel(
+			{ aveVel * cosf(aveAngle * (XM_PI / 180)),aveVel * sinf(aveAngle * (XM_PI / 180)) }
+		);
+	}
+}
+
+void ActorManager::BoidAlignment() {
+
+
+
+
+
+
+}
+
 Actor* ActorManager::SearchActorArea(XMFLOAT3 pos) {
-	Actor* itrActor=SearchActor("Player");
+	Actor* itrActor = SearchActor("Player");
 	const float limit = 30.0f;
 	float check = limit;
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();
-		if (actor->GetTag() == "Player"||actor->GetTag() == "Bullet") { continue; }
+		if (actor->GetTag() == "Player" || actor->GetTag() == "Bullet") { continue; }
 
 		XMFLOAT3 difPos = actor->GetPosition();
 		float dif;
@@ -194,7 +251,7 @@ Actor* ActorManager::SearchActor(const std::string& tag) {
 
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();
-		if (actor->GetTag()== tag) {
+		if (actor->GetTag() == tag) {
 			return actor;
 		}
 	}
@@ -212,7 +269,7 @@ Actor* ActorManager::SearchActorBack(const std::string& tag) {
 
 Bullet* ActorManager::SearchID(int ID) {
 	if (ID < 0) { assert(0); }
-	for (auto itr = Bullets.begin(); itr !=	Bullets.end(); ++itr) {
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* actor = itr->get();
 		if (actor->GetID() == ID) {
 			return actor;

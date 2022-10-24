@@ -63,13 +63,19 @@ void Player::DebugUpdate() {
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
 	obj->SetPosition({0,0,15});
+	isVisible = false;
 	LoadData();
 	UpdateCommand();
 
 	vel /= 5.0f;
 
-	//obj->SetScale({ 0.1f, 0.1f, 0.1f });
-	//obj->SetColor({ 0.0f, 1.0f, 0.0f,1.0f });
+	FBXObject3d* fbxObj_ = new FBXObject3d();
+	fbxObj_->Initialize();
+	fbxObj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Kobi));
+	fbxObj_->SetScale({ 0.005f,0.005f, 0.005f });
+	fbxObj.reset(fbxObj_);
+	fbxObj->LoadAnimation();
+	fbxObj->PlayAnimation();
 
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
@@ -95,12 +101,17 @@ void Player::OnUpda() {
 		Move();
 	}
 	Shot();
-	ContactObj();
+	//ContactObj();
+	fbxObj->Update();
+	fbxObj->SetPosition(obj->GetPosition());
+	fbxObj->SetRotation(obj->GetRotation());
 	LockOn->Upda(angle);
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
+	fbxObj->Draw(dxCommon->GetCmdList());
 	//
+
 	LockOn->Draw();
 
 	//int a=ActorManager::GetInstance()->SearchNum("Bullet");

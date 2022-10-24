@@ -70,6 +70,13 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	postEffect->Initialize();
 	miniMap = new  MiniMap();
 	miniMap->Initialize();
+	distance.x = sinf(angle * (PI / 180)) * 13.0f;
+	distance.y = cosf(angle * (PI / 180)) * 13.0f;
+
+	
+	dis.x = sinf(angle * (PI / 180)) * 13.0f;
+	dis.y = cosf(angle * (PI / 180)) * 13.0f;
+
 }
 //ŠJ•úˆ—
 void PlayScene::Finalize() {

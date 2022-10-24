@@ -91,6 +91,13 @@ void Enemy::OnInit() {
 	EnemyAttack* Attack_ = new EnemyAttack();
 	Attack_->Init();
 	Attack.reset(Attack_);
+	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+		{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	//Shadow_->SetIsBillboard(true);
+	Shadow_->TextureCreate();
+	Shadow_->SetRotation({ 90,0,0 });
+	Shadow.reset(Shadow_);
+
 }
 
 void Enemy::OnUpda() {
@@ -101,6 +108,8 @@ void Enemy::OnUpda() {
 	PhaseMove();
 	LifeCommon();
 	//Collide();
+	Shadow->Update();
+	Shadow->SetPosition({ Mash->GetPosition().x,0.01f, Mash->GetPosition().z });
 }
 
 void Enemy::OnDraw(DirectXCommon* dxCommon) {
@@ -113,6 +122,7 @@ void Enemy::OnDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	Mash->Draw(dxCommon->GetCmdList());
 	Texture::PreDraw();
+	Shadow->Draw();
 	Attack->Draw();
 }
 

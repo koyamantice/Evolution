@@ -31,6 +31,7 @@ public:
 	enum FBXName {
 		Mash,
 		Bird,
+		Kobi,
 	};
 
 public:

@@ -154,6 +154,19 @@ void BulletRed::BurnOut() {
 }
 
 void BulletRed::OnDraw(DirectXCommon* dxCommon) {
+	if (ID==0) {
+		float x = fbxObj->GetPosition().x;
+		float y = fbxObj->GetPosition().y;
+		float z = fbxObj->GetPosition().z;
+		ImGui::Begin("bullet");
+		ImGui::SliderFloat("bulletX", &x, 0, 360);
+		ImGui::SliderFloat("bulletY", &y, 0, 360);
+		ImGui::SliderFloat("Anglet", &z, 0, 360);
+		ImGui::End();
+
+	
+	
+	}
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
@@ -234,6 +247,21 @@ void BulletRed::WaitUpda() {
 	}else{
 		pos.y = 0;
 	}
+	if (pos.x>100) {
+		pos.x = 100;
+	}
+	if (pos.z > 100) {
+		pos.z = 100;
+	}
+	if (pos.x < -100) {
+		pos.x = -100;
+	}
+	if (pos.z < -100) {
+		pos.z = -100;
+	}
+
+
+
 	fbxObj->SetPosition(pos);
 
 	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {

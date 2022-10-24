@@ -66,6 +66,12 @@ public:
 	float Length(XMFLOAT3 pos, XMFLOAT3 pos2);
 
 	void ChangeBulletCommand(XMFLOAT3 pos,float scale);
+	//フロッキングアルゴリズム
+	void BoidIsolate();
+	//フロッキングアルゴリズム
+	void BoidAverage();
+	//フロッキングアルゴリズム
+	void BoidAlignment();
 
 	Actor* SearchActorArea(XMFLOAT3 pos);
 	Actor* SearchActor(const std::string& tag);
@@ -79,6 +85,10 @@ private:
 	std::list<std::unique_ptr<Actor>> Actors;
 	std::list<std::unique_ptr<Bullet>> Bullets;
 	int num = 0;
+
+	float contX[100];
+	float contY[100];
+
 
 	ActorManager()=default;
 	~ActorManager()=default;

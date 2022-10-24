@@ -40,7 +40,7 @@ private:
 
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;
-	std::unique_ptr<Texture> Explo = nullptr;
+	std::unique_ptr<Texture> Shadow = nullptr;
 
 
 	float waitTimer = 0;

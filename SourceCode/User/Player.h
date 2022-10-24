@@ -55,5 +55,6 @@ private:
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV{};
 
+	std::unique_ptr<FBXObject3d> fbxObj;
 
 };

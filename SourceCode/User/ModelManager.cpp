@@ -26,7 +26,7 @@ void ModelManager::Initialize() {
 	
 	LoadFBXModel(Mash,"Mash");
 	LoadFBXModel(Bird,"Player");
-
+	LoadFBXModel(Kobi, "kobi");
 }
 
 void ModelManager::Finalize() {
