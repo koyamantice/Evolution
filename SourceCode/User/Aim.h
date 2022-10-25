@@ -19,6 +19,7 @@ public:
 	void FirstSet();
 private:
 	std::unique_ptr<Texture> LockOn{};
+	std::unique_ptr<Texture> Whistle{};
 	static const int GuidNum = 8;
 	std::unique_ptr<Texture> Guid[GuidNum]{};
 	XMFLOAT3 GuidPos[GuidNum];
@@ -29,6 +30,9 @@ private:
 	void EnemySet();
 	float Area = 0.3f;
 	float distance = 5.0f;
+	float whiframe = 0.0f;
+	float alpha= 0.3f;
+	bool collect = false;
 	Actor* player = nullptr;
 	Bullet* bullet = nullptr;
 };

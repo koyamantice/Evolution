@@ -22,7 +22,7 @@ void Bullet::Update() {
 	if (isActive) {
 		fbxObj->Update();
 		oldPos = fbxObj->GetPosition();
-		//Move();
+		Move();
 		OnUpda();
 	}
 

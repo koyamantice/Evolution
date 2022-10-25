@@ -14,6 +14,9 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Clear, L"Resources/2d/GameClear.png");
 	Sprite::LoadTexture(UISheet, L"Resources/2d/PauseUi/UISheet.png");
 	Sprite::LoadTexture(TitleBack, L"Resources/2d/PauseUi/TitleBack.png");
+	Sprite::LoadTexture(Button, L"Resources/2d//Title/decide.png");
+	Sprite::LoadTexture(DebugMove, L"Resources/2d//Title/Debug.png");
+	Sprite::LoadTexture(TitleMove, L"Resources/2d//Title/Title.png");
 	Sprite::LoadTexture(ZBack, L"Resources/2d/PauseUi/ZBack.png");
 	Sprite::LoadTexture(Option, L"Resources/2d/PauseUi/Option.png");
 	Sprite::LoadTexture(Vignette, L"Resources/2d/Vignette.png");

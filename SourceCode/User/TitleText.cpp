@@ -41,7 +41,9 @@ void TitleText::Init() {
 	FBXObject3d* Player_ = new FBXObject3d();
 	Player_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
 	Player_->Initialize();
+	Player_->SetScale({ 0.005f,0.005f, 0.005f });
 	Player.reset(Player_);
+	Player->SetPosition({-5.0f,-5.0f,0.0f});
 }
 
 void TitleText::Upda() {
@@ -63,14 +65,14 @@ void TitleText::Upda() {
 	}
 
 	for (int i = 0; i < 6; i++) {
-		texts[i]->SetPosition({ pos[i],0,i*2.0f });
+		texts[i]->SetPosition({ pos[i],5,i*2.0f });
 	}
 
 	Player->Update();
 }
 
 void TitleText::Draw(DirectXCommon* dxCommon) {
-	Player->Draw(dxCommon->GetCmdList());
+//	Player->Draw(dxCommon->GetCmdList());
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Draw();
 	}

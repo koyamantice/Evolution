@@ -105,10 +105,10 @@ void BulletRed::WaitBullet() {
 
 void BulletRed::KnockBack() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
-	pos.x += (pos.x / back) * 0.1f;
+	pos.x -= (pos.x / back) * 0.1f;
 	pos.y += 0.5f - fall;
 	fall += 0.5f / 15.0f;
-	pos.z += (pos.z / back) * 0.1f;
+	pos.z -= (pos.z / back) * 0.1f;
 	if (pos.y < 0) {
 		pos.y = 0;
 		fall = 0.0f;
@@ -144,7 +144,7 @@ void BulletRed::BurnOut() {
 		effectRate += 0.08f;
 	} else {
 		effectRate = 0;
-		Explo->SetScale({ 0,0,0});
+		Explo->SetScale({ 0,0,0 });
 		Explo->SetPosition({ pos.x,-100,pos.z });
 		burning = false;
 	}
@@ -154,7 +154,7 @@ void BulletRed::BurnOut() {
 }
 
 void BulletRed::OnDraw(DirectXCommon* dxCommon) {
-	if (ID==0) {
+	if (ID == 0) {
 		float x = fbxObj->GetPosition().x;
 		float y = fbxObj->GetPosition().y;
 		float z = fbxObj->GetPosition().z;
@@ -164,8 +164,8 @@ void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 		ImGui::SliderFloat("Anglet", &z, 0, 360);
 		ImGui::End();
 
-	
-	
+
+
 	}
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
@@ -242,30 +242,22 @@ void BulletRed::OnCollision(const std::string& Tag) {
 void BulletRed::WaitUpda() {
 	throwReady = true;
 	XMFLOAT3 pos = fbxObj->GetPosition();
-	if (pos.y>0) {
+	if (pos.y > 0) {
 		pos.y -= 0.3f;
-	}else{
+	} else {
 		pos.y = 0;
 	}
-	if (pos.x>100) {
-		pos.x = 100;
-	}
-	if (pos.z > 100) {
-		pos.z = 100;
-	}
-	if (pos.x < -100) {
-		pos.x = -100;
-	}
-	if (pos.z < -100) {
-		pos.z = -100;
-	}
-
-
+	if (pos.x > 100) { pos.x = 100; }
+	if (pos.z > 100) { pos.z = 100; }
+	if (pos.x < -100) { pos.x = -100; }
+	if (pos.z < -100) { pos.z = -100; }
+	vel = 0.8f;
+	frame = 0.0f;
 
 	fbxObj->SetPosition(pos);
 
 	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
-		Follow2Player();
+		//Follow2Player();
 		//WaitBullet();
 	}
 }
@@ -292,6 +284,7 @@ void BulletRed::SlowUpda() {
 
 	} else {
 		frame = 0.0f;
+		vel = 0.8f;
 		command = Attack;
 	}
 
@@ -299,9 +292,9 @@ void BulletRed::SlowUpda() {
 
 void BulletRed::AttackUpda() {
 
-		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-			Follow2Enemy();
-		}
-	
+	if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+		Follow2Enemy();
+	}
+
 
 }

@@ -15,6 +15,10 @@
 class Input {
 public:
 	enum XBOX {
+		UP = XINPUT_GAMEPAD_DPAD_UP,
+		DOWN = XINPUT_GAMEPAD_DPAD_DOWN,
+		LEFT = XINPUT_GAMEPAD_DPAD_LEFT,
+		RIGHT = XINPUT_GAMEPAD_DPAD_RIGHT,
 		B = XINPUT_GAMEPAD_B,
 		A = XINPUT_GAMEPAD_A,
 		X = XINPUT_GAMEPAD_X,
@@ -33,9 +37,9 @@ public:
 
 
 	enum MouseButton {
-		LEFT = 0,
-		RIGHT,
-		MIDDLE,
+		MouseLEFT = 0,
+		MouseRIGHT,
+		MouseMIDDLE,
 	};
 	struct MouseMove {
 		LONG    lX;

@@ -13,6 +13,15 @@ void Aim::Init() {
 	LockOn.reset(Lock_);
 	LockOn->SetPosition({ 100,-50,0 });
 
+	Texture* Whistle_ = Texture::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	Whistle_->TextureCreate();
+	Whistle_->SetRotation({ 90,0,0 });
+	Whistle_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
+	Whistle.reset(Whistle_);
+	Whistle->SetPosition({ 100,-50,0 });
+
+
+
 	for (int i = 0; i < GuidNum; i++) {
 		Texture* Guid_ = Texture::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 		Guid_->TextureCreate();
@@ -24,6 +33,7 @@ void Aim::Init() {
 
 void Aim::Upda(float angle) {
 	LockOn->Update();
+	Whistle->Update();
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Update();
 	}
@@ -42,6 +52,7 @@ void Aim::Draw() {
 
 	Texture::PreDraw();
 	LockOn->Draw();
+	Whistle->Draw();
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Draw();
 	}
@@ -65,6 +76,7 @@ void Aim::Move(float angle) {
 	}
 
 	if (input->PushButton(Input::A)) {
+		collect = true;
 		if (Area < 8.0f) {
 			Area += 0.08f;
 		}
@@ -77,14 +89,31 @@ void Aim::Move(float angle) {
 			pos.z = base.z + Area * cosf(angle);
 			const float rnd_vel = 0.4f;
 			XMFLOAT3 vel{};
-			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
-			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			ParticleManager::GetInstance()->Add(15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
+		alpha = 0.3f;
+		Whistle->SetColor({1,1,1,alpha});
+
+		whiframe = Area / 8.0f;
+		if (whiframe < 1.0f) {
+			float scaleArea = Ease(Out, Quad, whiframe, 0.5f, 2.0f);
+			Whistle->SetScale({ scaleArea,scaleArea,scaleArea });
+			Whistle->SetRotation({90,0,scaleArea * 180 });
+		}
+		Whistle->SetPosition(base);
+	
 	} else {
 		Area = 0.0f;
+		if (alpha>0.01f) {
+			alpha *= 0.5f;
+			Whistle->SetColor({ 1,1,1,alpha });
+		}
+		Whistle->SetPosition({0,-100,0});
+		Whistle->SetScale({ 0.5f,0.5f,0.5f });
+
+		collect = false;
 	}
 
 	if (input->TiltPushStick(Input::L_RIGHT, 0.0f) || input->TiltPushStick(Input::L_LEFT, 0.0f) || input->TiltPushStick(Input::L_UP, 0.0f) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {

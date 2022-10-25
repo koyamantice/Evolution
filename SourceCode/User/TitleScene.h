@@ -34,7 +34,10 @@ private:
 
 	//ƒƒ“ƒo•Ï”
 	enum {
+		BackScene,
 		Button,
+		moveTitle,
+		moveDebug,
 		SpriteMax,
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
@@ -43,11 +46,20 @@ private:
 	bool Change = false;
 	float alpha = 0.0f;
 	float frame = 0;
-	float C;
-	float A;
 
+	enum Portal {
+		Title=0,
+		Debug,
+
+	};
+
+	int nextScene = Portal::Title;
+
+	XMFLOAT2 SetPos[3]={ { 640.0f,300.0f } ,{ 640.0f,360.0f } ,{ 640.0f,460.0f } };
 	
-
+	float moveText[2]{};
+	int moveTitleNow = 1;
+	int moveDebugNow = 2;
 
 	std::string SceneName = "null";
 };

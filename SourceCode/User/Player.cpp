@@ -71,7 +71,7 @@ void Player::OnInit() {
 
 	FBXObject3d* fbxObj_ = new FBXObject3d();
 	fbxObj_->Initialize();
-	fbxObj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Kobi));
+	fbxObj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
 	fbxObj_->SetScale({ 0.005f,0.005f, 0.005f });
 	fbxObj.reset(fbxObj_);
 	fbxObj->LoadAnimation();
@@ -135,7 +135,7 @@ void Player::Move() {
 	const float PI = 3.14159f;
 	const float STICK_MAX =32768.0f;
 
-	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,8,0 }, angle);
+	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,10,0 }, angle);
 	cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
 
 	if (input->TiltPushStick(Input::L_UP, 0.0f)||

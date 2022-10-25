@@ -22,8 +22,8 @@ void DebugScene::Initialize(DirectXCommon* dxCommon) {
 	
 	ActorManager::GetInstance()->AttachActor("Player");
 	Chara[MPlayer] = ActorManager::GetInstance()->SearchActor("Player");
-	ActorManager::GetInstance()->AttachActor("Bullet");
-	Chara[MBullet] = ActorManager::GetInstance()->SearchActor("Bullet");
+	ActorManager::GetInstance()->AttachBullet("Red");
+	bullet = ActorManager::GetInstance()->SearchID(0);
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	Chara[MEnemy]=ActorManager::GetInstance()->SearchActor("Enemy");
 	camera->SetEye({0, 0, -10});

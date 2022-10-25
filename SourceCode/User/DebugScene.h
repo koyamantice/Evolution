@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneManager.h"
 #include "Actor.h"
+#include <SourceCode/User/Bullet.h>
 
 /// <summary>
 /// タイトルシーン
@@ -40,11 +41,11 @@ private:
 	//メンバ変数
 	enum {
 		MPlayer,
-		MBullet,
 		MEnemy,
 		Chr_Max
 	};
-	Actor* Chara[Chr_Max];
+	Actor* Chara[Chr_Max]{};
+	Bullet* bullet=nullptr;
 	std::unique_ptr<Sprite>back=nullptr;
 	XMFLOAT3 rot;
 	//調整するキャラ

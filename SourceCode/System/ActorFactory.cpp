@@ -40,7 +40,7 @@ Bullet* ActorFactory::CreateBullet(const std::string& BulletKind) {
 	Bullet* newBullet=nullptr;
 	if (BulletKind=="Red") {
 		newBullet = new BulletRed();
-		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
+		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::Kobi));
 	}
 
 

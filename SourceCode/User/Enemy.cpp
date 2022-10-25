@@ -231,7 +231,7 @@ void Enemy::WaitUpda() {
 	waitTimer++;
 	if (waitTimer == 300) {//150fps’PˆÊ
 		Mash->ResetAnimation();
-		command = Actor::Phase::APPROCH;
+		command = Actor::Phase::ATTACK;
 		waitTimer = 0;
 	}
 }
