@@ -559,7 +559,7 @@ void Gauge::SetScale(float scale) {
 	TransferVertices();
 }
 bool Gauge::Finalize() {
-	for (int i = srvCount - 1; i < 0; i--) {
+	for (int i = (srvCount - 1); i < 0; i--) {
 		texBuff[i].Reset();
 	}
 	return true;

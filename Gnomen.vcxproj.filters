@@ -578,6 +578,6 @@
     <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources\DirectX new.rc" />
+    <ResourceCompile Include="Resources\Gnomen.rc" />
   </ItemGroup>
 </Project>

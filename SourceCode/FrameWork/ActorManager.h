@@ -84,7 +84,7 @@ private:
 
 	std::list<std::unique_ptr<Actor>> Actors;
 	std::list<std::unique_ptr<Bullet>> Bullets;
-	int num = 0;
+	int Bulletnum = 0;
 
 	float contX[100];
 	float contY[100];

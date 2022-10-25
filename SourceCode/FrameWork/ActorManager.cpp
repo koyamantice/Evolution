@@ -111,7 +111,7 @@ void ActorManager::RemoveActor() {
 }
 
 const int& ActorManager::SearchNum(const std::string& tag) {
-	int Bulletnum = 0;
+	Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bulletnum++;
 	}

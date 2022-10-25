@@ -32,6 +32,7 @@
     <ProjectGuid>{476bda2f-9d55-4d01-9568-fc82a86e9c05}</ProjectGuid>
     <RootNamespace>DirectXnew</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Gnomen</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -172,8 +173,9 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)camera;$(ProjectDir)light;%(AdditionalIncludeDirectories);$(SolutionDir)enemy;$(SolutionDir)FPSManager</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <DisableSpecificWarnings>6001;26451;26495;26812;</DisableSpecificWarnings>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,7 +191,9 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)camera;$(ProjectDir)light;%(AdditionalIncludeDirectories);$(SolutionDir)enemy;$(SolutionDir)FPSManager</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>6001;26451;26495;26812;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -209,7 +213,9 @@
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;%(AdditionalIncludeDirectories);$(SolutionDir)enemy;$(SolutionDir)FPSManager</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MaxSpeed</Optimization>
-      <DisableSpecificWarnings>6001;26451;26495;26812;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -540,7 +546,7 @@
     <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources\DirectX new.rc" />
+    <ResourceCompile Include="Resources\Gnomen.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

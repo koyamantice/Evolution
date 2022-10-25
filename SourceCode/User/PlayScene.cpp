@@ -201,7 +201,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	if (pause) {
 		pauseUi->Draw();
 	}
-	Demo->Draw();
+	//Demo->Draw();
 
 	//miniMap->PreDraw();
 	//miniMap->Draw(dxCommon->GetCmdList());
