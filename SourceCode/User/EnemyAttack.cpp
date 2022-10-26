@@ -24,7 +24,7 @@ void EnemyAttack::Upda() {
 	Explo->Update();
 	if (burning) {
 		XMFLOAT3 pos = Explo->GetPosition();
-		ActorManager::GetInstance()->DamageBullet(pos, 1.0f);
+		ActorManager::GetInstance()->DamageBullet(pos, 1.5f);
 		if (effectRate < 1.0f) {
 			effectRate += 0.08f;
 		} else {
@@ -58,7 +58,7 @@ bool EnemyAttack::Run() {
 void EnemyAttack::Stamp(XMFLOAT3 pos) {
 	if (!burning) {
 		burning = true;
+		Explo->SetPosition({ pos.x,0,pos.z });
 	}
-	Explo->SetPosition({ pos.x,0,pos.z });
 }
 

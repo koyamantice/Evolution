@@ -34,6 +34,9 @@ public:
 /// </summary>
 	void DemoDraw(DirectXCommon* dxCommon);
 
+
+
+
 	/// <summary>
 	/// èIóπèàóù
 	/// </summary>
@@ -55,7 +58,7 @@ public:
 	void RemoveActor();
 
 	const int& SearchNum(const std::string& tag);
-
+	const int& SerchWaitBul();
 	Bullet* CommandBullet(const int& ID);
 
 	Bullet* SearchWaitBullet();

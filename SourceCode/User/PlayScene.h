@@ -32,12 +32,19 @@ public:
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
 
+	void ResetCamera();
 private:
 	/// <summary>
 	///	ƒJƒƒ‰ü‚è
 	/// </summary>
 	void CameraUpda();
 	float angle = 0;
+	float firstangle = 0;	
+	float endangle = 0;
+
+	XMFLOAT2 firstdis{};
+	float angleframe = 0;
+	bool Reset = false;
 	const float PI=3.1452f;
 	XMFLOAT2 distance={0,0};
 	XMFLOAT2 dis = { 16,7 };

@@ -109,6 +109,8 @@ protected:
 	//
 	int command = 0;
 	std::unique_ptr<FBXObject3d> fbxObj;
+	std::unique_ptr<Texture> Shadow = nullptr;
+
 	float angle = 0;
 	bool DeadFlag = false;
 

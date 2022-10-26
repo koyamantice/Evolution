@@ -37,13 +37,11 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 //開放処理
 void TitleScene::Finalize() {
 	//３ｄのモデルのデリート
-	ActorManager::GetInstance()->Finalize();
 }
 //更新
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	camera->Update();
-	ActorManager::GetInstance()->Update();
 
 	if (input->TiltStick(Input::L_UP) ||input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
 		nextScene--;
@@ -109,19 +107,18 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 //描画
 void TitleScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	ImGui::Begin("test");
-	float F = FPSManager::GetInstance()->GetFps();
-	ImGui::SliderFloat("fps", &F, 120, 0);
+	//ImGui::Begin("test");
+	//float F = FPSManager::GetInstance()->GetFps();
+	//ImGui::SliderFloat("fps", &F, 120, 0);
 	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
 	//ImGui::Unindent();
-	ImGui::End();
+	//ImGui::End();
 	Sprite::PreDraw();
 	for (int i = 0; i < SpriteMax;i++) {
 		UI[i]->Draw();
 	}
 	Object3d::PreDraw();
 	text->Draw(dxCommon);
-	ActorManager::GetInstance()->Draw(dxCommon);
 	Sprite::PreDraw();
 	Effect->Draw();
 	dxCommon->PostDraw();

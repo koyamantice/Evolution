@@ -105,34 +105,56 @@ void BulletRed::WaitBullet() {
 
 void BulletRed::KnockBack() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
-	pos.x -= (pos.x / back) * 0.1f;
-	pos.y += 0.5f - fall;
-	fall += 0.5f / 15.0f;
-	pos.z -= (pos.z / back) * 0.1f;
-	if (pos.y < 0) {
-		pos.y = 0;
-		fall = 0.0f;
+	rebound.x = sin(atan2f(distance.x, distance.z)) * 0.5f;
+	rebound.z = cos(atan2f(distance.x, distance.z)) * 0.5f;
+
+	if (damageframe >= 1.0f) {
+		damageframe = 0.0f;
 		knockBacking = false;
+		fall = 0.4f;
+		pos.y = 0.0f;
+		fbxObj->SetPosition(pos);
+		return;
+	} else {
+		damageframe += 0.05f;
 	}
-	fbxObj->SetPosition(pos);
+
+	rebound = {
+	Ease(InOut,Quad,damageframe,rebound.x,0),
+	0,
+	Ease(InOut,Quad,damageframe,rebound.z,0)
+	};
+	pos.y += fall; //+
+	fall -= 0.16f;//
+	if (pos.y < 0.0f) {
+		pos.y = 0;
+	}
+if (pos.x <= 100.0f && pos.x >= -100.0f) {
+	pos.x -= rebound.x;
+}
+if (pos.z <= 100.0f && pos.z >= -100.0f) {
+	pos.z -= rebound.z;
+}
+
+fbxObj->SetPosition(pos);
 }
 
 void BulletRed::DamageInit() {
 	if (!knockBacking) {
 		enemy->SetHp(enemy->GetHp() - 1);
 		burning = true;
-		back = Normalize(fbxObj->GetPosition(), enemy->GetPosition());
+		XMFLOAT3 pos = fbxObj->GetPosition();
+		XMFLOAT3 pos2 = enemy->GetPosition();
+		if (pos2.x < pos.x) {
+			isLeft = true;
+		}
+		fall = 1.0f;
+		exploPos = pos;
+		distance = { pos2.x - pos.x,0,pos2.z - pos.z };
 		knockBacking = true;
 	}
 }
 
-float BulletRed::Normalize(const XMFLOAT3& pos, const XMFLOAT3& pos2) {
-	XMFLOAT3 itr{};
-	float nor;
-	itr = { pos2.x - pos.x,0,pos2.z - pos.z };
-	nor = sqrtf(powf(itr.x, 2) + powf(itr.z, 2));
-	return nor;
-}
 
 void BulletRed::Dead() {
 	isRemove = true;
@@ -150,23 +172,10 @@ void BulletRed::BurnOut() {
 	}
 	scale = Ease(In, Quad, effectRate, 0.5f, 1.0f);
 	Explo->SetScale({ scale,scale,scale });
-	Explo->SetPosition({ pos.x,pos.y,pos.z });
+	Explo->SetPosition(exploPos);
 }
 
 void BulletRed::OnDraw(DirectXCommon* dxCommon) {
-	if (ID == 0) {
-		float x = fbxObj->GetPosition().x;
-		float y = fbxObj->GetPosition().y;
-		float z = fbxObj->GetPosition().z;
-		ImGui::Begin("bullet");
-		ImGui::SliderFloat("bulletX", &x, 0, 360);
-		ImGui::SliderFloat("bulletY", &y, 0, 360);
-		ImGui::SliderFloat("Anglet", &z, 0, 360);
-		ImGui::End();
-
-
-
-	}
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
@@ -179,7 +188,6 @@ void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 		}
 	}
 }
-
 void BulletRed::OnFinal() {
 }
 
@@ -257,7 +265,7 @@ void BulletRed::WaitUpda() {
 	fbxObj->SetPosition(pos);
 
 	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
-		//Follow2Player();
+		Follow2Player();
 		//WaitBullet();
 	}
 }
@@ -291,9 +299,10 @@ void BulletRed::SlowUpda() {
 }
 
 void BulletRed::AttackUpda() {
-
-	if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-		Follow2Enemy();
+	if (!knockBacking) {
+		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+			Follow2Enemy();
+		}
 	}
 
 

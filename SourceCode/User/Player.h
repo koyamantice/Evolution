@@ -38,7 +38,7 @@ private:
 	void LeftMove();
 
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
-
+	const DirectX::XMFLOAT3& GetCameraPos(float angle) override;
 	void Shot();
 
 	void ContactObj();

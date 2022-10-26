@@ -18,7 +18,6 @@ void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
 	}
-
 	BoidAverage();
 	BoidIsolate();
 	for (std::unique_ptr<Bullet>& bullet : Bullets) {
@@ -50,6 +49,10 @@ void ActorManager::DemoDraw(DirectXCommon* dxCommon) {
 	}
 }
 void ActorManager::Finalize() {
+	for (std::unique_ptr<Bullet>& bullet : Bullets) {
+		bullet->Finalize();
+	}
+	Bullets.clear();
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Finalize();
 	}
@@ -114,6 +117,15 @@ const int& ActorManager::SearchNum(const std::string& tag) {
 	Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bulletnum++;
+	}
+	return Bulletnum;
+}
+
+const int& ActorManager::SerchWaitBul() {
+	Bulletnum = 0;
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		Bullet* bullet = itr->get();
+		if (bullet->GetCommand() == Bullet::command::Wait) {Bulletnum++;}
 	}
 	return Bulletnum;
 }

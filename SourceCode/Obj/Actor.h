@@ -48,7 +48,7 @@ public:
 	//À•W‚ÌŽæ“¾
 	void SetCameraPos(const DirectX::XMFLOAT3& pos) { this->cameraPos=cameraPos; }
 	const DirectX::XMFLOAT3& GetCameraPos() { return cameraPos; }
-
+	virtual const DirectX::XMFLOAT3& GetCameraPos(float angle) { return cameraPos; };
 	//Šp“x‚ÌŽæ“¾
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }

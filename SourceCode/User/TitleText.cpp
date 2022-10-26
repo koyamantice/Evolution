@@ -29,7 +29,7 @@ void TitleText::Init() {
 			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textN));
 		}
 		newText_->Initialize();
-		newText_->SetPosition({ (i - 3) * 6.0f,0,abs((i - 3) * 5.0f) });
+		newText_->SetPosition({ 0,0,-500 });
 		newText_->SetRotation({ 90,0,0 });
 		newText_->SetScale({ 5.0f,5.0f,5.0f });
 		texts[i].reset(newText_);

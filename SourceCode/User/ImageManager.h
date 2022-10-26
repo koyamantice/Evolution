@@ -23,6 +23,7 @@ public:
 		Button,
 		DebugMove,
 		TitleMove,
+		Bar,
 		ZBack,
 		Option,
 		Vignette,

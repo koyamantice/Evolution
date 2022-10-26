@@ -87,7 +87,7 @@ void PlayerUI::OnUpdate() {
 	//count++;
 	//Timer = count / 60.0f;
 
-	OnLive = AttachActor->GetStock();
+	OnLive = ActorManager::GetInstance()->SerchWaitBul();
 	onLive.clear();
 	for (int tmp = OnLive; tmp > 0;) {
 		onLive.push_back(tmp % 10);

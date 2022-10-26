@@ -20,15 +20,22 @@ public:
 	void Reset();
 
 	const bool& GetEase() { return ease; }
+	const int& GetBar() { return nowBar; }
 private:
 	enum {
 		Sheet,
 		TitleBack,
 		Option,
 		ZBack,
+		Bar,
 		Max
 	};
 	std::unique_ptr<Sprite> UI[Max];
+
+	XMFLOAT2 move{};
+
+	float SetPos = 250;
+	int nowBar = 0;
 	bool ease = false;
 	float frame = 0;
 	XMFLOAT2 pos={640,360};

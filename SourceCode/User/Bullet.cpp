@@ -1,6 +1,7 @@
 #include"Bullet.h"
 #include <SourceCode/User/ModelManager.h>
 #include <SourceCode/FrameWork/ActorManager.h>
+#include"ImageManager.h"
 
 
 
@@ -11,18 +12,29 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	FBXObject3d* fbxObj_ = new FBXObject3d();
 	fbxObj_->Initialize();
 	fbxObj_->SetModel(model);
-	fbxObj_->SetScale({ 0.002f,0.002f, 0.002f });
+	fbxObj_->SetScale({ 0.003f,0.003f, 0.003f });
 	fbxObj.reset(fbxObj_);
 	fbxObj->LoadAnimation();
 	fbxObj->PlayAnimation();
+	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
+	//Shadow_->SetIsBillboard(true);
+	Shadow_->TextureCreate();
+	Shadow_->SetRotation({ 90,0,0 });
+	Shadow.reset(Shadow_);
+
 	OnInit();
+
 }
 
 void Bullet::Update() {
 	if (isActive) {
 		fbxObj->Update();
 		oldPos = fbxObj->GetPosition();
-		Move();
+		//Move();
+		Shadow->Update();
+		Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
+
 		OnUpda();
 	}
 
@@ -35,6 +47,8 @@ void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		Object3d::PreDraw();
 		fbxObj->Draw(dxCommon->GetCmdList());
+		Texture::PreDraw();
+		Shadow->Draw();
 		OnDraw(dxCommon);
 	}
 }

@@ -135,8 +135,8 @@ void Player::Move() {
 	const float PI = 3.14159f;
 	const float STICK_MAX =32768.0f;
 
-	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,10,0 }, angle);
-	cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
+	//cameraPos = MoveVECTOR(XMVECTOR{ 0,0,10,0 }, angle);
+	//cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
 
 	if (input->TiltPushStick(Input::L_UP, 0.0f)||
 		input->TiltPushStick(Input::L_DOWN, 0.0f)||
@@ -146,25 +146,25 @@ void Player::Move() {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
 			pos.z -= vecvel.z * (StickY / STICK_MAX);
-			rot.y = angle;
+			//rot.y = angle;
 		}
 		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 			pos.x += vecvel.x * (StickY / STICK_MAX);
 			pos.z += vecvel.z * (StickY / STICK_MAX);
-			rot.y = angle - 180;
+			//rot.y = angle - 180;
 		}
 		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 			pos.x -= vecvel.x * (StickX / STICK_MAX);
 			pos.z -= vecvel.z * (StickX / STICK_MAX);
-			rot.y = angle + 90;
+			//rot.y = angle + 90;
 		}
 		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
 			pos.x += vecvel.x * (StickX / STICK_MAX);
 			pos.z += vecvel.z * (StickX / STICK_MAX);
-			rot.y = angle - 90;
+			//rot.y = angle - 90;
 		}
 		const float rnd_vel = 0.1f;
 		XMFLOAT3 vel{};
@@ -172,7 +172,7 @@ void Player::Move() {
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		ParticleManager::GetInstance()->Add(15, oldPos, vel, XMFLOAT3(), 1.2f, 0.6f);
-
+		rot.y = angle + atan2f(StickX,StickY) * (180.0f / XM_PI);
 
 		obj->SetPosition(pos);
 		obj->SetRotation(rot);
@@ -204,6 +204,13 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 	v = XMVector3TransformNormal(v, rot2);
 	XMFLOAT3 pos = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
 	return pos;
+}
+
+const DirectX::XMFLOAT3& Player::GetCameraPos(float angle) {
+	XMFLOAT3 pos = obj->GetPosition();
+	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,10,0 }, angle);
+	cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
+	return cameraPos;
 }
 
 

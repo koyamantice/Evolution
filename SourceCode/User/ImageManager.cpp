@@ -17,6 +17,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Button, L"Resources/2d//Title/decide.png");
 	Sprite::LoadTexture(DebugMove, L"Resources/2d//Title/Debug.png");
 	Sprite::LoadTexture(TitleMove, L"Resources/2d//Title/Title.png");
+	Sprite::LoadTexture(Bar, L"Resources/2d/PauseUi/Bar.png");
 	Sprite::LoadTexture(ZBack, L"Resources/2d/PauseUi/ZBack.png");
 	Sprite::LoadTexture(Option, L"Resources/2d/PauseUi/Option.png");
 	Sprite::LoadTexture(Vignette, L"Resources/2d/Vignette.png");

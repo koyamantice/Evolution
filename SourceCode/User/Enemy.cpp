@@ -229,7 +229,7 @@ void Enemy::LeaveUpda() {
 
 void Enemy::WaitUpda() {
 	waitTimer++;
-	if (waitTimer == 300) {//150fps’PˆÊ
+	if (waitTimer == 450) {//150fps’PˆÊ
 		Mash->ResetAnimation();
 		command = Actor::Phase::ATTACK;
 		waitTimer = 0;
@@ -239,7 +239,7 @@ void Enemy::WaitUpda() {
 void Enemy::AttackUpda() {
 	XMFLOAT3 pos = Mash->GetPosition();
 	waitTimer++;
-	if (waitTimer==450) {
+	if (waitTimer==150) {
 		pos.y = 0;
 		Mash->ResetAnimation();
 		Mash->PlayAnimation();

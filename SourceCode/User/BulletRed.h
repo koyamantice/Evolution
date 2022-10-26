@@ -25,9 +25,12 @@ private:
 	void KnockBack();
 	bool knockBacking = false;
 	void DamageInit();
-	float back = 0;
-	float Normalize(const XMFLOAT3& pos,const XMFLOAT3& pos2);
-	float fall=0.0f;
+	XMFLOAT3 rebound{};
+	XMFLOAT3 distance{};
+	XMFLOAT3 exploPos{};
+	float damageframe = 0.0f;
+	float fall=0.4f;
+	bool isLeft = false;
 	bool throwReady = false;
 	float frame = 0.0f;
 

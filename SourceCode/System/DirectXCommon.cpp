@@ -75,9 +75,9 @@ void DirectXCommon::PreDraw() {
 	//#pragma regin グラフィックスコマンド
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
 
-	ImGui_ImplDX12_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
+	//ImGui_ImplDX12_NewFrame();
+	//ImGui_ImplWin32_NewFrame();
+	//ImGui::NewFrame();
 	//実行
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(), D3D12_RESOURCE_STATE_PRESENT,
 	D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -106,10 +106,10 @@ void DirectXCommon::ClearDepthBuffer() {
 void DirectXCommon::PostDraw() {
 	HRESULT result = S_FALSE;
 	// imgui描画
-	ImGui::Render();
-	ID3D12DescriptorHeap* ppHeaps[] = { imguiHeap.Get() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.Get());
+	//ImGui::Render();
+	//ID3D12DescriptorHeap* ppHeaps[] = { imguiHeap.Get() };
+	//cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	//ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.Get());
 //	#pragma regin グラフィックスコマンド
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
 	//リソースバリアを戻す
@@ -326,8 +326,8 @@ bool DirectXCommon::InitializeRenderTargetView() {
 		rtvHandle.ptr += i * dev->GetDescriptorHandleIncrementSize(heapDesc.Type);
 		//
 		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-		rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+		rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		//DXGI_FORMAT_R8G8B8A8_UNORM;
 		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 		//
 		dev->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);

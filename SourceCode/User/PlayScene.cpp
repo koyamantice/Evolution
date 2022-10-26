@@ -86,15 +86,10 @@ void PlayScene::Finalize() {
 //XV
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	if (input->PushKey(DIK_0)) {
-		int a = 0;
-		a++;
-	}
 	if (input->PushKey(DIK_P)) {
 		ActorManager::GetInstance()->AttachBullet("Bullet");
 
 	}
-
 	CameraUpda();
 	if (input->TriggerButton(input->Y)) {
 		SceneManager::GetInstance()->ChangeScene("DEBUG");
@@ -104,16 +99,23 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		if (!pauseUi->GetEase()) {
 			if (input->TriggerButton(input->A) ||
 				input->TriggerKey(DIK_SPACE)) {
-				pauseUi->Reset();
-				pause = false;
+				switch (pauseUi->GetBar()) {
+				case 0:
+					SceneManager::GetInstance()->ChangeScene("TITLE");
+				case 1:
+					break;
+				case 2:
+					pauseUi->Reset();
+					pause = false;
+					break;
+				default:
+					break;
+				}
 			}
+			return;
 		}
 		return;
 	}
-	//if () {
-	//	return;
-	//}
-
 	if (input->TriggerButton(input->START)||
 		input->TriggerKey(DIK_1)) {
 		pause = true;
@@ -148,6 +150,11 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 void PlayScene::CameraUpda() {
 	Input* input = Input::GetInstance();
+	if (Reset) {
+		ResetCamera();
+		return;
+	}
+
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
 		if (input->TiltPushStick(Input::R_RIGHT)) {
 			angle -= 1;
@@ -157,23 +164,22 @@ void PlayScene::CameraUpda() {
 		}
 		dis.x = sinf(angle * (PI / 180)) * 13.0f;
 		dis.y = cosf(angle * (PI / 180)) * 13.0f;
+		distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
+		distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
+
 	}
 	if (input->TriggerButton(Input::LT)) {
-		player_shadow->SetCanMove(false);
-		angle = player_shadow->GetRotation().y;
-		dis.x = sinf(angle * (PI / 180)) * 13.0f;
-		dis.y = cosf(angle * (PI / 180)) * 13.0f;
-	} else {
-		player_shadow->SetCanMove(true);
-	}
-
-	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
-	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
-
+		if (!Reset) {
+			angleframe = 0.0f;
+			firstangle = angle;
+			endangle = player_shadow->GetRotation().y;
+			firstdis = distance;
+			Reset = true;
+		}
+	} 
 	player_shadow->SetAngle(angle);
 	crystal_shadow->SetAngle(angle);
-	cameraPos = player_shadow->GetCameraPos();
-	camera->SetTarget(cameraPos);
+ 	camera->SetTarget(player_shadow->GetCameraPos(angle));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
@@ -182,11 +188,11 @@ void PlayScene::CameraUpda() {
 void PlayScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	ImGui::Begin("playscene");
-	ImGui::SliderFloat("bulletX", &distance.x, 0, 360);
-	ImGui::SliderFloat("bulletY", &distance.y, 0, 360);
-	ImGui::SliderFloat("Anglet", &angle, 0, 360);
-	ImGui::End();
+	//ImGui::Begin("playscene");
+	//ImGui::SliderFloat("bulletX", &distance.x, 0, 360);
+	//ImGui::SliderFloat("bulletY", &distance.y, 0, 360);
+	//ImGui::SliderFloat("Anglet", &angle, 0, 360);
+	//ImGui::End();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -211,15 +217,40 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 	//dxCommon->PreDraw();
-	ImGui::Begin("test");
-	float F = FPSManager::GetInstance()->GetFps();
-	ImGui::SliderFloat("fps", &F, 120, 0);
+	//ImGui::Begin("test");
+	//float F = FPSManager::GetInstance()->GetFps();
+	//ImGui::SliderFloat("fps", &F, 120, 0);
 	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
 	//ImGui::Unindent();
-	ImGui::End();
+	//ImGui::End();
 	//postEffect->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 
+}
+
+void PlayScene::ResetCamera() {
+		player_shadow->SetCanMove(false);
+
+		if (angleframe < 1.0f) {
+			angleframe += 0.05f;
+		} else {
+			Reset = false;
+			player_shadow->SetCanMove(true);
+			angleframe = 1.0f;
+			distance.x=dis.x;
+			distance.x=dis.y;
+		}
+
+		angle = Ease(In, Quad,angleframe,firstangle,endangle);
+
+		dis.x = sinf(angle * (PI / 180)) * 13.0f;
+		dis.y = cosf(angle * (PI / 180)) * 13.0f;
+
+		distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
+		distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);
+		camera->SetTarget(player_shadow->GetCameraPos(angle));
+		camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+		camera->Update();
 }
 
 
