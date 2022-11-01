@@ -68,8 +68,6 @@ void Aim::FirstSet() {
 }
 
 void Aim::Move(float angle) {
-	XMFLOAT3 base = LockOn->GetPosition();
-	XMFLOAT3 pos = player->GetPosition();
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock() - 1);
@@ -80,83 +78,67 @@ void Aim::Move(float angle) {
 	}
 
 	if (input->PushButton(Input::A)) {
-		collect = true;
 		if (Area < 8.0f) {
 			Area += 0.08f;
 		}
+		XMFLOAT3 base = LockOn->GetPosition();
 		for (int i = 0; i < 1; i++) {
 			const float rnd_rad = 360.0f;
-			XMFLOAT3 spherePos{};
+			XMFLOAT3 pos{};
 			float angle = (float)rand() / RAND_MAX * rnd_rad;
-			spherePos.x = base.x + Area * sinf(angle);
-			spherePos.z = base.z + Area * cosf(angle);
+			pos.x = base.x + Area * sinf(angle);
+			pos.z = base.z + Area * cosf(angle);
 			const float rnd_vel = 0.4f;
 			XMFLOAT3 vel{};
+			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
-			ParticleManager::GetInstance()->Add(15, spherePos, vel, XMFLOAT3(), 1.0f, 0.0f);
+			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
+			ParticleManager::GetInstance()->Add(15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
-		alpha = 0.3f;
-		Whistle->SetColor({1,1,1,alpha});
-
-		whiframe = Area / 8.0f;
-		if (whiframe < 1.0f) {
-			float scaleArea = Ease(Out, Quad, whiframe, 0.5f, 2.0f);
-			Whistle->SetScale({ scaleArea,scaleArea,scaleArea });
-			Whistle->SetRotation({90,0,scaleArea * 180 });
-		}
-		Whistle->SetPosition(base);
-	
 	} else {
 		Area = 0.0f;
-		if (alpha>0.01f) {
-			alpha *= 0.5f;
-			Whistle->SetColor({ 1,1,1,alpha });
-		}
-		Whistle->SetPosition({0,-100,0});
-		Whistle->SetScale({ 0.5f,0.5f,0.5f });
-		collect = false;
 	}
 
 	if (input->TiltPushStick(Input::L_RIGHT, 0.0f) || input->TiltPushStick(Input::L_LEFT, 0.0f) || input->TiltPushStick(Input::L_UP, 0.0f) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
-		XMFLOAT3 base = LockOn->GetPosition();
+		XMFLOAT3 Lpos = LockOn->GetPosition();
 		float StickX = input->GetLeftControllerX();
 		float StickY = input->GetLeftControllerY();
 		const float PI = 3.14159f;
 		const float STICK_MAX = 32768.0f;
-		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
+		if (input->PushKey(DIK_W) || input->TiltPushStick(Input::L_UP, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,2,0 }, angle);
-			base.x -= vecvel.x * (StickY / STICK_MAX);
-			base.z -= vecvel.z * (StickY / STICK_MAX);
+			Lpos.x -= vecvel.x * (StickY / STICK_MAX);
+			Lpos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
+		if (input->PushKey(DIK_S) || input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-2,0 }, angle);
-			base.x += vecvel.x * (StickY / STICK_MAX);
-			base.z += vecvel.z * (StickY / STICK_MAX);
+			Lpos.x += vecvel.x * (StickY / STICK_MAX);
+			Lpos.z += vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
+		if (input->PushKey(DIK_D) || input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 2,0,0,0 }, angle);
-			base.x -= vecvel.x * (StickX / STICK_MAX);
-			base.z -= vecvel.z * (StickX / STICK_MAX);
+			Lpos.x -= vecvel.x * (StickX / STICK_MAX);
+			Lpos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+		if (input->PushKey(DIK_A) || input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -2,0,0,0 }, angle);
-			base.x += vecvel.x * (StickX / STICK_MAX);
-			base.z += vecvel.z * (StickX / STICK_MAX);
+			Lpos.x += vecvel.x * (StickX / STICK_MAX);
+			Lpos.z += vecvel.z * (StickX / STICK_MAX);
 		}
-		LockOn->SetPosition(base);
+		LockOn->SetPosition(Lpos);
 
 	}
+
+	XMFLOAT3 Lpos = LockOn->GetPosition();
+	XMFLOAT3 pos = player->GetPosition();
 
 	for (int i = 0; i < GuidNum; i++) {
-		GuidPos[i].x = Ease(InOut, Quad, (i + 1) * 0.1f, pos.x, base.x);
+		GuidPos[i].x = Ease(InOut, Quad, (i + 1) * 0.1f, pos.x, Lpos.x);
 		GuidPos[i].y = 0.1f;
-		GuidPos[i].z = Ease(InOut, Quad, (i + 1) * 0.1f, pos.z, base.z);
+		GuidPos[i].z = Ease(InOut, Quad, (i + 1) * 0.1f, pos.z, Lpos.z);
 		Guid[i]->SetPosition(GuidPos[i]);
 	}
-
-
-
 }
 
 void Aim::EnemySet() {

@@ -45,9 +45,9 @@ void Bullet::Demo() {
 
 void Bullet::IntroUpdate() {
 	if (isActive) {
-		fbxObj->Update();
-		Shadow->Update();
-		Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
+		//fbxObj->Update();
+		//Shadow->Update();
+		//Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 		IntroOnUpdate();
 	}
 

@@ -41,8 +41,8 @@ private:
 		SpriteMax,
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
-	std::unique_ptr<Sprite> Effect;
 	std::unique_ptr<TitleText> text;
+	std::unique_ptr<Sprite> Effect;
 	bool Change = false;
 	float alpha = 0.0f;
 	float frame = 0;

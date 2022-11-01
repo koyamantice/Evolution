@@ -114,6 +114,7 @@ void Player::OnInit() {
 }
 
 void Player::OnUpda() {
+	compornent->SetIsActive(true);
 	if (!first) {
 		LockOn->FirstSet();
 		first = true;
@@ -125,7 +126,7 @@ void Player::OnUpda() {
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
 	fbxObj->SetRotation(obj->GetRotation());
-	LockOn->Upda(obj->GetRotation().y);
+	LockOn->Upda(angle);
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {

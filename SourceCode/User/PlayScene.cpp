@@ -67,6 +67,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Demo.reset(_Gauge);
 	//Demo->SetColor(XMFLOAT4{ 1,1,1,0.2f });
 
+	//スプライト生成
+	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
+	Effect.reset(Effect_);
+	Effect->SetColor({ 1,1,1,alpha });
+
 
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
@@ -94,19 +99,27 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	if (input->PushKey(DIK_P)) {
 		ActorManager::GetInstance()->AttachBullet("Bullet");
-
 	}
-	CameraUpda();
 	if (Intro) {
-	
+		IntroCamera();
+		if (Change) {
+			if (frame < 1.0f) {
+				frame += 0.01f;
+			} else {
+				Change=false;
+			}
+			alpha = Ease(In, Cubic, frame, 1, 0);
+			Effect->SetColor({ 1,1,1,alpha });
+		}
 		ActorManager::GetInstance()->IntroUpdate();
+		skydome->Update();
+		ground->Update();
 		if (input->TriggerButton(input->START)) {
 			Intro = false;
 		}
 		return;
 	}
-
-
+	CameraUpda();
 	if (pause) {
 		pauseUi->Update();
 		if (!pauseUi->GetEase()) {
@@ -200,6 +213,17 @@ void PlayScene::CameraUpda() {
 	camera->Update();
 }
 
+void PlayScene::IntroCamera() {
+	dis.x = sinf(angle * (PI / 180)) * 13.0f;
+	dis.y = cosf(angle * (PI / 180)) * 13.0f;
+	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
+	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
+	player_shadow->SetAngle(angle);
+	camera->SetTarget(player_shadow->GetCameraPos(angle));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->Update();
+}
+
 //描画
 void PlayScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
@@ -217,6 +241,9 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());	    
 	Sprite::PreDraw();
 	Vignette->Draw();
+	if (Change) {
+		Effect->Draw();
+	}
 	if (clear) {
 		Clear->Draw();
 	}

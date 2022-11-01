@@ -38,6 +38,7 @@ private:
 	///	ƒJƒƒ‰ü‚è
 	/// </summary>
 	void CameraUpda();
+	void IntroCamera();
 	float angle = 0;
 	float firstangle = 0;	
 	float endangle = 0;
@@ -64,6 +65,11 @@ private:
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};	
+
+	std::unique_ptr<Sprite> Effect;
+	bool Change = true;
+	float alpha = 0.0f;
+	float frame = 0;
 
 	PostEffect* postEffect = nullptr;
 	MiniMap* miniMap = nullptr;
