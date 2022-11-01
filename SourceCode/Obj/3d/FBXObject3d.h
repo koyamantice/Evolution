@@ -105,6 +105,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position">スケール</param>
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+	const XMFLOAT3& GetScale() { return scale; }
 
 
 	/// <summary>

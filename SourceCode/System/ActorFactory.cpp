@@ -4,6 +4,7 @@
 #include"Enemy.h"
 #include"Bullet.h"
 #include"BulletRed.h"
+#include"BulletGreen.h"
 #include "Crystal.h"
 #include"PlayerUI.h"
 
@@ -40,6 +41,10 @@ Bullet* ActorFactory::CreateBullet(const std::string& BulletKind) {
 	Bullet* newBullet=nullptr;
 	if (BulletKind=="Red") {
 		newBullet = new BulletRed();
+		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::Kobi));
+	}
+	if (BulletKind == "Green") {
+		newBullet = new BulletGreen();
 		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::Kobi));
 	}
 

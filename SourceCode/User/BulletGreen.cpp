@@ -1,4 +1,4 @@
-#include"BulletRed.h"
+#include"BulletGreen.h"
 #include "Easing.h"
 #include"ActorManager.h"
 #include <SourceCode/FrameWork/collision/Collision.h>
@@ -8,11 +8,11 @@ using namespace DirectX;
 
 
 
-BulletRed::BulletRed() {
+BulletGreen::BulletGreen() {
 }
 
-void BulletRed::OnInit() {
-	ID = ActorManager::GetInstance()->SearchNum("BulletRed");
+void BulletGreen::OnInit() {
+	ID = ActorManager::GetInstance()->SearchNum("BulletGreen");
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
@@ -34,7 +34,7 @@ void BulletRed::OnInit() {
 	WaitBullet();
 }
 
-void BulletRed::OnUpda() {
+void BulletGreen::OnUpda() {
 	if (DeadFlag) {
 		Dead();
 		return;
@@ -66,7 +66,7 @@ void BulletRed::OnUpda() {
 	Status->Update();
 	Status->SetPosition({ fbxObj->GetPosition().x,fbxObj->GetPosition().y + 2.5f,fbxObj->GetPosition().z });
 }
-void BulletRed::Follow2Enemy() {
+void BulletGreen::Follow2Enemy() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	XMFLOAT3 rot = fbxObj->GetRotation();
 	XMFLOAT3 position{};
@@ -81,7 +81,7 @@ void BulletRed::Follow2Enemy() {
 	fbxObj->SetRotation(rot);
 }
 
-void BulletRed::Follow2Player() {
+void BulletGreen::Follow2Player() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	XMFLOAT3 rot = fbxObj->GetRotation();
 	float vel = (int)(rand() % 10 + 1) * 0.03f;
@@ -98,12 +98,12 @@ void BulletRed::Follow2Player() {
 
 }
 
-void BulletRed::WaitBullet() {
+void BulletGreen::WaitBullet() {
 
 	fbxObj->SetPosition({ ((int)ID % 10) * 3.0f, 0, ((int)ID / 10) * 5.0f });
 }
 
-void BulletRed::KnockBack() {
+void BulletGreen::KnockBack() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	rebound.x = sin(atan2f(distance.x, distance.z)) * 0.5f;
 	rebound.z = cos(atan2f(distance.x, distance.z)) * 0.5f;
@@ -139,7 +139,7 @@ if (pos.z <= 100.0f && pos.z >= -100.0f) {
 fbxObj->SetPosition(pos);
 }
 
-void BulletRed::DamageInit() {
+void BulletGreen::DamageInit() {
 	if (!knockBacking) {
 		enemy->SetHp(enemy->GetHp() - 1);
 		burning = true;
@@ -156,11 +156,11 @@ void BulletRed::DamageInit() {
 }
 
 
-void BulletRed::Dead() {
+void BulletGreen::Dead() {
 	isRemove = true;
 }
 
-void BulletRed::BurnOut() {
+void BulletGreen::BurnOut() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	if (effectRate < 1.0f) {
 		effectRate += 0.08f;
@@ -175,7 +175,7 @@ void BulletRed::BurnOut() {
 	Explo->SetPosition(exploPos);
 }
 
-void BulletRed::OnDraw(DirectXCommon* dxCommon) {
+void BulletGreen::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
@@ -188,10 +188,10 @@ void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 		}
 	}
 }
-void BulletRed::OnFinal() {
+void BulletGreen::OnFinal() {
 }
 
-void BulletRed::OnCollision(const std::string& Tag) {
+void BulletGreen::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
 		switch (command) {
 		case Wait:
@@ -247,7 +247,7 @@ void BulletRed::OnCollision(const std::string& Tag) {
 
 }
 
-void BulletRed::WaitUpda() {
+void BulletGreen::WaitUpda() {
 	throwReady = true;
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	if (pos.y > 0) {
@@ -270,7 +270,7 @@ void BulletRed::WaitUpda() {
 	}
 }
 
-void BulletRed::SlowUpda() {
+void BulletGreen::SlowUpda() {
 	if (throwReady) {
 		XMFLOAT3 pos = fbxObj->GetPosition();
 		XMFLOAT3 rot = fbxObj->GetRotation();
@@ -305,7 +305,7 @@ void BulletRed::SlowUpda() {
 
 }
 
-void BulletRed::AttackUpda() {
+void BulletGreen::AttackUpda() {
 	if (!knockBacking) {
 		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Enemy();

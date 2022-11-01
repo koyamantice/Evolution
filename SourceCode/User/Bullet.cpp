@@ -31,7 +31,7 @@ void Bullet::Update() {
 	if (isActive) {
 		fbxObj->Update();
 		oldPos = fbxObj->GetPosition();
-		//Move();
+		Move();
 		Shadow->Update();
 		Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 

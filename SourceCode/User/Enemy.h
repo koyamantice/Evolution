@@ -45,5 +45,7 @@ private:
 
 	float waitTimer = 0;
 	float vel = 0;
+	float scale = 0.01f;
+	float scaframe = 0;
 	std::unique_ptr<FBXObject3d> Mash;
 };

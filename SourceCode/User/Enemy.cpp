@@ -6,6 +6,7 @@
 #include <SourceCode/FrameWork/collision/SphereCollider.h>
 #include <SourceCode/FrameWork/collision/CollisionAttribute.h>
 #include <SourceCode/FrameWork/ActorManager.h>
+#include <SourceCode/Common/Easing.h>
 
 void Enemy::LoadData() {
 	std::ifstream file;
@@ -261,8 +262,20 @@ void Enemy::AttackUpda() {
 }
 
 void Enemy::LifeCommon() {
-	if (hp<0) {
-		isActive = false;
-		//isRemove = true;
+	if (hp < 0.0f) {
+		XMFLOAT3 pos = Mash->GetPosition();
+		XMFLOAT3 rot = Mash->GetRotation();
+		XMFLOAT3 sca = Mash->GetScale();
+		Mash->ResetAnimation();
+		
+		rot.y++;
+		scale = Ease(In,Quad, scaframe,1.0f,0.0f);
+		if (scaframe < 1.0f) {
+			scaframe += 0.01f;
+		} else {
+			isActive = false;
+		}
+		Mash->SetScale({scale * 0.01f,scale * 0.01f,scale * 0.01f });
+		Mash->SetRotation(rot);
 	}
 }
