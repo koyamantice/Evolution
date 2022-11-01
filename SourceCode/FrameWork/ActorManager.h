@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// Å‰‚ÌXV
 	/// </summary>
-	void IntroUpdate();
+	void IntroUpdate(const int& Timer);
 	/// <summary>
 	/// •`‰æ
 	/// </summary>

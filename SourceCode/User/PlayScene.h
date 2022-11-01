@@ -38,7 +38,8 @@ private:
 	///	ƒJƒƒ‰ü‚è
 	/// </summary>
 	void CameraUpda();
-	void IntroCamera();
+	void IntroCamera(int Timer);
+	int count = 0;
 	float angle = 0;
 	float firstangle = 0;	
 	float endangle = 0;
@@ -58,8 +59,9 @@ private:
 	Actor* crystal_shadow = nullptr;
 	ActorComponent* PlayerComp = nullptr;
 	std::unique_ptr<Sprite> Clear{};
-	std::unique_ptr<Sprite>	Vignette{};
 	std::unique_ptr<Sprite>	Screen[2] {};
+	std::unique_ptr<Sprite> IntroWord[10];
+	int nowWord = 0;
 	bool Intro = true;
 	std::unique_ptr<Gauge>	Demo;
 	std::unique_ptr<Object3d> skydome{};

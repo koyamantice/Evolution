@@ -83,7 +83,7 @@ public:
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Demo();		//更新処理
-	void IntroUpdate();
+	void IntroUpdate(const int& Timer);
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 
 	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
@@ -95,7 +95,7 @@ public:
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
-	virtual void IntroOnUpdate() {};
+	virtual void IntroOnUpdate(const int& Timer) {};
 
 	virtual void OnCollision(const std::string& Tag) {};
 
@@ -127,5 +127,7 @@ protected:
 	FlockSystem flocking;
 	float dx=0;
 	float dy=0;
+
+	float hight = 100;
 };
 

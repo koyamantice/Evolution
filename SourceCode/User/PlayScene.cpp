@@ -49,11 +49,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	_clear = Sprite::Create(ImageManager::Clear, clearPos);
 	Clear.reset(_clear);
 
-	Sprite* _Vignette = nullptr;
-	_Vignette = Sprite::Create(ImageManager::Vignette, {0,0});
-	Vignette.reset(_Vignette);
-	Vignette->SetColor(XMFLOAT4{0.0f,0.0f,0.0f,0.2f});
-
 	Sprite* _Screen = nullptr;
 	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
 	Screen[0].reset(_Screen);
@@ -71,6 +66,20 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
 	Effect.reset(Effect_);
 	Effect->SetColor({ 1,1,1,alpha });
+
+	Sprite* IntroWord_1 = Sprite::Create(ImageManager::Intro01, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0});
+	IntroWord[0].reset(IntroWord_1);
+	Sprite* IntroWord_2 = Sprite::Create(ImageManager::Intro02, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
+	IntroWord[1].reset(IntroWord_2);
+	Sprite* IntroWord_3 = Sprite::Create(ImageManager::Intro03, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
+	IntroWord[2].reset(IntroWord_3);
+	Sprite* IntroWord_4 = Sprite::Create(ImageManager::Intro04, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
+	IntroWord[3].reset(IntroWord_4);
+	Sprite* IntroWord_5 = Sprite::Create(ImageManager::Intro05, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
+	IntroWord[4].reset(IntroWord_5);
+	Sprite* IntroWord_6 = Sprite::Create(ImageManager::Intro06, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
+	IntroWord[5].reset(IntroWord_6);
+
 
 
 	PauseUI* pause_ui = new PauseUI();
@@ -101,7 +110,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		ActorManager::GetInstance()->AttachBullet("Bullet");
 	}
 	if (Intro) {
-		IntroCamera();
+		IntroCamera(count);
 		if (Change) {
 			if (frame < 1.0f) {
 				frame += 0.01f;
@@ -111,11 +120,18 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			alpha = Ease(In, Cubic, frame, 1, 0);
 			Effect->SetColor({ 1,1,1,alpha });
 		}
-		ActorManager::GetInstance()->IntroUpdate();
+		ActorManager::GetInstance()->IntroUpdate(count);
 		skydome->Update();
 		ground->Update();
-		if (input->TriggerButton(input->START)) {
+		if (input->TriggerButton(input->START)||count>1500) {
+			Effect->SetColor({ 1,1,1,0});
 			Intro = false;
+		}
+		count++;
+		if (count % 200 == 0) {
+			if (nowWord != 5) {
+				nowWord++;
+			}
 		}
 		return;
 	}
@@ -213,7 +229,11 @@ void PlayScene::CameraUpda() {
 	camera->Update();
 }
 
-void PlayScene::IntroCamera() {
+void PlayScene::IntroCamera(int Timer) {
+	if (Timer <= 720) {
+		angle+= 0.5f;
+	}
+
 	dis.x = sinf(angle * (PI / 180)) * 13.0f;
 	dis.y = cosf(angle * (PI / 180)) * 13.0f;
 	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
@@ -240,7 +260,6 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());	    
 	Sprite::PreDraw();
-	Vignette->Draw();
 	if (Change) {
 		Effect->Draw();
 	}
@@ -253,6 +272,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	if (Intro) {
 		Screen[0]->Draw();
 		Screen[1]->Draw();
+		IntroWord[nowWord]->Draw();
 	}
 	//Demo->Draw();
 

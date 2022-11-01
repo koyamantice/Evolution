@@ -60,7 +60,7 @@ void Player::DebugUpdate() {
 	obj->SetScale({ 1.0f,1.0f,1.0f });
 }
 
-void Player::IntroOnUpdate() {
+void Player::IntroOnUpdate(const int& Timer) {
 	fbxObj->Update();
 	IntroMove();
 	compornent->SetIsActive(false);
@@ -71,12 +71,6 @@ void Player::IntroOnUpdate() {
 }
 
 void Player::IntroMove() {
-
-
-
-
-
-
 
 
 	fbxObj->SetPosition(obj->GetPosition());

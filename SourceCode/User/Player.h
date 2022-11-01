@@ -29,7 +29,7 @@ private:
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
 	void DebugUpdate()override;
-	void IntroOnUpdate()override;
+	void IntroOnUpdate(const int& Timer)override;
 	void IntroMove();
 	void OnCollision(const std::string& Tag)override;
 

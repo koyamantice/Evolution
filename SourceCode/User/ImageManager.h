@@ -33,6 +33,12 @@ public:
 		numBack,
 		slash,
 		SceneCover,
+		Intro01,
+		Intro02,
+		Intro03,
+		Intro04,
+		Intro05,
+		Intro06,
 	};
 	enum tex2dName {
 		Lock,

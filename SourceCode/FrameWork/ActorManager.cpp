@@ -32,12 +32,12 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::IntroUpdate() {
+void ActorManager::IntroUpdate(const int& Timer) {
 	for (std::unique_ptr<Actor>& actor : Actors) {
-		actor->IntroUpdate();
+		actor->IntroUpdate(Timer);
 	}
 	for (std::unique_ptr<Bullet>& bullet : Bullets) {
-		bullet->IntroUpdate();
+		bullet->IntroUpdate(Timer);
 	}
 	RemoveActor();
 }

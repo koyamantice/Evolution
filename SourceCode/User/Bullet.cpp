@@ -43,12 +43,24 @@ void Bullet::Update() {
 void Bullet::Demo() {
 }
 
-void Bullet::IntroUpdate() {
+void Bullet::IntroUpdate(const int& Timer) {
 	if (isActive) {
-		//fbxObj->Update();
+		if(Timer<5){
+			fbxObj->Update();
+			fbxObj->SetPosition({ (((int)ID % 10)- 5) * 3.0f, hight, ((int)ID / 10) * 5.0f });
+		} else {
+			fbxObj->Update();
+			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
+			fbxObj->SetRotation({ 0,180,0 });
+			if (hight > 0) {
+				hight-=0.2f;
+			}
+
+		}
+
 		//Shadow->Update();
 		//Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
-		IntroOnUpdate();
+		IntroOnUpdate(Timer);
 	}
 
 }

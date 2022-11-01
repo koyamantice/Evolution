@@ -27,6 +27,12 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(numBack, L"Resources/2d/numBack.png");
 	Sprite::LoadTexture(slash, L"Resources/2d/slash.png");
 	Sprite::LoadTexture(SceneCover, L"Resources/2d/SceneCover.png");
+	Sprite::LoadTexture(Intro01, L"Resources/2d/IntroWord/Intro01.png");
+	Sprite::LoadTexture(Intro02, L"Resources/2d/IntroWord/Intro02.png");
+	Sprite::LoadTexture(Intro03, L"Resources/2d/IntroWord/Intro03.png");
+	Sprite::LoadTexture(Intro04, L"Resources/2d/IntroWord/Intro04.png");
+	Sprite::LoadTexture(Intro05, L"Resources/2d/IntroWord/Intro05.png");
+	Sprite::LoadTexture(Intro06, L"Resources/2d/IntroWord/Intro06.png");
 
 }
 

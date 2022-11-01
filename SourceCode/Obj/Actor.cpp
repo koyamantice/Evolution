@@ -29,11 +29,11 @@ void Actor::Update() {
 	}
 }
 
-void Actor::IntroUpdate() {
+void Actor::IntroUpdate(const int& Timer) {
 	if (isVisible) {
 		obj->Update();
 	}
-	IntroOnUpdate();
+	IntroOnUpdate(Timer);
 }
 
 void Actor::Demo() {
