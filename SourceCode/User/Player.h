@@ -29,17 +29,15 @@ private:
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
 	void DebugUpdate()override;
-
+	void IntroOnUpdate()override;
+	void IntroMove();
 	void OnCollision(const std::string& Tag)override;
 
 	void Move();
 
-	void RightMove();
-	void LeftMove();
-
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
 	const DirectX::XMFLOAT3& GetCameraPos(float angle) override;
-	void Shot();
+	
 
 	void ContactObj();
 	XMMATRIX rot2;

@@ -60,6 +60,29 @@ void Player::DebugUpdate() {
 	obj->SetScale({ 1.0f,1.0f,1.0f });
 }
 
+void Player::IntroOnUpdate() {
+	fbxObj->Update();
+	IntroMove();
+	compornent->SetIsActive(false);
+
+
+
+
+}
+
+void Player::IntroMove() {
+
+
+
+
+
+
+
+
+	fbxObj->SetPosition(obj->GetPosition());
+	fbxObj->SetRotation(obj->GetRotation());
+}
+
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
 	obj->SetPosition({0,0,15});
@@ -93,27 +116,21 @@ void Player::OnInit() {
 void Player::OnUpda() {
 	if (!first) {
 		LockOn->FirstSet();
-
-
 		first = true;
 	}
 	if (canMove) {
 		Move();
 	}
-	Shot();
 	//ContactObj();
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
 	fbxObj->SetRotation(obj->GetRotation());
-	LockOn->Upda(angle);
+	LockOn->Upda(obj->GetRotation().y);
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
 	fbxObj->Draw(dxCommon->GetCmdList());
-	//
-
 	LockOn->Draw();
-
 	//int a=ActorManager::GetInstance()->SearchNum("Bullet");
 	//	ImGui::Begin("test");
 	//	ImGui::SliderInt("bullet", &a, 0, 360);
@@ -136,7 +153,8 @@ void Player::Move() {
 	const float STICK_MAX =32768.0f;
 
 	//cameraPos = MoveVECTOR(XMVECTOR{ 0,0,10,0 }, angle);
-	//cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
+	//cameraPos = {cameraPos.x,cameraPos.y,cameraPos.z };
+	//LockOn->SetAim(cameraPos);
 
 	if (input->TiltPushStick(Input::L_UP, 0.0f)||
 		input->TiltPushStick(Input::L_DOWN, 0.0f)||
@@ -213,11 +231,6 @@ const DirectX::XMFLOAT3& Player::GetCameraPos(float angle) {
 	return cameraPos;
 }
 
-
-
-void Player::Shot() {
-	//LockOn->Move();
-}
 
 void Player::ContactObj() {
 	XMFLOAT3 pos = obj->GetPosition();

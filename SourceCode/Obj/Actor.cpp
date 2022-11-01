@@ -29,6 +29,13 @@ void Actor::Update() {
 	}
 }
 
+void Actor::IntroUpdate() {
+	if (isVisible) {
+		obj->Update();
+	}
+	IntroOnUpdate();
+}
+
 void Actor::Demo() {
 	if (isActive) {
 		obj->Update();

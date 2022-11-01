@@ -43,6 +43,16 @@ void Bullet::Update() {
 void Bullet::Demo() {
 }
 
+void Bullet::IntroUpdate() {
+	if (isActive) {
+		fbxObj->Update();
+		Shadow->Update();
+		Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
+		IntroOnUpdate();
+	}
+
+}
+
 void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		Object3d::PreDraw();

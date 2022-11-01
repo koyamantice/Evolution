@@ -41,6 +41,7 @@ void BulletRed::OnUpda() {
 	}
 	switch (command) {
 	case Wait:
+		fbxObj->SetRotation({ 0,fbxObj->GetRotation().y,0 });
 		WaitUpda();
 		break;
 	case Attack:

@@ -20,11 +20,16 @@ public:
 	/// 更新
 	/// </summary>
 	void Update();
+
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void DemoUpdate();
 
+	/// <summary>
+	/// 最初の更新
+	/// </summary>
+	void IntroUpdate();
 	/// <summary>
 	/// 描画
 	/// </summary>

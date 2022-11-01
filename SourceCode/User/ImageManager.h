@@ -32,6 +32,7 @@ public:
 		Num,
 		numBack,
 		slash,
+		SceneCover,
 	};
 	enum tex2dName {
 		Lock,

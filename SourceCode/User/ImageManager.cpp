@@ -26,6 +26,8 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Num, L"Resources/2d/Num.png"); 
 	Sprite::LoadTexture(numBack, L"Resources/2d/numBack.png");
 	Sprite::LoadTexture(slash, L"Resources/2d/slash.png");
+	Sprite::LoadTexture(SceneCover, L"Resources/2d/SceneCover.png");
+
 }
 
 void ImageManager::LoadTex2D() {

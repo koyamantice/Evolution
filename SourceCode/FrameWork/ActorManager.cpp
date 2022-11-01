@@ -32,6 +32,15 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
+void ActorManager::IntroUpdate() {
+	for (std::unique_ptr<Actor>& actor : Actors) {
+		actor->IntroUpdate();
+	}
+	for (std::unique_ptr<Bullet>& bullet : Bullets) {
+		bullet->IntroUpdate();
+	}
+	RemoveActor();
+}
 void ActorManager::Draw(DirectXCommon* dxCommon) {
 	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
 		Bullet* bullet = itr->get();

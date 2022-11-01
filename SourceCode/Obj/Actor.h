@@ -94,7 +94,13 @@ public:
 	//virtualにしようか悩み中//解決済み
 	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
+	void IntroUpdate();
+
+	
 	void Demo();		//更新処理
+
+
+
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 
 	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
@@ -105,7 +111,7 @@ public:
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
-
+	virtual void IntroOnUpdate() {};
 	virtual void OnCollision(const std::string& Tag){};
 protected:
 	int command = 0;

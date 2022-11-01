@@ -54,6 +54,12 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Vignette.reset(_Vignette);
 	Vignette->SetColor(XMFLOAT4{0.0f,0.0f,0.0f,0.2f});
 
+	Sprite* _Screen = nullptr;
+	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
+	Screen[0].reset(_Screen);
+	Sprite* _Screen2 = nullptr;
+	_Screen2 = Sprite::Create(ImageManager::SceneCover, { 0,600 });
+	Screen[1].reset(_Screen2);
 
 	Gauge::LoadTexture(0, L"Resources/2d/Lock.png");
 	Gauge* _Gauge = nullptr;
@@ -91,9 +97,16 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 	}
 	CameraUpda();
-	if (input->TriggerButton(input->Y)) {
-		SceneManager::GetInstance()->ChangeScene("DEBUG");
+	if (Intro) {
+	
+		ActorManager::GetInstance()->IntroUpdate();
+		if (input->TriggerButton(input->START)) {
+			Intro = false;
+		}
+		return;
 	}
+
+
 	if (pause) {
 		pauseUi->Update();
 		if (!pauseUi->GetEase()) {
@@ -116,11 +129,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 		return;
 	}
-	if (input->TriggerButton(input->START)||
-		input->TriggerKey(DIK_1)) {
+	if (input->TriggerButton(input->START)) {
 		pause = true;
 	}
-	
 	ActorManager::GetInstance()->Update();
 	ParticleManager::GetInstance()->Update();
 	skydome->Update();
@@ -128,23 +139,29 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 #pragma region "Clear"
 	if (enemy_shadow->GetHp()< 0) {
-		if (!clear) {
-			clear = true;
-		}
+		
+		
+		
+		
+		
+		
+		//if (!clear) {
+			//clear = true;
+		//}
 	}
-	if (clear) {
-		if (Cframe >= 1.0f) {
-			Cframe = 1.0f;
-			if (input->PushKey(DIK_SPACE)) {
-				SceneManager::GetInstance()->ChangeScene("TITLE");
-			}
+	//if (clear) {
+	//	if (Cframe >= 1.0f) {
+	//		Cframe = 1.0f;
+	//		if (input->PushKey(DIK_SPACE)) {
+	//			SceneManager::GetInstance()->ChangeScene("TITLE");
+	//		}
 
-		} else {
-			Cframe += 1.0f / 90.0f;
-		}
-		clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
-		Clear->SetPosition(clearPos);
-	}
+	//	} else {
+	//		Cframe += 1.0f / 90.0f;
+	//	}
+	//	clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
+	//	Clear->SetPosition(clearPos);
+	//}
 #pragma endregion
 }
 
@@ -154,7 +171,6 @@ void PlayScene::CameraUpda() {
 		ResetCamera();
 		return;
 	}
-
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
 		if (input->TiltPushStick(Input::R_RIGHT)) {
 			angle -= 1;
@@ -206,6 +222,10 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	}
 	if (pause) {
 		pauseUi->Draw();
+	}
+	if (Intro) {
+		Screen[0]->Draw();
+		Screen[1]->Draw();
 	}
 	//Demo->Draw();
 
