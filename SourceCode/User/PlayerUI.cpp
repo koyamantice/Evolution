@@ -1,6 +1,7 @@
 #include"PlayerUI.h"
 #include"ActorManager.h"
 #include <SourceCode/User/ImageManager.h>
+#include <SourceCode/Common/Easing.h>
 PlayerUI::PlayerUI() {
 }
 
@@ -50,12 +51,12 @@ void PlayerUI::OnInitialize() {
 				{ static_cast<float>(w), static_cast<float>(h) });
 			num[i][j]->SetSize({ 84,84 });
 			num[i][j]->SetScale(1.0f);
-			num[i][j]->SetAnchorPoint({ 0,0 });
+			num[i][j]->SetAnchorPoint({ 0.5f,0.5f });
 		}
 	}
 	for (int j = 0; j < 10; j++) {
-		num[0][j]->SetPosition({ 1150 ,600 });
-		num[1][j]->SetPosition({ 1060, 600 });
+		num[0][j]->SetPosition({ 1150 + 42 ,600 + 42 });
+		num[1][j]->SetPosition({ 1060 + 42, 600+42 });
 	}
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -67,13 +68,15 @@ void PlayerUI::OnInitialize() {
 				{ static_cast<float>(w), static_cast<float>(h) });
 			numBullet[i][j]->SetSize({ 84,84 });
 			numBullet[i][j]->SetScale(1.0f);
-			numBullet[i][j]->SetAnchorPoint({ 0,0 });
+			numBullet[i][j]->SetAnchorPoint({ 0.5f,0.5f });
 		}
 	}
 	for (int j = 0; j < 10; j++) {
-		numBullet[0][j]->SetPosition({ 910 ,600 });
-		numBullet[1][j]->SetPosition({ 820, 600 });
+		numBullet[0][j]->SetPosition({ 954 ,642 });
+		numBullet[1][j]->SetPosition({ 862, 642 });
 	}
+	OnLive = 30;
+	OldLive = OnLive;
 }
 
 void PlayerUI::OnUpdate() {
@@ -86,25 +89,75 @@ void PlayerUI::OnUpdate() {
 	
 	//count++;
 	//Timer = count / 60.0f;
+	if (!scaleChange) {
+		OnLive = ActorManager::GetInstance()->SerchWaitBul();
+		onLive.clear();
+		for (int tmp = OnLive; tmp > 0;) {
+			onLive.push_back(tmp % 10);
+			tmp /= 10;
+		}
+		if (OnLive != OldLive) {
+			scaleChange = true;
+		}
+		OldLive = OnLive;
+	} else {
+		if (frame < 1.0f) {
+			frame += 0.1f;
+		} else {
+			frame = 0;
+			scaleChange = false;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 10; j++) {
+					numBullet[i][j]->SetSize({ 84,84 });
+				}
+			}
+		}
+		scapos.x = Ease(In, Quad, frame, 84, 60);
+		scapos.y = Ease(In, Quad, frame, 84, 60);
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 10; j++) {
+				numBullet[i][j]->SetSize(scapos);
+			}
+		}
 
-	OnLive = ActorManager::GetInstance()->SerchWaitBul();
-	onLive.clear();
-	for (int tmp = OnLive; tmp > 0;) {
-		onLive.push_back(tmp % 10);
-		tmp /= 10;
 	}
 
 
-	Stock = ActorManager::GetInstance()->SearchNum("Bullet");
-	if (Stock>100) {
-		Stock=99;
-	}
-	stock.clear();
-	for (int tmp = Stock; tmp > 0;) {
-		stock.push_back(tmp % 10);
-		tmp /= 10;
-	}
+	if (!stockChange) {
+		Stock = ActorManager::GetInstance()->SearchNum("Bullet");
+		if (Stock > 100) {
+			Stock = 99;
+		}
+		stock.clear();
+		for (int tmp = Stock; tmp > 0;) {
+			stock.push_back(tmp % 10);
+			tmp /= 10;
+		}
+		if (Stock != OldStock) {
+			stockChange = true;
+		}
+		OldStock = Stock;
+	} else {
+		if (stockFrame < 1.0f) {
+			stockFrame += 0.1f;
+		} else {
+			stockFrame = 0;
+			stockChange = false;
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 10; j++) {
+					num[i][j]->SetSize({ 84,84 });
+				}
+			}
+		}
+		scapos2.x = Ease(In, Quad, stockFrame, 84, 60);
+		scapos2.y = Ease(In, Quad, stockFrame, 84, 60);
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 10; j++) {
+				num[i][j]->SetSize(scapos2);
+			}
+		}
 
+	}
 }
 
 void PlayerUI::OnFinalize() {

@@ -90,6 +90,9 @@ public:
 
 	void Finalize();	//終了処理
 
+	virtual void OnCollision(const std::string& Tag) {};
+
+protected:
 	virtual void OnInit() {};
 	virtual void OnUpda() {};
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
@@ -97,10 +100,45 @@ public:
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
 
-	virtual void OnCollision(const std::string& Tag) {};
 
 	void BoidAverage();
 	void Move();
+
+	void WaitUpda();
+	void SlowUpda();
+	void AttackUpda();
+	void Follow2Enemy();
+	void Follow2Player();
+	void WaitBullet();
+
+	void KnockBack();
+	bool knockBacking = false;
+	void DamageInit();
+	XMFLOAT3 rebound{};
+	XMFLOAT3 distance{};
+	XMFLOAT3 exploPos{};
+	float damageframe = 0.0f;
+	float fall = 0.4f;
+	bool isLeft = false;
+	bool throwReady = false;
+	float frame = 0.0f;
+
+
+	void DeadEnd();
+	float deadframe = 0;
+
+
+	int CoolTime = 0;
+
+	float vel = 0.8f;
+	std::unique_ptr<Texture> Status{};
+	std::unique_ptr<Texture> Explo = nullptr;
+	bool burning = false;
+	void BurnOut();
+	float scale = 0.0f;
+	float effectRate = 0.0f;
+	bool follow = false;
+	XMFLOAT2 vel_follow{};
 protected:
 	//バレット専用
 	int ID;

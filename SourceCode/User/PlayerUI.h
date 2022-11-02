@@ -21,11 +21,25 @@ private:
 	Sprite* numBullet[2][10]{};
 
 	int Stock = 0;
+	int OldStock = Stock;
 	std::vector<int> stock;
+	bool stockChange = false;
+	float stockFrame = 0.0f;
+
+
 
 	int OnLive = 0;
-	std::vector<int> onLive;
+	int OldLive = OnLive;
+	bool scaleChange = false;
+	float frame = 0.0f;
 
+
+
+
+
+	XMFLOAT2 scapos{};
+	XMFLOAT2 scapos2{};
+	std::vector<int> onLive;
 	std::unique_ptr<Sprite> Chara;
 	std::unique_ptr<Sprite> Bullet;
 };
