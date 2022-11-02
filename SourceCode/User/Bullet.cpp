@@ -215,10 +215,15 @@ void Bullet::DamageInit() {
 
 void Bullet::DeadEnd() {
 	fbxObj->SetScale({ 0.003f,0.0001f, 0.003f });
-
 	deadframe += 0.01f;
+	CharaDead->Update();
 
 
+	vanishHight = Ease(Out,Quad,deadframe,0.1f,4.5f);
+	vanishAlpha = Ease(In,Quad,deadframe,1.0f,0.5f);
+
+	CharaDead->SetPosition({ fbxObj->GetPosition().x,vanishHight, fbxObj->GetPosition().z });
+	CharaDead->SetColor({ 1,1,1,vanishAlpha });
 	if (deadframe > 1.0f) {
 		isRemove = true;
 	} else {

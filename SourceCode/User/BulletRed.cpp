@@ -1,9 +1,7 @@
 #include"BulletRed.h"
-#include "Easing.h"
 #include"ActorManager.h"
-#include <SourceCode/FrameWork/collision/Collision.h>
-#include"ImageManager.h"
 #include"ModelManager.h"
+#include <SourceCode/FrameWork/collision/Collision.h>
 using namespace DirectX;
 
 
@@ -17,6 +15,16 @@ void BulletRed::OnInit() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
 	landing = player->GetLockPos();
+	Color = DeathColor::Red;
+
+	Texture* CharaDead_ = Texture::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z},
+		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	CharaDead_->SetIsBillboard(true);
+	CharaDead_->TextureCreate();
+	CharaDead_->SetRotation({ 0,0,0 });
+	CharaDead.reset(CharaDead_);
+
+
 	Texture* Lock_ = Texture::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Lock_->SetIsBillboard(true);
@@ -73,11 +81,15 @@ void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
 		Texture::PreDraw();
-		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-			Status->Draw();
-		}
-		if (burning) {
-			Explo->Draw();
+		if (!DeadFlag) {
+			if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+				Status->Draw();
+			}
+			if (burning) {
+				Explo->Draw();
+			}
+		} else {
+			CharaDead->Draw();
 		}
 	}
 }

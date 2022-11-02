@@ -2,6 +2,8 @@
 #include"Actor.h"
 #include"FBXObject3d.h"
 #include"Texture.h"
+#include"ImageManager.h"
+
 using namespace DirectX;
 class Bullet {
 protected: // エイリアス
@@ -113,6 +115,7 @@ protected:
 
 	void KnockBack();
 	bool knockBacking = false;
+
 	void DamageInit();
 	XMFLOAT3 rebound{};
 	XMFLOAT3 distance{};
@@ -126,13 +129,11 @@ protected:
 
 	void DeadEnd();
 	float deadframe = 0;
-
-
+	float vanishHight = 0.1f;
+	float vanishAlpha = 1.0f;
 	int CoolTime = 0;
 
 	float vel = 0.8f;
-	std::unique_ptr<Texture> Status{};
-	std::unique_ptr<Texture> Explo = nullptr;
 	bool burning = false;
 	void BurnOut();
 	float scale = 0.0f;
@@ -150,9 +151,17 @@ protected:
 	int command = 0;
 	std::unique_ptr<FBXObject3d> fbxObj;
 	std::unique_ptr<Texture> Shadow = nullptr;
-
+	std::unique_ptr<Texture> Status = nullptr;
+	std::unique_ptr<Texture> Explo = nullptr;
+	std::unique_ptr<Texture> CharaDead = nullptr;
+	enum DeathColor{
+		Red=ImageManager::RedDead,
+		Green,
+	};
+	int Color = 0;
 	float angle = 0;
 	bool DeadFlag = false;
+
 
 	XMFLOAT3 oldPos = {};
 	XMFLOAT3 AftaerPos{};

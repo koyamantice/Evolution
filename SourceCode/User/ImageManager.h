@@ -47,6 +47,7 @@ public:
 		InOut,
 		Guid,
 		Shadow,
+		RedDead,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

@@ -44,6 +44,6 @@ void ImageManager::LoadTex2D() {
 	Texture::LoadTexture(InOut, L"Resources/2d/Effect/Base.png");
 	Texture::LoadTexture(Guid, L"Resources/2d/Effect/Diamond.png");
 	Texture::LoadTexture(Shadow, L"Resources/2d/Effect/Shadow.png");
-
+	Texture::LoadTexture(RedDead, L"Resources/2d/Effect/CharaDead.png");
 }
 

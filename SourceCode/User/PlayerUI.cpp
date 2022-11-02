@@ -112,8 +112,8 @@ void PlayerUI::OnUpdate() {
 				}
 			}
 		}
-		scapos.x = Ease(In, Quad, frame, 84, 60);
-		scapos.y = Ease(In, Quad, frame, 84, 60);
+		scapos.x = Ease(In, Quad, frame, 84, 106);
+		scapos.y = Ease(In, Quad, frame, 84, 106);
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 10; j++) {
 				numBullet[i][j]->SetSize(scapos);
@@ -149,8 +149,8 @@ void PlayerUI::OnUpdate() {
 				}
 			}
 		}
-		scapos2.x = Ease(In, Quad, stockFrame, 84, 60);
-		scapos2.y = Ease(In, Quad, stockFrame, 84, 60);
+		scapos2.x = Ease(In, Quad, stockFrame, 84, 106);
+		scapos2.y = Ease(In, Quad, stockFrame, 84, 106);
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 10; j++) {
 				num[i][j]->SetSize(scapos2);
