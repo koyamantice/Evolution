@@ -144,11 +144,6 @@ void BulletRed::OnCollision(const std::string& Tag) {
 			assert(0);
 			break;
 		}
-
 	}
-
-
-
-
 }
 

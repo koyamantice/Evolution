@@ -16,7 +16,7 @@ void ModelManager::Initialize() {
 	LoadModel(Ground, "Dungeon");
 	LoadModel(hole, "hole");
 	LoadModel(Crystal, "Crystal");
-	
+	LoadModel(Goal, "MonolithCrystal");
 	LoadModel(textG, "text01G");
 	LoadModel(textN, "text02N");
 	LoadModel(textO, "text03O");

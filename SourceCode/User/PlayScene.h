@@ -66,6 +66,7 @@ private:
 	std::unique_ptr<Gauge>	Demo;
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
+	std::unique_ptr<TouchableObject> GoalItem{};
 	std::unique_ptr<PauseUI> pauseUi{};	
 
 	std::unique_ptr<Sprite> Effect;

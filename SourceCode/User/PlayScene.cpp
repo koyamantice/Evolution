@@ -40,10 +40,21 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
 	Ground->SetPosition(XMFLOAT3(-50,0,50));
 	Ground->SetScale(XMFLOAT3(5, 5, 5));
-	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f));
-
+	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
+
+	TouchableObject* GoalItem_{};
+	GoalItem_ = new TouchableObject();
+	GoalItem_->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Goal));
+	GoalItem_->SetPosition(XMFLOAT3(0, 0, 0));
+	GoalItem_->SetScale(XMFLOAT3(1, 1, 1));
+	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
+	GoalItem_->SetRotation(XMFLOAT3(-90, 0, 0));
+	GoalItem.reset(GoalItem_);
+
+
+
 
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, clearPos);
@@ -165,7 +176,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	ParticleManager::GetInstance()->Update();
 	skydome->Update();
 	ground->Update();
-
+	GoalItem->Update();
 #pragma region "Clear"
 	if (enemy_shadow->GetHp()< 0) {
 		
@@ -178,19 +189,24 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			//clear = true;
 		//}
 	}
-	//if (clear) {
-	//	if (Cframe >= 1.0f) {
-	//		Cframe = 1.0f;
-	//		if (input->PushKey(DIK_SPACE)) {
-	//			SceneManager::GetInstance()->ChangeScene("TITLE");
-	//		}
+	if (clear) {
 
-	//	} else {
-	//		Cframe += 1.0f / 90.0f;
-	//	}
-	//	clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
-	//	Clear->SetPosition(clearPos);
-	//}
+
+
+
+
+		//if (Cframe >= 1.0f) {
+		//	Cframe = 1.0f;
+		//	if (input->PushKey(DIK_SPACE)) {
+		//		SceneManager::GetInstance()->ChangeScene("TITLE");
+		//	}
+
+		//} else {
+		//	Cframe += 1.0f / 90.0f;
+		//}
+		//clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
+		//Clear->SetPosition(clearPos);
+	}
 #pragma endregion
 }
 
@@ -256,6 +272,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
+	GoalItem->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());	    

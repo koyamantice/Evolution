@@ -117,6 +117,20 @@ void Player::OnUpda() {
 		Move();
 	}
 	//ContactObj();
+	XMFLOAT3 pos = obj->GetPosition();
+	if (pos.x > 48.0f) {
+		pos.x = 48.0f;
+	}
+	if (pos.x < -48.0f) {
+		pos.x = -48.0f;
+	}
+	if (pos.z > 48.0f) {
+		pos.z = 48.0f;
+	}		
+	if (pos.z < -48.0f) {
+		pos.z = -48.0f;
+	}
+	obj->SetPosition(pos);
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
 	fbxObj->SetRotation(obj->GetRotation());

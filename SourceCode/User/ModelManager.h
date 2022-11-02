@@ -20,6 +20,7 @@ public:
 		Ground,
 		hole,
 		Crystal,
+		Goal,
 		DeLorean,
 		textG,
 		textN,

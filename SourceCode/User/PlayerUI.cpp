@@ -106,19 +106,17 @@ void PlayerUI::OnUpdate() {
 		} else {
 			frame = 0;
 			scaleChange = false;
-			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 10; j++) {
-					numBullet[i][j]->SetSize({ 84,84 });
+					numBullet[0][j]->SetSize({ 84,84 });
 				}
-			}
+			
 		}
-		scapos.x = Ease(In, Quad, frame, 84, 106);
-		scapos.y = Ease(In, Quad, frame, 84, 106);
-		for (int i = 0; i < 2; i++) {
+		scapos.x = Ease(In, Quad, frame, 84, 128);
+		scapos.y = Ease(In, Quad, frame, 84, 128);
+		//for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 10; j++) {
-				numBullet[i][j]->SetSize(scapos);
+				numBullet[0][j]->SetSize(scapos);
 			}
-		}
 
 	}
 
@@ -143,19 +141,19 @@ void PlayerUI::OnUpdate() {
 		} else {
 			stockFrame = 0;
 			stockChange = false;
-			for (int i = 0; i < 2; i++) {
+			//for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 10; j++) {
-					num[i][j]->SetSize({ 84,84 });
+					num[0][j]->SetSize({ 84,84 });
 				}
-			}
+			//}
 		}
-		scapos2.x = Ease(In, Quad, stockFrame, 84, 106);
-		scapos2.y = Ease(In, Quad, stockFrame, 84, 106);
-		for (int i = 0; i < 2; i++) {
+		scapos2.x = Ease(In, Quad, stockFrame, 84, 128);
+		scapos2.y = Ease(In, Quad, stockFrame, 84, 128);
+		//for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 10; j++) {
-				num[i][j]->SetSize(scapos2);
+				num[0][j]->SetSize(scapos2);
 			}
-		}
+		//}
 
 	}
 }
