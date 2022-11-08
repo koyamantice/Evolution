@@ -25,7 +25,9 @@ private:
 
 	int OnLive = 0;
 	std::vector<int> onLive;
-
+	float frame = 0;
+	float c = 0;
+	float a = 0.01f;
 	std::unique_ptr<Sprite> Chara;
 	std::unique_ptr<Sprite> Bullet;
 };

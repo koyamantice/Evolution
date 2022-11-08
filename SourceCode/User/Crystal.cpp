@@ -28,7 +28,14 @@ void Crystal::OnUpda() {
 			pause = true;
 		}
 	}
+	if (pause) {
 
+
+
+
+
+
+	}
 
 	in_out->Update();
 
@@ -39,6 +46,13 @@ void Crystal::OnCollision(const std::string& Tag) {
 	} else {
 		isCollide = false;
 	}
+
+}
+void Crystal::ResultOnUpdate(const int& Timer) {
+	isActive = false;
+
+
+
 
 }
 void Crystal::OnDraw(DirectXCommon* dxCommon) {

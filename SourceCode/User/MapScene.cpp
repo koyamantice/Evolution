@@ -19,9 +19,7 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	PlayerComp = new PlayerUI();
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
-	for (int i = 0; i < 30; i++) {
-		ActorManager::GetInstance()->AttachActor("Bullet");
-	}
+
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));

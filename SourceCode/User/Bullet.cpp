@@ -66,6 +66,12 @@ void Bullet::IntroUpdate(const int& Timer) {
 
 }
 
+void Bullet::ResultUpdate(const int& Timer) {
+	
+	ResultOnUpdate(Timer);
+
+}
+
 void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		Object3d::PreDraw();

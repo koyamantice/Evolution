@@ -31,6 +31,8 @@ private:
 	void DebugUpdate()override;
 	void IntroOnUpdate(const int& Timer)override;
 	void IntroMove();
+	void ResultOnUpdate(const int& Timer)override;
+
 	void OnCollision(const std::string& Tag)override;
 
 	void Move();

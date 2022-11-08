@@ -30,6 +30,12 @@ public:
 	/// 最初の更新
 	/// </summary>
 	void IntroUpdate(const int& Timer);
+
+	/// <summary>
+	/// 最初の更新
+	/// </summary>
+	void ResultUpdate(const int& Timer);
+
 	/// <summary>
 	/// 描画
 	/// </summary>

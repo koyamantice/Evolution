@@ -9,11 +9,11 @@ PlayerUI::~PlayerUI() {
 }
 
 void PlayerUI::OnInitialize() {
-	Sprite* _Hp;
-	_Hp = Sprite::Create(ImageManager::Test, { 150,658 });
-	_Hp->SetColor({0,1.0f,0,1 });
-	_Hp->SetSize({ 32,32 });
-	Hp.reset(_Hp);
+	//Sprite* _Hp;
+	//_Hp = Sprite::Create(ImageManager::Test, { 150,658 });
+	//_Hp->SetColor({0,1.0f,0,1 });
+	//_Hp->SetSize({ 32,32 });
+	//Hp.reset(_Hp);
 
 	Sprite* _Chara;
 	_Chara = Sprite::Create(ImageManager::PlayerCover, { 10,582 });
@@ -82,10 +82,10 @@ void PlayerUI::OnInitialize() {
 void PlayerUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Player");
 	
-	Hp->SetSize({AttachActor->GetHp() * 50 ,32});
-	if (AttachActor->GetHp()<0) {
-		Hp->SetSize({ 0 ,32 });
-	}
+	//Hp->SetSize({AttachActor->GetHp() * 50 ,32});
+	//if (AttachActor->GetHp()<0) {
+	//	Hp->SetSize({ 0 ,32 });
+	//}
 	
 	//count++;
 	//Timer = count / 60.0f;

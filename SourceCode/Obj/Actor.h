@@ -95,6 +95,7 @@ public:
 	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void IntroUpdate(const int& Timer);
+	void ResultUpdate(const int& Timer);
 
 	
 	void Demo();		//更新処理
@@ -112,6 +113,7 @@ public:
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
+	virtual void ResultOnUpdate(const int& Timer){};
 	virtual void OnCollision(const std::string& Tag){};
 protected:
 	int command = 0;

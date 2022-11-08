@@ -1,6 +1,7 @@
 #include"EnemyUI.h"
 #include"ActorManager.h"
 #include <SourceCode/User/ImageManager.h>
+#include <SourceCode/Common/Easing.h>
 EnemyUI::EnemyUI() {
 }
 
@@ -18,8 +19,16 @@ void EnemyUI::OnInitialize() {
 
 void EnemyUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Enemy");
+	frame+=a;
 
-	Hp->SetSize({ (AttachActor->GetHp() * 15) ,32 });
+	if (frame>1.0f|| frame < 0.0f) {
+		a *= -1;
+	}
+	c=Ease(In,Quad,frame,0,500);
+
+
+
+	Hp->SetSize({ c ,32 });
 	if (AttachActor->GetHp() < 0) {
 		Hp->SetSize({ 0 ,32 });
 	}

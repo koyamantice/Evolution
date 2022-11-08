@@ -126,6 +126,18 @@ void Aim::Move(float angle) {
 			Lpos.x += vecvel.x * (StickX / STICK_MAX);
 			Lpos.z += vecvel.z * (StickX / STICK_MAX);
 		}
+		if (Lpos.x > 47.0f) {
+			Lpos.x = 47.0f;
+		}
+		if (Lpos.x < -47.0f) {
+			Lpos.x = -47.0f;
+		}
+		if (Lpos.z > 47.0f) {
+			Lpos.z = 47.0f;
+		}
+		if (Lpos.z < -47.0f) {
+			Lpos.z = -47.0f;
+		}
 		LockOn->SetPosition(Lpos);
 
 	}

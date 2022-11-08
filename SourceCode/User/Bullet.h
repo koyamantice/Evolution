@@ -86,6 +86,7 @@ public:
 	void Update();		//更新処理
 	void Demo();		//更新処理
 	void IntroUpdate(const int& Timer);
+	void ResultUpdate(const int& Timer);
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 
 	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
@@ -101,7 +102,7 @@ protected:
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
-
+	virtual void ResultOnUpdate(const int& Timer) {};
 
 	void BoidAverage();
 	void Move();

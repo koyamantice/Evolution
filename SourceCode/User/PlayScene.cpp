@@ -24,6 +24,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	enemy_shadow= ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("Crystal");
 	crystal_shadow= ActorManager::GetInstance()->SearchActor("Crystal");
+	ActorManager::GetInstance()->AttachActor("ClearCrystal");
+	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
+
 	for (int i = 0; i < 30;i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
@@ -44,20 +47,20 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
 
-	TouchableObject* GoalItem_{};
-	GoalItem_ = new TouchableObject();
-	GoalItem_->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Goal));
-	GoalItem_->SetPosition(XMFLOAT3(0, 0, 0));
-	GoalItem_->SetScale(XMFLOAT3(1, 1, 1));
-	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
-	GoalItem_->SetRotation(XMFLOAT3(-90, 0, 0));
-	GoalItem.reset(GoalItem_);
+	//TouchableObject* GoalItem_{};
+	//GoalItem_ = new TouchableObject();
+	//GoalItem_->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Goal));
+	//GoalItem_->SetPosition(XMFLOAT3(0, 0, 0));
+	//GoalItem_->SetScale(XMFLOAT3(1, 1, 1));
+	////Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
+	//GoalItem_->SetRotation(XMFLOAT3(-90, 0, 0));
+	//GoalItem.reset(GoalItem_);
 
 
 
 
 	Sprite* _clear = nullptr;
-	_clear = Sprite::Create(ImageManager::Clear, clearPos);
+	_clear = Sprite::Create(ImageManager::Clear, {0,0});
 	Clear.reset(_clear);
 
 	Sprite* _Screen = nullptr;
@@ -67,7 +70,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	_Screen2 = Sprite::Create(ImageManager::SceneCover, { 0,600 });
 	Screen[1].reset(_Screen2);
 
-	Gauge::LoadTexture(0, L"Resources/2d/Lock.png");
+	Gauge::LoadTexture(0, L"Resources/2d/PlayUI/Lock.png");
 	Gauge* _Gauge = nullptr;
 	_Gauge = Gauge::Create(0, { 0,0 });
 	Demo.reset(_Gauge);
@@ -120,6 +123,18 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	if (input->PushKey(DIK_P)) {
 		ActorManager::GetInstance()->AttachBullet("Bullet");
 	}
+	if (clear) {
+
+		ResultCamera(count);
+		count++;
+
+		ActorManager::GetInstance()->ResultUpdate(count);
+		ParticleManager::GetInstance()->Update();
+		if (input->TriggerButton(Input::A)) {
+			SceneManager::GetInstance()->ChangeScene("MAP");
+		}
+		return;
+	}
 	if (Intro) {
 		IntroCamera(count);
 		if (Change) {
@@ -131,14 +146,19 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			alpha = Ease(In, Cubic, frame, 1, 0);
 			Effect->SetColor({ 1,1,1,alpha });
 		}
+		goal_shadow->SetIsActive(false);
 		ActorManager::GetInstance()->IntroUpdate(count);
 		skydome->Update();
 		ground->Update();
-		if (input->TriggerButton(input->START)||count>1500) {
+		if (count>1200) {
 			Effect->SetColor({ 1,1,1,0});
+			count=0;
 			Intro = false;
 		}
-		count++;
+		count+=speed;
+		if (input->PushButton(input->START)) {
+			speed = 2;
+		}
 		if (count % 200 == 0) {
 			if (nowWord != 5) {
 				nowWord++;
@@ -176,36 +196,15 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	ParticleManager::GetInstance()->Update();
 	skydome->Update();
 	ground->Update();
-	GoalItem->Update();
 #pragma region "Clear"
-	if (enemy_shadow->GetHp()< 0) {
+	if (!enemy_shadow->GetIsActive()) {
 		
+		goal_shadow->SetIsActive(true);
 		
-		
-		
-		
-		
-		//if (!clear) {
-			//clear = true;
-		//}
-	}
-	if (clear) {
-
-
-
-
-
-		//if (Cframe >= 1.0f) {
-		//	Cframe = 1.0f;
-		//	if (input->PushKey(DIK_SPACE)) {
-		//		SceneManager::GetInstance()->ChangeScene("TITLE");
-		//	}
-
-		//} else {
-		//	Cframe += 1.0f / 90.0f;
-		//}
-		//clearPos.y = Ease(InOut,Elastic,Cframe,-720,0);
-		//Clear->SetPosition(clearPos);
+		if (goal_shadow->GetPause()) {
+			Result = true;
+			clear = true;
+		}
 	}
 #pragma endregion
 }
@@ -247,7 +246,21 @@ void PlayScene::CameraUpda() {
 
 void PlayScene::IntroCamera(int Timer) {
 	if (Timer <= 720) {
-		angle+= 0.5f;
+		if (speed==1) {
+			angle += 0.5f;
+			if (IntroHight > 10.0f) {
+				IntroHight -= 0.075f;
+			} else {
+				IntroHight = 10.0f;
+			}
+		} else {
+			angle += 1.0f;
+			if (IntroHight > 10.0f) {
+				IntroHight -= 0.150f;
+			} else {
+				IntroHight = 10.0f;
+			}
+		}
 	}
 
 	dis.x = sinf(angle * (PI / 180)) * 13.0f;
@@ -256,8 +269,24 @@ void PlayScene::IntroCamera(int Timer) {
 	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 	player_shadow->SetAngle(angle);
 	camera->SetTarget(player_shadow->GetCameraPos(angle));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,IntroHight,player_shadow->GetPosition().z + distance.y });
+	camera->Update();
+}
+
+void PlayScene::ResultCamera(int Timer) {
+	if (Timer <= 720) {
+		angle += 0.5f;
+	}
+
+	dis.x = sinf(angle * (PI / 180)) * 13.0f;
+	dis.y = cosf(angle * (PI / 180)) * 13.0f;
+	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
+	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
+	player_shadow->SetAngle(angle);
+	camera->SetTarget(goal_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
+
 }
 
 //•`‰æ
@@ -272,7 +301,6 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
-	GoalItem->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());	    
@@ -291,12 +319,16 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		Screen[1]->Draw();
 		IntroWord[nowWord]->Draw();
 	}
+	if (Result) {	
+		Screen[0]->Draw();
+		Screen[1]->Draw();
+		Clear->Draw();
+	}
 	//Demo->Draw();
 
 	//miniMap->PreDraw();
 	//miniMap->Draw(dxCommon->GetCmdList());
 	//miniMap->PostDraw();
-
 
 	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 

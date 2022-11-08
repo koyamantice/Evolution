@@ -36,6 +36,13 @@ void Actor::IntroUpdate(const int& Timer) {
 	IntroOnUpdate(Timer);
 }
 
+void Actor::ResultUpdate(const int& Timer) {
+	if (isVisible) {
+		obj->Update();
+	}
+	ResultOnUpdate(Timer);
+}
+
 void Actor::Demo() {
 	if (isActive) {
 		obj->Update();

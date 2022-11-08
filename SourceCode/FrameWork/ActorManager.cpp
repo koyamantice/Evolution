@@ -41,6 +41,15 @@ void ActorManager::IntroUpdate(const int& Timer) {
 	}
 	RemoveActor();
 }
+void ActorManager::ResultUpdate(const int& Timer) {
+	for (std::unique_ptr<Actor>& actor : Actors) {
+		actor->ResultUpdate(Timer);
+	}
+	for (std::unique_ptr<Bullet>& bullet : Bullets) {
+		bullet->ResultUpdate(Timer);
+	}
+	RemoveActor();
+}
 void ActorManager::Draw(DirectXCommon* dxCommon) {
 	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
 		Bullet* bullet = itr->get();
@@ -189,6 +198,7 @@ float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
+		if (bullet->GetCommand() != Bullet::command::Attack) { continue; }
 		if (Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
 			bullet->SetCommand(Bullet::command::Wait);
 		}
@@ -256,7 +266,7 @@ Actor* ActorManager::SearchActorArea(XMFLOAT3 pos) {
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();
 		if (actor->GetTag() == "Player" || actor->GetTag() == "Bullet") { continue; }
-
+		if (actor->GetIsActive() == false) { continue; }
 		XMFLOAT3 difPos = actor->GetPosition();
 		float dif;
 		dif = Length(difPos, pos);

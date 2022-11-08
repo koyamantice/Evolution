@@ -254,6 +254,9 @@
     <ClCompile Include="SourceCode\User\BulletGreen.cpp">
       <Filter>User\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\ClearCrystal.cpp">
+      <Filter>User\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -484,6 +487,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\BulletGreen.h">
       <Filter>User\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\ClearCrystal.h">
+      <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

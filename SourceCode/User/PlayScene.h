@@ -22,7 +22,6 @@ public:
 	/// 終了
 	/// </summary>
 	void Finalize() override;
-
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
@@ -39,7 +38,9 @@ private:
 	/// </summary>
 	void CameraUpda();
 	void IntroCamera(int Timer);
+	void ResultCamera(int Timer);
 	int count = 0;
+	int speed = 1;
 	float angle = 0;
 	float firstangle = 0;	
 	float endangle = 0;
@@ -57,12 +58,15 @@ private:
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
 	Actor* crystal_shadow = nullptr;
+	Actor* goal_shadow = nullptr;
 	ActorComponent* PlayerComp = nullptr;
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite>	Screen[2] {};
 	std::unique_ptr<Sprite> IntroWord[10];
 	int nowWord = 0;
 	bool Intro = true;
+	bool Result = false;
+	float IntroHight = 50.0f;
 	std::unique_ptr<Gauge>	Demo;
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<TouchableObject> ground{};
