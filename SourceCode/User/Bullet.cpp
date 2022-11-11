@@ -313,6 +313,7 @@ void Bullet::SlowUpda() {
 
 void Bullet::AttackUpda() {
 	if (!knockBacking) {
+		if (enemy->GetCommand() == Actor::Phase::DEAD) { return; }
 		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Enemy();
 		}

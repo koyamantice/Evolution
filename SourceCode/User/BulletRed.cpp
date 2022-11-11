@@ -59,6 +59,11 @@ void BulletRed::OnUpda() {
 			} else {
 				AttackUpda();
 			}
+		} else {
+			if (knockBacking) {
+				KnockBack();
+			}
+
 		}
 		break;
 	case Slow:
@@ -131,6 +136,8 @@ void BulletRed::OnCollision(const std::string& Tag) {
 			case Actor::Phase::LEAVE:
 				DamageInit();
 				break;
+			case Actor::Phase::DEAD:
+
 			default:
 				break;
 			}

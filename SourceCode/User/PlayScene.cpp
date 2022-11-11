@@ -27,7 +27,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 
-	for (int i = 0; i < 30;i++) {
+	for (int i = 0; i < 50;i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
 
@@ -42,7 +42,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
 	Ground->SetPosition(XMFLOAT3(-50,0,50));
-	Ground->SetScale(XMFLOAT3(5, 5, 5));
+	Ground->SetScale(XMFLOAT3(5,5,5));
 	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
@@ -55,9 +55,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	////Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//GoalItem_->SetRotation(XMFLOAT3(-90, 0, 0));
 	//GoalItem.reset(GoalItem_);
-
-
-
 
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, {0,0});
@@ -120,8 +117,8 @@ void PlayScene::Finalize() {
 //XV
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	if (input->PushKey(DIK_P)) {
-		ActorManager::GetInstance()->AttachBullet("Bullet");
+	if (input->TriggerKey(DIK_P)) {
+		ActorManager::GetInstance()->AttachBullet("Red");
 	}
 	if (clear) {
 
@@ -166,6 +163,25 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 		return;
 	}
+	if (enemy_shadow->GetPause()) {
+		
+		const float rnd_vel = 0.4f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		ParticleManager::GetInstance()->Add(0,120,enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
+		ParticleManager::GetInstance()->Update();
+
+		finishTime++;
+		if (finishTime > 200) {
+
+			enemy_shadow->SetPause(false);
+			enemy_shadow->SetCommand(Actor::DEAD);
+		}
+
+		return;
+	}
 	CameraUpda();
 	if (pause) {
 		pauseUi->Update();
@@ -198,9 +214,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	ground->Update();
 #pragma region "Clear"
 	if (!enemy_shadow->GetIsActive()) {
-		
-		goal_shadow->SetIsActive(true);
-		
+		goal_shadow->SetIsActive(true);		
 		if (goal_shadow->GetPause()) {
 			Result = true;
 			clear = true;
@@ -217,10 +231,10 @@ void PlayScene::CameraUpda() {
 	}
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
 		if (input->TiltPushStick(Input::R_RIGHT)) {
-			angle -= 1;
+			angle -= 2;
 		}
 		if (input->TiltPushStick(Input::R_LEFT)) {
-			angle += 1;
+			angle += 2;
 		}
 		dis.x = sinf(angle * (PI / 180)) * 13.0f;
 		dis.y = cosf(angle * (PI / 180)) * 13.0f;

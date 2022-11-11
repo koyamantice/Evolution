@@ -214,7 +214,7 @@ bool Input::TiltStick(STICK Stick) {
 }
 
 bool Input::TiltPushStick(STICK Stick, float DeadZone) {
-	StickPos vec;
+	StickPos vec{};
 	//âEÇ©ç∂Ç©
 	bool isLeftStick = Stick <= L_RIGHT;
 	if (isLeftStick) {

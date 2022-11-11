@@ -57,6 +57,8 @@ void ParticleManager::Initialize(ID3D12Device* device)
 
 	// テクスチャ読み込み
 	LoadTexture();
+	// テクスチャ読み込み
+	//LoadTexture(1,L"Resources/2d/Effect/ChargeEffect.png");
 
 	// モデル生成
 	CreateModel();
@@ -174,12 +176,13 @@ void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->DrawInstanced(drawNum, 1, 0, 0);
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale)
+void ParticleManager::Add(int texNumber, int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale)
 {
 	// リストに要素を追加
 	particles.emplace_front();
 	// 追加した要素の参照
 	Particle& p = particles.front();
+	p.texNumber = texNumber;
 	p.position = position;
 	p.velocity = velocity;
 	p.accel = accel;
@@ -387,7 +390,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	}
 }
 
-void ParticleManager::LoadTexture()
+void ParticleManager::LoadTexture(UINT texnumber, const wchar_t* filename)
 {
 	HRESULT result = S_FALSE;
 
@@ -397,7 +400,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/2d/Effect/Charge.png", WIC_FLAGS_NONE,
+		filename, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		assert(0);
@@ -421,13 +424,13 @@ void ParticleManager::LoadTexture()
 		&texresDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ, // テクスチャ用指定
 		nullptr,
-		IID_PPV_ARGS(&texbuff));
+		IID_PPV_ARGS(&texbuff[texnumber]));
 	if (FAILED(result)) {
 		assert(0);
 	}
 
 	// テクスチャバッファにデータ転送
-	result = texbuff->WriteToSubresource(
+	result = texbuff[texnumber]->WriteToSubresource(
 		0,
 		nullptr, // 全領域へコピー
 		img->pixels,    // 元データアドレス
@@ -439,18 +442,18 @@ void ParticleManager::LoadTexture()
 	}
 
 	// シェーダリソースビュー作成
-	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
+	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), texnumber, descriptorHandleIncrementSize);
+	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), texnumber, descriptorHandleIncrementSize);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
-	D3D12_RESOURCE_DESC resDesc = texbuff->GetDesc();
+	D3D12_RESOURCE_DESC resDesc = texbuff[texnumber]->GetDesc();
 
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	device->CreateShaderResourceView(texbuff.Get(), //ビューと関連付けるバッファ
+	device->CreateShaderResourceView(texbuff[texnumber].Get(), //ビューと関連付けるバッファ
 		&srvDesc, //テクスチャ設定情報
 		cpuDescHandleSRV
 	);

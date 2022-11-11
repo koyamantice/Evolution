@@ -263,6 +263,10 @@ void Enemy::AttackUpda() {
 
 void Enemy::LifeCommon() {
 	if (hp < 0.0f) {
+		if (command != DEAD) {
+			pause = true;
+			return;
+		}
 		XMFLOAT3 pos = Mash->GetPosition();
 		XMFLOAT3 rot = Mash->GetRotation();
 		XMFLOAT3 sca = Mash->GetScale();

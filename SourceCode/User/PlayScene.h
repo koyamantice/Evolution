@@ -77,7 +77,7 @@ private:
 	bool Change = true;
 	float alpha = 0.0f;
 	float frame = 0;
-
+	int finishTime = 0;
 	PostEffect* postEffect = nullptr;
 	MiniMap* miniMap = nullptr;
 };

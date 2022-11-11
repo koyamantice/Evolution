@@ -50,6 +50,8 @@ public: // サブクラス
 		using XMMATRIX = DirectX::XMMATRIX;
 
 	public:
+		//テクスチャ番号	
+		UINT texNumber = 0;
 		// 座標
 		XMFLOAT3 position = {};
 		// 速度
@@ -114,7 +116,7 @@ public: // メンバ関数
 	/// <param name="accel">加速度</param>
 	/// <param name="start_scale">開始時スケール</param>
 	/// <param name="end_scale">終了時スケール</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale);
+	void Add(int texNumber,int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale);
 
 	/// <summary>
 	/// デスクリプタヒープの初期化
@@ -132,7 +134,7 @@ public: // メンバ関数
 	/// テクスチャ読み込み
 	/// </summary>
 	/// <returns>成否</returns>
-	void LoadTexture();
+	void LoadTexture(UINT texnumber = 0, const wchar_t* filename = L"Resources/2d/Effect/Charge.png");
 
 	/// <summary>
 	/// モデル作成
@@ -140,6 +142,8 @@ public: // メンバ関数
 	void CreateModel();
 
 private: // メンバ変数
+		// テクスチャの最大枚数
+	static const int srvCount = 10;
 	// デバイス
 	ID3D12Device* device = nullptr;
 	// デスクリプタサイズ
@@ -153,7 +157,7 @@ private: // メンバ変数
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	// テクスチャバッファ
-	ComPtr<ID3D12Resource> texbuff;
+	ComPtr<ID3D12Resource> texbuff[srvCount];
 	// シェーダリソースビューのハンドル(CPU)
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
 	// シェーダリソースビューのハンドル(CPU)

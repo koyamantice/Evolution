@@ -19,16 +19,15 @@ void EnemyUI::OnInitialize() {
 
 void EnemyUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Enemy");
-	frame+=a;
-
-	if (frame>1.0f|| frame < 0.0f) {
-		a *= -1;
-	}
-	c=Ease(In,Quad,frame,0,500);
-
+	//frame+=a;
+	//if (frame>1.0f|| frame < 0.0f) {
+	//	a *= -1;
+	//}
+	//c=Ease(In,Quad,frame,0,500);
 
 
-	Hp->SetSize({ c ,32 });
+
+	Hp->SetSize({ AttachActor->GetHp()*10 ,32 });
 	if (AttachActor->GetHp() < 0) {
 		Hp->SetSize({ 0 ,32 });
 	}
