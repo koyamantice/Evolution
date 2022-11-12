@@ -172,8 +172,9 @@ public: // ƒƒ“ƒoŠÖ”
 	void SetIsBillboard(const bool& isBillboard);
 	void SetIsBillboardY(const bool& isBillboardY);
 
-	void Texture::SetColor(XMFLOAT4 color);
-	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+	void SetColor(XMFLOAT4 color);
+	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
+	const XMFLOAT3& GetRotation() { return this->rotation; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	const XMFLOAT3& GetScale() { return scale; }
 private: // ƒƒ“ƒo•Ï”

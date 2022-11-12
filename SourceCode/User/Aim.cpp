@@ -76,6 +76,13 @@ void Aim::Move(float angle) {
 			bullet->SetCommand(Bullet::command::Slow, LockOn->GetPosition());
 		}
 	}
+	XMFLOAT3 Lrot = LockOn->GetRotation();
+
+	Lrot.y += 2.0f;
+
+	LockOn->SetRotation(Lrot);
+
+
 
 	if (input->PushButton(Input::A)) {
 		if (Area < 8.0f) {
