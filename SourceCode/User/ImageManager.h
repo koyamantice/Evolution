@@ -49,6 +49,7 @@ public:
 		Guid,
 		Shadow,
 		RedDead,
+		SlowUI,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

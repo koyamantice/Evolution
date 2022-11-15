@@ -22,9 +22,13 @@ private:
 	std::unique_ptr<Texture> Whistle{};
 	static const int GuidNum = 8;
 	std::unique_ptr<Texture> Guid[GuidNum]{};
+	std::unique_ptr<Texture> FirstUI{};
 	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
+
+
+	bool first = true;
 
 	void Move(float angle);
 	void EnemySet();

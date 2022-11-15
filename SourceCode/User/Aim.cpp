@@ -21,6 +21,13 @@ void Aim::Init() {
 	Whistle->SetPosition({ 100,-50,0 });
 
 
+	Texture* FirstUI_ = Texture::Create(ImageManager::SlowUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	FirstUI_->TextureCreate();
+	FirstUI_->SetRotation({ 0,0,0 });
+	FirstUI_->SetIsBillboard(true);
+	FirstUI.reset(FirstUI_);
+	FirstUI->SetPosition({ 100,-50,0 });
+
 
 	for (int i = 0; i < GuidNum; i++) {
 		Texture* Guid_ = Texture::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
@@ -34,6 +41,8 @@ void Aim::Init() {
 void Aim::Upda(float angle) {
 	LockOn->Update();
 	Whistle->Update();
+	FirstUI->Update();
+
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Update();
 	}
@@ -53,6 +62,7 @@ void Aim::Draw() {
 	Texture::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
+	FirstUI->Draw();
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Draw();
 	}
@@ -149,6 +159,7 @@ void Aim::Move(float angle) {
 	}
 
 	LockOn->SetPosition({ Lpos.x,0.01f,Lpos.z });
+	FirstUI->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y+2) * PI / 180.0f) + 3.5f ,Lpos.z });
 
 
 	for (int i = 0; i < GuidNum; i++) {
