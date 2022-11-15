@@ -27,12 +27,14 @@ public:
 		textO,
 		textM,
 		textE,
+		RedKobi,
 
 	};
 	enum FBXName {
 		Mash,
 		Bird,
 		Kobi,
+		brave,
 	};
 
 public:

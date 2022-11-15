@@ -22,7 +22,7 @@ void WinApp::Initialize() {
 	fullScreen = FULL_SCREEN;
 	w.cbSize = sizeof(WNDCLASSEX);
 	w.lpfnWndProc = (WNDPROC)WindowProc;//ウィンドウプロシージャを設定
-	w.lpszClassName = L"Gnomen";//ウィンドウクラス名
+	w.lpszClassName = L"グノーメン";//ウィンドウクラス名
 	w.hInstance = GetModuleHandle(nullptr);//ウィンドウハンドル
 	w.hCursor = LoadCursor(NULL, IDC_ARROW);//カーソル指定
 	w.hIcon = LoadIcon(w.hInstance, MAKEINTRESOURCE(IDI_ICON1));	//ウィンドウクラスをOSに登録
@@ -57,7 +57,7 @@ void WinApp::Initialize() {
 
 	//ウィンドウオブジェクトの生成
 	/*HWND*/ hwnd = CreateWindow(w.lpszClassName,//クラス名
-		L"Gnomen",//タイトルバーの文字
+		L"グノーメン",//タイトルバーの文字
 		WS_OVERLAPPED | WS_SYSMENU,//標準的なウィンドウスタイル
 		//WS_OVERLAPPEDWINDOW,//非固定なウィンドウスタイル
 		CW_USEDEFAULT,//表示X座標(OSに任せる)

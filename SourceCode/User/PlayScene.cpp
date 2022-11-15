@@ -21,16 +21,18 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
-	enemy_shadow= ActorManager::GetInstance()->SearchActor("Enemy");
+	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("Crystal");
-	crystal_shadow= ActorManager::GetInstance()->SearchActor("Crystal");
+	crystal_shadow = ActorManager::GetInstance()->SearchActor("Crystal");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
-
-	for (int i = 0; i < 50;i++) {
+	goal_shadow->SetPosition(enemy_shadow->GetPosition());
+	for (int i = 0; i < 10; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
-
+	for (int i = 0; i < 10; i++) {
+		ActorManager::GetInstance()->AttachBullet("Green");
+	}
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
@@ -41,8 +43,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
-	Ground->SetPosition(XMFLOAT3(-50,0,50));
-	Ground->SetScale(XMFLOAT3(5,5,5));
+	Ground->SetPosition(XMFLOAT3(-50, 0, 50));
+	Ground->SetScale(XMFLOAT3(5, 5, 5));
 	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
@@ -57,8 +59,12 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//GoalItem.reset(GoalItem_);
 
 	Sprite* _clear = nullptr;
-	_clear = Sprite::Create(ImageManager::Clear, {0,0});
+	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
 	Clear.reset(_clear);
+
+	Sprite* _Over = nullptr;
+	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
+	Over.reset(_Over);
 
 	Sprite* _Screen = nullptr;
 	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
@@ -78,7 +84,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Effect.reset(Effect_);
 	Effect->SetColor({ 1,1,1,alpha });
 
-	Sprite* IntroWord_1 = Sprite::Create(ImageManager::Intro01, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0});
+	Sprite* IntroWord_1 = Sprite::Create(ImageManager::Intro01, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	IntroWord[0].reset(IntroWord_1);
 	Sprite* IntroWord_2 = Sprite::Create(ImageManager::Intro02, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	IntroWord[1].reset(IntroWord_2);
@@ -104,7 +110,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	distance.x = sinf(angle * (PI / 180)) * 13.0f;
 	distance.y = cosf(angle * (PI / 180)) * 13.0f;
 
-	
+
 	dis.x = sinf(angle * (PI / 180)) * 13.0f;
 	dis.y = cosf(angle * (PI / 180)) * 13.0f;
 
@@ -119,6 +125,10 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	if (input->TriggerKey(DIK_P)) {
 		ActorManager::GetInstance()->AttachBullet("Red");
+	}
+	if (crystal_shadow->GetPause()) {
+		crystal_shadow->Update();
+		return;
 	}
 	if (clear) {
 
@@ -138,7 +148,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			if (frame < 1.0f) {
 				frame += 0.01f;
 			} else {
-				Change=false;
+				Change = false;
 			}
 			alpha = Ease(In, Cubic, frame, 1, 0);
 			Effect->SetColor({ 1,1,1,alpha });
@@ -147,12 +157,12 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		ActorManager::GetInstance()->IntroUpdate(count);
 		skydome->Update();
 		ground->Update();
-		if (count>1200) {
-			Effect->SetColor({ 1,1,1,0});
-			count=0;
+		if (count > 1200) {
+			Effect->SetColor({ 1,1,1,0 });
+			count = 0;
 			Intro = false;
 		}
-		count+=speed;
+		count += speed;
 		if (input->PushButton(input->START)) {
 			speed = 2;
 		}
@@ -164,13 +174,13 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		return;
 	}
 	if (enemy_shadow->GetPause()) {
-		
+
 		const float rnd_vel = 0.4f;
 		XMFLOAT3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		ParticleManager::GetInstance()->Add(0,120,enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
+		ParticleManager::GetInstance()->Add(0, 120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
 		ParticleManager::GetInstance()->Update();
 
 		finishTime++;
@@ -214,13 +224,22 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	ground->Update();
 #pragma region "Clear"
 	if (!enemy_shadow->GetIsActive()) {
-		goal_shadow->SetIsActive(true);		
+		goal_shadow->SetIsActive(true);
 		if (goal_shadow->GetPause()) {
 			Result = true;
 			clear = true;
 		}
 	}
 #pragma endregion
+#pragma region "GameOver"
+	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
+		GameOver = true;
+		if (input->TriggerButton(Input::A)) {
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
+	}
+#pragma endregion
+
 }
 
 void PlayScene::CameraUpda() {
@@ -231,10 +250,10 @@ void PlayScene::CameraUpda() {
 	}
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
 		if (input->TiltPushStick(Input::R_RIGHT)) {
-			angle -= 2;
+			angle -= 3;
 		}
 		if (input->TiltPushStick(Input::R_LEFT)) {
-			angle += 2;
+			angle += 3;
 		}
 		dis.x = sinf(angle * (PI / 180)) * 13.0f;
 		dis.y = cosf(angle * (PI / 180)) * 13.0f;
@@ -250,17 +269,17 @@ void PlayScene::CameraUpda() {
 			firstdis = distance;
 			Reset = true;
 		}
-	} 
+	}
 	player_shadow->SetAngle(angle);
 	crystal_shadow->SetAngle(angle);
- 	camera->SetTarget(player_shadow->GetCameraPos(angle));
+	camera->SetTarget(player_shadow->GetCameraPos(angle));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
 void PlayScene::IntroCamera(int Timer) {
 	if (Timer <= 720) {
-		if (speed==1) {
+		if (speed == 1) {
 			angle += 0.5f;
 			if (IntroHight > 10.0f) {
 				IntroHight -= 0.075f;
@@ -317,7 +336,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ground->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
-	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());	    
+	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 	Sprite::PreDraw();
 	if (Change) {
 		Effect->Draw();
@@ -333,10 +352,13 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		Screen[1]->Draw();
 		IntroWord[nowWord]->Draw();
 	}
-	if (Result) {	
+	if (Result) {
 		Screen[0]->Draw();
 		Screen[1]->Draw();
 		Clear->Draw();
+	}
+	if (GameOver) {
+		Over->Draw();
 	}
 	//Demo->Draw();
 
@@ -359,28 +381,28 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 }
 
 void PlayScene::ResetCamera() {
-		player_shadow->SetCanMove(false);
+	player_shadow->SetCanMove(false);
 
-		if (angleframe < 1.0f) {
-			angleframe += 0.05f;
-		} else {
-			Reset = false;
-			player_shadow->SetCanMove(true);
-			angleframe = 1.0f;
-			distance.x=dis.x;
-			distance.x=dis.y;
-		}
+	if (angleframe < 1.0f) {
+		angleframe += 0.05f;
+	} else {
+		Reset = false;
+		player_shadow->SetCanMove(true);
+		angleframe = 1.0f;
+		distance.x = dis.x;
+		distance.x = dis.y;
+	}
 
-		angle = Ease(In, Quad,angleframe,firstangle,endangle);
+	angle = Ease(In, Quad, angleframe, firstangle, endangle);
 
-		dis.x = sinf(angle * (PI / 180)) * 13.0f;
-		dis.y = cosf(angle * (PI / 180)) * 13.0f;
+	dis.x = sinf(angle * (PI / 180)) * 13.0f;
+	dis.y = cosf(angle * (PI / 180)) * 13.0f;
 
-		distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
-		distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);
-		camera->SetTarget(player_shadow->GetCameraPos(angle));
-		camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
-		camera->Update();
+	distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
+	distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);
+	camera->SetTarget(player_shadow->GetCameraPos(angle));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->Update();
 }
 
 

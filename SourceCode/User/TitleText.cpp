@@ -54,12 +54,12 @@ void TitleText::Upda() {
 	frame += 0.01f;
 
 	if (frame < 1.0f) {
-		pos[0]=Ease(In,Circ,frame,0,-14.0f);
-		pos[1]=Ease(In,Circ,frame,0,-9.0f);
-		pos[2]=Ease(In,Circ,frame,0,-4.0f);
-		pos[3]=Ease(In,Circ,frame,0,2.0f);
-		pos[4]=Ease(In,Circ,frame,0,8.0f);
-		pos[5]=Ease(In,Circ,frame,0,14.0f);
+		pos[0]=Ease(In,Back,frame,0,-14.0f);
+		pos[1]=Ease(In,Back,frame,0,-9.0f);
+		pos[2]=Ease(In,Back,frame,0,-4.0f);
+		pos[3]=Ease(In,Back,frame,0,2.0f);
+		pos[4]=Ease(In,Back,frame,0,8.0f);
+		pos[5]=Ease(In,Back,frame,0,14.0f);
 	} else {
 		frame = 1.0f;
 	}

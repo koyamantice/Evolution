@@ -102,8 +102,6 @@ void Enemy::OnInit() {
 }
 
 void Enemy::OnUpda() {
-	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y-1,0});
-	obj->SetPosition(Mash->GetPosition());
 	Mash->Update();
 	Attack->Upda();
 	PhaseMove();
@@ -111,6 +109,8 @@ void Enemy::OnUpda() {
 	//Collide();
 	Shadow->Update();
 	Shadow->SetPosition({ Mash->GetPosition().x,0.01f, Mash->GetPosition().z });
+	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
+	obj->SetPosition(Mash->GetPosition());
 }
 
 void Enemy::OnDraw(DirectXCommon* dxCommon) {

@@ -61,11 +61,13 @@ private:
 	Actor* goal_shadow = nullptr;
 	ActorComponent* PlayerComp = nullptr;
 	std::unique_ptr<Sprite> Clear{};
+	std::unique_ptr<Sprite> Over{};
 	std::unique_ptr<Sprite>	Screen[2] {};
 	std::unique_ptr<Sprite> IntroWord[10];
 	int nowWord = 0;
 	bool Intro = true;
 	bool Result = false;
+	bool GameOver = false;
 	float IntroHight = 50.0f;
 	std::unique_ptr<Gauge>	Demo;
 	std::unique_ptr<Object3d> skydome{};

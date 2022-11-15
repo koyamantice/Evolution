@@ -46,7 +46,7 @@ Bullet* ActorFactory::CreateBullet(const std::string& BulletKind) {
 	}
 	if (BulletKind == "Green") {
 		newBullet = new BulletGreen();
-		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::Kobi));
+		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::brave));
 	}
 
 

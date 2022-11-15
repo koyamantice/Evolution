@@ -5,7 +5,6 @@ class BulletRed : public Bullet{
 public:
 	BulletRed();
 	~BulletRed() {};
-
 private:
 	void OnInit()override;
 	void OnUpda()override;

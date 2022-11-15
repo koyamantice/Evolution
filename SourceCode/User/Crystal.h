@@ -28,6 +28,8 @@ private:
 	Actor* player=nullptr;
 
 	std::unique_ptr<Texture> in_out = nullptr;
+	std::unique_ptr<Sprite> Test = nullptr;
+
 	bool isCollide = false;
 	float rad = 0;
 	float waitTimer = 0;

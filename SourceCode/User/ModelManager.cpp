@@ -22,11 +22,12 @@ void ModelManager::Initialize() {
 	LoadModel(textO, "text03O");
 	LoadModel(textM, "text04M");
 	LoadModel(textE, "text05E");
-	
+	LoadModel(RedKobi,"RedKobito");
 	
 	LoadFBXModel(Mash,"Mash");
 	LoadFBXModel(Bird,"Player");
 	LoadFBXModel(Kobi, "kobi");
+	LoadFBXModel(brave, "Eagle");
 }
 
 void ModelManager::Finalize() {

@@ -25,7 +25,7 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
 	Ground->SetPosition(XMFLOAT3(-50, 0, 50));
 	Ground->SetScale(XMFLOAT3(5, 5, 5));
-	Ground->SetRotation(XMFLOAT3(0, 180, 0));
+	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
 
 	PauseUI* pause_ui = new PauseUI();

@@ -10,7 +10,7 @@ EnemyUI::~EnemyUI() {
 
 void EnemyUI::OnInitialize() {
 	Sprite* _Hp;
-	_Hp = Sprite::Create(ImageManager::Test, { 400 + 150,40 });
+	_Hp = Sprite::Create(ImageManager::Test, { 400 + 180,40 });
 	_Hp->SetColor({ 0,1.0f,0,1 });
 	_Hp->SetSize({ 32,32 });
 	Hp.reset(_Hp);

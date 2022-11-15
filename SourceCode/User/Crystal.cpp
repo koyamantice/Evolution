@@ -4,7 +4,7 @@
 #include "ImageManager.h"
 
 void Crystal::OnInit() {
-	obj->SetPosition(XMFLOAT3(0,0, 35.0f));
+	obj->SetPosition(XMFLOAT3(0, 0, 35.0f));
 	//obj->SetScale(XMFLOAT3(2, 2, 2));
 	//player = ActorManager::GetInstance()->SearchActor("Player");
 	Texture* InOut_ = Texture::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
@@ -12,6 +12,10 @@ void Crystal::OnInit() {
 	InOut_->SetRotation({ 0,0,0 });
 	InOut_->SetColor({ 1.0f,1.0f,1.0f ,1.0f });
 	in_out.reset(InOut_);
+
+
+	Sprite* Test_ = Sprite::Create(ImageManager::Test, { 640,360 }, { 1,1,1,1 }, {0.5, 0.5});
+	Test.reset(Test_);
 
 }
 
@@ -30,6 +34,10 @@ void Crystal::OnUpda() {
 	}
 	if (pause) {
 
+		if (Input::GetInstance()->TriggerButton(Input::START)) {
+			pause = false;
+			isCollide = false;
+		}
 
 
 

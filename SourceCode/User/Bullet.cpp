@@ -37,6 +37,20 @@ void Bullet::Update() {
 		Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 
 		OnUpda();
+		XMFLOAT3 pos = fbxObj->GetPosition();
+		if (pos.x > 48.0f) {
+			pos.x = 48.0f;
+		}
+		if (pos.x < -48.0f) {
+			pos.x = -48.0f;
+		}
+		if (pos.z > 48.0f) {
+			pos.z = 48.0f;
+		}
+		if (pos.z < -48.0f) {
+			pos.z = -48.0f;
+		}
+		fbxObj->SetPosition(pos);
 	}
 
 }

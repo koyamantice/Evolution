@@ -18,6 +18,7 @@ public:
 		Black,
 		Title,
 		Clear,
+		Over,
 		UISheet,
 		TitleBack,
 		Button,
