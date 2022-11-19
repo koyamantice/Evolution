@@ -22,8 +22,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
-	ActorManager::GetInstance()->AttachActor("Crystal");
-	crystal_shadow = ActorManager::GetInstance()->SearchActor("Crystal");
+	//ActorManager::GetInstance()->AttachActor("Crystal");
+	//crystal_shadow = ActorManager::GetInstance()->SearchActor("Crystal");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
@@ -49,14 +49,47 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
 
-	//TouchableObject* GoalItem_{};
-	//GoalItem_ = new TouchableObject();
-	//GoalItem_->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Goal));
-	//GoalItem_->SetPosition(XMFLOAT3(0, 0, 0));
-	//GoalItem_->SetScale(XMFLOAT3(1, 1, 1));
-	////Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
-	//GoalItem_->SetRotation(XMFLOAT3(-90, 0, 0));
-	//GoalItem.reset(GoalItem_);
+	const int w = 256;
+	const int h = 256;
+	const int l = 6;
+	for (int i = 0; i < 6; i++) {
+		Sprite* CameCon_[6]{};
+		CameCon_[i] = Sprite::Create(ImageManager::CameCon, { 0,0 });
+		Camecon[i].reset(CameCon_[i]);
+		int number_index_y = i / l;
+		int number_index_x = i % l;
+		Camecon[i]->SetTextureRect(
+			{ static_cast<float>(number_index_x) * w, static_cast<float>(number_index_y) * h },
+			{ static_cast<float>(w), static_cast<float>(h) });
+		Camecon[i]->SetSize({ 84,84 });
+		Camecon[i]->SetScale(1.0f);
+		Camecon[i]->SetAnchorPoint({ 0.5f,0.5f });
+	}
+	Camecon[0]->SetPosition({ 540.0f,530.0f });
+	Camecon[1]->SetPosition({ 540.0f,530.0f });
+	Camecon[2]->SetPosition({ 540.0f,530.0f });
+	Camecon[3]->SetPosition({ 740.0f,530.0f });
+	Camecon[4]->SetPosition({ 740.0f,530.0f });
+	Camecon[5]->SetPosition({ 640.0f,530.0f });
+
+	const int p = 2;
+	for (int i = 0; i < 2; i++) {
+		Sprite* Rockon_[2]{};
+		Rockon_[i] = Sprite::Create(ImageManager::Rockon, { 0,0 });
+		Rockon[i].reset(Rockon_[i]);
+		int number_index_y = i / p;
+		int number_index_x = i % p;
+		Rockon[i]->SetTextureRect(
+			{ static_cast<float>(number_index_x) * w, static_cast<float>(number_index_y) * h },
+			{ static_cast<float>(w), static_cast<float>(h) });
+		Rockon[i]->SetSize({ 84,84 });
+		Rockon[i]->SetScale(1.0f);
+		Rockon[i]->SetAnchorPoint({ 0.5f,0.5f });
+	}
+
+
+
+
 
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
@@ -126,15 +159,13 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	if (input->TriggerKey(DIK_P)) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
-	if (crystal_shadow->GetPause()) {
-		crystal_shadow->Update();
-		return;
-	}
+	//if (crystal_shadow->GetPause()) {
+	//	crystal_shadow->Update();
+	//	return;
+	//}
 	if (clear) {
-
 		ResultCamera(count);
 		count++;
-
 		ActorManager::GetInstance()->ResultUpdate(count);
 		ParticleManager::GetInstance()->Update();
 		if (input->TriggerButton(Input::A)) {
@@ -164,6 +195,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 		count += speed;
 		if (input->PushButton(input->START)) {
+			if (count %2 ==1) {
+				count--;
+			}
 			speed = 2;
 		}
 		if (count % 200 == 0) {
@@ -218,6 +252,34 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	if (input->TriggerButton(input->START)) {
 		pause = true;
 	}
+	animafrate++;
+	if (animafrate == 30) {
+		if (animation < 2&&animation > 0) {
+			animation += vec;
+		} else if(animation == 2) {
+			animation = 1;
+			vec *= -1;
+		} else if(animation == 0) {
+			animation = 1;
+			vec *= -1;
+		}
+		if (tapanima==3) {
+			tapanima = 4;
+		} else {
+			tapanima = 3;
+		}
+		animafrate = 0;
+	}
+	if (firstCamera) {
+			CameraAlpha *= 0.8f;
+			for (int i = 0; i < 6;i++) {
+				Camecon[i]->SetColor({ 1,1,1,CameraAlpha });
+			}
+	}
+	if (player_shadow->GetPause()) {
+
+
+	}
 	ActorManager::GetInstance()->Update();
 	ParticleManager::GetInstance()->Update();
 	skydome->Update();
@@ -249,6 +311,10 @@ void PlayScene::CameraUpda() {
 		return;
 	}
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
+		if (!firstCamera) {
+			firstCamera = true;
+		}
+		
 		if (input->TiltPushStick(Input::R_RIGHT)) {
 			angle -= 3;
 		}
@@ -263,6 +329,9 @@ void PlayScene::CameraUpda() {
 	}
 	if (input->TriggerButton(Input::LT)) {
 		if (!Reset) {
+			if (!firstCamera) {
+				firstCamera = true;
+			}
 			angleframe = 0.0f;
 			firstangle = angle;
 			endangle = player_shadow->GetRotation().y;
@@ -271,7 +340,7 @@ void PlayScene::CameraUpda() {
 		}
 	}
 	player_shadow->SetAngle(angle);
-	crystal_shadow->SetAngle(angle);
+	//crystal_shadow->SetAngle(angle);
 	camera->SetTarget(player_shadow->GetCameraPos(angle));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
@@ -351,6 +420,10 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		Screen[0]->Draw();
 		Screen[1]->Draw();
 		IntroWord[nowWord]->Draw();
+	} else {
+			Camecon[animation]->Draw();
+			Camecon[tapanima]->Draw();
+			Camecon[5]->Draw();
 	}
 	if (Result) {
 		Screen[0]->Draw();
@@ -361,7 +434,6 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 		Over->Draw();
 	}
 	//Demo->Draw();
-
 	//miniMap->PreDraw();
 	//miniMap->Draw(dxCommon->GetCmdList());
 	//miniMap->PostDraw();

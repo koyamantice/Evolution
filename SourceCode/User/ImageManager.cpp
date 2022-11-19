@@ -34,7 +34,8 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Intro04, L"Resources/2d/IntroWord/Intro04.png");
 	Sprite::LoadTexture(Intro05, L"Resources/2d/IntroWord/Intro05.png");
 	Sprite::LoadTexture(Intro06, L"Resources/2d/IntroWord/Intro06.png");
-
+	Sprite::LoadTexture(CameCon, L"Resources/2d/PlayUI/CameCon.png");
+	Sprite::LoadTexture(Rockon, L"Resources/2d/PlayUI/Rockon.png");
 }
 
 void ImageManager::LoadTex2D() {
@@ -48,6 +49,8 @@ void ImageManager::LoadTex2D() {
 	Texture::LoadTexture(RedDead, L"Resources/2d/Effect/CharaDead.png");
 	Texture::LoadTexture(RedDead, L"Resources/2d/Effect/CharaDead.png");
 	Texture::LoadTexture(SlowUI, L"Resources/2d/PlayUI/SlowUI.png");
+	Texture::LoadTexture(SetUI, L"Resources/2d/PlayUI/SetUI.png");
+	Texture::LoadTexture(SetUI2, L"Resources/2d/PlayUI/SetUI2.png");
 
 
 }

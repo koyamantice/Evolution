@@ -30,7 +30,7 @@ void PlayerUI::OnInitialize() {
 	_slash->SetScale(0.8f);
 	Slash.reset(_slash);
 
-	Sprite* _numBack[2];
+	Sprite* _numBack[2]{};
 	const DirectX::XMFLOAT2 numPos[2] = { {1050,590},{810,590} };
 	for (int i = 0; i < 2;i++) {
 		_numBack[i] = Sprite::Create(ImageManager::numBack, numPos[i]);

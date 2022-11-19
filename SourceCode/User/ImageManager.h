@@ -40,6 +40,8 @@ public:
 		Intro04,
 		Intro05,
 		Intro06,
+		CameCon,
+		Rockon,
 	};
 	enum tex2dName {
 		Lock,
@@ -50,6 +52,8 @@ public:
 		Shadow,
 		RedDead,
 		SlowUI,
+		SetUI,
+		SetUI2,
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p

@@ -119,6 +119,9 @@ void Player::OnUpda() {
 	if (canMove) {
 		Move();
 	}
+	if (input->TriggerButton(Input::RT)) {
+		pause = true;
+	}
 	//ContactObj();
 	XMFLOAT3 pos = obj->GetPosition();
 	if (pos.x > 48.0f) {

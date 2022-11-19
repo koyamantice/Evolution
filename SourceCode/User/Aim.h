@@ -23,12 +23,20 @@ private:
 	static const int GuidNum = 8;
 	std::unique_ptr<Texture> Guid[GuidNum]{};
 	std::unique_ptr<Texture> FirstUI{};
+	std::unique_ptr<Texture> SecondUI[2]{};
 	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
 
 
 	bool first = true;
+	bool second = true;
+
+	int Animation = 0;
+	int vel = 1;
+	int animeframe = 0;
+	float FirstAlpha = 1;
+	float SecondAlpha = 1;
 
 	void Move(float angle);
 	void EnemySet();

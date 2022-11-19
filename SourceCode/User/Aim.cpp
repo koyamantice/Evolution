@@ -1,7 +1,7 @@
 #include "Aim.h"
-#include"ImageManager.h"
-#include"ActorManager.h"
-#include<DirectXMath.h>
+#include "ImageManager.h"
+#include "ActorManager.h"
+#include <DirectXMath.h>
 #include <SourceCode/Common/Easing.h>
 using namespace DirectX;
 
@@ -28,6 +28,19 @@ void Aim::Init() {
 	FirstUI.reset(FirstUI_);
 	FirstUI->SetPosition({ 100,-50,0 });
 
+	Texture* SecondUI_ = Texture::Create(ImageManager::SetUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	SecondUI_->TextureCreate();
+	SecondUI_->SetRotation({ 0,0,0 });
+	SecondUI_->SetIsBillboard(true);
+	SecondUI[0].reset(SecondUI_);
+	SecondUI[0]->SetPosition({ 100,-50,0 });
+
+	Texture* SecondUI2_ = Texture::Create(ImageManager::SetUI2, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	SecondUI2_->TextureCreate();
+	SecondUI2_->SetRotation({ 0,0,0 });
+	SecondUI2_->SetIsBillboard(true);
+	SecondUI[1].reset(SecondUI2_);
+	SecondUI[1]->SetPosition({ 100,-50,0 });
 
 	for (int i = 0; i < GuidNum; i++) {
 		Texture* Guid_ = Texture::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
@@ -42,7 +55,23 @@ void Aim::Upda(float angle) {
 	LockOn->Update();
 	Whistle->Update();
 	FirstUI->Update();
-
+	SecondUI[0]->Update();
+	SecondUI[1]->Update();
+	animeframe++;
+	if (animeframe > 50) {
+		Animation += vel;
+		vel *= -1;
+		animeframe = 0;
+	}
+	if (!first) {
+		FirstAlpha *= 0.9f;
+		FirstUI->SetColor({ 1,1,1,FirstAlpha });
+	}
+	if (!second) {
+		SecondAlpha *= 0.9f;
+		SecondUI[0]->SetColor({1,1,1,SecondAlpha});
+		SecondUI[1]->SetColor({ 1,1,1,SecondAlpha });
+	}
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Update();
 	}
@@ -52,17 +81,20 @@ void Aim::Upda(float angle) {
 }
 
 void Aim::Draw() {
-//ImGui::Begin("test");
-//for (int i = 0; i < GuidNum; i++) {
-//	ImGui::SliderFloat("@:@", &GuidPos[i].y, 0, 360);
-//}
-//////ImGui::Unindent();
-//ImGui::End();
+	//ImGui::Begin("test");
+	//for (int i = 0; i < GuidNum; i++) {
+	//	ImGui::SliderFloat("@:@", &GuidPos[i].y, 0, 360);
+	//}
+	//////ImGui::Unindent();
+	//ImGui::End();
 
 	Texture::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
 	FirstUI->Draw();
+	if (FirstAlpha < 0.01f) {
+		SecondUI[Animation]->Draw();
+	}
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Draw();
 	}
@@ -79,6 +111,9 @@ void Aim::FirstSet() {
 
 void Aim::Move(float angle) {
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
+		if (first) {
+			first = false;
+		}
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock() - 1);
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
@@ -92,9 +127,12 @@ void Aim::Move(float angle) {
 
 	LockOn->SetRotation(Lrot);
 
-
-
 	if (input->PushButton(Input::A)) {
+		if (!first) {
+			if (second) {
+				second = false;
+			}
+		}
 		if (Area < 8.0f) {
 			Area += 0.08f;
 		}
@@ -110,7 +148,7 @@ void Aim::Move(float angle) {
 			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
 			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
-			ParticleManager::GetInstance()->Add(1,15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
+			ParticleManager::GetInstance()->Add(1, 15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
 	} else {
@@ -134,32 +172,34 @@ void Aim::Move(float angle) {
 	}
 
 
-	if(input->TiltPushStick(Input::L_UP, 0.0f)){
+	if (input->TiltPushStick(Input::L_UP, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,2,0 }, angle);
 		Lpos.x -= vecvel.x * (StickY / STICK_MAX);
 		Lpos.z -= vecvel.z * (StickY / STICK_MAX);
 	}
-	if(input->TiltPushStick(Input::L_DOWN, 0.0f)) {
+	if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-2,0 }, angle);
 		Lpos.x += vecvel.x * (StickY / STICK_MAX);
 		Lpos.z += vecvel.z * (StickY / STICK_MAX);
 
 	}
-	if(input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
+	if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 2,0,0,0 }, angle);
 		Lpos.x -= vecvel.x * (StickX / STICK_MAX);
 		Lpos.z -= vecvel.z * (StickX / STICK_MAX);
 	}
-	if(input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+	if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -2,0,0,0 }, angle);
 		Lpos.x += vecvel.x * (StickX / STICK_MAX);
 		Lpos.z += vecvel.z * (StickX / STICK_MAX);
 
-	
+
 	}
 
 	LockOn->SetPosition({ Lpos.x,0.01f,Lpos.z });
-	FirstUI->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y+2) * PI / 180.0f) + 3.5f ,Lpos.z });
+	FirstUI->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
+	SecondUI[0]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
+	SecondUI[1]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
 
 
 	for (int i = 0; i < GuidNum; i++) {

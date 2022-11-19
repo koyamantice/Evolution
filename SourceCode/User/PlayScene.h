@@ -64,6 +64,13 @@ private:
 	std::unique_ptr<Sprite> Over{};
 	std::unique_ptr<Sprite>	Screen[2] {};
 	std::unique_ptr<Sprite> IntroWord[10];
+	std::unique_ptr<Sprite> Camecon[6]{};
+	std::unique_ptr<Sprite> Rockon[2]{};
+	float CameraAlpha = 1.0f;
+	int animation = 0;
+	int tapanima = 3;
+	int animafrate = 0;
+	int vec = 1;
 	int nowWord = 0;
 	bool Intro = true;
 	bool Result = false;
@@ -75,6 +82,7 @@ private:
 	std::unique_ptr<TouchableObject> GoalItem{};
 	std::unique_ptr<PauseUI> pauseUi{};	
 
+	bool firstCamera = false;
 	std::unique_ptr<Sprite> Effect;
 	bool Change = true;
 	float alpha = 0.0f;
