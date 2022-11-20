@@ -99,7 +99,18 @@ void ActorManager::CheckBulletCollisions() {
 			Bullet* bullet = itrB->get();
 			if (Collision::SphereCollision2(actor->GetPosition(), 1.5f, bullet->GetPosition(), 1.5f)) {
 				actor->OnCollision("Bullet");
-				bullet->OnCollision(actor->GetTag());
+				bullet->OnCollision(actor->GetTag(), actor->GetPosition());
+			}
+		}
+	}
+	for (auto itrA = Bullets.begin(); itrA != Bullets.end(); ++itrA) {
+		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
+			if (itrA == itrB) { continue; }
+			Bullet* bullet_a = itrA->get();
+			Bullet* bullet_b = itrB->get();
+			if (Collision::SphereCollision2(bullet_a->GetPosition(), 1.0f, bullet_b->GetPosition(), 1.0f)) {
+				bullet_a->OnCollision("Bullet", bullet_b->GetPosition());
+				bullet_b->OnCollision("Bullet", bullet_a->GetPosition());
 			}
 		}
 	}
@@ -206,6 +217,7 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 }
 
 void ActorManager::BoidIsolate() {
+
 	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
 		float contX = 0;
 		float contY = 0;

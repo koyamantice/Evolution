@@ -10,5 +10,8 @@ private:
 	void OnUpda()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
-	void OnCollision(const std::string& Tag) override;
+	void OnCollision(const std::string& Tag, const XMFLOAT3& pos) override;
+
+	void SetAggregation() override;
+
 };

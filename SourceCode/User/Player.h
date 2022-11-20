@@ -22,6 +22,7 @@ private:
 	std::stringstream parameterCommands;
 	//std::unique_ptr<Texture> LockOn{};
 	std::unique_ptr<Aim> LockOn{};
+	std::unique_ptr<Texture> Shadow = nullptr;
 
 	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
 	void OnInit()override;

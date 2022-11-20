@@ -108,6 +108,14 @@ void Player::OnInit() {
 	compornent = new PlayerUI();
 	compornent->Initialize();
 
+	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
+	//Shadow_->SetIsBillboard(true);
+	Shadow_->TextureCreate();
+	Shadow_->SetRotation({ 90,0,0 });
+	Shadow.reset(Shadow_);
+
+
 }
 
 void Player::OnUpda() {
@@ -119,9 +127,7 @@ void Player::OnUpda() {
 	if (canMove) {
 		Move();
 	}
-	if (input->TriggerButton(Input::RT)) {
-		pause = true;
-	}
+
 	//ContactObj();
 	XMFLOAT3 pos = obj->GetPosition();
 	if (pos.x > 48.0f) {
@@ -139,12 +145,16 @@ void Player::OnUpda() {
 	obj->SetPosition(pos);
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
+	Shadow->Update();
+	Shadow->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
 	fbxObj->SetRotation(obj->GetRotation());
 	LockOn->Upda(angle);
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
 	fbxObj->Draw(dxCommon->GetCmdList());
+	Texture::PreDraw();
+	Shadow->Draw();
 	LockOn->Draw();
 	//int a=ActorManager::GetInstance()->SearchNum("Bullet");
 	//	ImGui::Begin("test");

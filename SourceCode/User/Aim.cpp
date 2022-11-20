@@ -195,6 +195,18 @@ void Aim::Move(float angle) {
 
 
 	}
+	if (Lpos.x > 48.0f) {
+		Lpos.x = 48.0f;
+	}
+	if (Lpos.x < -48.0f) {
+		Lpos.x = -48.0f;
+	}
+	if (Lpos.z > 48.0f) {
+		Lpos.z = 48.0f;
+	}
+	if (Lpos.z < -48.0f) {
+		Lpos.z = -48.0f;
+	}
 
 	LockOn->SetPosition({ Lpos.x,0.01f,Lpos.z });
 	FirstUI->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });

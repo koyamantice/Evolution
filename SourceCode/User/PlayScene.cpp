@@ -276,10 +276,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 				Camecon[i]->SetColor({ 1,1,1,CameraAlpha });
 			}
 	}
-	if (player_shadow->GetPause()) {
 
-
-	}
 	ActorManager::GetInstance()->Update();
 	ParticleManager::GetInstance()->Update();
 	skydome->Update();

@@ -60,15 +60,15 @@ void Bullet::Demo() {
 
 void Bullet::IntroUpdate(const int& Timer) {
 	if (isActive) {
-		if(Timer<5){
+		if (Timer < 5) {
 			fbxObj->Update();
-			fbxObj->SetPosition({ (((int)ID % 10)- 5) * 3.0f, hight, ((int)ID / 10) * 5.0f });
+			fbxObj->SetPosition({ (((int)ID % 10) - 5) * 3.0f, hight, ((int)ID / 10) * 5.0f });
 		} else {
 			fbxObj->Update();
 			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
 			fbxObj->SetRotation({ 0,180,0 });
 			if (hight > 0) {
-				hight-=0.2f;
+				hight -= 0.2f;
 			}
 
 		}
@@ -81,7 +81,7 @@ void Bullet::IntroUpdate(const int& Timer) {
 }
 
 void Bullet::ResultUpdate(const int& Timer) {
-	
+
 	ResultOnUpdate(Timer);
 
 }
@@ -119,8 +119,8 @@ void Bullet::BoidAverage() {
 void Bullet::Move() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	BoidAverage();
-	float kX = 0.7f * flocking.ctrDirX + 0.2f * flocking.vel.x + 0.8f * flocking.contX;
-	float kY = 0.7f * flocking.ctrDirY + 0.2f * flocking.vel.x + 0.8f * flocking.contY;
+	float kX = 0.8f * flocking.ctrDirX + 0.2f * flocking.vel.x + 0.9f * flocking.contX;
+	float kY = 0.8f * flocking.ctrDirY + 0.2f * flocking.vel.x + 0.9f * flocking.contY;
 
 	float tempVel = sqrtf(kX * kX + kY * kY);
 	if (tempVel > 0.2f) {
@@ -131,9 +131,10 @@ void Bullet::Move() {
 	dx += (kX - dx) * 0.02f;
 	dy += (kY - dy) * 0.02f;
 
-
-	pos.x += dx;
-	pos.z += dy;
+	if (!collide) {
+		pos.x += dx;
+		pos.z += dy;
+	}
 	fbxObj->SetPosition(pos);
 }
 
@@ -239,8 +240,8 @@ void Bullet::DeadEnd() {
 	CharaDead->Update();
 
 
-	vanishHight = Ease(Out,Quad,deadframe,0.1f,4.5f);
-	vanishAlpha = Ease(In,Quad,deadframe,1.0f,0.5f);
+	vanishHight = Ease(Out, Quad, deadframe, 0.1f, 4.5f);
+	vanishAlpha = Ease(In, Quad, deadframe, 1.0f, 0.5f);
 
 	CharaDead->SetPosition({ fbxObj->GetPosition().x,vanishHight, fbxObj->GetPosition().z });
 	CharaDead->SetColor({ 1,1,1,vanishAlpha });
@@ -283,11 +284,26 @@ void Bullet::WaitUpda() {
 
 	fbxObj->SetPosition(pos);
 
-	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 1.0f)) {
+	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
+		if (!wait) {
+			Follow2Player();
+			Move();
+		}
+	} else {
+		wait = true;
 		Follow2Player();
-		Move();
-		//WaitBullet();
+		SetAggregation();
 	}
+	if (wait) {
+		SetAggregation();
+		if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 6.0f, player->GetPosition().x, player->GetPosition().z, 4.0f)) {
+			wait = false;
+		}
+	} else {
+		Followframe = 0.0f;
+	}
+
+
 }
 
 void Bullet::SlowUpda() {

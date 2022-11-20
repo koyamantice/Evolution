@@ -93,7 +93,7 @@ public:
 
 	void Finalize();	//èIóπèàóù
 
-	virtual void OnCollision(const std::string& Tag) {};
+	virtual void OnCollision(const std::string& Tag,const XMFLOAT3& pos) {};
 
 protected:
 	virtual void OnInit() {};
@@ -103,6 +103,8 @@ protected:
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
 	virtual void ResultOnUpdate(const int& Timer) {};
+	virtual void SetAggregation() {};
+
 
 	void BoidAverage();
 	void Move();
@@ -133,7 +135,7 @@ protected:
 	float vanishHight = 0.1f;
 	float vanishAlpha = 1.0f;
 	int CoolTime = 0;
-
+	bool wait = false;
 	float vel = 0.8f;
 	bool burning = false;
 	void BurnOut();
@@ -163,9 +165,11 @@ protected:
 	float angle = 0;
 	bool DeadFlag = false;
 
-
+	bool collide = false;
 	XMFLOAT3 oldPos = {};
 	XMFLOAT3 AftaerPos{};
+	float Followframe = 0.0f;
+	XMFLOAT3 FollowPos{};
 
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;

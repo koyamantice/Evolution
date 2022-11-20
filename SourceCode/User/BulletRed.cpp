@@ -2,6 +2,7 @@
 #include"ActorManager.h"
 #include"ModelManager.h"
 #include <SourceCode/FrameWork/collision/Collision.h>
+#include <SourceCode/Common/Easing.h>
 using namespace DirectX;
 
 
@@ -43,6 +44,7 @@ void BulletRed::OnInit() {
 }
 
 void BulletRed::OnUpda() {
+	if (collide) { collide = false; }
 	if (DeadFlag) {
 		DeadEnd();
 		return;
@@ -67,6 +69,7 @@ void BulletRed::OnUpda() {
 		}
 		break;
 	case Slow:
+		if (wait) { wait = false; Followframe = 0.0f; }
 		SlowUpda();
 		break;
 	default:
@@ -101,7 +104,7 @@ void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 void BulletRed::OnFinal() {
 }
 
-void BulletRed::OnCollision(const std::string& Tag) {
+void BulletRed::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 	if (Tag == "Player") {
 		switch (command) {
 		case Wait:
@@ -120,6 +123,8 @@ void BulletRed::OnCollision(const std::string& Tag) {
 			break;
 		}
 	}
+
+
 
 	if (Tag == "Enemy") {
 		int a = 0;
@@ -152,5 +157,41 @@ void BulletRed::OnCollision(const std::string& Tag) {
 			break;
 		}
 	}
+	if (Tag == "Bullet") {
+		if (collide) { return; }
+		if (command == Dead) { return; }
+		collide = true;
+		XMFLOAT3 pos2 = fbxObj->GetPosition();
+
+		float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
+
+		if (dir <= 0) {
+			pos2.x += sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+			pos2.z += cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+		} else {
+			pos2.x -= sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+			pos2.z -= cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+
+		}
+		fbxObj->SetPosition(pos2);
+	}
+
+}
+
+void BulletRed::SetAggregation() {
+	XMFLOAT3 pos = player->GetPosition();
+	XMFLOAT3 Bpos = fbxObj->GetPosition();
+	float rot = player->GetRotation().y + 360;
+	int first = ID % 10;
+	if (Followframe < 1.0f) {
+		Followframe += 0.002f;
+	} else {
+		Followframe = 1.0f;
+	}
+	FollowPos = { pos.x + -sinf((rot + (float)((first * 27) + 45)) * (XM_PI / 180)) * (((int)(ID / 10) + 1) * 2.5f) , 0, pos.z + -cosf((player->GetRotation().y + (float)((first * 27) + 45)) * (XM_PI / 180)) * (((int)(ID / 10) + 1) * 2.5f) };
+	Bpos.x = Ease(InOut, Quad, Followframe, Bpos.x, FollowPos.x);
+	Bpos.z = Ease(InOut, Quad, Followframe, Bpos.z, FollowPos.z);
+	fbxObj->SetPosition(Bpos);
+
 }
 
