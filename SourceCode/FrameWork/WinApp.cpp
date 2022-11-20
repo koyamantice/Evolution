@@ -115,7 +115,7 @@ void WinApp::Finalize() {
 }
 int  WinApp::SetWinCenter() {
 	HWND hDeskWnd;
-	RECT deskrc, rc;
+	RECT deskrc{}, rc{};
 	int x, y;
 
 	hDeskWnd = GetDesktopWindow();
