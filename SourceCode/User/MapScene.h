@@ -52,6 +52,7 @@ private:
 	std::unique_ptr<Sprite>	Vignette{};
 	std::unique_ptr<Gauge>	Demo;
 	std::unique_ptr<Object3d> skydome{};
+	std::unique_ptr<Object3d> grassPatch{};
 	std::unique_ptr<TouchableObject> ground{};
 	std::unique_ptr<PauseUI> pauseUi{};
 	PostEffect* postEffect = nullptr;

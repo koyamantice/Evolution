@@ -66,6 +66,7 @@ private:
 	std::unique_ptr<Sprite> IntroWord[10];
 	std::unique_ptr<Sprite> Camecon[6]{};
 	std::unique_ptr<Sprite> Rockon[2]{};
+	std::unique_ptr<Object3d> grassPatch{};
 	float CameraAlpha = 1.0f;
 	int animation = 0;
 	int tapanima = 3;

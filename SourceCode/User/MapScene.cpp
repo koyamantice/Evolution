@@ -28,6 +28,15 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
 
+	Object3d* Patch{};
+	Patch = new Object3d();
+	Patch->Initialize();
+	Patch->SetModel(ModelManager::GetIns()->GetModel(ModelManager::grassPatch));
+	Patch->SetPosition(XMFLOAT3(0, 0, 0));
+	Patch->SetBillboard(true);
+	Patch->SetScale(XMFLOAT3(5, 5, 5));
+	grassPatch.reset(Patch);
+
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
 	camera->SetTarget(player_shadow->GetPosition());
@@ -52,6 +61,8 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->Update();
 	ParticleManager::GetInstance()->Update();
 	ground->Update();
+	grassPatch->Update();
+
 }
 
 void MapScene::CameraUpda() {
@@ -67,7 +78,9 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw();
-	ground->Draw();
+	//ground->Draw();
+	grassPatch->Draw();
+
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());

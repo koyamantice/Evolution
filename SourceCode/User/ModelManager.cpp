@@ -23,7 +23,8 @@ void ModelManager::Initialize() {
 	LoadModel(textM, "text04M");
 	LoadModel(textE, "text05E");
 	LoadModel(RedKobi,"RedKobito");
-	
+	LoadModel(grassPatch, "grassPatch");
+
 	LoadFBXModel(Mash,"Mash");
 	LoadFBXModel(Bird,"Player");
 	LoadFBXModel(Kobi, "RedKobito");

@@ -49,6 +49,18 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
 
+
+
+
+
+	Object3d* Patch{};
+	Patch = new Object3d();
+	Patch->Initialize();
+	Patch->SetModel(ModelManager::GetIns()->GetModel(ModelManager::grassPatch));
+	Patch->SetPosition(XMFLOAT3(0, 0.5f, 30));
+	//Patch->SetBillboard(true);
+	Patch->SetScale(XMFLOAT3(10, 10, 10));
+	grassPatch.reset(Patch);
 	const int w = 256;
 	const int h = 256;
 	const int l = 6;
@@ -298,7 +310,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 	}
 #pragma endregion
-
+	grassPatch->Update();
 }
 
 void PlayScene::CameraUpda() {
@@ -400,6 +412,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
+	grassPatch->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());

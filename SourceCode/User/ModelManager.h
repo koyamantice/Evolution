@@ -28,6 +28,7 @@ public:
 		textM,
 		textE,
 		RedKobi,
+		grassPatch,
 
 	};
 	enum FBXName {

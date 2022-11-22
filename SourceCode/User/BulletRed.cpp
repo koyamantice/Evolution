@@ -160,6 +160,8 @@ void BulletRed::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 	if (Tag == "Bullet") {
 		if (collide) { return; }
 		if (command == Dead) { return; }
+		if (command == Wait) { return; }
+
 		collide = true;
 		XMFLOAT3 pos2 = fbxObj->GetPosition();
 
