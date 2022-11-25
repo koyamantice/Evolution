@@ -22,6 +22,7 @@ private:
 private:
 	std::unique_ptr<Object3d> texts[6];
 	std::unique_ptr<FBXObject3d> Player;
+	std::unique_ptr<Object3d> house;
 
 	float pos[6]{};
 

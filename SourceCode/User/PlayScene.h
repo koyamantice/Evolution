@@ -1,7 +1,6 @@
 #pragma once
 #include "SceneManager.h"
 #include "Actor.h"
-#include "PauseUI.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
 #include "Gauge.h"
 #include <PostEffect.h>
@@ -13,7 +12,6 @@
 
 class PlayScene : public BaseScene {
 public:
-
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -30,15 +28,18 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
-
-	void ResetCamera();
 private:
 	/// <summary>
 	///	カメラ周り
 	/// </summary>
 	void CameraUpda();
+	//導入カメラ
 	void IntroCamera(int Timer);
+	//クリア後カメラ
 	void ResultCamera(int Timer);
+	//画面を背中に
+	void ResetCamera();
+
 	int count = 0;
 	int speed = 1;
 	float angle = 0;
@@ -53,43 +54,35 @@ private:
 	XMFLOAT2 dis = { 16,7 };
 	bool clear = false;
 	float Cframe = 0.0f;
-	XMFLOAT2 clearPos = { 0,-720 };
 private:
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
 	Actor* crystal_shadow = nullptr;
 	Actor* goal_shadow = nullptr;
-	ActorComponent* PlayerComp = nullptr;
+
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};
-	std::unique_ptr<Sprite>	Screen[2] {};
 	std::unique_ptr<Sprite> IntroWord[10];
 	std::unique_ptr<Sprite> Camecon[6]{};
 	std::unique_ptr<Sprite> Rockon[2]{};
+	//std::unique_ptr<Gauge> Demo;
+
 	std::unique_ptr<Object3d> grassPatch{};
+	std::unique_ptr<Object3d> skydome{};
+
+	std::unique_ptr<TouchableObject> ground{};
+	std::unique_ptr<TouchableObject> GoalItem{};
+
 	float CameraAlpha = 1.0f;
 	int animation = 0;
 	int tapanima = 3;
 	int animafrate = 0;
 	int vec = 1;
 	int nowWord = 0;
-	bool Intro = true;
-	bool Result = false;
-	bool GameOver = false;
-	float IntroHight = 50.0f;
-	std::unique_ptr<Gauge>	Demo;
-	std::unique_ptr<Object3d> skydome{};
-	std::unique_ptr<TouchableObject> ground{};
-	std::unique_ptr<TouchableObject> GoalItem{};
-	std::unique_ptr<PauseUI> pauseUi{};	
 
-	bool firstCamera = false;
-	std::unique_ptr<Sprite> Effect;
-	bool Change = true;
-	float alpha = 0.0f;
-	float frame = 0;
-	int finishTime = 0;
+	bool cameraExplanation = false;
+	float IntroHight = 50.0f;
+	float introFrame = 0;
 	PostEffect* postEffect = nullptr;
-	MiniMap* miniMap = nullptr;
 };
 

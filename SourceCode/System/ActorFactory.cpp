@@ -2,12 +2,14 @@
 #include"ModelManager.h"
 #include"Player.h"
 #include"Enemy.h"
+#include"Enemy_Bee.h"
 #include"Bullet.h"
 #include"BulletRed.h"
 #include"BulletGreen.h"
 #include "Crystal.h"
 #include "ClearCrystal.h"
 #include"PlayerUI.h"
+#include "Honey.h"
 
 
 
@@ -24,6 +26,10 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 		newActor = new Enemy();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy), "Enemy");
 	}
+	if (sceneName == "Enemy_Bee") {
+		newActor = new Enemy_Bee();
+		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Enemy), "Enemy");
+	}
 	if (sceneName == "ClearCrystal") {
 		newActor = new ClearCrystal();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Goal),"ClearCrystal");
@@ -34,7 +40,11 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Crystal), "Crystal");
 
 	}
+	if (sceneName == "Honey") {
+		newActor = new Honey();
+		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::honey), "Honey");
 
+	}
 	return newActor;
 }
 

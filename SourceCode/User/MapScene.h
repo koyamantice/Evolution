@@ -12,7 +12,6 @@
 
 class MapScene : public BaseScene {
 public:
-
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>

@@ -24,11 +24,15 @@ void ModelManager::Initialize() {
 	LoadModel(textE, "text05E");
 	LoadModel(RedKobi,"RedKobito");
 	LoadModel(grassPatch, "grassPatch");
+	LoadModel(house, "House");
+	LoadModel(honey, "honey");
 
 	LoadFBXModel(Mash,"Mash");
 	LoadFBXModel(Bird,"Player");
 	LoadFBXModel(Kobi, "RedKobito");
 	LoadFBXModel(brave, "kobi");
+	LoadFBXModel(Demo, "Eagle");
+
 }
 
 void ModelManager::Finalize() {

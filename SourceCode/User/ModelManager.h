@@ -29,6 +29,8 @@ public:
 		textE,
 		RedKobi,
 		grassPatch,
+		house,
+		honey,
 
 	};
 	enum FBXName {
@@ -36,6 +38,7 @@ public:
 		Bird,
 		Kobi,
 		brave,
+		Demo,
 	};
 
 public:

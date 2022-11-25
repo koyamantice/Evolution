@@ -227,6 +227,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Honey.cpp" />
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
     <ClCompile Include="SourceCode\Common\Vec.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
@@ -290,6 +291,7 @@
     <ClCompile Include="SourceCode\User\Enemy.cpp" />
     <ClCompile Include="SourceCode\User\EnemyAttack.cpp" />
     <ClCompile Include="SourceCode\User\EnemyUI.cpp" />
+    <ClCompile Include="SourceCode\User\Enemy_Bee.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
     <ClCompile Include="SourceCode\User\MapScene.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
@@ -306,6 +308,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Honey.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
     <ClInclude Include="SourceCode\Common\Vec.h" />
@@ -375,6 +378,7 @@
     <ClInclude Include="SourceCode\User\Enemy.h" />
     <ClInclude Include="SourceCode\User\EnemyAttack.h" />
     <ClInclude Include="SourceCode\User\EnemyUI.h" />
+    <ClInclude Include="SourceCode\User\Enemy_Bee.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
     <ClInclude Include="SourceCode\User\MapScene.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />

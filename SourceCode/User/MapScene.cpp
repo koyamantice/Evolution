@@ -19,6 +19,7 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	PlayerComp = new PlayerUI();
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
+	ActorManager::GetInstance()->AttachActor("Enemy_Bee");
 
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
@@ -78,8 +79,8 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw();
-	//ground->Draw();
-	grassPatch->Draw();
+	ground->Draw();
+	//grassPatch->Draw();
 
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);

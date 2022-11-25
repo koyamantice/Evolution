@@ -38,6 +38,18 @@ void TitleText::Init() {
 		texts[i]->Initialize();
 	}
 
+	Object3d* house_ = new Object3d();
+	house_->Initialize();
+	house_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::house));
+	house_->SetPosition({ -4,-3,-10 });
+	house_->SetRotation({ 0,90,0 });
+	house_->SetScale({ 1.0f,1.0f,1.0f });
+	house.reset(house_);
+
+
+
+
+
 	FBXObject3d* Player_ = new FBXObject3d();
 	Player_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
 	Player_->Initialize();
@@ -61,7 +73,7 @@ void TitleText::Upda() {
 		pos[4]=Ease(In,Back,frame,0,8.0f);
 		pos[5]=Ease(In,Back,frame,0,14.0f);
 	} else {
-		frame = 1.0f;
+	//	frame = 1.0f;
 	}
 
 	for (int i = 0; i < 6; i++) {
@@ -69,10 +81,12 @@ void TitleText::Upda() {
 	}
 
 	Player->Update();
+	house->Update();
 }
 
 void TitleText::Draw(DirectXCommon* dxCommon) {
 //	Player->Draw(dxCommon->GetCmdList());
+	house->Draw();
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Draw();
 	}

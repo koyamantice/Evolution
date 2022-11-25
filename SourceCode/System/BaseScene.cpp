@@ -6,15 +6,11 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	Texture::SetCamera(camera);
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
-	// モデル読み込み
-	//AudioManager::GetInstance()->LoadSound(1, "Resources/Sound/titleBGM.wav");
-	//AudioManager::GetInstance()->LoopWave(1, 0.12f);
-	//srand(NULL);
+	//音の挿入
 	// ライト生成
 	lightGroup = LightGroup::Create();
 	// 3Dオブエクトにライトをセット
 	Object3d::SetLightGroup(lightGroup);
-
 	//この順番で書かないと例外スローになります
 	// デバイスをセット
 	FBXObject3d::SetDevice(dxCommon->GetDev());
@@ -22,8 +18,22 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	FBXObject3d::SetCamera(camera);
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
+	//パーティクルにカメラセット
+	ParticleManager::GetInstance()->SetCamera(camera);
 
-	particleMan = ParticleManager::GetInstance();
-	particleMan->SetCamera(camera);
+
+
+	//導入枠
+	Sprite* _Screen = nullptr;
+	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
+	Screen[0].reset(_Screen);
+	Sprite* _Screen2 = nullptr;
+	_Screen2 = Sprite::Create(ImageManager::SceneCover, { 0,600 });
+	Screen[1].reset(_Screen2);
+	
+	//
+	PauseUI* pause_ui = new PauseUI();
+	pauseUi.reset(pause_ui);
+
 
 }

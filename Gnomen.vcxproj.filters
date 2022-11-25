@@ -184,7 +184,6 @@
     <ClCompile Include="SourceCode\Obj\ActorComponent.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\System\BaseScene.cpp" />
     <ClCompile Include="SourceCode\User\PlayScene.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
@@ -256,6 +255,15 @@
     </ClCompile>
     <ClCompile Include="SourceCode\User\ClearCrystal.cpp">
       <Filter>User\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Enemy_Bee.cpp">
+      <Filter>User\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Honey.cpp">
+      <Filter>User\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\BaseScene.cpp">
+      <Filter>System\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -489,6 +497,12 @@
       <Filter>User\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\ClearCrystal.h">
+      <Filter>User\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Enemy_Bee.h">
+      <Filter>User\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Honey.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

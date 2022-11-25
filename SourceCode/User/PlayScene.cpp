@@ -3,7 +3,6 @@
 #include "AudioManager.h"
 #include "input.h"
 #include<string>
-#include"ImageManager.h"
 #include"ModelManager.h"
 #include <TisGame.h>
 #include"Player.h"
@@ -14,16 +13,11 @@
 
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
-	//背景スプライト生成
-	//sprite[back] = Sprite::Create(ImageManager::TITLE, { 0.0f,0.0f });
 	//スプライト生成
-	PlayerComp = new PlayerUI();
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
-	//ActorManager::GetInstance()->AttachActor("Crystal");
-	//crystal_shadow = ActorManager::GetInstance()->SearchActor("Crystal");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
@@ -48,10 +42,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(Ground);
-
-
-
-
 
 	Object3d* Patch{};
 	Patch = new Object3d();
@@ -83,7 +73,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Camecon[3]->SetPosition({ 740.0f,530.0f });
 	Camecon[4]->SetPosition({ 740.0f,530.0f });
 	Camecon[5]->SetPosition({ 640.0f,530.0f });
-
 	const int p = 2;
 	for (int i = 0; i < 2; i++) {
 		Sprite* Rockon_[2]{};
@@ -99,10 +88,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 		Rockon[i]->SetAnchorPoint({ 0.5f,0.5f });
 	}
 
-
-
-
-
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
 	Clear.reset(_clear);
@@ -111,23 +96,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
 	Over.reset(_Over);
 
-	Sprite* _Screen = nullptr;
-	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
-	Screen[0].reset(_Screen);
-	Sprite* _Screen2 = nullptr;
-	_Screen2 = Sprite::Create(ImageManager::SceneCover, { 0,600 });
-	Screen[1].reset(_Screen2);
-
-	Gauge::LoadTexture(0, L"Resources/2d/PlayUI/Lock.png");
-	Gauge* _Gauge = nullptr;
-	_Gauge = Gauge::Create(0, { 0,0 });
-	Demo.reset(_Gauge);
-	//Demo->SetColor(XMFLOAT4{ 1,1,1,0.2f });
-
 	//スプライト生成
 	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
-	Effect.reset(Effect_);
-	Effect->SetColor({ 1,1,1,alpha });
+	FeedBlack.reset(Effect_);
+	FeedBlack->SetColor({ 1,1,1,feedAlpha });
 
 	Sprite* IntroWord_1 = Sprite::Create(ImageManager::Intro01, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	IntroWord[0].reset(IntroWord_1);
@@ -142,16 +114,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	Sprite* IntroWord_6 = Sprite::Create(ImageManager::Intro06, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	IntroWord[5].reset(IntroWord_6);
 
-
-
-	PauseUI* pause_ui = new PauseUI();
-	pauseUi.reset(pause_ui);
 	camera->SetTarget(player_shadow->GetPosition());
 
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-	miniMap = new  MiniMap();
-	miniMap->Initialize();
+
 	distance.x = sinf(angle * (PI / 180)) * 13.0f;
 	distance.y = cosf(angle * (PI / 180)) * 13.0f;
 
@@ -188,20 +155,20 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	if (Intro) {
 		IntroCamera(count);
 		if (Change) {
-			if (frame < 1.0f) {
-				frame += 0.01f;
+			if (introFrame < 1.0f) {
+				introFrame += 0.01f;
 			} else {
 				Change = false;
 			}
-			alpha = Ease(In, Cubic, frame, 1, 0);
-			Effect->SetColor({ 1,1,1,alpha });
+			feedAlpha = Ease(In, Cubic, introFrame, 1, 0);
+			FeedBlack->SetColor({ 1,1,1,feedAlpha });
 		}
 		goal_shadow->SetIsActive(false);
 		ActorManager::GetInstance()->IntroUpdate(count);
 		skydome->Update();
 		ground->Update();
 		if (count > 1200) {
-			Effect->SetColor({ 1,1,1,0 });
+			FeedBlack->SetColor({ 1,1,1,0 });
 			count = 0;
 			Intro = false;
 		}
@@ -231,7 +198,6 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 
 		finishTime++;
 		if (finishTime > 200) {
-
 			enemy_shadow->SetPause(false);
 			enemy_shadow->SetCommand(Actor::DEAD);
 		}
@@ -282,7 +248,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		}
 		animafrate = 0;
 	}
-	if (firstCamera) {
+	if (cameraExplanation) {
 			CameraAlpha *= 0.8f;
 			for (int i = 0; i < 6;i++) {
 				Camecon[i]->SetColor({ 1,1,1,CameraAlpha });
@@ -320,8 +286,8 @@ void PlayScene::CameraUpda() {
 		return;
 	}
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
-		if (!firstCamera) {
-			firstCamera = true;
+		if (!cameraExplanation) {
+			cameraExplanation = true;
 		}
 		
 		if (input->TiltPushStick(Input::R_RIGHT)) {
@@ -338,8 +304,8 @@ void PlayScene::CameraUpda() {
 	}
 	if (input->TriggerButton(Input::LT)) {
 		if (!Reset) {
-			if (!firstCamera) {
-				firstCamera = true;
+			if (!cameraExplanation) {
+				cameraExplanation = true;
 			}
 			angleframe = 0.0f;
 			firstangle = angle;
@@ -412,13 +378,13 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
-	grassPatch->Draw();
+	//grassPatch->Draw();
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
 	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 	Sprite::PreDraw();
 	if (Change) {
-		Effect->Draw();
+		FeedBlack->Draw();
 	}
 	if (clear) {
 		Clear->Draw();

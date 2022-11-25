@@ -1,5 +1,4 @@
 #pragma once
-
 class SceneManager;
 #include "DirectXCommon.h"
 #include "DebugCamera.h"
@@ -12,8 +11,9 @@ class SceneManager;
 #include <DirectXMath.h>
 #include "input.h"
 #include "FPSManager.h"
-#include<memory>
 #include "ParticleManager.h"
+#include"ImageManager.h"
+#include <SourceCode/User/PauseUI.h>
 
 /// <summary>
 /// シーン規定
@@ -28,40 +28,26 @@ protected:
 	using XMMATRIX = DirectX::XMMATRIX;
 protected:
 	LightGroup* lightGroup = nullptr;
-	//各クラスのもの
 	DebugCamera* camera = { nullptr };
 	bool pause = false;
-	float ambientColor0[3] = { 1,1,1 };
 
-	// 光線方向初期値
-	float lightDir0[3] = { 0,0,1 };
-	float lightColor0[3] = { 1,0,0 };
+	std::unique_ptr<PauseUI> pauseUi{};
 
-	float lightDir1[3] = { 0,1,0 };
-	float lightColor1[3] = { 0,1,0 };
+	std::unique_ptr<Sprite>	Screen[2]{};
 
-	float lightDir2[3] = { 1,0,0 };
-	float lightColor2[3] = { 0,0,1 };
+	std::unique_ptr<Sprite> FeedBlack{};
+	bool Change = true;
+	float feedAlpha = 0.0f;
 
-	float pointLightPos[3] = { 0,0,0 };
-	float pointLightColor[3] = { 1,1,1 };
-	float pointLightAtten[3] = { 0.3f,0.1f,0.1f };
-	int EffectNum = 0;
-	float distanceY = 12;
-	float distanceZ = 12;
+	//killクリップ
+	int finishTime = 0;
 
-	//始まる前の演出のための変数
-	bool bossstart = false;
-	int appearanceNumber = 0;
-	int appearanceTimer = 0;
-	XMFLOAT3 cameraPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 cameratargetPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Aftereyepos;
-	XMFLOAT3 Aftertargetpos;
-	ParticleManager* particleMan;
+	bool Intro = true;
+	bool Result = false;
+	bool GameOver = false;
+
 public:
 	virtual ~BaseScene()=default;
-
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -84,6 +70,5 @@ public:
 	/// 描画
 	/// </summary>
 	virtual void Draw(DirectXCommon* dxCommon)=0;
-
 };
 

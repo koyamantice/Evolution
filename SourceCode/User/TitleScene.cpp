@@ -114,12 +114,13 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::Unindent();
 	//ImGui::End();
 	Sprite::PreDraw();
-	for (int i = 0; i < SpriteMax;i++) {
-		UI[i]->Draw();
-	}
+	UI[0]->Draw();
 	Object3d::PreDraw();
 	text->Draw(dxCommon);
 	Sprite::PreDraw();
+	for (int i = 1; i < SpriteMax; i++) {
+		UI[i]->Draw();
+	}
 	Effect->Draw();
 	dxCommon->PostDraw();
 
