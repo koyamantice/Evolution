@@ -31,7 +31,7 @@ void ModelManager::Initialize() {
 	LoadFBXModel(Bird,"Player");
 	LoadFBXModel(Kobi, "RedKobito");
 	LoadFBXModel(brave, "kobi");
-	LoadFBXModel(Demo, "Eagle");
+	LoadFBXModel(Demo, "Bee");
 
 }
 

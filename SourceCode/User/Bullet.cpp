@@ -348,6 +348,4 @@ void Bullet::AttackUpda() {
 			Follow2Enemy();
 		}
 	}
-
-
 }

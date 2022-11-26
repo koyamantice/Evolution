@@ -119,13 +119,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
-	distance.x = sinf(angle * (PI / 180)) * 13.0f;
-	distance.y = cosf(angle * (PI / 180)) * 13.0f;
+	distance.x = sinf(angle * (XM_PI / 180)) * 13.0f;
+	distance.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 
-
-	dis.x = sinf(angle * (PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (PI / 180)) * 13.0f;
-
+	dis.x = distance.x;
+	dis.y = distance.y;
 }
 //ŠJ•úˆ—
 void PlayScene::Finalize() {
@@ -135,13 +133,6 @@ void PlayScene::Finalize() {
 //XV
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	if (input->TriggerKey(DIK_P)) {
-		ActorManager::GetInstance()->AttachBullet("Red");
-	}
-	//if (crystal_shadow->GetPause()) {
-	//	crystal_shadow->Update();
-	//	return;
-	//}
 	if (clear) {
 		ResultCamera(count);
 		count++;
@@ -187,7 +178,6 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		return;
 	}
 	if (enemy_shadow->GetPause()) {
-
 		const float rnd_vel = 0.4f;
 		XMFLOAT3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
@@ -223,7 +213,6 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 					break;
 				}
 			}
-			return;
 		}
 		return;
 	}
@@ -254,7 +243,6 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 				Camecon[i]->SetColor({ 1,1,1,CameraAlpha });
 			}
 	}
-
 	ActorManager::GetInstance()->Update();
 	ParticleManager::GetInstance()->Update();
 	skydome->Update();
@@ -296,8 +284,8 @@ void PlayScene::CameraUpda() {
 		if (input->TiltPushStick(Input::R_LEFT)) {
 			angle += 3;
 		}
-		dis.x = sinf(angle * (PI / 180)) * 13.0f;
-		dis.y = cosf(angle * (PI / 180)) * 13.0f;
+		dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
+		dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 		distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
 		distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 
@@ -340,8 +328,8 @@ void PlayScene::IntroCamera(int Timer) {
 		}
 	}
 
-	dis.x = sinf(angle * (PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (PI / 180)) * 13.0f;
+	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
+	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
 	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 	player_shadow->SetAngle(angle);
@@ -355,15 +343,10 @@ void PlayScene::ResultCamera(int Timer) {
 		angle += 0.5f;
 	}
 
-	dis.x = sinf(angle * (PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (PI / 180)) * 13.0f;
-	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
-	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 	player_shadow->SetAngle(angle);
 	camera->SetTarget(goal_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
-
 }
 
 //•`‰æ
@@ -443,8 +426,8 @@ void PlayScene::ResetCamera() {
 
 	angle = Ease(In, Quad, angleframe, firstangle, endangle);
 
-	dis.x = sinf(angle * (PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (PI / 180)) * 13.0f;
+	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
+	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 
 	distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
 	distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);

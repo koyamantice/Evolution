@@ -70,13 +70,10 @@ void Enemy_Bee::OnInit() {
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Demo));
 	Mash_->SetScale({ 0.01f,0.01f, 0.01f });
-	Mash_->SetRotation({ 0,-180,0 });
+	Mash_->SetRotation({ 0,-90,0 });
 	Mash_->LoadAnimation();
-	//move_object_->SetPosition(position);
-	//move_object_->SetRotation(rot);
 	Mash.reset(Mash_);
 	Mash->PlayAnimation();
-
 	LoadData();
 	UpdateCommand();
 	player = ActorManager::GetInstance()->SearchActor("Player");
@@ -92,7 +89,11 @@ void Enemy_Bee::OnInit() {
 	Shadow_->TextureCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
+
+	command = WAIT;
+
 }
+
 
 void Enemy_Bee::OnUpda() {
 	Mash->Update();
@@ -142,6 +143,13 @@ void Enemy_Bee::LeaveUpda() {
 }
 
 void Enemy_Bee::WaitUpda() {
+	waitTimer++;
+	if (waitTimer==1) {
+		Mash->PlayAnimation(1);
+	}else if (waitTimer == 450) {//150fps’PˆÊ
+		//Mash->ResetAnimation();
+		//command = Actor::Phase::ATTACK;
+	}
 }
 
 void Enemy_Bee::AttackUpda() {

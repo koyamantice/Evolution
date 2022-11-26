@@ -11,7 +11,7 @@
 /// </summary>
 
 class MapScene : public BaseScene {
-public:
+private:
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -35,25 +35,50 @@ private:
 	///	カメラ周り
 	/// </summary>
 	void CameraUpda();
+	//導入カメラ
+	void IntroCamera(int Timer);
+	//クリア後カメラ
+	void ResultCamera(int Timer);
+	//画面を背中に
+	void ResetCamera();
+
+	int count = 0;
+	int speed = 1;
 	float angle = 0;
-	const float PI = 3.1452f;
-	XMFLOAT2 distance = { 0,10 };
-	XMFLOAT2 dis = { 0,15 };
+	float firstangle = 0;
+	float endangle = 0;
+
+	XMFLOAT2 firstdis{};
+	float angleframe = 0;
+	bool Reset = false;
+	XMFLOAT2 distance = { 0,0 };
+	XMFLOAT2 dis = { 16,7 };
 	bool clear = false;
 	float Cframe = 0.0f;
-	XMFLOAT2 clearPos = { 0,-720 };
-private:
+
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
-	Actor* crystal_shadow = nullptr;
-	ActorComponent* PlayerComp = nullptr;
+	Actor* goal_shadow = nullptr;
+
 	std::unique_ptr<Sprite> Clear{};
-	std::unique_ptr<Sprite>	Vignette{};
-	std::unique_ptr<Gauge>	Demo;
-	std::unique_ptr<Object3d> skydome{};
-	std::unique_ptr<Object3d> grassPatch{};
-	std::unique_ptr<TouchableObject> ground{};
-	std::unique_ptr<PauseUI> pauseUi{};
+	std::unique_ptr<Sprite> Over{};
+	std::unique_ptr<Sprite> IntroWord[10];
+
 	PostEffect* postEffect = nullptr;
+
+	std::unique_ptr<Object3d> skydome{};
+
+	std::unique_ptr<TouchableObject> ground{};
+
+	float CameraAlpha = 1.0f;
+	int animation = 0;
+	int tapanima = 3;
+	int animafrate = 0;
+	int vec = 1;
+	int nowWord = 0;
+
+	bool cameraExplanation = false;
+	float IntroHight = 50.0f;
+	float introFrame = 0;
 };
 

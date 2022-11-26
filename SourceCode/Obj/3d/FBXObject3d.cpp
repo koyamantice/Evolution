@@ -297,6 +297,9 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void FBXObject3d::PlayAnimation(const int& num)
 {
+	FbxScene* fbxScene = model->GetFbxScene();
+	//アニメーションの変更
+	fbxScene->SetCurrentAnimationStack(Animations[num].stack);
 	////開始時間取得
 	startTime = (FbxLongLong)Animations[num].start;
 	////終了時間取得
