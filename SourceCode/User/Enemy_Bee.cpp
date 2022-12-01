@@ -146,14 +146,20 @@ void Enemy_Bee::WaitUpda() {
 	waitTimer++;
 	if (waitTimer==1) {
 		Mash->PlayAnimation(1);
-	}else if (waitTimer == 450) {//150fps’PˆÊ
-		//Mash->ResetAnimation();
-		//command = Actor::Phase::ATTACK;
+	}else if (waitTimer == 200) {//150fps’PˆÊ
+		waitTimer = 0;
+		command = ATTACK;
 	}
 }
 
 void Enemy_Bee::AttackUpda() {
-
+	waitTimer++;
+	if (waitTimer == 1) {
+		Mash->PlayAnimation(0);
+	} else if (waitTimer == 300) {//150fps’PˆÊ
+		waitTimer = 0;
+		command = WAIT;
+	}
 }
 
 void Enemy_Bee::LifeCommon() {

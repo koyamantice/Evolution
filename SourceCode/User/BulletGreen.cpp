@@ -168,7 +168,7 @@ void BulletGreen::ResultOnUpdate(const int& Timer) {
 	XMFLOAT3 rot = fbxObj->GetRotation();
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	pos.y += vel; //+
-	vel -= 0.05f;//
+	vel -= 0.04f;//
 	if (frame < 0.7f) {
 		rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
 	}

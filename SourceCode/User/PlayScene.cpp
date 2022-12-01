@@ -141,6 +141,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		if (input->TriggerButton(Input::A)) {
 			SceneManager::GetInstance()->ChangeScene("MAP");
 		}
+		skydome->Update();
+		ground->Update();
+
 		return;
 	}
 	if (Intro) {
@@ -343,7 +346,7 @@ void PlayScene::ResultCamera(int Timer) {
 		angle += 0.5f;
 	}
 
-	player_shadow->SetAngle(angle);
+	//player_shadow->SetAngle(angle);
 	camera->SetTarget(goal_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
