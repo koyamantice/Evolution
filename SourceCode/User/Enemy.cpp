@@ -60,8 +60,8 @@ void Enemy::UpdateCommand() {
 }
 
 void Enemy::DebugUpdate() {
-	Mash->Update();
-	Mash->SetPosition({0,-3,0});
+	fbxObject3d->Update();
+	fbxObject3d->SetPosition({0,-3,0});
 }
 
 void Enemy::OnInit() {
@@ -74,13 +74,13 @@ void Enemy::OnInit() {
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);*/
 	FBXObject3d* Mash_= new FBXObject3d();
 	Mash_->Initialize();
-	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Mash));
+	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::fbxObject3d));
 	Mash_->SetScale({0.01f,0.01f, 0.01f});
 	Mash_->LoadAnimation();
 	//move_object_->SetPosition(position);
 	//move_object_->SetRotation(rot);
-	Mash.reset(Mash_);
-	Mash->PlayAnimation();
+	fbxObject3d.reset(Mash_);
+	fbxObject3d->PlayAnimation();
 
 	LoadData();
 	UpdateCommand();
@@ -102,15 +102,15 @@ void Enemy::OnInit() {
 }
 
 void Enemy::OnUpda() {
-	Mash->Update();
+	fbxObject3d->Update();
 	Attack->Upda();
 	PhaseMove();
 	LifeCommon();
 	//Collide();
 	Shadow->Update();
-	Shadow->SetPosition({ Mash->GetPosition().x,0.01f, Mash->GetPosition().z });
+	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
-	obj->SetPosition(Mash->GetPosition());
+	obj->SetPosition(fbxObject3d->GetPosition());
 }
 
 void Enemy::OnDraw(DirectXCommon* dxCommon) {
@@ -121,7 +121,7 @@ void Enemy::OnDraw(DirectXCommon* dxCommon) {
 //	ImGui::End();
 
 	Object3d::PreDraw();
-	Mash->Draw(dxCommon->GetCmdList());
+	fbxObject3d->Draw(dxCommon->GetCmdList());
 	Texture::PreDraw();
 	Shadow->Draw();
 	Attack->Draw();
@@ -199,7 +199,7 @@ void Enemy::PhaseMove() {
 }
 
 void Enemy::ApprochUpda() {
-	XMFLOAT3 pos = Mash->GetPosition();
+	XMFLOAT3 pos = fbxObject3d->GetPosition();
 
 	angle += 2.5f;
 	pos.x =sinf(angle * (XM_PI / 180)) *15.0f;
@@ -215,12 +215,12 @@ void Enemy::ApprochUpda() {
 	if (waitTimer == 300) {//150fps’PˆÊ
 		pos.y = 0;
 		speed = accel * 30.0f;
-		Mash->ResetAnimation();
+		fbxObject3d->ResetAnimation();
 		command = Actor::Phase::ATTACK;
-		Mash->PlayAnimation();
+		fbxObject3d->PlayAnimation();
 		waitTimer = 0;
 	}
-	Mash->SetPosition(pos);
+	fbxObject3d->SetPosition(pos);
 
 
 }
@@ -229,24 +229,19 @@ void Enemy::LeaveUpda() {
 }
 
 void Enemy::WaitUpda() {
-	waitTimer++;
-	if (waitTimer == 450) {//150fps’PˆÊ
-		Mash->ResetAnimation();
-		command = Actor::Phase::ATTACK;
-		waitTimer = 0;
-	}
+	ChangeCommand(0, ATTACK, 3);
 }
 
 void Enemy::AttackUpda() {
-	XMFLOAT3 pos = Mash->GetPosition();
+	XMFLOAT3 pos = fbxObject3d->GetPosition();
 	waitTimer++;
 	if (waitTimer==150) {
 		pos.y = 0;
-		Mash->ResetAnimation();
-		Mash->PlayAnimation();
+		fbxObject3d->ResetAnimation();
+		fbxObject3d->PlayAnimation();
 		command = Actor::Phase::WAIT;
 		waitTimer = 0;
-		Mash->SetPosition(pos);
+		fbxObject3d->SetPosition(pos);
 		return;
 	}
 	if (pos.y >= 0) {
@@ -257,8 +252,8 @@ void Enemy::AttackUpda() {
 		pos.y = 0;
 		speed = accel * 30.0f;
 	}
-	Mash->SetRotation({0,-180,0});
-	Mash->SetPosition(pos);
+	fbxObject3d->SetRotation({0,-180,0});
+	fbxObject3d->SetPosition(pos);
 }
 
 void Enemy::LifeCommon() {
@@ -267,10 +262,10 @@ void Enemy::LifeCommon() {
 			pause = true;
 			return;
 		}
-		XMFLOAT3 pos = Mash->GetPosition();
-		XMFLOAT3 rot = Mash->GetRotation();
-		XMFLOAT3 sca = Mash->GetScale();
-		Mash->ResetAnimation();
+		XMFLOAT3 pos = fbxObject3d->GetPosition();
+		XMFLOAT3 rot = fbxObject3d->GetRotation();
+		XMFLOAT3 sca = fbxObject3d->GetScale();
+		fbxObject3d->ResetAnimation();
 		
 		rot.y++;
 		scale = Ease(In,Quad, scaframe,1.0f,0.0f);
@@ -279,7 +274,23 @@ void Enemy::LifeCommon() {
 		} else {
 			isActive = false;
 		}
-		Mash->SetScale({scale * 0.01f,scale * 0.01f,scale * 0.01f });
-		Mash->SetRotation(rot);
+		fbxObject3d->SetScale({scale * 0.01f,scale * 0.01f,scale * 0.01f });
+		fbxObject3d->SetRotation(rot);
+	}
+}
+
+void Enemy::ChangeCommand(const int& num, const int& command, const int& count) {
+	static bool isFirst = true;
+	static int MotionCount = 0;
+	if (isFirst) {
+		fbxObject3d->PlayAnimation(num);
+		isFirst = false;
+	}
+	if (fbxObject3d->GetIsFinish()) { MotionCount++; }
+	if (MotionCount == count) {
+		this->command = command;
+		fbxObject3d->StopAnimation();
+		isFirst = true;
+		MotionCount = 0;
 	}
 }

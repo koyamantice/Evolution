@@ -202,6 +202,8 @@ void BulletRed::ResultOnUpdate(const int& Timer) {
 	fbxObj->SetPosition(pos);
 	fbxObj->SetRotation(rot);
 	fbxObj->Update();
+	Shadow->Update();
+	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 }
 
 void BulletRed::SetAggregation() {
@@ -218,6 +220,5 @@ void BulletRed::SetAggregation() {
 	Bpos.x = Ease(InOut, Quad, Followframe, Bpos.x, FollowPos.x);
 	Bpos.z = Ease(InOut, Quad, Followframe, Bpos.z, FollowPos.z);
 	fbxObj->SetPosition(Bpos);
-
 }
 

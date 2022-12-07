@@ -1,12 +1,12 @@
 #include "PlayScene.h"
-#include"SceneManager.h"
+#include "SceneManager.h"
 #include "AudioManager.h"
 #include "input.h"
-#include<string>
-#include"ModelManager.h"
+#include <string>
+#include "ModelManager.h"
 #include <TisGame.h>
-#include"Player.h"
-#include"PlayerUI.h"
+#include "Player.h"
+#include "PlayerUI.h"
 #include"Enemy.h"
 #include <SourceCode/Common/Easing.h>
 #include"ActorManager.h"
@@ -438,5 +438,3 @@ void PlayScene::ResetCamera() {
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
-
-

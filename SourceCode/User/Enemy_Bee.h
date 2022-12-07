@@ -36,17 +36,18 @@ private:
 	//
 	void LifeCommon();
 	std::unique_ptr<EnemyAttack> Attack;
-
+	//
+	void ChangeCommand(const int& num = 0,const int& command = 0,const int& count = 1);
 
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;
 	std::unique_ptr<Texture> Shadow = nullptr;
-
+	Actor* Honey[2]{};
 
 	float waitTimer = 0;
 	float vel = 0;
 	float scale = 0.01f;
 	float scaframe = 0;
-	std::unique_ptr<FBXObject3d> Mash;
+	std::unique_ptr<FBXObject3d> fbxObject3d;
 
 };

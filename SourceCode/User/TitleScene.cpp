@@ -94,7 +94,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 			SceneName = "PLAY";
 			break;
 		case Portal::Debug:
-			SceneName = "DEBUG";
+			SceneName = "MAP";
 			break;
 		default:
 			assert(0);

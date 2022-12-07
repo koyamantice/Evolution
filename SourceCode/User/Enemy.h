@@ -16,7 +16,7 @@ public:
 	void LoadData();
 	void UpdateCommand();
 	void DebugUpdate();
-private:
+protected:
 	Input* input =Input::GetInstance();
 	std::stringstream parameterCommands;
 
@@ -35,6 +35,8 @@ private:
 	void AttackUpda();
 	//
 	void LifeCommon();
+	void ChangeCommand(const int& num = 0, const int& command = 0, const int& count = 1);
+
 	std::unique_ptr<EnemyAttack> Attack;
 
 
@@ -47,5 +49,5 @@ private:
 	float vel = 0;
 	float scale = 0.01f;
 	float scaframe = 0;
-	std::unique_ptr<FBXObject3d> Mash;
+	std::unique_ptr<FBXObject3d> fbxObject3d;
 };

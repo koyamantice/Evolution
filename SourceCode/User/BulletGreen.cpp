@@ -186,6 +186,8 @@ void BulletGreen::ResultOnUpdate(const int& Timer) {
 	fbxObj->SetPosition(pos);
 	fbxObj->SetRotation(rot);
 	fbxObj->Update();
+	Shadow->Update();
+	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 }
 
 void BulletGreen::SetAggregation() {

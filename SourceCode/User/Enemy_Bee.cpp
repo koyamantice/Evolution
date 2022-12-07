@@ -8,13 +8,12 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 #include <SourceCode/Common/Easing.h>
 
+
 void Enemy_Bee::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/EnemyStatus.csv");
 	assert(file.is_open());
-
 	parameterCommands << file.rdbuf();
-
 	file.close();
 }
 
@@ -60,8 +59,8 @@ void Enemy_Bee::UpdateCommand() {
 }
 
 void Enemy_Bee::DebugUpdate() {
-	Mash->Update();
-	Mash->SetPosition({ 0,-3,0 });
+	fbxObject3d->Update();
+	fbxObject3d->SetPosition({ 0,-3,0 });
 }
 
 void Enemy_Bee::OnInit() {
@@ -72,50 +71,54 @@ void Enemy_Bee::OnInit() {
 	Mash_->SetScale({ 0.01f,0.01f, 0.01f });
 	Mash_->SetRotation({ 0,-90,0 });
 	Mash_->LoadAnimation();
-	Mash.reset(Mash_);
-	Mash->PlayAnimation();
+	fbxObject3d.reset(Mash_);
+	fbxObject3d->PlayAnimation();
 	LoadData();
 	UpdateCommand();
+
 	player = ActorManager::GetInstance()->SearchActor("Player");
 
 	compornent = new EnemyUI();
 	compornent->Initialize();
 
 	ActorManager::GetInstance()->AttachActor("Honey");
+	ActorManager::GetInstance()->AttachActor("Honey");
+	Honey[0]= ActorManager::GetInstance()->SearchActor("Honey");
+	Honey[1]= ActorManager::GetInstance()->SearchActorBack("Honey");
+
+	Honey[0]->SetPosition({ 5,0,5 });
+	Honey[1]->SetPosition({-5,0,-5});
 
 	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
-		{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	//Shadow_->SetIsBillboard(true);
 	Shadow_->TextureCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
 	command = WAIT;
-
 }
 
 
 void Enemy_Bee::OnUpda() {
-	Mash->Update();
+	fbxObject3d->Update();
 	PhaseMove();
 	LifeCommon();
 	Shadow->Update();
-	Shadow->SetPosition({ Mash->GetPosition().x,0.01f, Mash->GetPosition().z });
+	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
-	obj->SetPosition(Mash->GetPosition());
+	obj->SetPosition(fbxObject3d->GetPosition());
 }
 
 void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
-	Mash->Draw(dxCommon->GetCmdList());
+	fbxObject3d->Draw(dxCommon->GetCmdList());
 	Texture::PreDraw();
 	Shadow->Draw();
 }
 
 void Enemy_Bee::OnFinal() {
 }
-
-
 void Enemy_Bee::PhaseMove() {
 	switch (command) {
 	case Actor::Phase::APPROCH:
@@ -140,26 +143,16 @@ void Enemy_Bee::ApprochUpda() {
 }
 
 void Enemy_Bee::LeaveUpda() {
+
 }
 
 void Enemy_Bee::WaitUpda() {
-	waitTimer++;
-	if (waitTimer==1) {
-		Mash->PlayAnimation(1);
-	}else if (waitTimer == 200) {//150fps’PˆÊ
-		waitTimer = 0;
-		command = ATTACK;
-	}
+	ChangeCommand(1, ATTACK , 3);
 }
 
 void Enemy_Bee::AttackUpda() {
-	waitTimer++;
-	if (waitTimer == 1) {
-		Mash->PlayAnimation(0);
-	} else if (waitTimer == 300) {//150fps’PˆÊ
-		waitTimer = 0;
-		command = WAIT;
-	}
+	ChangeCommand(0,WAIT,2);
+	Honey[0]->SetCommand(LEAVE);
 }
 
 void Enemy_Bee::LifeCommon() {
@@ -168,10 +161,10 @@ void Enemy_Bee::LifeCommon() {
 			pause = true;
 			return;
 		}
-		XMFLOAT3 pos = Mash->GetPosition();
-		XMFLOAT3 rot = Mash->GetRotation();
-		XMFLOAT3 sca = Mash->GetScale();
-		Mash->ResetAnimation();
+		XMFLOAT3 pos = fbxObject3d->GetPosition();
+		XMFLOAT3 rot = fbxObject3d->GetRotation();
+		XMFLOAT3 sca = fbxObject3d->GetScale();
+		fbxObject3d->ResetAnimation();
 
 		rot.y++;
 		scale = Ease(In, Quad, scaframe, 1.0f, 0.0f);
@@ -180,7 +173,22 @@ void Enemy_Bee::LifeCommon() {
 		} else {
 			isActive = false;
 		}
-		Mash->SetScale({ scale * 0.01f,scale * 0.01f,scale * 0.01f });
-		Mash->SetRotation(rot);
+		fbxObject3d->SetScale({ scale * 0.01f,scale * 0.01f,scale * 0.01f });
+		fbxObject3d->SetRotation(rot);
+	}
+}
+
+void Enemy_Bee::ChangeCommand(const int& num, const int& command, const int& count) {
+	static bool isFirst = true;
+	static int MotionCount = 0;
+	if (isFirst) {
+		fbxObject3d->PlayAnimation(num);
+		isFirst = false;
+	}
+	if (fbxObject3d->GetIsFinish()) { MotionCount++; }
+	if (MotionCount == count) {
+		this->command = command;
+		isFirst = true;
+		MotionCount = 0;
 	}
 }

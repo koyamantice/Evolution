@@ -20,18 +20,18 @@ void PlayerUI::OnInitialize() {
 	Chara.reset(_Chara);
 
 	Sprite* _Bullet;
-	_Bullet = Sprite::Create(ImageManager::CharaCover, { 680,592 });
+	_Bullet = Sprite::Create(ImageManager::CharaCover, { 700,612 });
 	_Bullet->SetScale(0.8f);
 	Bullet.reset(_Bullet);
 	
 
 	Sprite* _slash;
-	_slash = Sprite::Create(ImageManager::slash, { 1010,600 });
+	_slash = Sprite::Create(ImageManager::slash, { 1030,620 });
 	_slash->SetScale(0.8f);
 	Slash.reset(_slash);
 
 	Sprite* _numBack[2]{};
-	const DirectX::XMFLOAT2 numPos[2] = { {1050,590},{810,590} };
+	const DirectX::XMFLOAT2 numPos[2] = { {1070,610},{830,610} };
 	for (int i = 0; i < 2;i++) {
 		_numBack[i] = Sprite::Create(ImageManager::numBack, numPos[i]);
 	//	_numBack[i]->SetScale(0.8f);
@@ -55,8 +55,8 @@ void PlayerUI::OnInitialize() {
 		}
 	}
 	for (int j = 0; j < 10; j++) {
-		num[0][j]->SetPosition({ 1150 + 42 ,600 + 42 });
-		num[1][j]->SetPosition({ 1060 + 42, 600+42 });
+		num[0][j]->SetPosition({ 1150 + 62 ,600+62 });
+		num[1][j]->SetPosition({ 1060 + 62, 600+62 });
 	}
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -72,8 +72,8 @@ void PlayerUI::OnInitialize() {
 		}
 	}
 	for (int j = 0; j < 10; j++) {
-		numBullet[0][j]->SetPosition({ 954 ,642 });
-		numBullet[1][j]->SetPosition({ 862, 642 });
+		numBullet[0][j]->SetPosition({ 974 ,662 });
+		numBullet[1][j]->SetPosition({ 882, 662 });
 	}
 	OnLive = 30;
 	OldLive = OnLive;
@@ -81,7 +81,6 @@ void PlayerUI::OnInitialize() {
 
 void PlayerUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Player");
-	
 	//Hp->SetSize({AttachActor->GetHp() * 50 ,32});
 	//if (AttachActor->GetHp()<0) {
 	//	Hp->SetSize({ 0 ,32 });
@@ -163,7 +162,7 @@ void PlayerUI::OnFinalize() {
 
 void PlayerUI::OnDraw() {
 	Sprite::PreDraw();
-	Chara->Draw();
+	//1Chara->Draw();
 	Bullet->Draw();
 //	Hp->Draw();
 	Slash->Draw();

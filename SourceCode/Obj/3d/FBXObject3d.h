@@ -107,6 +107,12 @@ public: // メンバ関数
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 	const XMFLOAT3& GetScale() { return scale; }
 
+	/// <summary>
+	/// スケールの設定
+	/// </summary>
+	/// <param name="position">スケール</param>
+	const bool& GetIsFinish() { return isFinish; }
+
 
 	/// <summary>
 	/// アニメーション
@@ -143,8 +149,9 @@ protected: // メンバ変数
 	FbxTime currentTime;
 	//アニメーション再生中
 	bool isPlay = false;
-
-
+	//アニメーション終了フレーム
+	bool isFinish = false;
+	//アニメーション格納
 	std::vector<AnimationInfo> Animations;
 };
 

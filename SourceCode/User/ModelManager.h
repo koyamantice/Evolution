@@ -34,7 +34,7 @@ public:
 
 	};
 	enum FBXName {
-		Mash,
+		fbxObject3d,
 		Bird,
 		Kobi,
 		brave,

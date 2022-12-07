@@ -140,7 +140,7 @@ void FBXObject3d::CreateGraphicsPipeline()
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;// DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
-		//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+	//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
@@ -246,7 +246,10 @@ void FBXObject3d::Update()
 		currentTime += frameTime;
 		//最後まで再生したら先頭に戻す
 		if (currentTime > endTime) {
+			isFinish = true;
 			currentTime = startTime;
+		} else {
+			isFinish = false;
 		}
 	}
 

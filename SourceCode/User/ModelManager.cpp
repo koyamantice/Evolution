@@ -27,7 +27,7 @@ void ModelManager::Initialize() {
 	LoadModel(house, "House");
 	LoadModel(honey, "honey");
 
-	LoadFBXModel(Mash,"Mash");
+	LoadFBXModel(fbxObject3d,"Mash");
 	LoadFBXModel(Bird,"Player");
 	LoadFBXModel(Kobi, "RedKobito");
 	LoadFBXModel(brave, "kobi");
