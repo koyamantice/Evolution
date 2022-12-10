@@ -142,26 +142,27 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 		}
 
 	}
+}
 
-	if (Tag=="Bullet") {
-		if (collide) { return; }
-		if (command == Dead) { return; }
-		if (command == Wait) { return; }
-		collide = true;
-		XMFLOAT3 pos2 = fbxObj->GetPosition();
+void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
+	if (collide) { return; }
+	if (command == Dead) { return; }
+	//if (command == Wait) { return; }
+	if (ID < Id) { return; }
+	collide = true;
+	XMFLOAT3 pos2 = fbxObj->GetPosition();
 
-		float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
+	float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
 
-		if (dir<=0) {
-			pos2.x += sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-			pos2.z += cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-		} else {											  			  
-			pos2.x -= sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-			pos2.z -= cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+	if (dir <= 0) {
+		pos2.x += sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+		pos2.z += cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+	} else {
+		pos2.x -= sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+		pos2.z -= cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
 
-		}
-		fbxObj->SetPosition(pos2);
-	} 
+	}
+	fbxObj->SetPosition(pos2);
 }
 
 void BulletGreen::ResultOnUpdate(const int& Timer) {

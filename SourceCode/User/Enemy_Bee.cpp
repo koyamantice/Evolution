@@ -68,7 +68,7 @@ void Enemy_Bee::OnInit() {
 	FBXObject3d* Mash_ = new FBXObject3d();
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Demo));
-	Mash_->SetScale({ 0.01f,0.01f, 0.01f });
+	Mash_->SetScale({ 0.02f,0.02f, 0.02f });
 	Mash_->SetRotation({ 0,-90,0 });
 	Mash_->LoadAnimation();
 	fbxObject3d.reset(Mash_);
@@ -86,8 +86,8 @@ void Enemy_Bee::OnInit() {
 	Honey[0]= ActorManager::GetInstance()->SearchActor("Honey");
 	Honey[1]= ActorManager::GetInstance()->SearchActorBack("Honey");
 
-	Honey[0]->SetPosition({ 5,0,5 });
-	Honey[1]->SetPosition({-5,0,-5});
+	Honey[0]->SetPosition({ 25,0,25 });
+	Honey[1]->SetPosition({-25,0,-25});
 
 	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
 	{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
@@ -147,12 +147,16 @@ void Enemy_Bee::LeaveUpda() {
 }
 
 void Enemy_Bee::WaitUpda() {
+	XMFLOAT3 pos = fbxObject3d->GetPosition();
+	waitTimer+=2.0f;
+	pos.y = sinf(waitTimer * XM_PI/180);
+	fbxObject3d->SetPosition(pos);
 	ChangeCommand(1, ATTACK , 3);
+	Honey[0]->SetCommand(WAIT);
 }
 
 void Enemy_Bee::AttackUpda() {
 	ChangeCommand(0,WAIT,2);
-	Honey[0]->SetCommand(LEAVE);
 }
 
 void Enemy_Bee::LifeCommon() {

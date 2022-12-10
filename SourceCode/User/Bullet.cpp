@@ -118,22 +118,34 @@ void Bullet::BoidAverage() {
 
 void Bullet::Move() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
-	BoidAverage();
+	//BoidAverage();
 	float kX = 0.8f * flocking.ctrDirX + 0.2f * flocking.vel.x + 0.9f * flocking.contX;
 	float kY = 0.8f * flocking.ctrDirY + 0.2f * flocking.vel.x + 0.9f * flocking.contY;
 
-	float tempVel = sqrtf(kX * kX + kY * kY);
-	if (tempVel > 0.2f) {
-		kX = 0.2f * kX / tempVel;
-		kY = 0.2f * kY / tempVel;
+	XMFLOAT3 rot = fbxObj->GetRotation();
+	XMFLOAT3 plapos = player->GetPosition();
+	XMFLOAT3 position{};
+	position.x = (plapos.x - pos.x);
+	position.z = (plapos.z - pos.z);
+	{
+		rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
+		fbxObj->SetRotation(rot);
 	}
+	kX = sin(-atan2f(position.x, position.z)) * 0.2f;
+	kY = cos(-atan2f(position.x, position.z)) * 0.2f;
 
-	dx += (kX - dx) * 0.02f;
-	dy += (kY - dy) * 0.02f;
+	//float tempVel = sqrtf(kX * kX + kY * kY);
+	//if (tempVel > 0.2f) {
+	//	kX = 0.2f * kX / tempVel;
+	//	kY = 0.2f * kY / tempVel;
+	//}
+
+	//dx += (kX - dx) * 0.02f;
+	//dy += (kY - dy) * 0.02f;
 
 	if (!collide) {
-		pos.x += dx;
-		pos.z += dy;
+		pos.x -= kX;
+		pos.z += kY;
 	}
 	fbxObj->SetPosition(pos);
 }

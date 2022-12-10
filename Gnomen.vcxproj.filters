@@ -259,11 +259,11 @@
     <ClCompile Include="SourceCode\User\Enemy_Bee.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Honey.cpp">
-      <Filter>User\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\System\BaseScene.cpp">
       <Filter>System\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Honey.cpp">
+      <Filter>User\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,7 +502,7 @@
     <ClInclude Include="SourceCode\User\Enemy_Bee.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Honey.h">
+    <ClInclude Include="SourceCode\User\Honey.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

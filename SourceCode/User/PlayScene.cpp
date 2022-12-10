@@ -139,8 +139,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		ActorManager::GetInstance()->ResultUpdate(count);
 		ParticleManager::GetInstance()->Update();
 		if (input->TriggerButton(Input::A)) {
-			SceneManager::GetInstance()->ChangeScene("MAP");
+			Change = true;
 		}
+		Feed("MAP");
 		skydome->Update();
 		ground->Update();
 

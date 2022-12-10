@@ -94,7 +94,7 @@ public:
 	void Finalize();	//èIóπèàóù
 
 	virtual void OnCollision(const std::string& Tag,const XMFLOAT3& pos) {};
-
+	virtual void BulletCollision(const XMFLOAT3& pos, const int& Id) {};
 protected:
 	virtual void OnInit() {};
 	virtual void OnUpda() {};
@@ -157,6 +157,7 @@ protected:
 	std::unique_ptr<Texture> Status = nullptr;
 	std::unique_ptr<Texture> Explo = nullptr;
 	std::unique_ptr<Texture> CharaDead = nullptr;
+
 	enum DeathColor{
 		Red=ImageManager::RedDead,
 		Green,

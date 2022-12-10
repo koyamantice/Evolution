@@ -157,27 +157,6 @@ void BulletRed::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			break;
 		}
 	}
-	if (Tag == "Bullet") {
-		if (collide) { return; }
-		if (command == Dead) { return; }
-		if (command == Wait) { return; }
-
-		collide = true;
-		XMFLOAT3 pos2 = fbxObj->GetPosition();
-
-		float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
-
-		if (dir <= 0) {
-			pos2.x += sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-			pos2.z += cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-		} else {
-			pos2.x -= sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-			pos2.z -= cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
-
-		}
-		fbxObj->SetPosition(pos2);
-	}
-
 }
 
 void BulletRed::ResultOnUpdate(const int& Timer) {
@@ -204,6 +183,30 @@ void BulletRed::ResultOnUpdate(const int& Timer) {
 	fbxObj->Update();
 	Shadow->Update();
 	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
+}
+
+void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
+	if (collide) { return; }
+	if (command == Dead) { return; }
+	//if (command == Wait) { return; }
+	if (ID > Id) { return; }
+	XMFLOAT3 pos2 = fbxObj->GetPosition();
+	if (!collide) {
+	}
+	collide = true;
+
+	rad = atan2f((pos2.x - pos.x), (pos2.z - pos.z));
+	float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
+
+	if (dir <= 0) {
+		pos2.x += sin(rad+randRad) * 0.1f;
+		pos2.z += cos(rad +randRad) * 0.1f;
+	} else {
+		pos2.x -= sin(rad+randRad) * 0.1f;
+		pos2.z -= cos(rad +randRad) * 0.1f;
+
+	}
+	fbxObj->SetPosition(pos2);
 }
 
 void BulletRed::SetAggregation() {

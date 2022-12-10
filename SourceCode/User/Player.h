@@ -47,8 +47,9 @@ private:
 
 	Actor* Picmin[30]{};
 	float radius = 0;
-
-
+	bool onHoney = false;
+	int honeyCount = 0;
+	float speed = 0.0f;
 	float vel = 0;
 	int charge = 0;
 	bool onGround = false;

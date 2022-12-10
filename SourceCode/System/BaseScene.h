@@ -14,7 +14,6 @@ class SceneManager;
 #include "ParticleManager.h"
 #include"ImageManager.h"
 #include <SourceCode/User/PauseUI.h>
-
 /// <summary>
 /// シーン規定
 /// </summary>
@@ -34,9 +33,12 @@ protected:
 	std::unique_ptr<PauseUI> pauseUi{};
 
 	std::unique_ptr<Sprite>	Screen[2]{};
-
 	std::unique_ptr<Sprite> FeedBlack{};
+	std::unique_ptr<Sprite> Effect;
 	bool Change = true;
+	float alpha = 0.0f;
+	float frame = 0.0f;
+
 	float feedAlpha = 0.0f;
 
 	//killクリップ
@@ -70,5 +72,7 @@ public:
 	/// 描画
 	/// </summary>
 	virtual void Draw(DirectXCommon* dxCommon)=0;
+
+	void Feed(const std::string& sceneName);
 };
 

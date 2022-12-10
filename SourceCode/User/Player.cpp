@@ -11,6 +11,8 @@
 #include "ParticleManager.h"
 #define STICK__MAX 32768.0f
 
+
+
 void Player::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/status.csv");
@@ -43,9 +45,6 @@ void Player::UpdateCommand() {
 		} else if (word.find("VEL") == 0) {
 			getline(line_stream, word, ',');
 			vel = (float)std::atof(word.c_str());
-			if (vel>5) {
-				vel = 5;
-			}
 		}
 		else if (word.find("STOCK") == 0) {
 			getline(line_stream, word, ',');
@@ -114,8 +113,6 @@ void Player::OnInit() {
 	Shadow_->TextureCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
-
-
 }
 
 void Player::OnUpda() {
@@ -159,10 +156,9 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 	//int a=ActorManager::GetInstance()->SearchNum("Bullet");
 	//	ImGui::Begin("test");
 	//	ImGui::SliderInt("bullet", &a, 0, 360);
-	////	ImGui::SliderFloat("Anglet", &angle, 0, 360);
+	//  ImGui::SliderFloat("Anglet", &angle, 0, 360);
 	//	ImGui::Unindent();
 	//	ImGui::End();
-
 }
 
 void Player::OnFinal() {
@@ -176,10 +172,16 @@ void Player::Move() {
 	float StickY = input->GetLeftControllerY();
 	const float PI = 3.14159f;
 	const float STICK_MAX =32768.0f;
-
-	//cameraPos = MoveVECTOR(XMVECTOR{ 0,0,10,0 }, angle);
-	//cameraPos = {cameraPos.x,cameraPos.y,cameraPos.z };
-	//LockOn->SetAim(cameraPos);
+	if (onHoney) {
+		vel = speed * 0.65f;
+		honeyCount++;
+		if (honeyCount==60) {
+			onHoney = false;
+			honeyCount = 0;
+		}
+	} else {
+		vel = 0.5f;
+	}
 
 	if (input->TiltPushStick(Input::L_UP, 0.0f)||
 		input->TiltPushStick(Input::L_DOWN, 0.0f)||
@@ -238,7 +240,12 @@ void Player::OnCollision(const std::string& Tag) {
 		int a = 0;
 		a++;
 	}
-
+	if (Tag=="Honey") {
+		if (!onHoney) {
+			speed = vel;
+			onHoney = true;
+		}
+	}
 }
 
 

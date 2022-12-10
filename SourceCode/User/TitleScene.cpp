@@ -23,12 +23,7 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	sprite4_->SetScale(0.5f);
 	sprite4_->SetColor({1.0f,1.0f,1.0f,0.5f});
 	UI[moveDebug].reset(sprite4_);
-
-
-	//スプライト生成
-	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
-	Effect.reset(Effect_);
-	Effect->SetColor({1,1,1,alpha});
+	Change = false;
 
 	TitleText* text_ = new TitleText();
 	text_->Init();
@@ -125,17 +120,3 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PostDraw();
 
 }
-
-void TitleScene::Feed(const std::string& sceneName) {
-	if (Change) {
-		if (frame < 1.6f) {
-			frame += 0.02f;
-		} else {
-			SceneManager::GetInstance()->ChangeScene(sceneName);
-		}
-		alpha = Ease(In, Cubic, frame, 0, 1);
-		Effect->SetColor({ 1,1,1,alpha });
-	}
-
-}
-

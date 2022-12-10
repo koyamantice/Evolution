@@ -12,6 +12,10 @@ private:
 	void OnFinal()override;
 	void OnCollision(const std::string& Tag, const XMFLOAT3& pos) override;
 	void ResultOnUpdate(const int& Timer) override;
+	void BulletCollision(const XMFLOAT3& pos, const int& Id) override;
+
+	float rad = 0.0f;
+	float randRad = 0.0f;
 
 	void SetAggregation() override;
 
