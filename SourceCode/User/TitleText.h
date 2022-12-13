@@ -5,6 +5,9 @@
 #include <memory>
 #include<cassert>
 #include <SourceCode/System/DirectXCommon.h>
+#include <LevelLoader.h>
+#include <vector>
+#include <map>
 
 
 class TitleText {
@@ -21,8 +24,18 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 private:
 	std::unique_ptr<Object3d> texts[6];
-	std::unique_ptr<FBXObject3d> Player;
-	std::unique_ptr<Object3d> house;
+	std::list<std::unique_ptr<Object3d>> grounds;
+	std::map<std::string, Model*> models;
+
+	Model* modelSkydome = nullptr;
+	Model* modelGround = nullptr;
+	Model* modelFighter = nullptr;
+	Model* modelSphere = nullptr;
+	Model* modelPine = nullptr;
+
+
+	LevelData* levelData = nullptr;
+
 
 	float pos[6]{};
 

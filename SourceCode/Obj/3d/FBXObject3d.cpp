@@ -139,8 +139,8 @@ void FBXObject3d::CreateGraphicsPipeline()
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;// DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
-	//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+	gpipeline.RTVFormats[0] =  DXGI_FORMAT_R8G8B8A8_UNORM;// DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	// DXGI_FORMAT_R8G8B8A8_UNORM
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
@@ -252,7 +252,17 @@ void FBXObject3d::Update()
 			isFinish = false;
 		}
 	}
-
+	if (isReverse) {
+		//1フレーム進める
+		currentTime -= frameTime;
+		//最後まで再生したら先頭に戻す
+		if (currentTime < endTime) {
+			isFinish = true;
+			currentTime = startTime;
+		} else {
+			isFinish = false;
+		}
+	}
 	//定数バッファへデータ転送
 	ConstBufferDataSkin* constMapSkin = nullptr;
 	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
@@ -311,6 +321,22 @@ void FBXObject3d::PlayAnimation(const int& num)
 	currentTime = startTime;
 	//再生中状態にする
 	isPlay = true;
+}
+
+void FBXObject3d::ReverseAnimation(const int& num) {
+	FbxScene* fbxScene = model->GetFbxScene();
+	//アニメーションの変更
+	fbxScene->SetCurrentAnimationStack(Animations[num].stack);
+	////開始時間取得
+	startTime = (FbxLongLong)Animations[num].end;
+	////終了時間取得
+	endTime = (FbxLongLong)Animations[num].start;
+	//開始時間に合わせる
+	currentTime = startTime;
+	//再生中状態にする
+	isPlay = false;
+	//
+	isReverse = true;
 }
 
 void FBXObject3d::StopAnimation() {

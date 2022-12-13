@@ -8,13 +8,13 @@ float4 main(VSOutput input) : SV_TARGET
 	// テクスチャマッピング
 	float4 texcolor = tex.Sample(smp, input.uv);
 	const float _ThresholdMin = 0.4;
-	const float _ThresholdMax = 0.8;
+	const float _ThresholdMax = 0.6;
 	float3 lightv = normalize(float3(0, 1, -1)); // 右下奥　向きのライト
 
 	float3 eyeDir = normalize(cameraPos - input.worldpos.xyz);
 	float3 halfVec = normalize(lightv + eyeDir);
 	float intensity = saturate(dot(normalize(input.normal), halfVec));
-	float Diffuse = pow(intensity, 5);
+	float Diffuse = pow(intensity, 10);
 	float Dif = smoothstep(_ThresholdMin, _ThresholdMax, Diffuse);
 
 	float light = smoothstep(_ThresholdMin, _ThresholdMax, intensity);
@@ -26,7 +26,7 @@ float4 main(VSOutput input) : SV_TARGET
 
 	float4 ambient = dark * darkColor * float4(m_ambient.xyz,1.0);
 	float4 diffuse = light * lightColor + dark * darkColor;
-	float4 specular = Dif * float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 specular = Dif * float4(0.0f, 0.0f, 0.0f, 1.0f);
 	float4 ads = ambient + diffuse + specular;
 
 	return ads;

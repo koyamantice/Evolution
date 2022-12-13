@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Actor.h"
 #include"TitleText.h"
+#include <thread>
 
 /// <summary>
 /// タイトルシーン
@@ -18,7 +19,6 @@ public:
 	/// 終了
 	/// </summary>
 	void Finalize() override;
-
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
@@ -28,6 +28,7 @@ public:
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
 
+	void Heavy();
 private:
 	//メンバ変数
 	enum {
@@ -38,7 +39,7 @@ private:
 		SpriteMax,
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
-	std::unique_ptr<TitleText> text;
+	TitleText* text;
 
 	enum Portal {
 		Title=0,
@@ -55,5 +56,13 @@ private:
 	int moveDebugNow = 2;
 
 	std::string SceneName = "null";
+
+	enum {
+		UnLoad = 0,
+		Loading,
+		LoadFinish
+	};
+	static int LoadState;
+	//static 画面 = ゲーム画面;
 };
 

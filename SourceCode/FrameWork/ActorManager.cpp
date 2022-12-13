@@ -97,7 +97,7 @@ void ActorManager::CheckBulletCollisions() {
 		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
 			Actor* actor = itrA->get();
 			Bullet* bullet = itrB->get();
-			if (Collision::SphereCollision2(actor->GetPosition(), 1.5f, bullet->GetPosition(), 1.5f)) {
+			if (Collision::SphereCollision2(actor->GetPosition(), 1.0f, bullet->GetPosition(), 1.0f)) {
 				actor->OnCollision("Bullet");
 				bullet->OnCollision(actor->GetTag(), actor->GetPosition());
 			}

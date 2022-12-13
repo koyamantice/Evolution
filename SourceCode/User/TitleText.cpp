@@ -29,7 +29,7 @@ void TitleText::Init() {
 			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textN));
 		}
 		newText_->Initialize();
-		newText_->SetPosition({ 0,0,-500 });
+		newText_->SetPosition({ 0,-10,-500 });
 		newText_->SetRotation({ 90,0,0 });
 		newText_->SetScale({ 5.0f,5.0f,5.0f });
 		texts[i].reset(newText_);
@@ -38,24 +38,54 @@ void TitleText::Init() {
 		texts[i]->Initialize();
 	}
 
-	Object3d* house_ = new Object3d();
-	house_->Initialize();
-	house_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::house));
-	house_->SetPosition({ -4,-3,-10 });
-	house_->SetRotation({ 0,90,0 });
-	house_->SetScale({ 1.0f,1.0f,1.0f });
-	house.reset(house_);
+	// モデル読み込み
+	modelSkydome = Model::CreateFromOBJ("skydome");
+	modelGround = Model::CreateFromOBJ("ground");
+	modelFighter = Model::CreateFromOBJ("House");
+	modelSphere = Model::CreateFromOBJ("snag");
+	modelPine = Model::CreateFromOBJ("Pine1");
 
+	models.insert(std::make_pair("skydome", modelSkydome));
+	models.insert(std::make_pair("ground", modelGround));
+	models.insert(std::make_pair("house", modelFighter));
+	models.insert(std::make_pair("snag", modelSphere));
+	models.insert(std::make_pair("Pine1",modelPine));
+	levelData = LevelLoader::LoadFile("level_editor");
+	// レベルデータからオブジェクトを生成、配置
+	for (auto& objectData : levelData->objects) {
+		// ファイル名から登録済みモデルを検索
+		Model* model = nullptr;
+		decltype(models)::iterator it = models.find(objectData.fileName);
+		if (it != models.end()) {
+			model = it->second;
+		}
 
+		// モデルを指定して3Dオブジェクトを生成
+		Object3d* newObj = nullptr;
+		newObj = new Object3d();
+		newObj->Initialize();
+		newObj->SetModel(model);
 
+		// 座標
+		DirectX::XMFLOAT3 pos;
+		DirectX::XMStoreFloat3(&pos, objectData.translation);
+		newObj->SetPosition(pos);
 
+		// 回転角
+		DirectX::XMFLOAT3 rot;
+		DirectX::XMStoreFloat3(&rot, objectData.rotation);
+		newObj->SetRotation(rot);
 
-	FBXObject3d* Player_ = new FBXObject3d();
-	Player_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
-	Player_->Initialize();
-	Player_->SetScale({ 0.005f,0.005f, 0.005f });
-	Player.reset(Player_);
-	Player->SetPosition({-5.0f,-5.0f,0.0f});
+		// 座標
+		DirectX::XMFLOAT3 scale;
+		DirectX::XMStoreFloat3(&scale, objectData.scaling);
+		newObj->SetScale(scale);
+
+		std::unique_ptr<Object3d> newObj_;
+		newObj_.reset(newObj);
+		// 配列に登録
+		grounds.push_back(std::move(newObj_));
+	}
 }
 
 void TitleText::Upda() {
@@ -77,18 +107,18 @@ void TitleText::Upda() {
 	}
 
 	for (int i = 0; i < 6; i++) {
-		texts[i]->SetPosition({ pos[i],5,i*2.0f });
+		texts[i]->SetPosition({ pos[i],5,10.0f });
 	}
-
-	Player->Update();
-	house->Update();
+	for (std::unique_ptr<Object3d>& obj : grounds) {
+		obj->Update();
+	}
 }
 
 void TitleText::Draw(DirectXCommon* dxCommon) {
-//	Player->Draw(dxCommon->GetCmdList());
-	house->Draw();
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Draw();
 	}
-
+	for (std::unique_ptr<Object3d>& obj : grounds) {
+		obj->Draw();
+	}
 }

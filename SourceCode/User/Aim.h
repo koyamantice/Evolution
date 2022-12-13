@@ -27,6 +27,7 @@ private:
 	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
+	XMFLOAT3 AfterPos{};
 
 
 	bool first = true;

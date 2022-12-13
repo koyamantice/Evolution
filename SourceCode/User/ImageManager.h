@@ -51,6 +51,7 @@ public:
 		Guid,
 		Shadow,
 		RedDead,
+		GreenDead,
 		SlowUI,
 		SetUI,
 		SetUI2,

@@ -8,8 +8,15 @@
 #include <TisGame.h>
 #include"ActorManager.h"
 #include"Easing.h"
+
+static int LoadState=0;
+std::thread t;
+
+
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
+	camera->SetEye({0,0,-20});
+
 	//背景スプライト生成
 	Sprite* sprite_ = Sprite::Create(ImageManager::Title, { 0.0f,0.0f });
 	UI[BackScene].reset(sprite_);
@@ -25,9 +32,8 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	UI[moveDebug].reset(sprite4_);
 	Change = false;
 
-	TitleText* text_ = new TitleText();
-	text_->Init();
-	text.reset(text_);
+	text = new TitleText();
+	text->Init();
 }
 //開放処理
 void TitleScene::Finalize() {
@@ -37,7 +43,6 @@ void TitleScene::Finalize() {
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	camera->Update();
-
 	if (input->TiltStick(Input::L_UP) ||input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
 		nextScene--;
 	}
@@ -109,7 +114,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::Unindent();
 	//ImGui::End();
 	Sprite::PreDraw();
-	UI[0]->Draw();
+	//UI[0]->Draw();
 	Object3d::PreDraw();
 	text->Draw(dxCommon);
 	Sprite::PreDraw();
@@ -119,4 +124,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	Effect->Draw();
 	dxCommon->PostDraw();
 
+}
+
+void TitleScene::Heavy() {
 }

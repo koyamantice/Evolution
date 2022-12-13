@@ -37,8 +37,10 @@ private:
 	void LifeCommon();
 	std::unique_ptr<EnemyAttack> Attack;
 	//
-	void ChangeCommand(const int& num = 0,const int& command = 0,const int& count = 1);
+	void ChangeCommand(const int& num = 0,const int& command = 0,const int& count = 1,const bool& reverese=false);
 
+	int pattern = 0;
+	XMFLOAT3 AfterPos{};
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;
 	std::unique_ptr<Texture> Shadow = nullptr;

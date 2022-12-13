@@ -118,6 +118,7 @@ public: // メンバ関数
 	/// アニメーション
 	/// </summary>
 	void PlayAnimation(const int& num = 0);
+	void ReverseAnimation(const int& num = 0);
 	void StopAnimation();
 	void ResetAnimation();
 	//複数fbxの読み込み
@@ -149,6 +150,7 @@ protected: // メンバ変数
 	FbxTime currentTime;
 	//アニメーション再生中
 	bool isPlay = false;
+	bool isReverse = false;
 	//アニメーション終了フレーム
 	bool isFinish = false;
 	//アニメーション格納

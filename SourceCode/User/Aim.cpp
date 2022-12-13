@@ -16,7 +16,7 @@ void Aim::Init() {
 	Texture* Whistle_ = Texture::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	Whistle_->TextureCreate();
 	Whistle_->SetRotation({ 90,0,0 });
-	Whistle_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
+	Whistle_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
 	Whistle.reset(Whistle_);
 	Whistle->SetPosition({ 100,-50,0 });
 
@@ -69,7 +69,7 @@ void Aim::Upda(float angle) {
 	}
 	if (!second) {
 		SecondAlpha *= 0.9f;
-		SecondUI[0]->SetColor({1,1,1,SecondAlpha});
+		SecondUI[0]->SetColor({ 1,1,1,SecondAlpha });
 		SecondUI[1]->SetColor({ 1,1,1,SecondAlpha });
 	}
 	for (int i = 0; i < GuidNum; i++) {
@@ -87,7 +87,6 @@ void Aim::Draw() {
 	//}
 	//////ImGui::Unindent();
 	//ImGui::End();
-
 	Texture::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
@@ -151,9 +150,15 @@ void Aim::Move(float angle) {
 			ParticleManager::GetInstance()->Add(1, 15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
+		Whistle->SetPosition({ base.x, base.y+(Area/4), base.z });
+		Whistle->SetScale({ Area * 0.3f,Area * 0.3f,Area * 0.3f });
+		Whistle->SetRotation({90 ,Lrot.y * 2.0f ,Lrot.z * 2.0f });
+		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f-(Area/8.0f) });
+
 	} else {
 		Area = 0.0f;
-	}
+		Whistle->SetScale({ Area,Area,Area });
+	} 
 
 	XMFLOAT3 Lpos = LockOn->GetPosition();
 	XMFLOAT3 pos = player->GetPosition();
@@ -164,50 +169,19 @@ void Aim::Move(float angle) {
 	const float PI = 3.14159f;
 	const float STICK_MAX = 32768.0f;
 
-	if (input->TiltPushStick(Input::L_UP, 0.95f) ||
-		input->TiltPushStick(Input::L_DOWN, 0.95f) ||
-		input->TiltPushStick(Input::L_RIGHT, 0.95f) ||
-		input->TiltPushStick(Input::L_LEFT, 0.95f)) {
-		Lpos = player->GetCameraPos(player->GetRotation().y);
+	if (input->TiltPushStick(Input::L_UP   ,0.1f) ||
+		input->TiltPushStick(Input::L_DOWN ,0.1f) ||
+		input->TiltPushStick(Input::L_RIGHT,0.1f) ||
+		input->TiltPushStick(Input::L_LEFT ,0.1f)) {
+		AfterPos = player->GetCameraPos(player->GetRotation().y,10);
 	}
-
-
-	if (input->TiltPushStick(Input::L_UP, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,2,0 }, angle);
-		Lpos.x -= vecvel.x * (StickY / STICK_MAX);
-		Lpos.z -= vecvel.z * (StickY / STICK_MAX);
-	}
-	if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 0,0,-2,0 }, angle);
-		Lpos.x += vecvel.x * (StickY / STICK_MAX);
-		Lpos.z += vecvel.z * (StickY / STICK_MAX);
-
-	}
-	if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ 2,0,0,0 }, angle);
-		Lpos.x -= vecvel.x * (StickX / STICK_MAX);
-		Lpos.z -= vecvel.z * (StickX / STICK_MAX);
-	}
-	if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
-		XMFLOAT3 vecvel = MoveVector(XMVECTOR{ -2,0,0,0 }, angle);
-		Lpos.x += vecvel.x * (StickX / STICK_MAX);
-		Lpos.z += vecvel.z * (StickX / STICK_MAX);
-
-
-	}
-	if (Lpos.x > 48.0f) {
-		Lpos.x = 48.0f;
-	}
-	if (Lpos.x < -48.0f) {
-		Lpos.x = -48.0f;
-	}
-	if (Lpos.z > 48.0f) {
-		Lpos.z = 48.0f;
-	}
-	if (Lpos.z < -48.0f) {
-		Lpos.z = -48.0f;
-	}
-
+	Lpos.x = Ease(In, Quad, 0.95f, Lpos.x, AfterPos.x);
+	Lpos.y = Ease(In, Quad, 0.95f, Lpos.y, AfterPos.y);
+	Lpos.z = Ease(In, Quad, 0.95f, Lpos.y, AfterPos.z);
+	if (Lpos.x > 48.0f) { Lpos.x = 48.0f; }
+	if (Lpos.x < -48.0f) { Lpos.x = -48.0f; }
+	if (Lpos.z > 48.0f) { Lpos.z = 48.0f; }
+	if (Lpos.z < -48.0f) { Lpos.z = -48.0f; }
 	LockOn->SetPosition({ Lpos.x,0.01f,Lpos.z });
 	FirstUI->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
 	SecondUI[0]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
