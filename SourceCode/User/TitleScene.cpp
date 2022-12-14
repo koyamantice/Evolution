@@ -20,13 +20,13 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
 	Sprite* sprite_ = Sprite::Create(ImageManager::Title, { 0.0f,0.0f });
 	UI[BackScene].reset(sprite_);
-	Sprite* sprite2_ = Sprite::Create(ImageManager::Button, { 640.0f,650.0f });
+	Sprite* sprite2_ = Sprite::Create(ImageManager::Button, { 840.0f,650.0f });
 	sprite2_->SetScale(0.5f);
 	UI[Button].reset(sprite2_);
-	Sprite* sprite3_ = Sprite::Create(ImageManager::TitleMove, { 640.0f,360.0f });
+	Sprite* sprite3_ = Sprite::Create(ImageManager::TitleMove, { 840.0f,360.0f });
 	sprite3_->SetScale(0.7f);
 	UI[moveTitle].reset(sprite3_);
-	Sprite* sprite4_ = Sprite::Create(ImageManager::DebugMove, { 640.0f,460.0f });
+	Sprite* sprite4_ = Sprite::Create(ImageManager::DebugMove, { 840.0f,460.0f });
 	sprite4_->SetScale(0.5f);
 	sprite4_->SetColor({1.0f,1.0f,1.0f,0.5f});
 	UI[moveDebug].reset(sprite4_);
@@ -81,8 +81,8 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 
 	moveText[0] = Ease(In,Quad, 0.7f,UI[moveTitle]->GetPosition().y,SetPos[moveTitleNow].y);
 	moveText[1] = Ease(In, Quad,0.7f,UI[moveDebug]->GetPosition().y,SetPos[moveDebugNow].y);
-	UI[moveTitle]->SetPosition({640,moveText[0]});
-	UI[moveDebug]->SetPosition({640,moveText[1]});
+	UI[moveTitle]->SetPosition({840,moveText[0]});
+	UI[moveDebug]->SetPosition({840,moveText[1]});
 
 
 

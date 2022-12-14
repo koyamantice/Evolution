@@ -146,6 +146,7 @@ void Enemy_Bee::PhaseMove() {
 }
 
 void Enemy_Bee::ApprochUpda() {
+	ChangeCommand(1,LEAVE,3);
 
 }
 
@@ -154,12 +155,12 @@ void Enemy_Bee::LeaveUpda() {
 	waitTimer += 2.0f;
 	pos.y = sinf(waitTimer * XM_PI / 180);
 	fbxObject3d->SetPosition(pos);
-	ChangeCommand(2, ATTACK, 3);
+	ChangeCommand(2, WAIT, 3);
 	Honey[0]->SetCommand(WAIT);
 }
 
 void Enemy_Bee::WaitUpda() {
-	ChangeCommand(0, WAIT, 2);
+	ChangeCommand(0, APPROCH, 3);
 
 }
 
