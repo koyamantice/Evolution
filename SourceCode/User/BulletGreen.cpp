@@ -96,7 +96,6 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 	if (Tag == "Player") {
 		switch (command) {
 		case Wait:
-
 			break;
 		case Attack:
 			player->SetStock(player->GetStock() + 1);
@@ -130,7 +129,6 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			default:
 				break;
 			}
-
 			break;
 		case Slow:
 
@@ -142,6 +140,30 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 		}
 
 	}
+
+	if (Tag == "Honey") {
+		switch (command) {
+		case Wait:
+			break;
+		case Attack:
+			if(!isPlayActive){
+				ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
+				ActionActor->SetStock(ActionActor->GetStock() + 1);
+				isPlayActive = true;
+			} else {
+
+			}
+			break;
+		case Slow:
+
+			break;
+
+		default:
+			assert(0);
+			break;
+		}
+	}
+
 }
 
 void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {

@@ -87,8 +87,11 @@ public:
 	//フロッキングアルゴリズム
 	void BoidAlignment();
 
-	Actor* SearchActorArea(XMFLOAT3 pos);
+	Actor* SearchActorArea(const XMFLOAT3& pos);
 	Actor* SearchActor(const std::string& tag);
+
+
+	Actor* GetAreaActor(const XMFLOAT3& pos,const std::string& tag);
 
 	Actor* SearchActorBack(const std::string& tag);
 

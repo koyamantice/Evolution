@@ -174,8 +174,11 @@ protected:
 
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
-
+	Actor* ActionActor = nullptr;
 	XMFLOAT3 landing{};
+
+
+	bool isPlayActive = false;
 
 	FlockSystem flocking;
 	float dx=0;

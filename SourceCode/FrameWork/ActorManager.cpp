@@ -82,7 +82,7 @@ void ActorManager::CheckActorCollisions() {
 		for (auto itrB = Actors.rbegin(); itrB != Actors.rend(); ++itrB) {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
-			if (Collision::SphereCollision2(actorA->GetPosition(), 1.5f, actorB->GetPosition(), 1.5f)) {
+			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
 				if (actorA->GetTag() != actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());
@@ -97,7 +97,7 @@ void ActorManager::CheckBulletCollisions() {
 		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
 			Actor* actor = itrA->get();
 			Bullet* bullet = itrB->get();
-			if (Collision::SphereCollision2(actor->GetPosition(), 1.0f, bullet->GetPosition(), 1.0f)) {
+			if (Collision::SphereCollision2(actor->GetPosition(),actor->GetSize(), bullet->GetPosition(), 1.5f)) {
 				actor->OnCollision("Bullet");
 				bullet->OnCollision(actor->GetTag(), actor->GetPosition());
 			}
@@ -271,7 +271,7 @@ void ActorManager::BoidAlignment() {
 
 }
 
-Actor* ActorManager::SearchActorArea(XMFLOAT3 pos) {
+Actor* ActorManager::SearchActorArea(const XMFLOAT3& pos) {
 	Actor* itrActor = SearchActor("Player");
 	const float limit = 30.0f;
 	float check = limit;
@@ -290,6 +290,28 @@ Actor* ActorManager::SearchActorArea(XMFLOAT3 pos) {
 	return itrActor;
 }
 
+Actor* ActorManager::GetAreaActor(const XMFLOAT3& pos, const std::string& tag) {
+	Actor* itrActor = nullptr;
+	const float limit = 30.0f;
+	float check = limit;
+	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
+		Actor* actor = itr->get();
+		if (actor->GetTag() != tag) { continue; }
+		if (actor->GetIsActive() == false) { continue; }
+		XMFLOAT3 difPos = actor->GetPosition();
+		float dif;
+		dif = Length(difPos, pos);
+		if (check > dif) {
+			check = dif;
+			itrActor = actor;
+		}
+	}
+	return itrActor;
+
+}
+
+
+
 Actor* ActorManager::SearchActor(const std::string& tag) {
 
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
@@ -300,6 +322,7 @@ Actor* ActorManager::SearchActor(const std::string& tag) {
 	}
 	return nullptr;
 }
+
 Actor* ActorManager::SearchActorBack(const std::string& tag) {
 	for (auto itr = Actors.rbegin(); itr != Actors.rend(); ++itr) {
 		Actor* actor = itr->get();
