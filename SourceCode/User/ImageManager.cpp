@@ -36,6 +36,12 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Intro06, L"Resources/2d/IntroWord/Intro06.png");
 	Sprite::LoadTexture(CameCon, L"Resources/2d/PlayUI/CameCon.png");
 	Sprite::LoadTexture(Rockon, L"Resources/2d/PlayUI/Rockon.png");
+	Sprite::LoadTexture(HpCover , L"Resources/2d/PlayUI/HpCover2.png");
+	Sprite::LoadTexture(HpGreen, L"Resources/2d/PlayUI/Hp_Green.png");
+	Sprite::LoadTexture(HpRed, L"Resources/2d/PlayUI/Hp_Red.png");
+
+
+
 }
 
 void ImageManager::LoadTex2D() {

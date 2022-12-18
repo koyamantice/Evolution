@@ -16,6 +16,7 @@ public:
 private:
 	std::unique_ptr<Sprite> Hp;
 	std::unique_ptr<Sprite> Hp2;
+	std::unique_ptr<Sprite> Hp3;
 
 
 

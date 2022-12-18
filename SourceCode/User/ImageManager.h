@@ -42,6 +42,9 @@ public:
 		Intro06,
 		CameCon,
 		Rockon,
+		HpCover,
+		HpGreen,
+		HpRed,
 	};
 	enum tex2dName {
 		Lock,
