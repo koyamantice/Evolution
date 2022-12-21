@@ -126,6 +126,31 @@ void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
 
 void Enemy_Bee::OnFinal() {
 }
+void Enemy_Bee::OnCollision(const std::string& Tag) {
+	if (Tag=="Player") {
+		switch (command) {
+		case ATTACK:
+			if (pattern == 1) {
+				if (!OnePunch) {
+					OnePunch = true;
+					player->SetHitBound(fbxObject3d->GetPosition());
+				}
+			}
+			break;
+		default:
+			break;
+		}
+
+
+
+
+
+
+	}
+
+
+
+}
 void Enemy_Bee::PhaseMove() {
 	switch (command) {
 	case Actor::Phase::APPROCH:
@@ -155,7 +180,7 @@ void Enemy_Bee::LeaveUpda() {
 	waitTimer += 2.0f;
 	pos.y = sinf(waitTimer * XM_PI / 180);
 	fbxObject3d->SetPosition(pos);
-	ChangeCommand(2, WAIT, 3);
+	ChangeCommand(2, ATTACK, 3);
 	Honey[0]->SetCommand(WAIT);
 }
 
@@ -206,7 +231,9 @@ void Enemy_Bee::AttackUpda() {
 		break;
 	case 2:
 		waitTimer++;
-
+		if (OnePunch) {
+			OnePunch = false;
+		}
 		AfterPos = {
 		PlaPos.x,
 		sinf(waitTimer * XM_PI / 180),

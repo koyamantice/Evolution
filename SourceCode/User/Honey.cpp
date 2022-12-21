@@ -56,7 +56,7 @@ void Honey::WaitUpda() {
 		pos.y = 0.0f;
 	}
 	if (stock >= 5) {
-		pos.y = 5.0f;
+		pos.y = 3.0f;
 	}
 
 	obj->SetPosition(pos);

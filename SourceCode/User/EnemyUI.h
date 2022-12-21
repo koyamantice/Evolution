@@ -14,9 +14,9 @@ public:
 	void OnAttached() override;	//ゲームオブジェクトにアタッチされたときに呼ばれる関数
 
 private:
-	std::unique_ptr<Sprite> Hp;
-	std::unique_ptr<Sprite> Hp2;
-	std::unique_ptr<Sprite> Hp3;
+	std::unique_ptr<Sprite> HpCover;
+	std::unique_ptr<Sprite> HpGauge;
+	std::unique_ptr<Sprite> UnderGauge;
 
 
 

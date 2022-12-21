@@ -27,6 +27,7 @@ private:
 	void OnUpda()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
+	void OnCollision(const std::string& Tag)override;
 	//フェーズまとめ
 	void PhaseMove();
 	void ApprochUpda();
@@ -40,6 +41,7 @@ private:
 	void ChangeCommand(const int& num = 0,const int& command = 0,const int& count = 1,const bool& reverese=false);
 
 	int pattern = 0;
+	bool OnePunch = false;
 	XMFLOAT3 AfterPos{};
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;

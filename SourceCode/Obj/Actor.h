@@ -24,13 +24,18 @@ protected:
 	//付与されているタグへのポインタ
 	std::string tag = "None";
 public:
-
+	//各フェイズ
 	enum Phase {
 		APPROCH = 0,
 		LEAVE,
 		WAIT,
 		DEAD,
 		ATTACK,
+	};
+	struct HitBound {
+		bool isHit;
+		XMFLOAT3 HitingPos;
+
 	};
 protected:
 	//オブジェクト識別番号
@@ -53,16 +58,16 @@ public:
 	//角度の取得
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
-	//
+	//コマンド取得
 	void SetCommand(const int& command) { this->command = command; };
 	const int& GetCommand() { return command; }
 	//isAliveセッタ＆ゲッタ
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
-
 	//Player固有の処理
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
-	
+	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true;hitBound.HitingPos = pos; };
+
 	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
 	const float& GetSize()const { return obj->GetSize(); }
 
@@ -97,11 +102,8 @@ public:
 	void Update();		//更新処理
 	void IntroUpdate(const int& Timer);
 	void ResultUpdate(const int& Timer);
-
 	
 	void Demo();		//更新処理
-
-
 
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 
@@ -119,6 +121,7 @@ public:
 protected:
 	int command = 0;
 	std::unique_ptr<Object3d> obj;
+	HitBound hitBound;
 	XMFLOAT3 cameraPos{};
 	float hp = 0;
 	float angle = 0;

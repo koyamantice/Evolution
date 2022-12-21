@@ -178,6 +178,15 @@ Bullet* ActorManager::SearchWaitBullet() {
 	return nullptr;
 }
 
+Bullet* ActorManager::SearchBulletBack() {
+	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
+		Bullet* bullet = itr->get();
+		if (bullet->GetCommand() != Bullet::command::Wait) { continue; }
+		return bullet;
+	}
+	return nullptr;
+}
+
 void ActorManager::DamageBullet(XMFLOAT3 pos, float radius) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();

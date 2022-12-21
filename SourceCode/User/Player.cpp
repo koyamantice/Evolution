@@ -9,6 +9,7 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 #include"PlayerUI.h"
 #include "ParticleManager.h"
+#include <Easing.h>
 #define STICK__MAX 32768.0f
 
 
@@ -63,15 +64,9 @@ void Player::IntroOnUpdate(const int& Timer) {
 	fbxObj->Update();
 	IntroMove();
 	compornent->SetIsActive(false);
-
-
-
-
 }
 
 void Player::IntroMove() {
-
-
 	fbxObj->SetPosition(obj->GetPosition());
 	fbxObj->SetRotation(obj->GetRotation());
 }
@@ -109,7 +104,6 @@ void Player::OnInit() {
 
 	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	//Shadow_->SetIsBillboard(true);
 	Shadow_->TextureCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
@@ -124,22 +118,8 @@ void Player::OnUpda() {
 	if (canMove) {
 		Move();
 	}
-
-	//ContactObj();
-	XMFLOAT3 pos = obj->GetPosition();
-	if (pos.x > 48.0f) {
-		pos.x = 48.0f;
-	}
-	if (pos.x < -48.0f) {
-		pos.x = -48.0f;
-	}
-	if (pos.z > 48.0f) {
-		pos.z = 48.0f;
-	}		
-	if (pos.z < -48.0f) {
-		pos.z = -48.0f;
-	}
-	obj->SetPosition(pos);
+	HitBoundMotion();
+	LimitArea();
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
 	Shadow->Update();
@@ -153,12 +133,6 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 	Texture::PreDraw();
 	Shadow->Draw();
 	LockOn->Draw();
-	//int a=ActorManager::GetInstance()->SearchNum("Bullet");
-	//	ImGui::Begin("test");
-	//	ImGui::SliderInt("bullet", &a, 0, 360);
-	//  ImGui::SliderFloat("Anglet", &angle, 0, 360);
-	//	ImGui::Unindent();
-	//	ImGui::End();
 }
 
 void Player::OnFinal() {
@@ -191,25 +165,21 @@ void Player::Move() {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
 			pos.z -= vecvel.z * (StickY / STICK_MAX);
-			//rot.y = angle;
 		}
 		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 			pos.x += vecvel.x * (StickY / STICK_MAX);
 			pos.z += vecvel.z * (StickY / STICK_MAX);
-			//rot.y = angle - 180;
 		}
 		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 			pos.x -= vecvel.x * (StickX / STICK_MAX);
 			pos.z -= vecvel.z * (StickX / STICK_MAX);
-			//rot.y = angle + 90;
 		}
 		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
 			pos.x += vecvel.x * (StickX / STICK_MAX);
 			pos.z += vecvel.z * (StickX / STICK_MAX);
-			//rot.y = angle - 90;
 		}
 		const float rnd_vel = 0.1f;
 		XMFLOAT3 vel{};
@@ -229,9 +199,6 @@ void Player::Move() {
 
 void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Enemy") {
-		//hp--;
-		int a = 0;
-		a++;
 	}
 	if (Tag == "Bullet") {
 		
@@ -247,6 +214,69 @@ void Player::OnCollision(const std::string& Tag) {
 		}
 	}
 }
+
+void Player::HitBoundMotion() {
+	if (hitBound.isHit) {
+		canMove = false;
+		if (!knockBacking) {
+			Bullet* bullet = ActorManager::GetInstance()->SearchBulletBack();
+			if (bullet != nullptr) {
+				bullet->SetIsRemove(true);
+			}
+			XMFLOAT3 pos = obj->GetPosition();
+			Start = pos;
+			XMFLOAT3 pos2 = hitBound.HitingPos;
+			distance = { pos2.x - pos.x,0,pos2.z - pos.z };
+			rebound.x = pos.x + sin(atan2f(distance.x, distance.z)) * 15.5f;
+			rebound.z = pos.z + cos(atan2f(distance.x, distance.z)) * 15.5f;
+			knockBacking = true;
+		} else {
+			XMFLOAT3 pos = obj->GetPosition();
+			float rot = obj->GetRotation().y;
+			rot+=30;
+			if (damageframe >= 1.0f) {
+				damageframe = 0.0f;
+				knockBacking = false;
+				hitBound.isHit = false;
+				rot = 0;
+				canMove = true;
+				obj->SetRotation({ 0,rot,0 });
+				obj->SetPosition(pos);
+				return;
+			} else {
+				damageframe += 0.02f;
+			}
+
+			pos = {
+			Ease(InOut,Quad,damageframe,Start.x,rebound.x),
+			0,
+			Ease(InOut,Quad,damageframe,Start.z,rebound.z)
+			};
+
+			obj->SetRotation({ 0,rot,0 });
+			obj->SetPosition(pos);
+		}
+	} else {
+	}
+}
+
+void Player::LimitArea() {
+	XMFLOAT3 pos = obj->GetPosition();
+	if (pos.x > 48.0f) {
+		pos.x = 48.0f;
+	}
+	if (pos.x < -48.0f) {
+		pos.x = -48.0f;
+	}
+	if (pos.z > 48.0f) {
+		pos.z = 48.0f;
+	}
+	if (pos.z < -48.0f) {
+		pos.z = -48.0f;
+	}
+	obj->SetPosition(pos);
+}
+
 
 
 XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {

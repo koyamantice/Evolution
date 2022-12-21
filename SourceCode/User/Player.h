@@ -13,14 +13,11 @@ public:
 	Player(){};
 	void LoadData();
 	void UpdateCommand();
-
-	
 	const XMFLOAT3& GetLockPos()override { return rockpos;}
 private:
 	Input* input =Input::GetInstance();
-
 	std::stringstream parameterCommands;
-	//std::unique_ptr<Texture> LockOn{};
+
 	std::unique_ptr<Aim> LockOn{};
 	std::unique_ptr<Texture> Shadow = nullptr;
 
@@ -35,16 +32,22 @@ private:
 	void ResultOnUpdate(const int& Timer)override;
 
 	void OnCollision(const std::string& Tag)override;
+	void HitBoundMotion();
+
+	void LimitArea();
 
 	void Move();
 
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
 	const DirectX::XMFLOAT3& GetCameraPos(const float& angle, const float& str = 10) override;
 	
-
 	void ContactObj();
 	XMMATRIX rot2;
-
+	XMFLOAT3 distance{};
+	XMFLOAT3 rebound{};
+	XMFLOAT3 Start{};
+	float damageframe = 0.0f;
+	bool knockBacking = false;
 	Actor* Picmin[30]{};
 	float radius = 0;
 	bool onHoney = false;

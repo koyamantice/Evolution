@@ -73,7 +73,7 @@ public:
 	Bullet* CommandBullet(const int& ID);
 
 	Bullet* SearchWaitBullet();
-
+	Bullet* SearchBulletBack();
 	void DamageBullet(XMFLOAT3 pos, float radius = 1.0f);
 
 	DirectX::XMFLOAT3 Dist(XMFLOAT3 pos,XMFLOAT3 pos2);
