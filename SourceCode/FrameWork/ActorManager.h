@@ -80,6 +80,8 @@ public:
 	float Length(XMFLOAT3 pos, XMFLOAT3 pos2);
 
 	void ChangeBulletCommand(XMFLOAT3 pos,float scale);
+	Bullet* SetActionBullet(const XMFLOAT3& pos);
+
 	//フロッキングアルゴリズム
 	void BoidIsolate();
 	//フロッキングアルゴリズム

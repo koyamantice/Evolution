@@ -1,4 +1,5 @@
 #include "Honey.h"
+#include <ActorManager.h>
 
 void Honey::OnInit() {
 	obj->SetScale({3,3,3});
@@ -55,11 +56,24 @@ void Honey::WaitUpda() {
 	} else {
 		pos.y = 0.0f;
 	}
+	if (stock < 5) {
+		if (oldStock != stock) {
+			Driver[More] = ActorManager::GetInstance()->SetActionBullet(obj->GetPosition());
+			Driver[More]->SetsPlayActive(true);
+			More++;
+			oldStock = stock;
+		}
+	} else {
+		for (int i = 0; i < More;i++) {
+			Driver[i]->SetPosition({ pos.x+(sinf(((i+1)*72)*XM_PI/180)*2.0f),0,pos.z + (cosf(((i + 1) * 72) * XM_PI / 180) * 2.0f) });
+		}
+	}
 	if (stock >= 5) {
 		pos.y = 3.0f;
 	}
 
+
+
+
 	obj->SetPosition(pos);
-
-
 }

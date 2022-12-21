@@ -149,7 +149,6 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			if(!isPlayActive){
 				ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
 				ActionActor->SetStock(ActionActor->GetStock() + 1);
-				isPlayActive = true;
 			} else {
 
 			}

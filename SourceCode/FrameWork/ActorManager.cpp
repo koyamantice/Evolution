@@ -225,6 +225,19 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	}
 }
 
+Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos) {
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		Bullet* bullet = itr->get();
+		if (bullet->GetCommand() != Bullet::command::Attack) { continue; }
+		if (Collision::CircleCollision(pos.x, pos.z, 3.0f, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
+			if (!bullet->GetIsPlayActive()) {
+				return bullet;
+			}
+		}
+	}
+	return nullptr;
+}
+
 void ActorManager::BoidIsolate() {
 
 	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {

@@ -206,7 +206,7 @@ void Enemy_Bee::AttackUpda() {
 		pos.x = Ease(In,Quad,0.3f,pos.x,AfterPos.x);
 		pos.y = Ease(In,Quad,0.3f,pos.y,AfterPos.y);
 		pos.z = Ease(In,Quad,0.3f,pos.z,AfterPos.z);
-		if (waitTimer > 120) {
+		if (waitTimer > 100) {
 			pattern++;
 			waitTimer = 0;
 		}
@@ -223,7 +223,7 @@ void Enemy_Bee::AttackUpda() {
 			pos.y = Ease(In, Quad, (float)(waitTimer / 100), pos.y, AfterPos.y);
 
 		}
-		if (waitTimer > 150) {
+		if (waitTimer > 130) {
 			pattern++;
 			waitTimer = 0;
 		}
@@ -242,7 +242,7 @@ void Enemy_Bee::AttackUpda() {
 		pos.x = Ease(In, Quad, 0.3f, pos.x, AfterPos.x);
 		pos.y = Ease(In, Quad, 0.3f, pos.y, AfterPos.y);
 		pos.z = Ease(In, Quad, 0.3f, pos.z, AfterPos.z);
-		if (waitTimer > 120) {
+		if (waitTimer > 70) {
 			pattern=0;
 			waitTimer = 0;
 		}

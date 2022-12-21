@@ -74,6 +74,8 @@ public:
 	void SetVel(const XMFLOAT2& vel) { this->flocking.vel= vel; }
 	const XMFLOAT2& GetVel() { return this->flocking.vel; }
 
+	void SetsPlayActive(const bool& Play) { isPlayActive = Play; };
+	const bool& GetIsPlayActive() { return isPlayActive; }
 
 
 	//
