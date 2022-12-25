@@ -111,12 +111,11 @@ void Enemy_Bee::OnUpda() {
 }
 
 void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
-	float k = fbxObject3d->GetPosition().y;
-	ImGui::Begin("test");
-	ImGui::SliderInt("yabei", &pattern, 0, 10);
-	ImGui::SliderFloat("yabai", &k, 0, 10);
-
-	ImGui::End();
+	//float k = fbxObject3d->GetPosition().y;
+	//ImGui::Begin("test");
+	//ImGui::SliderInt("yabei", &pattern, 0, 10);
+	//ImGui::SliderFloat("yabai", &k, 0, 10);
+	//ImGui::End();
 
 	Object3d::PreDraw();
 	fbxObject3d->Draw(dxCommon->GetCmdList());

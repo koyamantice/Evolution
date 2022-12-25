@@ -223,6 +223,7 @@ void Player::HitBoundMotion() {
 			if (bullet != nullptr) {
 				bullet->SetIsRemove(true);
 			}
+			compornent->SetIsDamage(true);
 			XMFLOAT3 pos = obj->GetPosition();
 			Start = pos;
 			XMFLOAT3 pos2 = hitBound.HitingPos;
@@ -235,6 +236,7 @@ void Player::HitBoundMotion() {
 			float rot = obj->GetRotation().y;
 			rot+=30;
 			if (damageframe >= 1.0f) {
+				//compornent->SetIsDamage(false);
 				damageframe = 0.0f;
 				knockBacking = false;
 				hitBound.isHit = false;

@@ -16,6 +16,7 @@ public:
 private:
 	std::unique_ptr<Sprite> Hp;
 	std::unique_ptr<Sprite> Slash;
+	std::unique_ptr<Sprite> Damage;
 	Sprite* num[2][10]{};
 	std::unique_ptr<Sprite> numBack[2];
 	Sprite* numBullet[2][10]{};
@@ -26,16 +27,14 @@ private:
 	bool stockChange = false;
 	float stockFrame = 0.0f;
 
-
+	float Alpha = 0.0f;
+	XMFLOAT2 Dmapos{};
+	float DamageFrame = 0.0f;
 
 	int OnLive = 0;
 	int OldLive = OnLive;
 	bool scaleChange = false;
 	float frame = 0.0f;
-
-
-
-
 
 	XMFLOAT2 scapos{};
 	XMFLOAT2 scapos2{};

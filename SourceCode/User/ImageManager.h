@@ -45,6 +45,7 @@ public:
 		HpCover,
 		HpGreen,
 		HpRed,
+		Damage,
 	};
 	enum tex2dName {
 		Lock,

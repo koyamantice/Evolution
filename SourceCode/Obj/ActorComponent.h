@@ -20,7 +20,8 @@ protected:
 	bool isActive = true;
 	//削除するか
 	bool isRemove = false;
-
+	//
+	bool isDamage = false;
 
 public:
 	virtual ~ActorComponent() {}
@@ -39,5 +40,9 @@ public:
 	//isRemoveセッタ＆ゲッタ
 	void SetIsRemove(bool Remove) { isRemove = Remove; }
 	bool GetIsRemove() { return isRemove; }
+
+	//isDamageセッタ＆ゲッタ
+	void SetIsDamage(bool Damage) { isDamage = Damage; }
+	bool GetIsDamage() { return isDamage; }
 
 };

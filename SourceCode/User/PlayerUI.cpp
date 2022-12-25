@@ -9,11 +9,10 @@ PlayerUI::~PlayerUI() {
 }
 
 void PlayerUI::OnInitialize() {
-	//Sprite* _Hp;
-	//_Hp = Sprite::Create(ImageManager::Test, { 150,658 });
-	//_Hp->SetColor({0,1.0f,0,1 });
-	//_Hp->SetSize({ 32,32 });
-	//Hp.reset(_Hp);
+	Sprite* _Damage;
+	_Damage = Sprite::Create(ImageManager::Damage, { 480,50 });
+	Damage.reset(_Damage);
+	Dmapos = Damage->GetPosition();
 
 	Sprite* _Chara;
 	_Chara = Sprite::Create(ImageManager::PlayerCover, { 10,582 });
@@ -81,13 +80,22 @@ void PlayerUI::OnInitialize() {
 
 void PlayerUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Player");
-	//Hp->SetSize({AttachActor->GetHp() * 50 ,32});
-	//if (AttachActor->GetHp()<0) {
-	//	Hp->SetSize({ 0 ,32 });
-	//}
-	
-	//count++;
-	//Timer = count / 60.0f;
+
+	if (isDamage) {
+			Alpha = 1.0f;
+			Dmapos.y = Ease(In,Quad, DamageFrame,30,80);
+			DamageFrame += 0.025f;
+			if (DamageFrame>1.0f) {
+				isDamage = false;
+				DamageFrame = 0.0f;
+			}
+			Damage->SetPosition(Dmapos);
+	} else {
+
+			Alpha *= 0.85f;
+	}
+	Damage->SetColor({1,1,1,Alpha});
+
 	if (!scaleChange) {
 		OnLive = ActorManager::GetInstance()->SerchWaitBul();
 		onLive.clear();
@@ -164,7 +172,7 @@ void PlayerUI::OnDraw() {
 	Sprite::PreDraw();
 	//1Chara->Draw();
 	Bullet->Draw();
-//	Hp->Draw();
+	Damage->Draw();
 	Slash->Draw();
 	for (int i = 0; i < 2; i++) {
 		numBack[i]->Draw();

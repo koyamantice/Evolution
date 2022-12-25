@@ -39,6 +39,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(HpCover , L"Resources/2d/PlayUI/HpCover2.png");
 	Sprite::LoadTexture(HpGreen, L"Resources/2d/PlayUI/Hp_Green.png");
 	Sprite::LoadTexture(HpRed, L"Resources/2d/PlayUI/Hp_Red.png");
+	Sprite::LoadTexture(Damage, L"Resources/2d/PlayUI/Damage.png");
 
 
 
