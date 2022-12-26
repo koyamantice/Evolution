@@ -193,26 +193,26 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 		}
 		animafrate = 0;
 	}
-	ActorManager::GetInstance()->Update();
-	ParticleManager::GetInstance()->Update();
-	skydome->Update();
-	ground->Update();
+ActorManager::GetInstance()->Update();
+ParticleManager::GetInstance()->Update();
+skydome->Update();
+ground->Update();
 #pragma region "Clear"
-	if (!enemy_shadow->GetIsActive()) {
-		goal_shadow->SetIsActive(true);
-		if (goal_shadow->GetPause()) {
-			Result = true;
-			clear = true;
-		}
+if (!enemy_shadow->GetIsActive()) {
+	goal_shadow->SetIsActive(true);
+	if (goal_shadow->GetPause()) {
+		Result = true;
+		clear = true;
 	}
+}
 #pragma endregion
 #pragma region "GameOver"
-	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
-		GameOver = true;
-		if (input->TriggerButton(Input::A)) {
-			SceneManager::GetInstance()->ChangeScene("TITLE");
-		}
+if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
+	GameOver = true;
+	if (input->TriggerButton(Input::A)) {
+		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
+}
 #pragma endregion
 }
 
@@ -247,7 +247,12 @@ void MapScene::CameraUpda() {
 	}
 	player_shadow->SetAngle(angle);
 	camera->SetTarget(player_shadow->GetCameraPos(angle));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	float hight = 10.0f;
+	if (player_shadow->GetHitBound()) {
+		hight = RandHeight(10.0f);
+	}
+	XMFLOAT3 PlayerPos = player_shadow->GetPosition();
+	camera->SetEye({ PlayerPos.x + distance.x,PlayerPos.y + hight,PlayerPos.z + distance.y });
 	camera->Update();
 }
 
@@ -291,7 +296,10 @@ void MapScene::ResultCamera(int Timer) {
 	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 	player_shadow->SetAngle(angle);
 	camera->SetTarget(goal_shadow->GetPosition());
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	
+	XMFLOAT3 PlayerPos = player_shadow->GetPosition();
+	float hight = 10.0f;
+	camera->SetEye({ PlayerPos.x + distance.x,PlayerPos.y + hight,PlayerPos.z + distance.y });
 	camera->Update();
 
 }
@@ -377,6 +385,15 @@ void MapScene::ResetCamera() {
 	camera->SetTarget(player_shadow->GetCameraPos(angle));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
+}
+
+float MapScene::RandHeight(const float& base) {
+	const float& rnd_vel = 0.95f;
+	float Rand= (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	float itr = 0;
+	itr = base + Rand;
+
+	return itr;
 }
 
 

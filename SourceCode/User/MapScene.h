@@ -42,6 +42,7 @@ private:
 	//‰æ–Ê‚ð”w’†‚É
 	void ResetCamera();
 
+	float RandHeight(const float& base);
 	int count = 0;
 	int speed = 1;
 	float angle = 0;
