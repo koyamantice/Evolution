@@ -6,7 +6,7 @@
 
 void ClearCrystal::OnInit() {
 	obj->SetColor({1,1,1,0});
-	//player = ActorManager::GetInstance()->SearchActor("Player");
+	obj->SetScale({1.5f,1.5f, 1.5f});
 	Texture* InOut_ = Texture::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
 	InOut_->TextureCreate();
 	InOut_->SetRotation({ 0,0,0 });
@@ -40,9 +40,9 @@ void ClearCrystal::OnUpda() {
 }
 void ClearCrystal::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
-		if (input->TriggerButton(Input::A)) {
+		//if (input->TriggerButton(Input::A)) {
 			pause= true;
-		}
+		//}
 	} else {
 		isCollide = false;
 	}
@@ -61,9 +61,9 @@ void ClearCrystal::ResultOnUpdate(const int& Timer) {
 		pos.y += 0.1f;
 	}else if (Timer < 150) {
 		if (sca.x > 0.0f) {
-			sca.x -= 0.01f;
-			sca.y -= 0.01f;
-			sca.z -= 0.01f;
+			sca.x -= 0.022f;
+			sca.y -= 0.022f;
+			sca.z -= 0.022f;
 			const float rnd_vel = 0.1f;
 			XMFLOAT3 vel{};
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;

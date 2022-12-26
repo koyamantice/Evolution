@@ -203,9 +203,8 @@ void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Bullet") {
 		
 	}
-	if (Tag == "Crystal") {
-		int a = 0;
-		a++;
+	if (Tag == "ClearCrystal") {
+		//pause = true;
 	}
 	if (Tag=="Honey") {
 		if (!onHoney) {

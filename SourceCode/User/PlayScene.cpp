@@ -37,7 +37,7 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
-	Ground->SetPosition(XMFLOAT3(-50, 0, 50));
+	Ground->SetPosition(XMFLOAT3(-50, -0.5f, 50));
 	Ground->SetScale(XMFLOAT3(5, 5, 5));
 	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
@@ -254,7 +254,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 #pragma region "Clear"
 	if (!enemy_shadow->GetIsActive()) {
 		goal_shadow->SetIsActive(true);
-		if (goal_shadow->GetPause()) {
+		if (goal_shadow->GetPause()||player_shadow->GetPause()) {
 			Result = true;
 			clear = true;
 		}
