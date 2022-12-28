@@ -16,7 +16,4 @@ private:
 
 	float rad = 0.0f;
 	float randRad = 0.0f;
-
-	void SetAggregation() override;
-
 };

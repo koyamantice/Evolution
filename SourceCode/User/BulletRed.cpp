@@ -236,33 +236,5 @@ void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	fbxObj->SetPosition(pos2);
 }
 
-void BulletRed::SetAggregation() {
-	XMFLOAT3 pos = player->GetPosition();
-	XMFLOAT3 BulletPos = fbxObj->GetPosition();
-	
 
-
-	float FbxObjrot = fbxObj->GetRotation().y;
-
-	fbxObj->SetRotation({ 0,FbxObjrot,0 });
-
-	if (Collision::SphereCollision2(pos,1.0f,BulletPos,3.0f*((int)(ID / 10) + 1))) {
-		XMFLOAT3 oldPos = player->GetOldPosition();
-		XMFLOAT3 dir{};
-		dir.x=pos.x-oldPos.x;
-		dir.y=pos.y-oldPos.y;
-		dir.z=pos.z-oldPos.z;
-
-		BulletPos.x += dir.x;  
-		BulletPos.z += dir.z;
-	} else {
-		float rot = player->GetRotation().y;
-		if (rot < FbxObjrot + 90 && rot > FbxObjrot - 90) {
-			BulletPos.y = 3.0f;
-		} else {
-			BulletPos.y = 0.0f;
-		}
-	}
-	fbxObj->SetPosition(BulletPos);
-}
 

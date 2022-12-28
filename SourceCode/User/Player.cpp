@@ -91,6 +91,13 @@ void Player::OnInit() {
 	fbxObj->LoadAnimation();
 	fbxObj->PlayAnimation();
 
+	// キャラクターの初期位置をセット
+	for (int i = 0; i < AFTIMAGENUM; i++) {
+		PlayerX[i] = 0;
+		PlayerZ[i] = 0;
+	}
+
+
 	float radius = 1.0f;
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
@@ -145,7 +152,21 @@ void Player::OnFinal() {
 void Player::Move() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
-
+	holdpos++;
+	if (holdpos > 8) {
+		if ((int)pos.x != (int)PlayerX[0]) {
+			// 残像データを一つづつずらす
+			for (int i = AFTIMAGENUM - 1; i > 0; i--) {
+				PlayerX[i] = PlayerX[i - 1];
+				RotY[i] = RotY[i-1];
+				PlayerZ[i] = PlayerZ[i - 1];
+			}
+		}
+		PlayerX[0] = pos.x;
+		RotY[0] = rot.y;
+		PlayerZ[0] = pos.z;
+		holdpos = 0;
+	}
 	float StickX = input->GetLeftControllerX();
 	float StickY = input->GetLeftControllerY();
 	const float PI = 3.14159f;

@@ -77,7 +77,6 @@ public:
 	void SetsPlayActive(const bool& Play) { isPlayActive = Play; };
 	const bool& GetIsPlayActive() { return isPlayActive; }
 
-
 	//
 	void SetCommand(const int& command, XMFLOAT3 pos = { 0,0,0 });
 	const int& GetCommand() { return command; }
@@ -105,7 +104,7 @@ protected:
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
 	virtual void ResultOnUpdate(const int& Timer) {};
-	virtual void SetAggregation() {};
+	void SetAggregation();
 
 
 	void BoidAverage();
@@ -179,12 +178,14 @@ protected:
 	Actor* ActionActor = nullptr;
 	XMFLOAT3 landing{};
 
-
 	bool isPlayActive = false;
 
 	FlockSystem flocking;
 	float dx=0;
 	float dy=0;
+
+	float margin;
+
 
 	float hight = 100;
 };

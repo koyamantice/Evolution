@@ -10,10 +10,9 @@
 
 class ActorComponent;
 
-class Actor 
-{
+class Actor {
 protected: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -52,13 +51,13 @@ public:
 	void SetPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
 	//昔の座標の取得
-	//void SetOldPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetOldPosition() { return oldPos; }
-
+	//プレイヤーの残像
+	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return XMFLOAT3{ PlayerX[num + 1],RotY[num + 1],PlayerZ[num + 1] }; }
 	//座標の取得
-	void SetCameraPos(const DirectX::XMFLOAT3& pos) { this->cameraPos=cameraPos; }
+	void SetCameraPos(const DirectX::XMFLOAT3& pos) { this->cameraPos = cameraPos; }
 	const DirectX::XMFLOAT3& GetCameraPos() { return cameraPos; }
-	virtual const DirectX::XMFLOAT3& GetCameraPos(const float& angle,const float& str = 10) { return cameraPos; };
+	virtual const DirectX::XMFLOAT3& GetCameraPos(const float& angle, const float& str = 10) { return cameraPos; };
 	//角度の取得
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
@@ -70,22 +69,22 @@ public:
 	const float& GetHp() { return hp; }
 	//Player固有の処理
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
-	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true;hitBound.HitingPos = pos; };
+	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true; hitBound.HitingPos = pos; };
 	const bool& GetHitBound() { return  hitBound.isHit; }
 	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
 	const float& GetSize()const { return obj->GetSize(); }
 
 	//タグのセット
-	void SetTag(const std::string& Tag){tag = Tag;};
+	void SetTag(const std::string& Tag) { tag = Tag; };
 	//タグが一致するか
 	const std::string& GetTag() { return tag; }
 
 	//isAliveセッタ＆ゲッタ
-	void SetIsActive(const bool& Active) {isActive = Active;};
+	void SetIsActive(const bool& Active) { isActive = Active; };
 	const bool& GetIsActive() { return isActive; }
 
 	//isRemoveセッタ＆ゲッタ
-	void SetIsRemove(const bool& Remove) {isRemove = Remove;};
+	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
 	const bool& GetIsRemove() { return isRemove; }
 
 	//canMoveセッタ＆ゲッタ
@@ -96,17 +95,17 @@ public:
 	void SetAngle(const float& angle) { this->angle = angle; }
 	const float& GetAngle() { return angle; }
 	//
-	void SetStock(const int& Stock) {this->stock = Stock;};
+	void SetStock(const int& Stock) { this->stock = Stock; };
 	const int& GetStock() { return stock; }
 	//
 	void SetPause(const bool& pause) { this->pause = pause; }
 	const bool& GetPause() { return pause; }
 	//virtualにしようか悩み中//解決済み
-	void Initialize(Model* model,const std::string& tag="None", ActorComponent* compornent = nullptr);	//初期化処理
+	void Initialize(Model* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void IntroUpdate(const int& Timer);
 	void ResultUpdate(const int& Timer);
-	
+
 	void Demo();		//更新処理
 
 	void Draw(DirectXCommon* dxCommon);	//描画処理
@@ -120,11 +119,14 @@ public:
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
-	virtual void ResultOnUpdate(const int& Timer){};
-	virtual void OnCollision(const std::string& Tag){};
+	virtual void ResultOnUpdate(const int& Timer) {};
+	virtual void OnCollision(const std::string& Tag) {};
 protected:
 	int command = 0;
 	std::unique_ptr<Object3d> obj;
+	// 残像データの数
+#define AFTIMAGENUM	21
+	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
 	HitBound hitBound;
 	XMFLOAT3 cameraPos{};
 	float hp = 0;

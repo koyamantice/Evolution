@@ -20,11 +20,17 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	fbxObj->PlayAnimation();
 	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	//Shadow_->SetIsBillboard(true);
 	Shadow_->TextureCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
+	const float rnd_vel = 1.0f;
+	margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	if (margin < 0) {
+		margin -= 2.5f;
+	} else {
+		margin += 2.5f;
+	}
 	OnInit();
 
 }
@@ -84,6 +90,25 @@ void Bullet::ResultUpdate(const int& Timer) {
 
 	ResultOnUpdate(Timer);
 
+}
+
+void Bullet::SetAggregation() {
+	XMFLOAT3 pos = player->GetAFTIMAGE(ID % 10);
+	XMFLOAT3 BulletPos = fbxObj->GetPosition();
+	XMFLOAT3 position{};
+
+	position.x = (BulletPos.x - (pos.x + margin));
+	position.z = (BulletPos.z - (pos.z + margin));
+	if (powf(position.x, 2) + powf(position.z, 2) > 1) {
+		vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.2f;
+		vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.2f;
+		BulletPos.x += vel_follow.x;
+		BulletPos.z -= vel_follow.y;
+	}
+
+	float rotation = Ease(In, Quad, 0.5f, fbxObj->GetRotation().y, pos.y);
+	fbxObj->SetPosition(BulletPos);
+	fbxObj->SetRotation({ 0,rotation,0 });
 }
 
 void Bullet::Draw(DirectXCommon* dxCommon) {
@@ -294,25 +319,27 @@ void Bullet::WaitUpda() {
 	frame = 0.0f;
 
 	fbxObj->SetPosition(pos);
+	//Follow2Player();
+	SetAggregation();
 
-	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
-		if (!wait) {
-			Follow2Player();
-			Move();
-		}
-	} else {
-		wait = true;
-		Follow2Player();
-		SetAggregation();
-	}
-	if (wait) {
-		SetAggregation();
-		if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 6.0f, player->GetPosition().x, player->GetPosition().z, 4.0f)) {
-			wait = false;
-		}
-	} else {
-		Followframe = 0.0f;
-	}
+	//if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
+	//	if (!wait) {
+	//		Follow2Player();
+	//		Move();
+	//	}
+	//} else {
+	//	wait = true;
+	//	Follow2Player();
+	//	SetAggregation();
+	//}
+	//if (wait) {
+	//	SetAggregation();
+	//	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 6.0f, player->GetPosition().x, player->GetPosition().z, 4.0f)) {
+	//		wait = false;
+	//	}
+	//} else {
+	//	Followframe = 0.0f;
+	//}
 
 
 }

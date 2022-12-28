@@ -168,7 +168,7 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (collide) { return; }
 	if (command == Dead) { return; }
-	if (command == Wait) { return; }
+	//if (command == Wait) { return; }
 	if (ID < Id) { return; }
 	collide = true;
 	XMFLOAT3 pos2 = fbxObj->GetPosition();
@@ -212,38 +212,3 @@ void BulletGreen::ResultOnUpdate(const int& Timer) {
 	Shadow->Update();
 }
 
-void BulletGreen::SetAggregation() {
-	XMFLOAT3 pos = player->GetPosition();
-	XMFLOAT3 BulletPos = fbxObj->GetPosition();
-	if (Collision::SphereCollision2(pos, 1.0f, BulletPos, 3.0f * ((int)(ID / 10) + 1))) {
-		XMFLOAT3 oldPos = player->GetOldPosition();
-		XMFLOAT3 dir{};
-		dir.x = pos.x - oldPos.x;
-		dir.y = pos.y - oldPos.y;
-		dir.z = pos.z - oldPos.z;
-
-		BulletPos.x += dir.x;
-		BulletPos.z += dir.z;
-
-
-	}
-
-	float rot = fbxObj->GetRotation().y ;
-	//int first = ID % 10;
-	//if (Followframe < 1.0f) {
-	//	Followframe += 0.002f;
-	//} else {
-	//	Followframe = 1.0f;
-	//}
-	//FollowPos = { pos.x + -sinf((rot + (float)((first * 27) + 45)) * (XM_PI / 180)) * (((int)(ID / 10) + 1) * 2.5f) , 0, pos.z + -cosf((player->GetRotation().y + (float)((first * 27) + 45)) * (XM_PI / 180)) * (((int)(ID / 10) + 1) * 2.5f) };
-	//BulletPos.x = Ease(InOut, Quad, Followframe, BulletPos.x, FollowPos.x);
-	//BulletPos.z = Ease(InOut, Quad, Followframe, BulletPos.z, FollowPos.z);
-	if (rot >= 0) {
-		rot = (float)((int)rot % 360);
-	} else {
-		rot += 360;
-		rot = (float)((int)rot % 360);
-	}
-	fbxObj->SetRotation({ 0,rot,0 });
-	fbxObj->SetPosition(BulletPos);
-}

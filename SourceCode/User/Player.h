@@ -46,6 +46,7 @@ private:
 	XMFLOAT3 distance{};
 	XMFLOAT3 rebound{};
 	XMFLOAT3 Start{};
+	int holdpos = 0;
 	float damageframe = 0.0f;
 	bool knockBacking = false;
 	Actor* Picmin[30]{};

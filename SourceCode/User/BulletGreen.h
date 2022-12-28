@@ -15,6 +15,4 @@ private:
 
 	
 	void ResultOnUpdate(const int& Timer) override;
-	void SetAggregation() override;
-
 };
