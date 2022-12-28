@@ -24,10 +24,8 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
-	//const float rnd_vel = 1.0f;
-	//margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
 	OnInit();
+	//IDごとの誤差の範囲
 	if ((int)ID / 7 == 0) {
 		margin = -2.5f;
 	} else if((int)ID / 7 == 1){
@@ -39,59 +37,28 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 
 void Bullet::Update() {
 	if (isActive) {
-		fbxObj->Update();
-		oldPos = fbxObj->GetPosition();
-		Shadow->Update();
-		Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
-
+		CommonUpda();
 		OnUpda();
-		XMFLOAT3 pos = fbxObj->GetPosition();
-		if (pos.x > 48.0f) {
-			pos.x = 48.0f;
-		}
-		if (pos.x < -48.0f) {
-			pos.x = -48.0f;
-		}
-		if (pos.z > 48.0f) {
-			pos.z = 48.0f;
-		}
-		if (pos.z < -48.0f) {
-			pos.z = -48.0f;
-		}
-		fbxObj->SetPosition(pos);
+		LimitArea();
 	}
-
-}
-
-void Bullet::Demo() {
 }
 
 void Bullet::IntroUpdate(const int& Timer) {
 	if (isActive) {
-		if (Timer < 5) {
-			fbxObj->Update();
-			fbxObj->SetPosition({ (((int)ID % 10) - 5) * 3.0f, hight, ((int)ID / 10) * 5.0f });
-		} else {
-			fbxObj->Update();
-			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
-			fbxObj->SetRotation({ 0,180,0 });
+		if (Timer > 5) {
 			if (hight > 0) {
 				hight -= 0.2f;
 			}
-
+			fbxObj->Update();
+			fbxObj->SetRotation({ 0,180,0 });
+			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
 		}
-
-		//Shadow->Update();
-		//Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 		IntroOnUpdate(Timer);
 	}
-
 }
 
 void Bullet::ResultUpdate(const int& Timer) {
-
 	ResultOnUpdate(Timer);
-
 }
 
 void Bullet::SetAggregation() {
@@ -113,13 +80,31 @@ void Bullet::SetAggregation() {
 	fbxObj->SetRotation({ 0,rotation,0 });
 }
 
+void Bullet::LimitArea() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	if (pos.x > 48.0f) {
+		pos.x = 48.0f;
+	}
+	if (pos.x < -48.0f) {
+		pos.x = -48.0f;
+	}
+	if (pos.z > 48.0f) {
+		pos.z = 48.0f;
+	}
+	if (pos.z < -48.0f) {
+		pos.z = -48.0f;
+	}
+	fbxObj->SetPosition(pos);
+}
+
+void Bullet::CommonUpda() {
+	fbxObj->Update();
+	Shadow->Update();
+	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
+}
+
 void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
-		ImGui::Begin("bullet");
-		ImGui::SliderFloat("margin", &margin, -10, 10);
-		ImGui::End();
-
-
 		Object3d::PreDraw();
 		fbxObj->Draw(dxCommon->GetCmdList());
 		Texture::PreDraw();
@@ -140,50 +125,6 @@ void Bullet::DemoDraw(DirectXCommon* dxCommon) {
 void Bullet::Finalize() {
 }
 
-void Bullet::BoidAverage() {
-	XMFLOAT3 pos = fbxObj->GetPosition();
-	player = ActorManager::GetInstance()->SearchActor("Player");
-	flocking.average = player->GetPosition();
-	flocking.ctrDirX = flocking.average.x - pos.x;
-	flocking.ctrDirY = flocking.average.z - pos.z;
-}
-
-void Bullet::Move() {
-	XMFLOAT3 pos = fbxObj->GetPosition();
-	//BoidAverage();
-	float kX = 0.8f * flocking.ctrDirX + 0.2f * flocking.vel.x + 0.9f * flocking.contX;
-	float kY = 0.8f * flocking.ctrDirY + 0.2f * flocking.vel.x + 0.9f * flocking.contY;
-
-	XMFLOAT3 rot = fbxObj->GetRotation();
-	XMFLOAT3 plapos = player->GetPosition();
-	XMFLOAT3 position{};
-	position.x = (plapos.x - pos.x);
-	position.z = (plapos.z - pos.z);
-	//{
-	//	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
-	//	fbxObj->SetRotation(rot);
-	//}
-	kX = sin(-atan2f(position.x, position.z)) * 0.2f;
-	kY = cos(-atan2f(position.x, position.z)) * 0.2f;
-
-	//float tempVel = sqrtf(kX * kX + kY * kY);
-	//if (tempVel > 0.2f) {
-	//	kX = 0.2f * kX / tempVel;
-	//	kY = 0.2f * kY / tempVel;
-	//}
-
-	//dx += (kX - dx) * 0.02f;
-	//dy += (kY - dy) * 0.02f;
-
-	if (!collide) {
-		pos.x -= kX;
-		pos.z += kY;
-	}
-	fbxObj->SetPosition(pos);
-}
-
-
-
 void Bullet::SetCommand(const int& command, XMFLOAT3 pos) {
 	this->command = command; AftaerPos = pos;
 }
@@ -194,7 +135,13 @@ void Bullet::Follow2Enemy() {
 	XMFLOAT3 position{};
 	position.x = (enemy->GetPosition().x - pos.x);
 	position.z = (enemy->GetPosition().z - pos.z);
-	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
+	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) + 180; //- 90;// *(XM_PI / 180.0f);
+	if (rot.y >= 0) {
+		rot.y = (float)((int)rot.y % 360);
+	} else {
+		rot.y += 360;
+		rot.y = (float)((int)rot.y % 360);
+	}
 	vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.3f;
 	vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.3f;
 	pos.x -= vel_follow.x;
@@ -203,26 +150,6 @@ void Bullet::Follow2Enemy() {
 	fbxObj->SetRotation(rot);
 }
 
-void Bullet::Follow2Player() {
-	XMFLOAT3 pos = fbxObj->GetPosition();
-	XMFLOAT3 rot = fbxObj->GetRotation();
-	XMFLOAT3 position{};
-	position.x = (player->GetPosition().x - pos.x);
-	position.z = (player->GetPosition().z - pos.z);
-	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) + 180; //- 90;// *(XM_PI / 180.0f);
-	if (rot.y >= 0) {
-		rot.y = (float)((int)rot.y % 360);
-	} else {
-		rot.y += 360;
-		rot.y = (float)((int)rot.y % 360);
-	}
-	fbxObj->SetRotation(rot);
-}
-
-void Bullet::WaitBullet() {
-
-	fbxObj->SetPosition({ ((int)ID % 10) * 3.0f, 0, ((int)ID / 10) * 5.0f });
-}
 
 void Bullet::KnockBack() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
@@ -279,20 +206,18 @@ void Bullet::DamageInit() {
 
 void Bullet::DeadEnd() {
 	fbxObj->SetScale({ 0.003f,0.0001f, 0.003f });
-	deadframe += 0.01f;
-	CharaDead->Update();
-
-
-	vanishHight = Ease(Out, Quad, deadframe, 0.1f, 4.5f);
-	vanishAlpha = Ease(In, Quad, deadframe, 1.0f, 0.5f);
-
-	CharaDead->SetPosition({ fbxObj->GetPosition().x,vanishHight, fbxObj->GetPosition().z });
-	CharaDead->SetColor({ 1,1,1,vanishAlpha });
 	if (deadframe > 1.0f) {
 		isRemove = true;
 	} else {
-
+		deadframe += 0.01f;
 	}
+	CharaDead->Update();
+	//イージング処理
+	vanishHight = Ease(Out, Quad, deadframe, 0.1f, 4.5f);
+	vanishAlpha = Ease(In, Quad, deadframe, 1.0f, 0.5f);
+	//更新処理
+	CharaDead->SetPosition({ fbxObj->GetPosition().x,vanishHight, fbxObj->GetPosition().z });
+	CharaDead->SetColor({ 1,1,1,vanishAlpha });
 }
 
 void Bullet::BurnOut() {
@@ -312,43 +237,17 @@ void Bullet::BurnOut() {
 
 void Bullet::WaitUpda() {
 	throwReady = true;
+	vel = 0.8f;
+	frame = 0.0f;
+	//投げてる最中の回収時の矛盾解消
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	if (pos.y > 0) {
 		pos.y -= 0.3f;
 	} else {
 		pos.y = 0;
 	}
-	if (pos.x > 100) { pos.x = 100; }
-	if (pos.z > 100) { pos.z = 100; }
-	if (pos.x < -100) { pos.x = -100; }
-	if (pos.z < -100) { pos.z = -100; }
-	vel = 0.8f;
-	frame = 0.0f;
-
 	fbxObj->SetPosition(pos);
-	//Follow2Player();
 	SetAggregation();
-
-	//if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
-	//	if (!wait) {
-	//		Follow2Player();
-	//		Move();
-	//	}
-	//} else {
-	//	wait = true;
-	//	Follow2Player();
-	//	SetAggregation();
-	//}
-	//if (wait) {
-	//	SetAggregation();
-	//	if (!Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 6.0f, player->GetPosition().x, player->GetPosition().z, 4.0f)) {
-	//		wait = false;
-	//	}
-	//} else {
-	//	Followframe = 0.0f;
-	//}
-
-
 }
 
 void Bullet::SlowUpda() {
@@ -378,8 +277,6 @@ void Bullet::SlowUpda() {
 		fbxObj->SetRotation(rot);
 
 	} else {
-		frame = 0.0f;
-		vel = 0.8f;
 		fbxObj->SetRotation({ 0,fbxObj->GetRotation().y,0 });
 		command = Attack;
 	}

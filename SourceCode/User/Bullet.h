@@ -65,18 +65,8 @@ public:
 	void SetAngle(const float& angle) { this->angle = angle; }
 	const float& GetAngle() { return angle; }
 	//
-	void SetContX(const float& contX) { this->flocking.contX = contX; }
-	const float& GetContX() { return flocking.contX; }
-	//
-	void SetContY(const float& contY) { this->flocking.contY = contY; }
-	const float& GetContY() { return flocking.contY; }
-
-	void SetVel(const XMFLOAT2& vel) { this->flocking.vel= vel; }
-	const XMFLOAT2& GetVel() { return this->flocking.vel; }
-
 	void SetsPlayActive(const bool& Play) { isPlayActive = Play; };
 	const bool& GetIsPlayActive() { return isPlayActive; }
-
 	//
 	void SetCommand(const int& command, XMFLOAT3 pos = { 0,0,0 });
 	const int& GetCommand() { return command; }
@@ -105,17 +95,13 @@ protected:
 	virtual void IntroOnUpdate(const int& Timer) {};
 	virtual void ResultOnUpdate(const int& Timer) {};
 	void SetAggregation();
-
-
-	void BoidAverage();
-	void Move();
+	void LimitArea();
+	void CommonUpda();
 
 	void WaitUpda();
 	void SlowUpda();
 	void AttackUpda();
 	void Follow2Enemy();
-	void Follow2Player();
-	void WaitBullet();
 
 	void KnockBack();
 	bool knockBacking = false;
@@ -151,7 +137,7 @@ protected:
 	bool isActive = true;
 	//çÌèú
 	bool isRemove = false;
-	//
+	//ÉRÉ}ÉìÉh
 	int command = 0;
 	std::unique_ptr<FBXObject3d> fbxObj;
 	std::unique_ptr<Texture> Shadow = nullptr;
@@ -164,6 +150,7 @@ protected:
 		Green,
 	};
 	int Color = 0;
+
 	float angle = 0;
 	bool DeadFlag = false;
 
@@ -180,12 +167,7 @@ protected:
 
 	bool isPlayActive = false;
 
-	FlockSystem flocking;
-	float dx=0;
-	float dy=0;
-
 	float margin;
-
 
 	float hight = 100;
 };

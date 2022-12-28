@@ -39,8 +39,6 @@ void BulletRed::OnInit() {
 	Explo_->TextureCreate();
 	Explo_->SetRotation({ 0,0,0 });
 	Explo.reset(Explo_);
-
-	WaitBullet();
 }
 
 void BulletRed::OnUpda() {

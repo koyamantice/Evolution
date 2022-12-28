@@ -37,7 +37,6 @@ void BulletGreen::OnInit() {
 	CharaDead_->TextureCreate();
 	CharaDead_->SetRotation({ 0,0,0 });
 	CharaDead.reset(CharaDead_);
-	WaitBullet();
 }
 
 void BulletGreen::OnUpda() {

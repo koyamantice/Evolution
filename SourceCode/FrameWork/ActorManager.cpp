@@ -18,8 +18,6 @@ void ActorManager::Update() {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->Update();
 	}
-	BoidAverage();
-	BoidIsolate();
 	for (std::unique_ptr<Bullet>& bullet : Bullets) {
 		bullet->Update();
 	}
@@ -142,16 +140,16 @@ void ActorManager::RemoveActor() {
 		});
 }
 
-const int& ActorManager::SearchNum(const std::string& tag) {
-	Bulletnum = 0;
+int ActorManager::SearchNum(const std::string& tag) {
+	int Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bulletnum++;
 	}
 	return Bulletnum;
 }
 
-const int& ActorManager::SerchWaitBul() {
-	Bulletnum = 0;
+int ActorManager::SerchWaitBul() {
+	int Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
 		if (bullet->GetCommand() == Bullet::command::Wait) {Bulletnum++;}
@@ -238,60 +236,6 @@ Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos) {
 	return nullptr;
 }
 
-void ActorManager::BoidIsolate() {
-
-	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
-		float contX = 0;
-		float contY = 0;
-		for (auto j = Bullets.begin(); j != Bullets.end(); j++) {
-			if (i != j) {
-				Bullet* itrA = i->get();
-				Bullet* itrB = j->get();
-				XMFLOAT3 itrApos = itrA->GetPosition();
-				XMFLOAT3 itrBpos = itrB->GetPosition();
-				float dist = sqrtf((itrBpos.x - itrApos.x) * (itrBpos.x - itrApos.x) + (itrBpos.z - itrApos.z) * (itrBpos.z - itrApos.z));
-				if (0 < dist && dist < 3) {
-					contX = -1 * (itrBpos.x - itrApos.x);
-					contY = -1 * (itrBpos.z - itrApos.z);
-					float temp = sqrt(contX * contX + contY * contY);
-					contX /= temp;
-					contY /= temp;
-					itrA->SetContX(contX);
-					itrA->SetContY(contY);
-				}
-			}
-		}
-	}
-}
-void ActorManager::BoidAverage() {
-	float aveVel = 0;
-	float aveAngle = 0;
-	int num = 0;
-	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
-		num++;
-		Bullet* itr = i->get();
-		XMFLOAT3 pos = itr->GetPosition();
-		aveVel += sqrtf((pos.x * pos.x) + (pos.z * pos.z));
-		aveAngle += atan2f(pos.z, pos.x) * (180 / XM_PI);
-	}
-	aveVel /= (float)num;
-	aveAngle /= (float)num;
-	for (auto i = Bullets.begin(); i != Bullets.end(); i++) {
-		Bullet* itr = i->get();
-		itr->SetVel(
-			{ aveVel * cosf(aveAngle * (XM_PI / 180)),aveVel * sinf(aveAngle * (XM_PI / 180)) }
-		);
-	}
-}
-
-void ActorManager::BoidAlignment() {
-
-
-
-
-
-
-}
 
 Actor* ActorManager::SearchActorArea(const XMFLOAT3& pos) {
 	Actor* itrActor = SearchActor("Player");
