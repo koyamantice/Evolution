@@ -34,6 +34,13 @@ private:
 	int OnLive = 0;
 	int OldLive = OnLive;
 	bool scaleChange = false;
+	bool decrement = false;
+	bool increment = false;
+
+	bool stock_decre = false;
+	bool stock_incre = false;
+
+
 	float frame = 0.0f;
 
 	XMFLOAT2 scapos{};

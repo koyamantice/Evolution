@@ -8,10 +8,8 @@ ActorManager* ActorManager::GetInstance() {
 }
 
 void ActorManager::Initialize() {
-
 	ActorFactory* newFactory = new ActorFactory();
 	actorFactory_ = newFactory;
-
 }
 
 void ActorManager::Update() {
@@ -116,18 +114,14 @@ void ActorManager::CheckBulletCollisions() {
 
 void ActorManager::AttachActor(const std::string& ActorName, ActorComponent* newActorCompornent) {
 	assert(actorFactory_);
-
 	std::unique_ptr<Actor> newActor;
-
 	newActor.reset(actorFactory_->CreateActor(ActorName, newActorCompornent));
 	Actors.push_back(std::move(newActor));
 }
 void ActorManager::AttachBullet(const std::string& ActorName) {
 	assert(actorFactory_);
 	std::unique_ptr<Bullet> newBullet;
-
 	newBullet.reset(actorFactory_->CreateBullet(ActorName));
-
 	Bullets.push_back(std::move(newBullet));
 }
 

@@ -104,6 +104,11 @@ void PlayerUI::OnUpdate() {
 			tmp /= 10;
 		}
 		if (OnLive != OldLive) {
+			if (OnLive<OldLive) {
+				decrement = true;
+			}else{
+				increment = true;
+			}
 			scaleChange = true;
 		}
 		OldLive = OnLive;
@@ -113,18 +118,28 @@ void PlayerUI::OnUpdate() {
 		} else {
 			frame = 0;
 			scaleChange = false;
+			decrement = false;
+			increment = false;
+			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 10; j++) {
-					numBullet[0][j]->SetSize({ 84,84 });
+					numBullet[i][j]->SetColor({ 1,1,1,1 });
+					numBullet[i][j]->SetSize({ 84,84 });
 				}
-			
+			}
 		}
 		scapos.x = Ease(In, Quad, frame, 84, 128);
 		scapos.y = Ease(In, Quad, frame, 84, 128);
-		//for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 10; j++) {
-				numBullet[0][j]->SetSize(scapos);
+		for (int j = 0; j < 10; j++) {
+			for (int i = 0; i < 2; i++) {
+				if (decrement) {
+					numBullet[i][j]->SetColor({ 1.0f,0.5f,0.5f,1 });
+				}
+				if (increment) {
+					numBullet[i][j]->SetColor({ 0.5f,1.0f,0.5f,1 });
+				}
 			}
-
+			numBullet[0][j]->SetSize(scapos);
+		}
 	}
 
 
@@ -139,6 +154,11 @@ void PlayerUI::OnUpdate() {
 			tmp /= 10;
 		}
 		if (Stock != OldStock) {
+			if (Stock < OldStock) {
+				stock_decre = true;
+			} else {
+				stock_incre = true;
+			}
 			stockChange = true;
 		}
 		OldStock = Stock;
@@ -148,19 +168,31 @@ void PlayerUI::OnUpdate() {
 		} else {
 			stockFrame = 0;
 			stockChange = false;
-			//for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 10; j++) {
+				num[0][j]->SetSize({ 84,84 });
+			}
+			stock_decre = false;
+			stock_incre = false;
+			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 10; j++) {
-					num[0][j]->SetSize({ 84,84 });
+					num[i][j]->SetColor({ 1,1,1,1 });
+					num[i][j]->SetSize({ 84,84 });
 				}
-			//}
+			}
 		}
 		scapos2.x = Ease(In, Quad, stockFrame, 84, 128);
 		scapos2.y = Ease(In, Quad, stockFrame, 84, 128);
-		//for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 10; j++) {
+				for (int i = 0; i < 2; i++) {
+					if (stock_decre) {
+						num[i][j]->SetColor({ 1.0f,0.5f,0.5f,1 });
+					}
+					if (stock_incre) {
+						num[i][j]->SetColor({ 0.5f,1.0f,0.5f,1 });
+					}
+				}
 				num[0][j]->SetSize(scapos2);
 			}
-		//}
 
 	}
 }
