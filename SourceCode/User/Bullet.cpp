@@ -24,15 +24,17 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
-	const float rnd_vel = 1.0f;
-	margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	if (margin < 0) {
-		margin -= 2.5f;
-	} else {
-		margin += 2.5f;
-	}
-	OnInit();
+	//const float rnd_vel = 1.0f;
+	//margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
+	OnInit();
+	if ((int)ID / 7 == 0) {
+		margin = -2.5f;
+	} else if((int)ID / 7 == 1){
+		margin = 2.5f;
+	} else {
+		margin = 0.0f;
+	}
 }
 
 void Bullet::Update() {
@@ -93,13 +95,13 @@ void Bullet::ResultUpdate(const int& Timer) {
 }
 
 void Bullet::SetAggregation() {
-	XMFLOAT3 pos = player->GetAFTIMAGE(ID % 10);
+	XMFLOAT3 pos = player->GetAFTIMAGE(ID % 7);
 	XMFLOAT3 BulletPos = fbxObj->GetPosition();
 	XMFLOAT3 position{};
 
 	position.x = (BulletPos.x - (pos.x + margin));
 	position.z = (BulletPos.z - (pos.z + margin));
-	if (powf(position.x, 2) + powf(position.z, 2) > 1) {
+	if (powf(position.x, 2) + powf(position.z, 2) > 1||collide) {
 		vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.2f;
 		vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.2f;
 		BulletPos.x += vel_follow.x;
@@ -113,6 +115,11 @@ void Bullet::SetAggregation() {
 
 void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
+		ImGui::Begin("bullet");
+		ImGui::SliderFloat("margin", &margin, -10, 10);
+		ImGui::End();
+
+
 		Object3d::PreDraw();
 		fbxObj->Draw(dxCommon->GetCmdList());
 		Texture::PreDraw();

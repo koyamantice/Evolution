@@ -153,8 +153,8 @@ void Player::Move() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
 	holdpos++;
-	if (holdpos > 8) {
-		if ((int)pos.x != (int)PlayerX[0]) {
+	if (holdpos > 4) {
+		if ((int)pos.x != (int)PlayerX[0] || (int)pos.z != (int)PlayerZ[0]) {
 			// 残像データを一つづつずらす
 			for (int i = AFTIMAGENUM - 1; i > 0; i--) {
 				PlayerX[i] = PlayerX[i - 1];
