@@ -10,7 +10,7 @@
 #include"PlayerUI.h"
 #include "ParticleManager.h"
 #include <Easing.h>
-#define STICK__MAX 32768.0f
+#define STICK__MAX 32767.0f
 
 
 
@@ -129,6 +129,10 @@ void Player::OnUpda() {
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
+	ImGui::Begin("player");
+	float rot = fbxObj->GetRotation().y;
+	ImGui::SliderFloat("rotation", &rot, 0, 360);
+	ImGui::End();
 	fbxObj->Draw(dxCommon->GetCmdList());
 	Texture::PreDraw();
 	Shadow->Draw();
@@ -187,8 +191,13 @@ void Player::Move() {
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		ParticleManager::GetInstance()->Add(0,15, oldPos, vel, XMFLOAT3(), 1.2f, 0.6f);
-		rot.y = angle + (atan2f(StickX,StickY) * (180.0f / XM_PI));
-
+		rot.y = angle + (atan2f(StickX / STICK_MAX,StickY / STICK_MAX) * (180.0f / XM_PI));
+		if (rot.y >= 0) {
+			rot.y = (float)((int)rot.y % 360);
+		} else {
+			rot.y += 360;
+			rot.y = (float)((int)rot.y % 360);
+		}
 		obj->SetPosition(pos);
 		obj->SetRotation(rot);
 	}

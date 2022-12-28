@@ -51,6 +51,10 @@ public:
 	//À•W‚ÌŽæ“¾
 	void SetPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
+	//Ì‚ÌÀ•W‚ÌŽæ“¾
+	//void SetOldPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
+	const DirectX::XMFLOAT3& GetOldPosition() { return oldPos; }
+
 	//À•W‚ÌŽæ“¾
 	void SetCameraPos(const DirectX::XMFLOAT3& pos) { this->cameraPos=cameraPos; }
 	const DirectX::XMFLOAT3& GetCameraPos() { return cameraPos; }

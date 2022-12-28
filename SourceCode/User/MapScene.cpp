@@ -38,7 +38,7 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	TouchableObject* Ground{};
 	Ground = new TouchableObject();
 	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
-	Ground->SetPosition(XMFLOAT3(-50, 0, 50));
+	Ground->SetPosition(XMFLOAT3(-50, -0.5f, 50));
 	Ground->SetScale(XMFLOAT3(5, 5, 5));
 	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
 	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
@@ -229,6 +229,10 @@ void MapScene::CameraUpda() {
 		}
 		if (input->TiltPushStick(Input::R_LEFT)) {
 			angle += 3;
+		}
+		if (angle > 360 || angle < 0) {
+			angle += 360;
+			angle = (float)((int)angle % 360);
 		}
 		dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
 		dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;

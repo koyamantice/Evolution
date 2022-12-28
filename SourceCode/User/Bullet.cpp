@@ -127,10 +127,10 @@ void Bullet::Move() {
 	XMFLOAT3 position{};
 	position.x = (plapos.x - pos.x);
 	position.z = (plapos.z - pos.z);
-	{
-		rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
-		fbxObj->SetRotation(rot);
-	}
+	//{
+	//	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
+	//	fbxObj->SetRotation(rot);
+	//}
 	kX = sin(-atan2f(position.x, position.z)) * 0.2f;
 	kY = cos(-atan2f(position.x, position.z)) * 0.2f;
 
@@ -174,18 +174,17 @@ void Bullet::Follow2Enemy() {
 void Bullet::Follow2Player() {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	XMFLOAT3 rot = fbxObj->GetRotation();
-	float vel = (int)(rand() % 10 + 1) * 0.03f;
 	XMFLOAT3 position{};
 	position.x = (player->GetPosition().x - pos.x);
 	position.z = (player->GetPosition().z - pos.z);
-	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 180; //- 90;// *(XM_PI / 180.0f);
-	vel_follow.x = sinf(-atan2f(position.x, position.z)) * vel;
-	vel_follow.y = cosf(-atan2f(position.x, position.z)) * vel;
-	pos.x -= vel_follow.x;
-	pos.z += vel_follow.y;
-	//fbxObj->SetPosition(pos);
+	rot.y = (atan2f(position.x, position.z) * (180.0f / XM_PI)) + 180; //- 90;// *(XM_PI / 180.0f);
+	if (rot.y >= 0) {
+		rot.y = (float)((int)rot.y % 360);
+	} else {
+		rot.y += 360;
+		rot.y = (float)((int)rot.y % 360);
+	}
 	fbxObj->SetRotation(rot);
-
 }
 
 void Bullet::WaitBullet() {

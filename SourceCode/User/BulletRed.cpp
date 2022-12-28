@@ -51,7 +51,7 @@ void BulletRed::OnUpda() {
 	}
 	switch (command) {
 	case Wait:
-		fbxObj->SetRotation({ 0,fbxObj->GetRotation().y,0 });
+		//fbxObj->SetRotation({ 0,fbxObj->GetRotation().y,0 });
 		WaitUpda();
 		break;
 	case Attack:
@@ -85,6 +85,12 @@ void BulletRed::OnUpda() {
 }
 
 void BulletRed::OnDraw(DirectXCommon* dxCommon) {
+	if (ID==0) {
+		ImGui::Begin("bullet");
+		float rot = fbxObj->GetRotation().y;
+		ImGui::SliderFloat("Bulletrotation", &rot, 0, 360);
+		ImGui::End();
+	}
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
@@ -232,17 +238,31 @@ void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 
 void BulletRed::SetAggregation() {
 	XMFLOAT3 pos = player->GetPosition();
-	XMFLOAT3 Bpos = fbxObj->GetPosition();
-	float rot = player->GetRotation().y + 360;
-	int first = ID % 10;
-	if (Followframe < 1.0f) {
-		Followframe += 0.002f;
+	XMFLOAT3 BulletPos = fbxObj->GetPosition();
+	
+
+
+	float FbxObjrot = fbxObj->GetRotation().y;
+
+	fbxObj->SetRotation({ 0,FbxObjrot,0 });
+
+	if (Collision::SphereCollision2(pos,1.0f,BulletPos,3.0f*((int)(ID / 10) + 1))) {
+		XMFLOAT3 oldPos = player->GetOldPosition();
+		XMFLOAT3 dir{};
+		dir.x=pos.x-oldPos.x;
+		dir.y=pos.y-oldPos.y;
+		dir.z=pos.z-oldPos.z;
+
+		BulletPos.x += dir.x;  
+		BulletPos.z += dir.z;
 	} else {
-		Followframe = 1.0f;
+		float rot = player->GetRotation().y;
+		if (rot < FbxObjrot + 90 && rot > FbxObjrot - 90) {
+			BulletPos.y = 3.0f;
+		} else {
+			BulletPos.y = 0.0f;
+		}
 	}
-	FollowPos = { pos.x + -sinf((rot + (float)((first * 27) + 45)) * (XM_PI / 180)) * (((int)(ID / 10) + 1) * 2.5f) , 0, pos.z + -cosf((player->GetRotation().y + (float)((first * 27) + 45)) * (XM_PI / 180)) * (((int)(ID / 10) + 1) * 2.5f) };
-	Bpos.x = Ease(InOut, Quad, Followframe, Bpos.x, FollowPos.x);
-	Bpos.z = Ease(InOut, Quad, Followframe, Bpos.z, FollowPos.z);
-	fbxObj->SetPosition(Bpos);
+	fbxObj->SetPosition(BulletPos);
 }
 

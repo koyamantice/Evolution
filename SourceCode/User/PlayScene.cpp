@@ -288,6 +288,10 @@ void PlayScene::CameraUpda() {
 		if (input->TiltPushStick(Input::R_LEFT)) {
 			angle += 3;
 		}
+		if (angle > 360||angle < 0) {
+			angle += 360;
+			angle = (float)((int)angle%360);
+		}
 		dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
 		dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 		distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
