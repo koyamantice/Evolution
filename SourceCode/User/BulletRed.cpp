@@ -49,7 +49,6 @@ void BulletRed::OnUpda() {
 	}
 	switch (command) {
 	case Wait:
-		//fbxObj->SetRotation({ 0,fbxObj->GetRotation().y,0 });
 		WaitUpda();
 		break;
 	case Attack:
@@ -83,12 +82,6 @@ void BulletRed::OnUpda() {
 }
 
 void BulletRed::OnDraw(DirectXCommon* dxCommon) {
-	if (ID==0) {
-		ImGui::Begin("bullet");
-		float rot = fbxObj->GetRotation().y;
-		ImGui::SliderFloat("Bulletrotation", &rot, 0, 360);
-		ImGui::End();
-	}
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
@@ -109,79 +102,51 @@ void BulletRed::OnFinal() {
 }
 
 void BulletRed::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
-	if (Tag == "Player") {
 		switch (command) {
 		case Wait:
 
 			break;
 		case Attack:
-			player->SetStock(player->GetStock() + 1);
-			command = Wait;
-			break;
-		case Slow:
+			//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è
+			if (Tag == "Player") {
+				player->SetStock(player->GetStock() + 1);
+				command = Wait;
+			}
+			//–I–¨ˆÚ“®
+			if (Tag == "Honey") {
+				if (!isPlayActive) {
+					ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
+					if (ActionActor->GetStock() < 5) {
+						ActionActor->SetStock(ActionActor->GetStock() + 1);
+					} else {
+						ActionActor = nullptr;
+					}
+				}
+			}
+			//“G‚Æ‚Ì“–‚½‚è”»’è
+			if (Tag == "Enemy") {
+				switch (enemy->GetCommand()) {
+				case Actor::Phase::WAIT:
+					DamageInit();
+					break;
+				case Actor::Phase::ATTACK:
+					break;
+				case Actor::Phase::LEAVE:
+					DamageInit();
+					break;
+				case Actor::Phase::DEAD:
 
-			break;
-
-		default:
-			assert(0);
-			break;
-		}
-	}
-
-	if (Tag == "Honey") {
-		switch (command) {
-		case Wait:
-			break;
-		case Attack:
-			if (!isPlayActive) {
-				ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
-				ActionActor->SetStock(ActionActor->GetStock() + 1);
-			} else {
-
+				default:
+					break;
+				}
 			}
 			break;
 		case Slow:
-
 			break;
-
 		default:
 			assert(0);
 			break;
 		}
-	}
-
-
-	if (Tag == "Enemy") {
-		int a = 0;
-		switch (command) {
-		case Wait:
-			break;
-		case Attack:
-			switch (enemy->GetCommand()) {
-			case Actor::Phase::WAIT:
-				DamageInit();
-				break;
-			case Actor::Phase::ATTACK:
-				break;
-			case Actor::Phase::LEAVE:
-				DamageInit();
-				break;
-			case Actor::Phase::DEAD:
-
-			default:
-				break;
-			}
-
-			break;
-		case Slow:
-
-			break;
-
-		default:
-			assert(0);
-			break;
-		}
-	}
 }
 
 void BulletRed::ResultOnUpdate(const int& Timer) {

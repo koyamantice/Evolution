@@ -92,30 +92,29 @@ void BulletGreen::OnFinal() {
 }
 
 void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
-	if (Tag == "Player") {
-		switch (command) {
-		case Wait:
-			break;
-		case Attack:
+	switch (command) {
+	case Wait:
+
+		break;
+	case Attack:
+		//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è
+		if (Tag == "Player") {
 			player->SetStock(player->GetStock() + 1);
 			command = Wait;
-			break;
-		case Slow:
-
-			break;
-
-		default:
-			assert(0);
-			break;
 		}
-	}
-
-	if (Tag == "Enemy") {
-		int a = 0;
-		switch (command) {
-		case Wait:
-			break;
-		case Attack:
+		//–I–¨ˆÚ“®
+		if (Tag == "Honey") {
+			if (!isPlayActive) {
+				ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
+				if (ActionActor->GetStock() < 5) {
+					ActionActor->SetStock(ActionActor->GetStock() + 1);
+				} else {
+					ActionActor = nullptr;
+				}
+			}
+		}
+		//“G‚Æ‚Ì“–‚½‚è”»’è
+		if (Tag == "Enemy") {
 			switch (enemy->GetCommand()) {
 			case Actor::Phase::WAIT:
 				DamageInit();
@@ -125,43 +124,19 @@ void BulletGreen::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			case Actor::Phase::LEAVE:
 				DamageInit();
 				break;
+			case Actor::Phase::DEAD:
+
 			default:
 				break;
 			}
-			break;
-		case Slow:
-
-			break;
-
-		default:
-			assert(0);
-			break;
 		}
-
+		break;
+	case Slow:
+		break;
+	default:
+		assert(0);
+		break;
 	}
-
-	if (Tag == "Honey") {
-		switch (command) {
-		case Wait:
-			break;
-		case Attack:
-			if(!isPlayActive){
-				ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
-				ActionActor->SetStock(ActionActor->GetStock() + 1);
-			} else {
-
-			}
-			break;
-		case Slow:
-
-			break;
-
-		default:
-			assert(0);
-			break;
-		}
-	}
-
 }
 
 void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {

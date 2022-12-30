@@ -72,8 +72,5 @@ void Honey::WaitUpda() {
 		pos.y = 3.0f;
 	}
 
-
-
-
 	obj->SetPosition(pos);
 }
