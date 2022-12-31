@@ -34,6 +34,9 @@ protected:
 	std::unique_ptr<Sprite>	Screen[2]{};
 	std::unique_ptr<Sprite> FeedBlack{};
 	std::unique_ptr<Sprite> Effect;
+
+	std::unique_ptr<ParticleManager> paticle;
+
 	bool Change = true;
 	float alpha = 0.0f;
 	float frame = 0.0f;

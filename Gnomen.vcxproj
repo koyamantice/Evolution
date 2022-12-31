@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
     <ClCompile Include="SourceCode\Common\Vec.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
@@ -238,6 +239,7 @@
     <ClCompile Include="Touch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
     <ClInclude Include="SourceCode\Common\Vec.h" />

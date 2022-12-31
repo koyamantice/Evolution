@@ -28,6 +28,14 @@ public: // サブクラス
 		float scale; // スケール
 	};
 
+	// パイプラインセット
+	struct PipelineSet {
+		// ルートシグネチャ
+		ComPtr<ID3D12RootSignature> rootsignature;
+		// パイプラインステートオブジェクト
+		ComPtr<ID3D12PipelineState> pipelinestate;
+	};
+
 	// 定数バッファ用データ構造体
 	struct ConstBufferData {
 		XMMATRIX mat;	// ビュープロジェクション行列
@@ -75,16 +83,21 @@ public: // サブクラス
 private: // 定数
 	static const int vertexCount = 65536;		// 頂点数
 public: // 静的メンバ関数
-	/// <summary>
-	/// 3Dオブジェクト生成
-	/// </summary>
-	/// <param name="device">デバイス</param>
-	/// <param name="camera">カメラ</param>
-	/// <param name="fName">ファイル名</param>
-	/// <returns></returns>
-	static std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera, std::wstring fName = L"effect1");
 
-public: // メンバ関数	
+	/// <summary>
+	/// パーティクル共通部分の初期化
+	/// </summary>
+	/// <param name="dev">デバイス</param>
+	/// <param name="cmdList">コマンドリスト</param>
+	static void ParticleManagerCommon(ID3D12Device* dev, ID3D12GraphicsCommandList* cmdList, Camera* camera);
+
+public: // メンバ関数
+	/// <summary>
+	/// 生成処理
+	/// </summary>
+	/// <returns>ParticleManager</returns>
+	static std::unique_ptr<ParticleManager> Create(std::wstring fName);
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -98,13 +111,27 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ID3D12GraphicsCommandList* cmdList);
+	void Draw();
 
 	/// <summary>
 	/// カメラのセット
 	/// </summary>
 	/// <param name="camera">カメラ</param>
-	inline void SetCamera(Camera* camera) { this->camera = camera; }
+	static  void SetCamera(Camera* camera) { ParticleManager::camera = camera; }
+
+	/// <summary>
+	/// 減算合成描画前処理
+	/// </summary>
+	static void DrawPrevSubBlend();
+	/// <summary>
+	/// 加算合成描画前処理
+	/// </summary>
+	static void DrawPrevAddBlend();
+
+	/// <summary>
+	/// 半透明合成描画前処理
+	/// </summary>
+	static void DrawPrevAlphaBlend();
 
 	/// <summary>
 	/// パーティクルの追加
@@ -124,10 +151,18 @@ public: // メンバ関数
 	void InitializeDescriptorHeap();
 
 	/// <summary>
-	/// グラフィックパイプライン生成
+	/// 半透明合成パイプライン生成
 	/// </summary>
-	/// <returns>成否</returns>
-	void InitializeGraphicsPipeline();
+	static void CreateAlphaBlendPipeline();
+	/// <summary>
+	/// 加算合成パイプライン生成
+	/// </summary>
+	static void CreateAddBlendPipeline();
+
+	/// <summary>
+	/// 減算合成パイプライン生成
+	/// </summary>
+	static void CreateSubBlendPipeline();
 
 	/// <summary>
 	/// テクスチャ読み込み
@@ -141,14 +176,20 @@ public: // メンバ関数
 	void CreateModel();
 
 private: // メンバ変数
-	// デバイス
-	ID3D12Device* device = nullptr;
+	//デバイス
+	static ID3D12Device* device;
+	//コマンドリスト
+	static ID3D12GraphicsCommandList* cmdList;
+	//半透明合成パイプラインセット
+	static PipelineSet alphaBlendPipelineSet;
+	//加算合成パイプラインセット
+	static PipelineSet addBlendPipelineSet;
+	//減算合成パイプラインセット
+	static PipelineSet subBlendPipelineSet;
+	// カメラ
+	static Camera* camera;
 	// デスクリプタサイズ
 	UINT descriptorHandleIncrementSize = 0u;
-	// ルートシグネチャ
-	ComPtr<ID3D12RootSignature> rootsignature;
-	// パイプラインステートオブジェクト
-	ComPtr<ID3D12PipelineState> pipelinestate;
 	// デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeap;
 	// 頂点バッファ
@@ -165,14 +206,6 @@ private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff;
 	// パーティクル配列
 	std::forward_list<Particle> particles;
-	// カメラ
-	Camera* camera = nullptr;
-private:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	/// <param name="device">デバイス</param>
-	/// <param name="camera">カメラ</param>
-	ParticleManager(ID3D12Device* device, Camera* camera);
+
 };
 

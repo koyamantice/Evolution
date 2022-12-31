@@ -12,8 +12,8 @@ void ParticleEmitter::Update() {
 	}
 }
 
-void ParticleEmitter::Draw(ID3D12GraphicsCommandList* cmdList) {
-	if (particleMan_ != nullptr) {
-		particleMan_->Draw(cmdList);
-	}
+void ParticleEmitter::Draw() {
+	//if (particleMan_ != nullptr) {
+	//	particleMan_->Draw(cmdList);
+	//}
 }

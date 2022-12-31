@@ -39,8 +39,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	kGround->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kGround));
 	kGround->SetPosition(XMFLOAT3(-50, -0.5f, 50));
 	kGround->SetScale(XMFLOAT3(5, 5, 5));
-	//kGround->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
-	//kGround->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(kGround);
 
 	const int w = 256;
@@ -116,6 +114,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 
 	dis.x = distance.x;
 	dis.y = distance.y;
+
+
+
 }
 //ŠJ•úˆ—
 void PlayScene::Finalize() {
@@ -363,7 +364,6 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//grassPatch->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
-	//ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 	Sprite::PreDraw();
 	if (Change) {
 		FeedBlack->Draw();

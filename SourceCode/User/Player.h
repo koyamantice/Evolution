@@ -7,6 +7,7 @@
 #include <SourceCode/Obj/2d/Object2d.h>
 #include<DirectXMath.h>
 #include"Aim.h"
+#include <ParticleEmitter.h>
 
 class Player :public Actor {
 public:
@@ -63,4 +64,5 @@ private:
 
 	std::unique_ptr<FBXObject3d> fbxObj;
 
+	std::unique_ptr<ParticleManager> paticle;
 };

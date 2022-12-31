@@ -34,7 +34,7 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>
-	void Draw(ID3D12GraphicsCommandList* cmdList);
+	void Draw();
 
 	/// <summary>
 	/// 座標の設定

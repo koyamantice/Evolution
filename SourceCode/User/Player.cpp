@@ -109,9 +109,7 @@ void Player::OnInit() {
 	compornent = new PlayerUI();
 	compornent->Initialize();
 
-
-
-
+	partMan = ParticleManager::Create(L"Smoke");
 
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
@@ -121,6 +119,7 @@ void Player::OnInit() {
 }
 
 void Player::OnUpda() {
+	partMan->Update();
 	compornent->SetIsActive(true);
 	if (!first) {
 		LockOn->FirstSet();
@@ -148,6 +147,7 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	Shadow->Draw();
 	LockOn->Draw();
+	partMan->Draw();
 }
 
 void Player::OnFinal() {
@@ -215,7 +215,7 @@ void Player::Move() {
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//ParticleManager::GetInstance()->Add(0,15, oldPos, vel, XMFLOAT3(), 1.2f, 0.6f);
+		partMan->Add(0, oldPos, vel, XMFLOAT3(), 1.2f, 0.6f);
 		rot.y = angle + (atan2f(StickX / STICK_MAX,StickY / STICK_MAX) * (180.0f / XM_PI));
 		if (rot.y >= 0) {
 			rot.y = (float)((int)rot.y % 360);
@@ -228,8 +228,6 @@ void Player::Move() {
 	}
 
 }
-
-
 
 void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Enemy") {
