@@ -14,31 +14,24 @@ private:
 public:
 
 	enum ModelName {
-		Player,
-		Enemy,
-		skydome,
-		Ground,
-		hole,
-		Crystal,
-		Goal,
-		DeLorean,
-		textG,
-		textN,
-		textO,
-		textM,
-		textE,
-		RedKobi,
-		grassPatch,
-		house,
-		honey,
+		kSkydome,
+		kGround,
+		kGoalcrystal,
+		kTextG,
+		kTextN,
+		kTextO,
+		kTextM,
+		kTextE,
+		kHouse,
+		kHoney,
 
 	};
 	enum FBXName {
-		fbxObject3d,
-		Bird,
-		Kobi,
-		brave,
-		Demo,
+		kMash,
+		kSeed,
+		kRedkobito,
+		kGreenkobito,
+		kBee,
 	};
 
 public:

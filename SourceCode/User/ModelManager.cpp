@@ -10,28 +10,21 @@ ModelManager* ModelManager::GetIns() {
 }
 
 void ModelManager::Initialize() {
-	LoadModel(Player, "chr_knight");
-	LoadModel(Enemy, "ball");
-	LoadModel(skydome, "skydome");
-	LoadModel(Ground, "Dungeon");
-	LoadModel(hole, "hole");
-	LoadModel(Crystal, "Crystal");
-	LoadModel(Goal, "MonolithCrystal");
-	LoadModel(textG, "text01G");
-	LoadModel(textN, "text02N");
-	LoadModel(textO, "text03O");
-	LoadModel(textM, "text04M");
-	LoadModel(textE, "text05E");
-	LoadModel(RedKobi,"RedKobito");
-	LoadModel(grassPatch, "grassPatch");
-	LoadModel(house, "House");
-	LoadModel(honey, "honey");
-
-	LoadFBXModel(fbxObject3d,"Mash");
-	LoadFBXModel(Bird,"Player");
-	LoadFBXModel(Kobi, "RedKobito");
-	LoadFBXModel(brave, "kobi");
-	LoadFBXModel(Demo, "Bee");
+	LoadModel(kSkydome, "Skydome");
+	LoadModel(kGround, "Dungeon");
+	LoadModel(kGoalcrystal, "MonolithCrystal");
+	LoadModel(kTextG, "text01G");
+	LoadModel(kTextN, "text02N");
+	LoadModel(kTextO, "text03O");
+	LoadModel(kTextM, "text04M");
+	LoadModel(kTextE, "text05E");
+	LoadModel(kHouse, "House");
+	LoadModel(kHoney, "Honey");
+	LoadFBXModel(kMash,"Mash");
+	LoadFBXModel(kSeed,"Player");
+	LoadFBXModel(kRedkobito, "RedKobito");
+	LoadFBXModel(kGreenkobito, "kobi");
+	LoadFBXModel(kBee, "Bee");
 
 }
 

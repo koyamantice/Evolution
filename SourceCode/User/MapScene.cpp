@@ -30,19 +30,19 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	}
 	Object3d* Sky{};
 	Sky = new Object3d();
-	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::skydome));
+	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
 	Sky->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
 	Sky->Initialize();
-	skydome.reset(Sky);
+	kSkydome.reset(Sky);
 
-	TouchableObject* Ground{};
-	Ground = new TouchableObject();
-	Ground->Initialize(ModelManager::GetIns()->GetModel(ModelManager::Ground));
-	Ground->SetPosition(XMFLOAT3(-50, -0.5f, 50));
-	Ground->SetScale(XMFLOAT3(5, 5, 5));
-	//Ground->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
-	//Ground->SetRotation(XMFLOAT3(0, 180, 0));
-	ground.reset(Ground);
+	TouchableObject* kGround{};
+	kGround = new TouchableObject();
+	kGround->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kGround));
+	kGround->SetPosition(XMFLOAT3(-50, -0.5f, 50));
+	kGround->SetScale(XMFLOAT3(5, 5, 5));
+	//kGround->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
+	//kGround->SetRotation(XMFLOAT3(0, 180, 0));
+	ground.reset(kGround);
 
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
@@ -112,7 +112,7 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 		}
 		goal_shadow->SetIsActive(false);
 		ActorManager::GetInstance()->IntroUpdate(count);
-		skydome->Update();
+		kSkydome->Update();
 		ground->Update();
 		if (count > 1200) {
 			FeedBlack->SetColor({ 1,1,1,0 });
@@ -195,7 +195,7 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 	}
 ActorManager::GetInstance()->Update();
 ParticleManager::GetInstance()->Update();
-skydome->Update();
+kSkydome->Update();
 ground->Update();
 #pragma region "Clear"
 if (!enemy_shadow->GetIsActive()) {
@@ -318,7 +318,7 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::SliderFloat("Anglet", &angle, 0, 360);
 	//ImGui::End();
 	Object3d::PreDraw();
-	skydome->Draw();
+	kSkydome->Draw();
 	ground->Draw();
 	//grassPatch->Draw();
 	//îwåióp

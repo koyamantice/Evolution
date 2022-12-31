@@ -65,8 +65,7 @@ private:
 	std::unique_ptr<Sprite> Rockon[2]{};
 	//std::unique_ptr<Gauge> Demo;
 
-	std::unique_ptr<Object3d> grassPatch{};
-	std::unique_ptr<Object3d> skydome{};
+	std::unique_ptr<Object3d> kSkydome{};
 
 	std::unique_ptr<TouchableObject> ground{};
 

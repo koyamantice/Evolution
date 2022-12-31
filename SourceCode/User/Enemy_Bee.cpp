@@ -67,7 +67,7 @@ void Enemy_Bee::OnInit() {
 	isVisible = false;
 	FBXObject3d* Mash_ = new FBXObject3d();
 	Mash_->Initialize();
-	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Demo));
+	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kBee));
 	Mash_->SetScale({ 0.02f,0.02f, 0.02f });
 	Mash_->SetRotation({ 0,-90,0 });
 	Mash_->LoadAnimation();

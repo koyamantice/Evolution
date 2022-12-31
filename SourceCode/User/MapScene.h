@@ -67,7 +67,7 @@ private:
 
 	PostEffect* postEffect = nullptr;
 
-	std::unique_ptr<Object3d> skydome{};
+	std::unique_ptr<Object3d> kSkydome{};
 
 	std::unique_ptr<TouchableObject> ground{};
 

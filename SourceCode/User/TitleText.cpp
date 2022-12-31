@@ -16,17 +16,17 @@ void TitleText::Init() {
 	for (int i = 0; i < 6; i++) {
 		Object3d* newText_ = new Object3d();
 		if (i == 0) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textG));
+			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextG));
 		} else if (i == 1) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textN));
+			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextN));
 		} else if (i == 2) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textO));
+			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextO));
 		} else if (i == 3) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textM));
+			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextM));
 		} else if (i == 4) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textE));
+			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextE));
 		} else {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::textN));
+			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextN));
 		}
 		newText_->Initialize();
 		newText_->SetPosition({ 0,-10,-500 });

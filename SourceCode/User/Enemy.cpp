@@ -74,7 +74,7 @@ void Enemy::OnInit() {
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);*/
 	FBXObject3d* Mash_= new FBXObject3d();
 	Mash_->Initialize();
-	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::fbxObject3d));
+	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash));
 	Mash_->SetScale({0.01f,0.01f, 0.01f});
 	Mash_->LoadAnimation();
 	//move_object_->SetPosition(position);

@@ -85,7 +85,7 @@ void Player::OnInit() {
 
 	FBXObject3d* fbxObj_ = new FBXObject3d();
 	fbxObj_->Initialize();
-	fbxObj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::Bird));
+	fbxObj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kSeed));
 	fbxObj_->SetScale({ 0.005f,0.005f, 0.005f });
 	fbxObj.reset(fbxObj_);
 	fbxObj->LoadAnimation();
