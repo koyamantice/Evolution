@@ -3,7 +3,6 @@
 #include "Actor.h"
 #include "PauseUI.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
-#include "Gauge.h"
 #include <PostEffect.h>
 
 /// <summary>

@@ -2,9 +2,7 @@
 #include "SceneManager.h"
 #include "Actor.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
-#include "Gauge.h"
 #include <PostEffect.h>
-#include <SourceCode/Obj/2d/MiniMap.h>
 
 /// <summary>
 /// タイトルシーン

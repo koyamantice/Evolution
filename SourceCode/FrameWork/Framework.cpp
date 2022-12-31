@@ -1,7 +1,6 @@
 ﻿#include "Framework.h"
 #include "FbxLoader.h"
 #include <SourceCode/FrameWork/ActorManager.h>
-#include <SourceCode/Obj/2d/Gauge.h>
 
 void Framework::Run() {
 	

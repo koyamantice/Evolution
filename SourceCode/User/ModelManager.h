@@ -14,7 +14,7 @@ private:
 public:
 
 	enum ModelName {
-		kSkydome,
+		kSkydome = 0,
 		kGround,
 		kGoalcrystal,
 		kTextG,
@@ -24,10 +24,10 @@ public:
 		kTextE,
 		kHouse,
 		kHoney,
-
+		kTouch
 	};
 	enum FBXName {
-		kMash,
+		kMash = 0,
 		kSeed,
 		kRedkobito,
 		kGreenkobito,

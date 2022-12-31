@@ -191,8 +191,6 @@
     <ClCompile Include="SourceCode\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="SourceCode\imgui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
-    <ClCompile Include="SourceCode\Obj\2d\Gauge.cpp" />
-    <ClCompile Include="SourceCode\Obj\2d\MiniMap.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp" />
@@ -274,8 +272,6 @@
     <ClInclude Include="SourceCode\imgui\imstb_rectpack.h" />
     <ClInclude Include="SourceCode\imgui\imstb_textedit.h" />
     <ClInclude Include="SourceCode\imgui\imstb_truetype.h" />
-    <ClInclude Include="SourceCode\Obj\2d\Gauge.h" />
-    <ClInclude Include="SourceCode\Obj\2d\MiniMap.h" />
     <ClInclude Include="SourceCode\Obj\2d\Sprite.h" />
     <ClInclude Include="SourceCode\Obj\2d\Object2d.h" />
     <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h" />

@@ -10,6 +10,7 @@ ModelManager* ModelManager::GetIns() {
 }
 
 void ModelManager::Initialize() {
+	//OBJフォルダを読み込みます。
 	LoadModel(kSkydome, "Skydome");
 	LoadModel(kGround, "Dungeon");
 	LoadModel(kGoalcrystal, "MonolithCrystal");
@@ -20,6 +21,9 @@ void ModelManager::Initialize() {
 	LoadModel(kTextE, "text05E");
 	LoadModel(kHouse, "House");
 	LoadModel(kHoney, "Honey");
+	LoadModel(kTouch, "Touch");
+
+	//FBXフォルダを読み込みます。
 	LoadFBXModel(kMash,"Mash");
 	LoadFBXModel(kSeed,"Player");
 	LoadFBXModel(kRedkobito, "RedKobito");
