@@ -147,7 +147,7 @@ void Aim::Move(float angle) {
 			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
 			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
-			ParticleManager::GetInstance()->Add(1, 15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
+			//ParticleManager::GetInstance()->Add(1, 15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
 		Whistle->SetPosition({ base.x, base.y+(Area/4), base.z });

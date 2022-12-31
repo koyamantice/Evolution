@@ -42,8 +42,6 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	// スプライト静的初期化
 	Sprite::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	ImageManager::GetIns()->Load2D();
-	// デバッグテキスト初期化
-	Gauge::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 
 	// ライト静的初期化
 	LightGroup::StaticInitialize(dxcommon->GetDev());
@@ -61,7 +59,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
 	ModelManager::GetIns()->Initialize();
-	ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
+	//ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
 }
 
 void Framework::Finalize() {

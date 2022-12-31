@@ -69,7 +69,7 @@ void ClearCrystal::ResultOnUpdate(const int& Timer) {
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			ParticleManager::GetInstance()->Add(1,120, pos, vel, XMFLOAT3(), 1.2f, 0.0f);
+			//ParticleManager::GetInstance()->Add(1,120, pos, vel, XMFLOAT3(), 1.2f, 0.0f);
 
 		}
 	}

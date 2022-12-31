@@ -7,8 +7,7 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-static const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs)
-{
+static const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs) {
 	XMFLOAT3 result;
 	result.x = lhs.x + rhs.x;
 	result.y = lhs.y + rhs.y;
@@ -16,8 +15,7 @@ static const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const Dir
 	return result;
 }
 
-static const DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs)
-{
+static const DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs) {
 	XMFLOAT3 result;
 	result.x = lhs.x - rhs.x;
 	result.y = lhs.y - rhs.y;
@@ -25,8 +23,7 @@ static const DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& lhs, const Dir
 	return result;
 }
 
-const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
-{
+const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs) {
 	XMFLOAT3 result;
 	result.x = lhs.x / rhs;
 	result.y = lhs.y / rhs;
@@ -34,19 +31,24 @@ const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
 	return result;
 }
 
-ParticleManager* ParticleManager::GetInstance()
-{
-	static ParticleManager instance;
-	return &instance;
-}
-
-void ParticleManager::Initialize(ID3D12Device* device)
-{
+std::unique_ptr<ParticleManager> ParticleManager::Create(ID3D12Device* device, Camera* camera, std::wstring fName) {
 	// nullptrチェック
 	assert(device);
+	assert(camera);
+	
+	// 3Dオブジェクトのインスタンスを生成
+	ParticleManager* partMan = new ParticleManager(device, camera);
+	if (partMan == nullptr) {
+		return nullptr;
+	}
 
-	this->device = device;
+	// 初期化
+	partMan->Initialize(fName);
 
+	return std::unique_ptr<ParticleManager>(partMan);
+}
+
+void ParticleManager::Initialize(std::wstring fName) {
 	HRESULT result;
 
 	// デスクリプタヒープの初期化
@@ -56,9 +58,7 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	InitializeGraphicsPipeline();
 
 	// テクスチャ読み込み
-	LoadTexture();
-	// テクスチャ読み込み
-	//LoadTexture(1,L"Resources/2d/Effect/ChargeEffect.png");
+	LoadTexture(fName);
 
 	// モデル生成
 	CreateModel();
@@ -76,8 +76,7 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	}
 }
 
-void ParticleManager::Update()
-{
+void ParticleManager::Update() {
 	HRESULT result;
 
 	// 寿命が尽きたパーティクルを全削除
@@ -139,8 +138,7 @@ void ParticleManager::Update()
 	constBuff->Unmap(0, nullptr);
 }
 
-void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList)
-{
+void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList) {
 	UINT drawNum = (UINT)std::distance(particles.begin(), particles.end());
 	if (drawNum > vertexCount) {
 		drawNum = vertexCount;
@@ -176,13 +174,11 @@ void ParticleManager::Draw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->DrawInstanced(drawNum, 1, 0, 0);
 }
 
-void ParticleManager::Add(int texNumber, int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale)
-{
+void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale) {
 	// リストに要素を追加
 	particles.emplace_front();
 	// 追加した要素の参照
 	Particle& p = particles.front();
-	p.texNumber = texNumber;
 	p.position = position;
 	p.velocity = velocity;
 	p.accel = accel;
@@ -191,8 +187,7 @@ void ParticleManager::Add(int texNumber, int life, XMFLOAT3 position, XMFLOAT3 v
 	p.num_frame = life;
 }
 
-void ParticleManager::InitializeDescriptorHeap()
-{
+void ParticleManager::InitializeDescriptorHeap() {
 	HRESULT result = S_FALSE;
 
 	// デスクリプタヒープを生成	
@@ -209,8 +204,7 @@ void ParticleManager::InitializeDescriptorHeap()
 	descriptorHandleIncrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-void ParticleManager::InitializeGraphicsPipeline()
-{
+void ParticleManager::InitializeGraphicsPipeline() {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト
@@ -351,7 +345,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;// DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
 	//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
@@ -390,18 +384,20 @@ void ParticleManager::InitializeGraphicsPipeline()
 	}
 }
 
-void ParticleManager::LoadTexture(UINT texnumber, const wchar_t* filename)
-{
+void ParticleManager::LoadTexture(std::wstring fName) {
 	HRESULT result = S_FALSE;
 
 	// WICテクスチャのロード
 	TexMetadata metadata{};
-	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
-	result = LoadFromWICFile(
-		filename, WIC_FLAGS_NONE,
-		&metadata, scratchImg);
+	std::wstring name = L"Resources/" + fName + L".png";
+
+	result = LoadFromWICFile
+	(
+		name.c_str(), WIC_FLAGS_NONE,
+		&metadata, scratchImg
+	);
 	if (FAILED(result)) {
 		assert(0);
 	}
@@ -409,7 +405,8 @@ void ParticleManager::LoadTexture(UINT texnumber, const wchar_t* filename)
 	const Image* img = scratchImg.GetImage(0, 0, 0); // 生データ抽出
 
 	// リソース設定
-	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D
+	(
 		metadata.format,
 		metadata.width,
 		(UINT)metadata.height,
@@ -424,13 +421,14 @@ void ParticleManager::LoadTexture(UINT texnumber, const wchar_t* filename)
 		&texresDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ, // テクスチャ用指定
 		nullptr,
-		IID_PPV_ARGS(&texbuff[texnumber]));
+		IID_PPV_ARGS(&texbuff));
 	if (FAILED(result)) {
 		assert(0);
 	}
 
 	// テクスチャバッファにデータ転送
-	result = texbuff[texnumber]->WriteToSubresource(
+	result = texbuff->WriteToSubresource
+	(
 		0,
 		nullptr, // 全領域へコピー
 		img->pixels,    // 元データアドレス
@@ -442,25 +440,26 @@ void ParticleManager::LoadTexture(UINT texnumber, const wchar_t* filename)
 	}
 
 	// シェーダリソースビュー作成
-	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), texnumber, descriptorHandleIncrementSize);
-	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), texnumber, descriptorHandleIncrementSize);
+	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
+	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
-	D3D12_RESOURCE_DESC resDesc = texbuff[texnumber]->GetDesc();
+	D3D12_RESOURCE_DESC resDesc = texbuff->GetDesc();
 
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = 1;
 
-	device->CreateShaderResourceView(texbuff[texnumber].Get(), //ビューと関連付けるバッファ
+	device->CreateShaderResourceView
+	(
+		texbuff.Get(), //ビューと関連付けるバッファ
 		&srvDesc, //テクスチャ設定情報
 		cpuDescHandleSRV
 	);
 }
 
-void ParticleManager::CreateModel()
-{
+void ParticleManager::CreateModel() {
 	HRESULT result = S_FALSE;
 
 	// 頂点バッファ生成
@@ -480,4 +479,9 @@ void ParticleManager::CreateModel()
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
 	vbView.SizeInBytes = sizeof(VertexPos) * vertexCount;
 	vbView.StrideInBytes = sizeof(VertexPos);
+}
+
+ParticleManager::ParticleManager(ID3D12Device* device, Camera* camera) {
+	this->device = device;
+	this->camera = camera;
 }

@@ -129,7 +129,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		ResultCamera(count);
 		count++;
 		ActorManager::GetInstance()->ResultUpdate(count);
-		ParticleManager::GetInstance()->Update();
+		//ParticleManager::GetInstance()->Update();
 		if (input->TriggerButton(Input::A)) {
 			Change = true;
 		}
@@ -179,8 +179,8 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		ParticleManager::GetInstance()->Add(0, 120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
-		ParticleManager::GetInstance()->Update();
+		//ParticleManager::GetInstance()->Add(0, 120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
+		//ParticleManager::GetInstance()->Update();
 
 		finishTime++;
 		if (finishTime > 200) {
@@ -240,7 +240,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			}
 	}
 	ActorManager::GetInstance()->Update();
-	ParticleManager::GetInstance()->Update();
+	//ParticleManager::GetInstance()->Update();
 	kSkydome->Update();
 	ground->Update();
 #pragma region "Clear"
@@ -363,7 +363,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//grassPatch->Draw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
-	ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
+	//ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
 	Sprite::PreDraw();
 	if (Change) {
 		FeedBlack->Draw();

@@ -6,14 +6,12 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 #include <forward_list>
-
 #include "Camera.h"
 
 /// <summary>
 /// パーティクルマネージャ
 /// </summary>
-class ParticleManager
-{
+class ParticleManager {
 private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -25,22 +23,19 @@ private: // エイリアス
 
 public: // サブクラス
 	// 頂点データ構造体
-	struct VertexPos
-	{
+	struct VertexPos {
 		XMFLOAT3 pos; // xyz座標
 		float scale; // スケール
 	};
 
 	// 定数バッファ用データ構造体
-	struct ConstBufferData
-	{
+	struct ConstBufferData {
 		XMMATRIX mat;	// ビュープロジェクション行列
 		XMMATRIX matBillboard;	// ビルボード行列
 	};
 
 	// パーティクル1粒
-	class Particle
-	{
+	class Particle {
 		// Microsoft::WRL::を省略
 		template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 		// DirectX::を省略
@@ -50,8 +45,6 @@ public: // サブクラス
 		using XMMATRIX = DirectX::XMMATRIX;
 
 	public:
-		//テクスチャ番号	
-		UINT texNumber = 0;
 		// 座標
 		XMFLOAT3 position = {};
 		// 速度
@@ -81,16 +74,22 @@ public: // サブクラス
 
 private: // 定数
 	static const int vertexCount = 65536;		// 頂点数
-
-public:// 静的メンバ関数
-	static ParticleManager* GetInstance();
+public: // 静的メンバ関数
+	/// <summary>
+	/// 3Dオブジェクト生成
+	/// </summary>
+	/// <param name="device">デバイス</param>
+	/// <param name="camera">カメラ</param>
+	/// <param name="fName">ファイル名</param>
+	/// <returns></returns>
+	static std::unique_ptr<ParticleManager> Create(ID3D12Device* device, Camera* camera, std::wstring fName = L"effect1");
 
 public: // メンバ関数	
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <returns></returns>
-	void Initialize(ID3D12Device* device);
+	void Initialize(std::wstring fName);
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -116,7 +115,7 @@ public: // メンバ関数
 	/// <param name="accel">加速度</param>
 	/// <param name="start_scale">開始時スケール</param>
 	/// <param name="end_scale">終了時スケール</param>
-	void Add(int texNumber,int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale);
+	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale);
 
 	/// <summary>
 	/// デスクリプタヒープの初期化
@@ -134,7 +133,7 @@ public: // メンバ関数
 	/// テクスチャ読み込み
 	/// </summary>
 	/// <returns>成否</returns>
-	void LoadTexture(UINT texnumber = 0, const wchar_t* filename = L"Resources/2d/Effect/Charge.png");
+	void LoadTexture(std::wstring fName);
 
 	/// <summary>
 	/// モデル作成
@@ -142,8 +141,6 @@ public: // メンバ関数
 	void CreateModel();
 
 private: // メンバ変数
-		// テクスチャの最大枚数
-	static const int srvCount = 10;
 	// デバイス
 	ID3D12Device* device = nullptr;
 	// デスクリプタサイズ
@@ -157,7 +154,7 @@ private: // メンバ変数
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	// テクスチャバッファ
-	ComPtr<ID3D12Resource> texbuff[srvCount];
+	ComPtr<ID3D12Resource> texbuff;
 	// シェーダリソースビューのハンドル(CPU)
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
 	// シェーダリソースビューのハンドル(CPU)
@@ -171,9 +168,11 @@ private: // メンバ変数
 	// カメラ
 	Camera* camera = nullptr;
 private:
-	ParticleManager() = default;
-	ParticleManager(const ParticleManager&) = delete;
-	~ParticleManager() = default;
-	ParticleManager& operator=(const ParticleManager&) = delete;
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="device">デバイス</param>
+	/// <param name="camera">カメラ</param>
+	ParticleManager(ID3D12Device* device, Camera* camera);
 };
 
