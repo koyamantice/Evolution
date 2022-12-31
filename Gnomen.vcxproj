@@ -194,7 +194,7 @@
     <ClCompile Include="SourceCode\Obj\2d\Gauge.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\MiniMap.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp" />
-    <ClCompile Include="SourceCode\Obj\2d\Texture.cpp" />
+    <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\FBXModel.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\FBXObject3d.cpp" />
@@ -237,6 +237,7 @@
     <ClCompile Include="SourceCode\User\PlayScene.cpp" />
     <ClCompile Include="SourceCode\User\TitleScene.cpp" />
     <ClCompile Include="SourceCode\User\TitleText.cpp" />
+    <ClCompile Include="Touch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -276,7 +277,7 @@
     <ClInclude Include="SourceCode\Obj\2d\Gauge.h" />
     <ClInclude Include="SourceCode\Obj\2d\MiniMap.h" />
     <ClInclude Include="SourceCode\Obj\2d\Sprite.h" />
-    <ClInclude Include="SourceCode\Obj\2d\Texture.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Object2d.h" />
     <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h" />
     <ClInclude Include="SourceCode\Obj\3d\FBXModel.h" />
     <ClInclude Include="SourceCode\Obj\3d\FBXObject3d.h" />
@@ -320,6 +321,7 @@
     <ClInclude Include="SourceCode\User\PlayScene.h" />
     <ClInclude Include="SourceCode\User\TitleScene.h" />
     <ClInclude Include="SourceCode\User\TitleText.h" />
+    <ClInclude Include="Touch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />

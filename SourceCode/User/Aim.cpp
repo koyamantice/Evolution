@@ -6,45 +6,45 @@
 using namespace DirectX;
 
 void Aim::Init() {
-	Texture* Lock_ = Texture::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Lock_->TextureCreate();
+	Object2d* Lock_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	Lock_->Object2dCreate();
 	Lock_->SetRotation({ 90,0,0 });
 	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 	LockOn.reset(Lock_);
 	LockOn->SetPosition({ 100,-50,0 });
 
-	Texture* Whistle_ = Texture::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Whistle_->TextureCreate();
+	Object2d* Whistle_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	Whistle_->Object2dCreate();
 	Whistle_->SetRotation({ 90,0,0 });
 	Whistle_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
 	Whistle.reset(Whistle_);
 	Whistle->SetPosition({ 100,-50,0 });
 
 
-	Texture* FirstUI_ = Texture::Create(ImageManager::SlowUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	FirstUI_->TextureCreate();
+	Object2d* FirstUI_ = Object2d::Create(ImageManager::SlowUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	FirstUI_->Object2dCreate();
 	FirstUI_->SetRotation({ 0,0,0 });
 	FirstUI_->SetIsBillboard(true);
 	FirstUI.reset(FirstUI_);
 	FirstUI->SetPosition({ 100,-50,0 });
 
-	Texture* SecondUI_ = Texture::Create(ImageManager::SetUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	SecondUI_->TextureCreate();
+	Object2d* SecondUI_ = Object2d::Create(ImageManager::SetUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	SecondUI_->Object2dCreate();
 	SecondUI_->SetRotation({ 0,0,0 });
 	SecondUI_->SetIsBillboard(true);
 	SecondUI[0].reset(SecondUI_);
 	SecondUI[0]->SetPosition({ 100,-50,0 });
 
-	Texture* SecondUI2_ = Texture::Create(ImageManager::SetUI2, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	SecondUI2_->TextureCreate();
+	Object2d* SecondUI2_ = Object2d::Create(ImageManager::SetUI2, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+	SecondUI2_->Object2dCreate();
 	SecondUI2_->SetRotation({ 0,0,0 });
 	SecondUI2_->SetIsBillboard(true);
 	SecondUI[1].reset(SecondUI2_);
 	SecondUI[1]->SetPosition({ 100,-50,0 });
 
 	for (int i = 0; i < GuidNum; i++) {
-		Texture* Guid_ = Texture::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-		Guid_->TextureCreate();
+		Object2d* Guid_ = Object2d::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+		Guid_->Object2dCreate();
 		Guid_->SetRotation({ 90,0,0 });
 		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.6f });
 		Guid[i].reset(Guid_);
@@ -87,7 +87,7 @@ void Aim::Draw() {
 	//}
 	//////ImGui::Unindent();
 	//ImGui::End();
-	Texture::PreDraw();
+	Object2d::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
 	FirstUI->Draw();

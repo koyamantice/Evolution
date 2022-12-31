@@ -3,7 +3,7 @@
 #include"Input.h"
 #include<list>
 #include <sstream>
-#include <SourceCode/Obj/2d/Texture.h>
+#include <SourceCode/Obj/2d/Object2d.h>
 #include"Player.h"
 
 
@@ -27,7 +27,7 @@ private:
 	void OnCollision(const std::string& Tag)override;
 	Actor* player=nullptr;
 
-	std::unique_ptr<Texture> in_out = nullptr;
+	std::unique_ptr<Object2d> in_out = nullptr;
 	bool isCollide = false;
 	float frame = 0.0f;
 	float a = 0.02f;

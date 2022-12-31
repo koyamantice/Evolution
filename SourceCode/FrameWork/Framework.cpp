@@ -49,7 +49,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	// ライト静的初期化
 	LightGroup::StaticInitialize(dxcommon->GetDev());
 	//テクスチャ初期化
-	Texture::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
+	Object2d::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	ImageManager::GetIns()->LoadTex2D();
 	Object3d::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	ActorManager::GetInstance()->Initialize();
@@ -68,7 +68,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 void Framework::Finalize() {
 	ModelManager::GetIns()->Finalize();
 	Sprite::Finalize();
-	Texture::Finalize();
+	Object2d::Finalize();
 	LightGroup::Finalize();
 	SceneManager::GetInstance()->Finalize();
 	input->GetInstance()->Finalize();

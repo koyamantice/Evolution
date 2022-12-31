@@ -1,5 +1,5 @@
 #pragma once
-#include <SourceCode/Obj/2d/Texture.h>
+#include <SourceCode/Obj/2d/Object2d.h>
 #include<list>
 #include <sstream>
 #include<DirectXMath.h>
@@ -18,12 +18,12 @@ public:
 	void Draw();
 	void FirstSet();
 private:
-	std::unique_ptr<Texture> LockOn{};
-	std::unique_ptr<Texture> Whistle{};
+	std::unique_ptr<Object2d> LockOn{};
+	std::unique_ptr<Object2d> Whistle{};
 	static const int GuidNum = 8;
-	std::unique_ptr<Texture> Guid[GuidNum]{};
-	std::unique_ptr<Texture> FirstUI{};
-	std::unique_ptr<Texture> SecondUI[2]{};
+	std::unique_ptr<Object2d> Guid[GuidNum]{};
+	std::unique_ptr<Object2d> FirstUI{};
+	std::unique_ptr<Object2d> SecondUI[2]{};
 	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);

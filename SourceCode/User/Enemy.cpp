@@ -92,10 +92,10 @@ void Enemy::OnInit() {
 	EnemyAttack* Attack_ = new EnemyAttack();
 	Attack_->Init();
 	Attack.reset(Attack_);
-	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	//Shadow_->SetIsBillboard(true);
-	Shadow_->TextureCreate();
+	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
@@ -122,7 +122,7 @@ void Enemy::OnDraw(DirectXCommon* dxCommon) {
 
 	Object3d::PreDraw();
 	fbxObject3d->Draw(dxCommon->GetCmdList());
-	Texture::PreDraw();
+	Object2d::PreDraw();
 	Shadow->Draw();
 	Attack->Draw();
 }

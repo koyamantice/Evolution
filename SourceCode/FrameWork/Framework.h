@@ -7,7 +7,7 @@
 #include "Object3d.h"
 #include "Sprite.h"
 #include "AbstractSceneFactory.h"
-#include "Texture.h"
+#include "Object2d.h"
 #include"FPSManager.h"
 #include"ModelManager.h"
 #include "XorShift.h"

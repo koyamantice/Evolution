@@ -10,10 +10,10 @@ EnemyAttack::~EnemyAttack() {
 }
 
 void EnemyAttack::Init() {
-	Texture* Explo_ = Texture::Create(ImageManager::Fire, {0,0,0},
+	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, {0,0,0},
 	{1,1,1}, { 1,1,1,1 });
 	Explo_->SetIsBillboard(true);
-	Explo_->TextureCreate();
+	Explo_->Object2dCreate();
 	Explo_->SetRotation({ 0,0,0 });
 	Explo.reset(Explo_);
 

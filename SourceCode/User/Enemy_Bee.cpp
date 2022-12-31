@@ -89,10 +89,10 @@ void Enemy_Bee::OnInit() {
 	Honey[0]->SetPosition({ 25,0,25 });
 	Honey[1]->SetPosition({-25,0,-25});
 
-	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 	{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	//Shadow_->SetIsBillboard(true);
-	Shadow_->TextureCreate();
+	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
@@ -119,7 +119,7 @@ void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
 
 	Object3d::PreDraw();
 	fbxObject3d->Draw(dxCommon->GetCmdList());
-	Texture::PreDraw();
+	Object2d::PreDraw();
 	Shadow->Draw();
 }
 

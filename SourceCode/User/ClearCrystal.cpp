@@ -7,8 +7,8 @@
 void ClearCrystal::OnInit() {
 	obj->SetColor({1,1,1,0});
 	obj->SetScale({1.5f,1.5f, 1.5f});
-	Texture* InOut_ = Texture::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
-	InOut_->TextureCreate();
+	Object2d* InOut_ = Object2d::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
+	InOut_->Object2dCreate();
 	InOut_->SetRotation({ 0,0,0 });
 	InOut_->SetColor({ 1.0f,1.0f,1.0f ,1.0f });
 	in_out.reset(InOut_);

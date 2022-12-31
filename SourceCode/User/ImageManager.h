@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 #include "Sprite.h"
-#include "Texture.h"
+#include "Object2d.h"
 class ImageManager  final {
 private:
 	ImageManager() = default;

@@ -4,7 +4,7 @@
 #include<list>
 #include"Bullet.h"
 #include <sstream>
-#include <SourceCode/Obj/2d/Texture.h>
+#include <SourceCode/Obj/2d/Object2d.h>
 #include<DirectXMath.h>
 #include"Aim.h"
 
@@ -19,7 +19,7 @@ private:
 	std::stringstream parameterCommands;
 
 	std::unique_ptr<Aim> LockOn{};
-	std::unique_ptr<Texture> Shadow = nullptr;
+	std::unique_ptr<Object2d> Shadow = nullptr;
 
 	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
 	void OnInit()override;

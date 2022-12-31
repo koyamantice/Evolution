@@ -1,5 +1,5 @@
 #pragma once
-#include"Texture.h"
+#include"Object2d.h"
 
 
 class EnemyAttack {
@@ -25,6 +25,6 @@ private:
 	bool burning = false;
 	float scale = 0.0f;
 	float effectRate = 0.0f;
-	std::unique_ptr<Texture> Explo = nullptr;
+	std::unique_ptr<Object2d> Explo = nullptr;
 
 };

@@ -47,17 +47,17 @@ void ImageManager::Load2D() {
 
 void ImageManager::LoadTex2D() {
 	// テクスチャ読み込み
-	Texture::LoadTexture(Lock, L"Resources/2d/PlayUI/Lock.png");
-	Texture::LoadTexture(Battle, L"Resources/2d/PlayUI/Battle.png");
-	Texture::LoadTexture(Fire, L"Resources/2d/Effect/Fire.png");
-	Texture::LoadTexture(InOut, L"Resources/2d/Effect/Base.png");
-	Texture::LoadTexture(Guid, L"Resources/2d/Effect/Diamond.png");
-	Texture::LoadTexture(Shadow, L"Resources/2d/Effect/Shadow.png");
-	Texture::LoadTexture(RedDead, L"Resources/2d/Effect/CharaDead.png");
-	Texture::LoadTexture(GreenDead, L"Resources/2d/Effect/CharaDead.png");
-	Texture::LoadTexture(SlowUI, L"Resources/2d/PlayUI/SlowUI.png");
-	Texture::LoadTexture(SetUI, L"Resources/2d/PlayUI/SetUI.png");
-	Texture::LoadTexture(SetUI2, L"Resources/2d/PlayUI/SetUI2.png");
+	Object2d::LoadTexture(Lock, L"Resources/2d/PlayUI/Lock.png");
+	Object2d::LoadTexture(Battle, L"Resources/2d/PlayUI/Battle.png");
+	Object2d::LoadTexture(Fire, L"Resources/2d/Effect/Fire.png");
+	Object2d::LoadTexture(InOut, L"Resources/2d/Effect/Base.png");
+	Object2d::LoadTexture(Guid, L"Resources/2d/Effect/Diamond.png");
+	Object2d::LoadTexture(Shadow, L"Resources/2d/Effect/Shadow.png");
+	Object2d::LoadTexture(RedDead, L"Resources/2d/Effect/CharaDead.png");
+	Object2d::LoadTexture(GreenDead, L"Resources/2d/Effect/CharaDead.png");
+	Object2d::LoadTexture(SlowUI, L"Resources/2d/PlayUI/SlowUI.png");
+	Object2d::LoadTexture(SetUI, L"Resources/2d/PlayUI/SetUI.png");
+	Object2d::LoadTexture(SetUI2, L"Resources/2d/PlayUI/SetUI2.png");
 
 
 }

@@ -18,25 +18,25 @@ void BulletRed::OnInit() {
 	landing = player->GetLockPos();
 	Color = DeathColor::Red;
 
-	Texture* CharaDead_ = Texture::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z},
+	Object2d* CharaDead_ = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z},
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
 	CharaDead_->SetIsBillboard(true);
-	CharaDead_->TextureCreate();
+	CharaDead_->Object2dCreate();
 	CharaDead_->SetRotation({ 0,0,0 });
 	CharaDead.reset(CharaDead_);
 
 
-	Texture* Lock_ = Texture::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
+	Object2d* Lock_ = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Lock_->SetIsBillboard(true);
-	Lock_->TextureCreate();
+	Lock_->Object2dCreate();
 	Lock_->SetRotation({ 0,0,0 });
 	Status.reset(Lock_);
 
-	Texture* Explo_ = Texture::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
+	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Explo_->SetIsBillboard(true);
-	Explo_->TextureCreate();
+	Explo_->Object2dCreate();
 	Explo_->SetRotation({ 0,0,0 });
 	Explo.reset(Explo_);
 }
@@ -85,7 +85,7 @@ void BulletRed::OnDraw(DirectXCommon* dxCommon) {
 	if (enemy == NULL) { return; }
 	if (enemy->GetIsActive()) {
 		if (command == Wait) { return; }
-		Texture::PreDraw();
+		Object2d::PreDraw();
 		if (!DeadFlag) {
 			if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 				Status->Draw();

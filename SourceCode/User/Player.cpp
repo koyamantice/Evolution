@@ -109,9 +109,9 @@ void Player::OnInit() {
 	compornent = new PlayerUI();
 	compornent->Initialize();
 
-	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	Shadow_->TextureCreate();
+	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 }
@@ -141,7 +141,7 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 	ImGui::SliderFloat("rotation", &rot, 0, 360);
 	ImGui::End();
 	fbxObj->Draw(dxCommon->GetCmdList());
-	Texture::PreDraw();
+	Object2d::PreDraw();
 	Shadow->Draw();
 	LockOn->Draw();
 }

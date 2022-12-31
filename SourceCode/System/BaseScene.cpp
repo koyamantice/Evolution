@@ -5,7 +5,7 @@
 void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	// カメラ生成
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
-	Texture::SetCamera(camera);
+	Object2d::SetCamera(camera);
 	// 3Dオブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 	//音の挿入

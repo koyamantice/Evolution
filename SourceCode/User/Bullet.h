@@ -1,7 +1,7 @@
 #pragma once
 #include"Actor.h"
 #include"FBXObject3d.h"
-#include"Texture.h"
+#include"Object2d.h"
 #include"ImageManager.h"
 
 using namespace DirectX;
@@ -140,10 +140,10 @@ protected:
 	//ƒRƒ}ƒ“ƒh
 	int command = 0;
 	std::unique_ptr<FBXObject3d> fbxObj;
-	std::unique_ptr<Texture> Shadow = nullptr;
-	std::unique_ptr<Texture> Status = nullptr;
-	std::unique_ptr<Texture> Explo = nullptr;
-	std::unique_ptr<Texture> CharaDead = nullptr;
+	std::unique_ptr<Object2d> Shadow = nullptr;
+	std::unique_ptr<Object2d> Status = nullptr;
+	std::unique_ptr<Object2d> Explo = nullptr;
+	std::unique_ptr<Object2d> CharaDead = nullptr;
 
 	enum DeathColor{
 		Red=ImageManager::RedDead,

@@ -3,7 +3,7 @@
 #include"Input.h"
 #include<list>
 #include <sstream>
-#include <SourceCode/Obj/2d/Texture.h>
+#include <SourceCode/Obj/2d/Object2d.h>
 #include "Player.h"
 #include"EnemyUI.h"
 #include"EnemyAttack.h"
@@ -42,7 +42,7 @@ protected:
 
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;
-	std::unique_ptr<Texture> Shadow = nullptr;
+	std::unique_ptr<Object2d> Shadow = nullptr;
 
 
 	float waitTimer = 0;

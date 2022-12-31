@@ -7,7 +7,6 @@ class SceneManager;
 #include "Sprite.h"
 #include "FBXObject3d.h"
 #include "Object3d.h"
-#include "Texture.h"
 #include <DirectXMath.h>
 #include "input.h"
 #include "FPSManager.h"

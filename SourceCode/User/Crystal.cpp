@@ -7,8 +7,8 @@ void Crystal::OnInit() {
 	obj->SetPosition(XMFLOAT3(0, 0, 35.0f));
 	//obj->SetScale(XMFLOAT3(2, 2, 2));
 	//player = ActorManager::GetInstance()->SearchActor("Player");
-	Texture* InOut_ = Texture::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
-	InOut_->TextureCreate();
+	Object2d* InOut_ = Object2d::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
+	InOut_->Object2dCreate();
 	InOut_->SetRotation({ 0,0,0 });
 	InOut_->SetColor({ 1.0f,1.0f,1.0f ,1.0f });
 	in_out.reset(InOut_);
@@ -65,7 +65,7 @@ void Crystal::ResultOnUpdate(const int& Timer) {
 }
 void Crystal::OnDraw(DirectXCommon* dxCommon) {
 	if (isCollide) {
-		Texture::PreDraw();
+		Object2d::PreDraw();
 		in_out->Draw();
 	}
 }

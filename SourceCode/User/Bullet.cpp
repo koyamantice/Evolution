@@ -18,9 +18,9 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	fbxObj.reset(fbxObj_);
 	fbxObj->LoadAnimation();
 	fbxObj->PlayAnimation();
-	Texture* Shadow_ = Texture::Create(ImageManager::Shadow, { 0,0,0 },
+	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	Shadow_->TextureCreate();
+	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
 
@@ -107,7 +107,7 @@ void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		Object3d::PreDraw();
 		fbxObj->Draw(dxCommon->GetCmdList());
-		Texture::PreDraw();
+		Object2d::PreDraw();
 		Shadow->Draw();
 		OnDraw(dxCommon);
 	}
