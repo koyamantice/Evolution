@@ -6,8 +6,16 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 #include <forward_list>
-
 #include "Camera.h"
+
+
+//タイプ
+enum blendType {
+	alphaBle = 0,
+	addBle,
+	subBle
+};
+
 
 /// <summary>
 /// パーティクルマネージャ
@@ -27,19 +35,13 @@ public: // サブクラス
 	struct VertexPos {
 		XMFLOAT3 pos; // xyz座標
 		float scale; // スケール
+		XMFLOAT4 color; // 色(RGBA)
 	};
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferData {
 		XMMATRIX mat;	// ビュープロジェクション行列
 		XMMATRIX matBillboard;	// ビルボード行列
-	};
-
-	//タイプ
-	enum blendType {
-		alphaBle= 0,
-		addBle,
-		subBle
 	};
 
 	// パイプラインセット
@@ -61,51 +63,46 @@ public: // サブクラス
 		using XMMATRIX = DirectX::XMMATRIX;
 
 	public:
-		// 座標
+		//座標
 		XMFLOAT3 position = {};
-		// 速度
+		//速度
 		XMFLOAT3 velocity = {};
-		// 加速度
+		//加速度
 		XMFLOAT3 accel = {};
-		// 色
-		XMFLOAT3 color = {};
+		//現在フレーム
+		int frame = 0;
+		//終了フレーム
+		int num_frame = 0;
 		// スケール
 		float scale = 1.0f;
-		// 回転
-		float rotation = 0.0f;
 		// 初期値
-		XMFLOAT3 s_color = {};
 		float s_scale = 1.0f;
-		float s_rotation = 0.0f;
 		// 最終値
-		XMFLOAT3 e_color = {};
 		float e_scale = 0.0f;
-		float e_rotation = 0.0f;
-		// 現在フレーム
-		int frame = 0;
-		// 終了フレーム
-		int num_frame = 0;
-
+		// 色(RGBA)
+		XMFLOAT4 color = { 1, 1, 1, 1 };
+		// 色(RGBA)初期値
+		XMFLOAT4 s_color = {};
+		// 色(RGBA)最終値
+		XMFLOAT4 e_color = {};
 	};
 
 private: // 定数
 	static const int vertexCount = 65536;		// 頂点数
-
-public:// 静的メンバ関数
-	static ParticleManager* GetInstance();
+	UINT texNumber = 0;
 
 public: // メンバ関数	
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <returns></returns>
-	void CreateCommon(ID3D12Device* device, Camera* camera, ID3D12GraphicsCommandList* cmdList);
+	static void CreateCommon(ID3D12Device* device, Camera* camera, ID3D12GraphicsCommandList* cmdList);
 	
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <returns></returns>
-	void Initialize(const std::string& filename);
+	void Initialize(UINT texNumber);
 	
 	/// <summary>
 	/// 毎フレーム処理
@@ -115,7 +112,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(blendType type=addBle);
+	void Draw(blendType type=alphaBle);
 
 	///// <summary>
 	///// カメラのセット
@@ -132,13 +129,16 @@ public: // メンバ関数
 	/// <param name="accel">加速度</param>
 	/// <param name="start_scale">開始時スケール</param>
 	/// <param name="end_scale">終了時スケール</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale);
+	void Add(const int& life,
+		const XMFLOAT3& position, const XMFLOAT3& velocity, const XMFLOAT3& accel,
+		const float& start_scale, const float& end_scale,
+		const XMFLOAT4& start_color, const XMFLOAT4& end_color);
 
 	/// <summary>
 	/// デスクリプタヒープの初期化
 	/// </summary>
 	/// <returns></returns>
-	void InitializeDescriptorHeap();
+	static void InitializeDescriptorHeap();
 
 	/// <summary>
 	/// グラフィックパイプライン生成
@@ -159,20 +159,21 @@ public: // メンバ関数
 	/// テクスチャ読み込み
 	/// </summary>
 	/// <returns>成否</returns>
-	void LoadTexture(const std::string& filename);
+	static void LoadTexture(UINT texNumber, const std::string& filename);
 
 	/// <summary>
 	/// モデル作成
 	/// </summary>
-	void CreateModel();
+	void CreateModel(UINT texNumber);
 
 private: // メンバ変数
+	static const int srvCount = 213;
 	// デバイス
 	static ID3D12Device* device;
 	//コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList;
 	// デスクリプタサイズ
-	UINT descriptorHandleIncrementSize = 0u;
+	static UINT descriptorHandleIncrementSize;
 	//加算合成パイプラインセット
 	static PipelineSet addBlendPipelineSet;
 	//減算合成パイプラインセット
@@ -186,15 +187,17 @@ private: // メンバ変数
 	//拡張子
 	static std::string extensionPath;
 	// デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> descHeap;
+	static ComPtr<ID3D12DescriptorHeap> descHeap;
 	// 頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	// テクスチャバッファ
-	ComPtr<ID3D12Resource> texbuff;
+	//ComPtr<ID3D12Resource> texbuff[texnumber];
+	static ComPtr<ID3D12Resource> texbuff[srvCount];
+
 	// シェーダリソースビューのハンドル(CPU)
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
+	static CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
 	// シェーダリソースビューのハンドル(CPU)
-	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
+	static CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView;
 	// 定数バッファ
@@ -202,11 +205,5 @@ private: // メンバ変数
 	// パーティクル配列
 	std::forward_list<Particle> particles;
 
-
-private:
-	ParticleManager() = default;
-	ParticleManager(const ParticleManager&) = delete;
-	~ParticleManager() = default;
-	ParticleManager& operator=(const ParticleManager&) = delete;
 };
 

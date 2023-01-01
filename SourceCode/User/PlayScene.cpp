@@ -13,6 +13,12 @@
 
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
+
+	touch = new Touch();
+	touch->Initialize({-10.0f,7.0f,-48.0f});
+
+
+
 	//スプライト生成
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
@@ -27,6 +33,10 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	for (int i = 0; i < 10; i++) {
 		ActorManager::GetInstance()->AttachBullet("Green");
 	}
+
+
+
+
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
@@ -126,6 +136,7 @@ void PlayScene::Finalize() {
 //更新
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
+	touch->Update();
 	if (clear) {
 		ResultCamera(count);
 		count++;
@@ -406,6 +417,8 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::Unindent();
 	//ImGui::End();
 	//postEffect->Draw(dxCommon->GetCmdList());
+		touch->Draw();
+
 	dxCommon->PostDraw();
 
 }

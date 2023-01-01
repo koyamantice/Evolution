@@ -42,8 +42,6 @@ void TitleScene::Finalize() {
 //XV
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	ParticleManager::GetInstance()->Update();
-	ParticleManager::GetInstance()->Add(60, { 0,0,0 }, { 0,-1,0 }, {}, 1.0f, 0.0f);
 
 	camera->Update();
 	if (input->TiltStick(Input::L_UP) ||input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
@@ -125,7 +123,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 		UI[i]->Draw();
 	}
 	Effect->Draw();
-	ParticleManager::GetInstance()->Draw();
 
 	dxCommon->PostDraw();
 }

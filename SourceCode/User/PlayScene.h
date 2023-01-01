@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
 #include <PostEffect.h>
+#include"Touch.h"
 
 /// <summary>
 /// タイトルシーン
@@ -55,6 +56,8 @@ private:
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
 	Actor* goal_shadow = nullptr;
+
+	Touch* touch = nullptr;
 
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};

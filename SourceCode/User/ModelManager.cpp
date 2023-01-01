@@ -12,7 +12,7 @@ ModelManager* ModelManager::GetIns() {
 void ModelManager::Initialize() {
 	//OBJフォルダを読み込みます。
 	LoadModel(kSkydome, "Skydome");
-	LoadModel(kGround, "Dungeon");
+	LoadModel(kGround, "DemoDungeon");
 	LoadModel(kGoalcrystal, "MonolithCrystal");
 	LoadModel(kTextG, "text01G");
 	LoadModel(kTextN, "text02N");
@@ -21,7 +21,7 @@ void ModelManager::Initialize() {
 	LoadModel(kTextE, "text05E");
 	LoadModel(kHouse, "House");
 	LoadModel(kHoney, "Honey");
-	LoadModel(kTouch, "Touch");
+	LoadModel(kTouch, "TouchNo");
 
 	//FBXフォルダを読み込みます。
 	LoadFBXModel(kMash,"Mash");

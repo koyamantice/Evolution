@@ -27,6 +27,7 @@ protected:
 protected:
 	LightGroup* lightGroup = nullptr;
 	DebugCamera* camera = { nullptr };
+	ParticleManager* partMan = nullptr;
 	bool pause = false;
 
 	std::unique_ptr<PauseUI> pauseUi{};

@@ -1,4 +1,5 @@
 #include"Touch.h"
+#include"ModelManager.h"
 
 
 
@@ -6,4 +7,45 @@ Touch::Touch() {
 }
 
 Touch::~Touch() {
+}
+
+void Touch::Initialize(const XMFLOAT3& pos) {
+	Object3d* touch_obj_ = new Object3d();
+	touch_obj_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTouch));
+	touch_obj_->Initialize();
+	touch_obj_->SetPosition(pos);
+	touch_obj_->SetScale({ 5,5,5 });
+	touch_obj.reset(touch_obj_);
+
+	ParticleManager::LoadTexture(2, "smoke1");
+	ParticleManager* fire_ = new ParticleManager();
+	fire_->Initialize(2);
+	fire.reset(fire_);
+
+}
+
+void Touch::Update() {
+	touch_obj->Update();
+	FireAdd();
+}
+
+void Touch::Draw() {
+	Object3d::PreDraw();
+	touch_obj->Draw();
+
+	fire->Draw(addBle);
+}
+
+void Touch::FireAdd() {
+	XMFLOAT3 pos = touch_obj->GetPosition();
+
+	const float rnd_vel = 0.05f;
+	XMFLOAT3 vel{};
+	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	vel.y = (float)rand() / RAND_MAX * rnd_vel * 2.0f;// -rnd_vel / 2.0f;
+	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+	fire->Add(20, { pos.x,pos.y + 3.0f,pos.z }, vel, {}, 1.0f, 0.0f, { 0.0f,0.0f,1.0f,1.0f }, { 0.3f,0.3f,1.0f,1.0f });
+
+	fire->Update();
 }
