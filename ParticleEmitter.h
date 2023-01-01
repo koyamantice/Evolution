@@ -75,7 +75,7 @@ public: // メンバ関数
 	/// マネージャーの設定
 	/// </summary>
 	/// <param name="particleMan">マネージャー</param>
-	void SetParticleManager(ParticleManager* particleMan) { particleMan_ = particleMan; }
+	//void SetParticleManager(ParticleManager* particleMan) { particleMan_ = particleMan; }
 
 private: // メンバ変数
 	//座標
@@ -102,5 +102,4 @@ private: // メンバ変数
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float mdAcc_ = 0.001f;
 
-	ParticleManager* particleMan_ = nullptr;
 };

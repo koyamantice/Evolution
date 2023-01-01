@@ -21,7 +21,9 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
 	//パーティクルにカメラセット
-	ParticleManager::ParticleManagerCommon(dxCommon->GetDev(), dxCommon->GetCmdList(),camera);
+	ParticleManager::GetInstance()->CreateCommon(dxCommon->GetDev(), camera, dxCommon->GetCmdList());
+
+	ParticleManager::GetInstance()->Initialize("effect");
 
 	//導入枠
 	Sprite* _Screen = nullptr;

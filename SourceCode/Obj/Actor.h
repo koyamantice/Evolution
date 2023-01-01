@@ -139,6 +139,4 @@ protected:
 	int stock = 0;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;
-
-	std::unique_ptr<ParticleManager> partMan = nullptr;
 };

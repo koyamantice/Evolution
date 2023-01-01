@@ -6,6 +6,7 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 #include <forward_list>
+
 #include "Camera.h"
 
 /// <summary>
@@ -28,20 +29,27 @@ public: // サブクラス
 		float scale; // スケール
 	};
 
-	// パイプラインセット
-	struct PipelineSet {
-		// ルートシグネチャ
-		ComPtr<ID3D12RootSignature> rootsignature;
-		// パイプラインステートオブジェクト
-		ComPtr<ID3D12PipelineState> pipelinestate;
-	};
-
 	// 定数バッファ用データ構造体
 	struct ConstBufferData {
 		XMMATRIX mat;	// ビュープロジェクション行列
 		XMMATRIX matBillboard;	// ビルボード行列
 	};
 
+	//タイプ
+	enum blendType {
+		alphaBle= 0,
+		addBle,
+		subBle
+	};
+
+	// パイプラインセット
+	struct PipelineSet
+	{
+		// ルートシグネチャ
+		ComPtr<ID3D12RootSignature> rootsignature;
+		// パイプラインステートオブジェクト
+		ComPtr<ID3D12PipelineState> pipelinestate;
+	};
 	// パーティクル1粒
 	class Particle {
 		// Microsoft::WRL::を省略
@@ -82,27 +90,23 @@ public: // サブクラス
 
 private: // 定数
 	static const int vertexCount = 65536;		// 頂点数
-public: // 静的メンバ関数
 
-	/// <summary>
-	/// パーティクル共通部分の初期化
-	/// </summary>
-	/// <param name="dev">デバイス</param>
-	/// <param name="cmdList">コマンドリスト</param>
-	static void ParticleManagerCommon(ID3D12Device* dev, ID3D12GraphicsCommandList* cmdList, Camera* camera);
+public:// 静的メンバ関数
+	static ParticleManager* GetInstance();
 
-public: // メンバ関数
-	/// <summary>
-	/// 生成処理
-	/// </summary>
-	/// <returns>ParticleManager</returns>
-	static std::unique_ptr<ParticleManager> Create(std::wstring fName);
-
+public: // メンバ関数	
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <returns></returns>
-	void Initialize(std::wstring fName);
+	void CreateCommon(ID3D12Device* device, Camera* camera, ID3D12GraphicsCommandList* cmdList);
+	
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <returns></returns>
+	void Initialize(const std::string& filename);
+	
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -111,27 +115,13 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw(blendType type=addBle);
 
-	/// <summary>
-	/// カメラのセット
-	/// </summary>
-	/// <param name="camera">カメラ</param>
-	static  void SetCamera(Camera* camera) { ParticleManager::camera = camera; }
-
-	/// <summary>
-	/// 減算合成描画前処理
-	/// </summary>
-	static void DrawPrevSubBlend();
-	/// <summary>
-	/// 加算合成描画前処理
-	/// </summary>
-	static void DrawPrevAddBlend();
-
-	/// <summary>
-	/// 半透明合成描画前処理
-	/// </summary>
-	static void DrawPrevAlphaBlend();
+	///// <summary>
+	///// カメラのセット
+	///// </summary>
+	///// <param name="camera">カメラ</param>
+	//inline void SetCamera(Camera* camera) { this->camera = camera; }
 
 	/// <summary>
 	/// パーティクルの追加
@@ -151,9 +141,10 @@ public: // メンバ関数
 	void InitializeDescriptorHeap();
 
 	/// <summary>
-	/// 半透明合成パイプライン生成
+	/// グラフィックパイプライン生成
 	/// </summary>
-	static void CreateAlphaBlendPipeline();
+	/// <returns>成否</returns>
+	static void InitializeGraphicsPipeline();
 	/// <summary>
 	/// 加算合成パイプライン生成
 	/// </summary>
@@ -168,7 +159,7 @@ public: // メンバ関数
 	/// テクスチャ読み込み
 	/// </summary>
 	/// <returns>成否</returns>
-	void LoadTexture(std::wstring fName);
+	void LoadTexture(const std::string& filename);
 
 	/// <summary>
 	/// モデル作成
@@ -176,20 +167,24 @@ public: // メンバ関数
 	void CreateModel();
 
 private: // メンバ変数
-	//デバイス
+	// デバイス
 	static ID3D12Device* device;
 	//コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList;
-	//半透明合成パイプラインセット
-	static PipelineSet alphaBlendPipelineSet;
+	// デスクリプタサイズ
+	UINT descriptorHandleIncrementSize = 0u;
 	//加算合成パイプラインセット
 	static PipelineSet addBlendPipelineSet;
 	//減算合成パイプラインセット
 	static PipelineSet subBlendPipelineSet;
+	//半透明合成パイプラインセット
+	static PipelineSet alphaBlendPipelineSet;
 	// カメラ
 	static Camera* camera;
-	// デスクリプタサイズ
-	UINT descriptorHandleIncrementSize = 0u;
+	//画像読み込み
+	static std::string directoryPath;
+	//拡張子
+	static std::string extensionPath;
 	// デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeap;
 	// 頂点バッファ
@@ -207,5 +202,11 @@ private: // メンバ変数
 	// パーティクル配列
 	std::forward_list<Particle> particles;
 
+
+private:
+	ParticleManager() = default;
+	ParticleManager(const ParticleManager&) = delete;
+	~ParticleManager() = default;
+	ParticleManager& operator=(const ParticleManager&) = delete;
 };
 

@@ -63,6 +63,4 @@ private:
 	DirectX::XMVECTOR fallV{};
 
 	std::unique_ptr<FBXObject3d> fbxObj;
-
-	std::unique_ptr<ParticleManager> paticle;
 };
