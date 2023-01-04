@@ -12,10 +12,10 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	Touch();
+	Touch(const XMFLOAT3& pos = { 0,0,0 }, const XMFLOAT3& rot = { 0,0,0 });
 	~Touch();
 
-	void Initialize(const XMFLOAT3& pos = {0,0,0});
+	void Initialize(const XMFLOAT3& pos = {0,0,0}, const XMFLOAT3& rot = { 0,0,0 });
 
 	void Update();
 

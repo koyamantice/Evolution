@@ -38,6 +38,15 @@ private:
 	void ResultCamera(int Timer);
 	//‰æ–Ê‚ð”w’†‚É
 	void ResetCamera();
+	//
+	void SkydomeUpdate();
+
+	void SkydomeSunny(int time);
+
+	//
+	void LoadData();
+	//
+	void UpdateCommand();
 
 	int count = 0;
 	int speed = 1;
@@ -57,7 +66,9 @@ private:
 	Actor* enemy_shadow = nullptr;
 	Actor* goal_shadow = nullptr;
 
-	Touch* touch = nullptr;
+	std::stringstream touch_pop;
+
+	std::list<std::unique_ptr<Touch>> touchs;
 
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};

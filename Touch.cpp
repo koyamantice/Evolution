@@ -3,17 +3,19 @@
 
 
 
-Touch::Touch() {
+Touch::Touch(const XMFLOAT3& pos, const XMFLOAT3& rot) {
+	Initialize(pos,rot);
 }
 
 Touch::~Touch() {
 }
 
-void Touch::Initialize(const XMFLOAT3& pos) {
+void Touch::Initialize(const XMFLOAT3& pos, const XMFLOAT3& rot) {
 	Object3d* touch_obj_ = new Object3d();
 	touch_obj_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTouch));
 	touch_obj_->Initialize();
 	touch_obj_->SetPosition(pos);
+	touch_obj_->SetRotation(rot);
 	touch_obj_->SetScale({ 5,5,5 });
 	touch_obj.reset(touch_obj_);
 
@@ -21,7 +23,6 @@ void Touch::Initialize(const XMFLOAT3& pos) {
 	ParticleManager* fire_ = new ParticleManager();
 	fire_->Initialize(2);
 	fire.reset(fire_);
-
 }
 
 void Touch::Update() {

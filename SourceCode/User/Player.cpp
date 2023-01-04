@@ -141,8 +141,12 @@ void Player::OnUpda() {
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
 	ImGui::Begin("player");
-	float rot = fbxObj->GetRotation().y;
-	ImGui::SliderFloat("rotation", &rot, 0, 360);
+	float posX = fbxObj->GetPosition().x;
+	float posY = fbxObj->GetPosition().y;
+	float posZ = fbxObj->GetPosition().z;
+	ImGui::SliderFloat("pos.x", &posX, -360, 360);
+	ImGui::SliderFloat("pos.y", &posY, -360, 360);
+	ImGui::SliderFloat("pos.z", &posZ, -360, 360);
 	ImGui::End();
 	fbxObj->Draw(dxCommon->GetCmdList());
 	Object2d::PreDraw();

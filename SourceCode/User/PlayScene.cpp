@@ -13,12 +13,8 @@
 
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
-
-	touch = new Touch();
-	touch->Initialize({-10.0f,7.0f,-48.0f});
-
-
-
+	LoadData();
+	UpdateCommand();
 	//スプライト生成
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
@@ -35,12 +31,11 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	}
 
 
-
-
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
 	Sky->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+	Sky->SetColor({0.3f,0.3f,0.3f,1.0f});
 	Sky->Initialize();
 	kSkydome.reset(Sky);
 
@@ -136,7 +131,9 @@ void PlayScene::Finalize() {
 //更新
 void PlayScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-	touch->Update();
+	for (std::unique_ptr<Touch>& touch : touchs) {
+		touch->Update();
+	}
 	if (clear) {
 		ResultCamera(count);
 		count++;
@@ -195,6 +192,10 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		//ParticleManager::GetInstance()->Update();
 
 		finishTime++;
+
+		SkydomeSunny(finishTime);
+
+
 		if (finishTime > 200) {
 			enemy_shadow->SetPause(false);
 			enemy_shadow->SetCommand(Actor::DEAD);
@@ -252,8 +253,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			}
 	}
 	ActorManager::GetInstance()->Update();
-	//ParticleManager::GetInstance()->Update();
-	kSkydome->Update();
+	SkydomeUpdate();
 	ground->Update();
 #pragma region "Clear"
 	if (!enemy_shadow->GetIsActive()) {
@@ -372,7 +372,9 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	kSkydome->Draw();
 	ground->Draw();
-	//grassPatch->Draw();
+	for (std::unique_ptr<Touch>& touch : touchs) {
+		touch->Draw();
+	}
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
 	Sprite::PreDraw();
@@ -406,9 +408,7 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//miniMap->PreDraw();
 	//miniMap->Draw(dxCommon->GetCmdList());
 	//miniMap->PostDraw();
-
 	//postEffect->PostDrawScene(dxCommon->GetCmdList());
-
 	//dxCommon->PreDraw();
 	//ImGui::Begin("test");
 	//float F = FPSManager::GetInstance()->GetFps();
@@ -417,7 +417,6 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::Unindent();
 	//ImGui::End();
 	//postEffect->Draw(dxCommon->GetCmdList());
-		touch->Draw();
 
 	dxCommon->PostDraw();
 
@@ -446,4 +445,77 @@ void PlayScene::ResetCamera() {
 	camera->SetTarget(player_shadow->GetCameraPos(angle));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
+}
+
+void PlayScene::SkydomeUpdate() {
+	float rot = kSkydome->GetRotation().y;
+	rot += 0.1f;
+	
+	kSkydome->SetRotation({ 0,rot,0 });
+	
+	kSkydome->Update();
+}
+
+void PlayScene::SkydomeSunny(int time) {
+
+
+
+}
+
+void PlayScene::LoadData() {
+	std::ifstream file;
+	file.open("Resources/csv/touchpop.csv");
+	assert(file.is_open());
+	touch_pop << file.rdbuf();
+	file.close();
+}
+
+void PlayScene::UpdateCommand() {
+	std::string line;
+	while (getline(touch_pop, line)) {
+		//解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		//半角スペース区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+		//"//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			//飛ばす
+			continue;
+		}
+		//各コマンド
+		if (word.find("POP") == 0) {
+			getline(line_stream, word, ',');
+			XMFLOAT3 pos{};
+			pos.x= (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			pos.y = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			pos.z = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			if (word.find("DIR") == 0) {
+				getline(line_stream, word, ',');
+				float rot = 0;
+				if (word.find("FRONT") == 0) {
+					rot = 0;
+				}else if (word.find("BACK") == 0) {
+					rot = 180;
+				}else if (word.find("RIGHT") == 0) {
+					rot = 90;
+				}else if (word.find("LEFT") == 0) {
+					rot = -90;
+				}
+				getline(line_stream, word, ',');
+				std::unique_ptr<Touch> new_touch;
+				new_touch.reset(new Touch(pos,{0,rot,0}));
+				touchs.push_back(std::move(new_touch));
+			}
+		}
+		if (word.find("END") == 0) {
+			break;
+		}
+	}
+
+
 }
