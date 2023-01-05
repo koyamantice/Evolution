@@ -53,7 +53,7 @@ void ImageManager::LoadTex2D() {
 	Object2d::LoadTexture(InOut, L"Resources/2d/Effect/Base.png");
 	Object2d::LoadTexture(Guid, L"Resources/2d/Effect/Diamond.png");
 	Object2d::LoadTexture(Shadow, L"Resources/2d/Effect/Shadow.png");
-	Object2d::LoadTexture(RedDead, L"Resources/2d/Effect/CharaDead.png");
+	Object2d::LoadTexture(RedDead, L"Resources/2d/Effect/DeadRed.png");
 	Object2d::LoadTexture(GreenDead, L"Resources/2d/Effect/CharaDead.png");
 	Object2d::LoadTexture(SlowUI, L"Resources/2d/PlayUI/SlowUI.png");
 	Object2d::LoadTexture(SetUI, L"Resources/2d/PlayUI/SetUI.png");
