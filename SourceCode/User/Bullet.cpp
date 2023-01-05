@@ -68,14 +68,24 @@ void Bullet::SetAggregation() {
 
 	position.x = (BulletPos.x - (pos.x + margin));
 	position.z = (BulletPos.z - (pos.z + margin));
-	if (powf(position.x, 2) + powf(position.z, 2) > 1||collide) {
+	if (powf(position.x, 2) + powf(position.z, 2) > 4|| collide) {
 		vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.2f;
 		vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.2f;
 		BulletPos.x += vel_follow.x;
 		BulletPos.z -= vel_follow.y;
 	}
-
-	float rotation = Ease(In, Quad, 0.5f, fbxObj->GetRotation().y, pos.y);
+	float rotation = 0;
+	if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 10.0f)) {
+		rotation = Ease(In, Quad, 0.5f, fbxObj->GetRotation().y, pos.y);
+	} else {
+		rotation = (atan2f(position.x, position.z) * (180.0f / XM_PI)) ; //- 90;// *(XM_PI / 180.0f);
+		if (rotation >= 0) {
+			rotation = (float)((int)rotation % 360);
+		} else {
+			rotation += 360;
+			rotation = (float)((int)rotation % 360);
+		}
+	}
 	fbxObj->SetPosition(BulletPos);
 	fbxObj->SetRotation({ 0,rotation,0 });
 }

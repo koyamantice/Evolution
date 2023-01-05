@@ -125,7 +125,7 @@ protected:
 	int command = 0;
 	std::unique_ptr<Object3d> obj;
 	// 残像データの数
-#define AFTIMAGENUM	21
+#define AFTIMAGENUM	8
 	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
 	HitBound hitBound;
 	XMFLOAT3 cameraPos{};

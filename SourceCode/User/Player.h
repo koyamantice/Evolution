@@ -50,6 +50,7 @@ private:
 	int holdpos = 0;
 	float damageframe = 0.0f;
 	bool knockBacking = false;
+	bool isFasted = false;
 	Actor* Picmin[30]{};
 	float radius = 0;
 	bool onHoney = false;

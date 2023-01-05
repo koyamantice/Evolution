@@ -46,11 +46,10 @@ void Player::UpdateCommand() {
 		} else if (word.find("VEL") == 0) {
 			getline(line_stream, word, ',');
 			vel = (float)std::atof(word.c_str());
-		}
-		else if (word.find("STOCK") == 0) {
+		} else if (word.find("STOCK") == 0) {
 			getline(line_stream, word, ',');
 			stock = (int)std::atof(word.c_str());
-			
+
 			break;
 		}
 	}
@@ -76,7 +75,7 @@ void Player::ResultOnUpdate(const int& Timer) {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
-	obj->SetPosition({0,0,15});
+	obj->SetPosition({ 0,0,15 });
 	isVisible = false;
 	LoadData();
 	UpdateCommand();
@@ -94,7 +93,7 @@ void Player::OnInit() {
 	// キャラクターの初期位置をセット
 	for (int i = 0; i < AFTIMAGENUM; i++) {
 		PlayerX[i] = 0;
-		PlayerZ[i] = 0;
+		PlayerZ[i] = 18.0f + 10.0f * ((float)(AFTIMAGENUM - i) / AFTIMAGENUM);
 	}
 
 
@@ -102,7 +101,7 @@ void Player::OnInit() {
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
 
-	Aim* LockOn_=new Aim();
+	Aim* LockOn_ = new Aim();
 	LockOn.reset(LockOn_);
 	LockOn->Init();
 
@@ -140,14 +139,14 @@ void Player::OnUpda() {
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
-	ImGui::Begin("player");
-	float posX = fbxObj->GetPosition().x;
-	float posY = fbxObj->GetPosition().y;
-	float posZ = fbxObj->GetPosition().z;
-	ImGui::SliderFloat("pos.x", &posX, -360, 360);
-	ImGui::SliderFloat("pos.y", &posY, -360, 360);
-	ImGui::SliderFloat("pos.z", &posZ, -360, 360);
-	ImGui::End();
+	//ImGui::Begin("player");
+	//float posX = fbxObj->GetPosition().x;
+	//float posY = fbxObj->GetPosition().y;
+	//float posZ = fbxObj->GetPosition().z;
+	//ImGui::SliderFloat("pos.x", &posX, -360, 360);
+	//ImGui::SliderFloat("pos.y", &posY, -360, 360);
+	//ImGui::SliderFloat("pos.z", &posZ, -360, 360);
+	//ImGui::End();
 	fbxObj->Draw(dxCommon->GetCmdList());
 	Object2d::PreDraw();
 	Shadow->Draw();
@@ -164,11 +163,11 @@ void Player::Move() {
 	XMFLOAT3 rot = obj->GetRotation();
 	holdpos++;
 	if (holdpos > 4) {
-		if ((int)pos.x != (int)PlayerX[0] || (int)pos.z != (int)PlayerZ[0]) {
+		if (((int)pos.x != (int)PlayerX[0] || (int)pos.z != (int)PlayerZ[0]) || !isFasted) {
 			// 残像データを一つづつずらす
 			for (int i = AFTIMAGENUM - 1; i > 0; i--) {
 				PlayerX[i] = PlayerX[i - 1];
-				RotY[i] = RotY[i-1];
+				RotY[i] = RotY[i - 1];
 				PlayerZ[i] = PlayerZ[i - 1];
 			}
 		}
@@ -176,15 +175,16 @@ void Player::Move() {
 		RotY[0] = rot.y;
 		PlayerZ[0] = pos.z;
 		holdpos = 0;
+		isFasted = true;
 	}
 	float StickX = input->GetLeftControllerX();
 	float StickY = input->GetLeftControllerY();
 	const float PI = 3.14159f;
-	const float STICK_MAX =32768.0f;
+	const float STICK_MAX = 32768.0f;
 	if (onHoney) {
 		vel = speed * 0.65f;
 		honeyCount++;
-		if (honeyCount==60) {
+		if (honeyCount == 60) {
 			onHoney = false;
 			honeyCount = 0;
 		}
@@ -192,9 +192,9 @@ void Player::Move() {
 		vel = 0.5f;
 	}
 
-	if (input->TiltPushStick(Input::L_UP, 0.0f)||
-		input->TiltPushStick(Input::L_DOWN, 0.0f)||
-		input->TiltPushStick(Input::L_RIGHT, 0.0f)||
+	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
+		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
+		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
 		input->TiltPushStick(Input::L_LEFT, 0.0f)) {
 		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
@@ -221,8 +221,8 @@ void Player::Move() {
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(60,oldPos,vel,{},0.5f,0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
-		rot.y = angle + (atan2f(StickX / STICK_MAX,StickY / STICK_MAX) * (180.0f / XM_PI));
+		partMan->Add(60, oldPos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
+		rot.y = angle + (atan2f(StickX / STICK_MAX, StickY / STICK_MAX) * (180.0f / XM_PI));
 		if (rot.y >= 0) {
 			rot.y = (float)((int)rot.y % 360);
 		} else {
@@ -239,12 +239,12 @@ void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Enemy") {
 	}
 	if (Tag == "Bullet") {
-		
+
 	}
 	if (Tag == "ClearCrystal") {
 		//pause = true;
 	}
-	if (Tag=="Honey") {
+	if (Tag == "Honey") {
 		if (!onHoney) {
 			speed = vel;
 			onHoney = true;
@@ -271,7 +271,7 @@ void Player::HitBoundMotion() {
 		} else {
 			XMFLOAT3 pos = obj->GetPosition();
 			float rot = obj->GetRotation().y;
-			rot+=30;
+			rot += 30;
 			if (damageframe >= 1.0f) {
 				//compornent->SetIsDamage(false);
 				damageframe = 0.0f;
@@ -382,7 +382,7 @@ void Player::ContactObj() {
 		Sphere* sphere = nullptr;
 		DirectX::XMVECTOR move = {};
 	};
-	
+
 	PlayerQueryCallback callback(sphereCollider);
 
 	// 球と地形の交差を全検索
