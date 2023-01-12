@@ -69,7 +69,6 @@ private:
 	Actor* goal_shadow = nullptr;
 
 	std::stringstream touch_pop;
-
 	std::list<std::unique_ptr<Touch>> touchs;
 
 	std::unique_ptr<Sprite> Clear{};
@@ -77,7 +76,6 @@ private:
 	std::unique_ptr<Sprite> IntroWord[10];
 	std::unique_ptr<Sprite> Camecon[6]{};
 	std::unique_ptr<Sprite> Rockon[2]{};
-	//std::unique_ptr<Gauge> Demo;
 
 	std::unique_ptr<Object3d> kSkydome{};
 

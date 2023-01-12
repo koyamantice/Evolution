@@ -66,10 +66,12 @@ void Enemy::DebugUpdate() {
 
 void Enemy::OnInit() {
 	isVisible = false;
+	obj->SetScale({3.0f, 3.0f, 3.0f});
 	FBXObject3d* Mash_= new FBXObject3d();
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash));
-	Mash_->SetScale({0.01f,0.01f, 0.01f});
+	//Mash_->SetPosition({ 0.01f,0.0f, 0.01f });
+	Mash_->SetScale({0.025f,0.025f, 0.025f});
 	Mash_->LoadAnimation();
 
 	fbxObject3d.reset(Mash_);
@@ -90,7 +92,7 @@ void Enemy::OnInit() {
 	Attack.reset(Attack_);
 
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
-		{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+		{ 0.8f,0.8f,0.8f }, { 1,1,1,1 });
 	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
@@ -117,18 +119,22 @@ void Enemy::OnFirstDraw(DirectXCommon* dxCommon) {
 }
 
 void Enemy::OnDraw(DirectXCommon* dxCommon) {
+	Attack->Draw();
 	Object3d::PreDraw();
 	fbxObject3d->Draw(dxCommon->GetCmdList());
 }
 
 void Enemy::OnLastDraw(DirectXCommon* dxCommon) {
-	Attack->Draw();
 }
 
 void Enemy::OnFinal() {
 }
 
-
+void Enemy::OnCollision(const std::string& Tag) {
+	if (Tag == "Player") {
+		player->SetHitBound(fbxObject3d->GetPosition());
+	}
+}
 void Enemy::PhaseMove() {
 	switch (command) {
 	case Actor::Phase::UNGUARD:

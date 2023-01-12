@@ -44,7 +44,7 @@ protected:
 	//killクリップ
 	int finishTime = 0;
 
-	bool Intro = false;
+	bool Intro = true;
 	bool Result = false;
 	bool GameOver = false;
 
@@ -59,15 +59,20 @@ public:
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void InitCommon(DirectXCommon* dxCommon);
+	/// <summary>
+	/// 毎フレーム更新
+	/// </summary>
+	virtual void Update(DirectXCommon* dxCommon) = 0;
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	void UpdaCommon(DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// 終了
 	/// </summary>
 	virtual void Finalize()=0;
-	/// <summary>
-	/// 毎フレーム更新
-	/// </summary>
-	virtual void Update(DirectXCommon* dxCommon)=0;
 	/// <summary>
 	/// 描画
 	/// </summary>

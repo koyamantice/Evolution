@@ -29,6 +29,12 @@ void ActorManager::DemoUpdate() {
 	}
 }
 void ActorManager::IntroUpdate(const int& Timer) {
+	if (Timer==9999) {
+		for (std::unique_ptr<Bullet>& bullet : Bullets) {
+			bullet->IntroUpdate(Timer);
+		}
+		return;
+	}
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->IntroUpdate(Timer);
 	}
@@ -96,6 +102,7 @@ void ActorManager::CheckActorCollisions() {
 			Actor* actorA = itrA->get();
 			Actor* actorB = itrB->get();
 			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
+				if (!actorA->GetIsActive() || !actorB->GetIsActive()) { continue; }
 				if (actorA->GetTag() != actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());

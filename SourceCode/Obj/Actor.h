@@ -52,7 +52,7 @@ public:
 	void SetPosition(const DirectX::XMFLOAT3& pos) { obj->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
 	//昔の座標の取得
-	const DirectX::XMFLOAT3& GetOldPosition() { return oldPos; }
+	const DirectX::XMFLOAT3& GetOldPosition() { return old_pos; }
 	//プレイヤーの残像
 	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return XMFLOAT3{ PlayerX[num + 1],RotY[num + 1],PlayerZ[num + 1] }; }
 	//座標の取得
@@ -138,6 +138,7 @@ protected:
 	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
 	HitBound hitBound;
 	XMFLOAT3 cameraPos{};
+	float max_hp = 0;
 	float hp = 0;
 	float angle = 0;
 	bool canMove = true;
@@ -147,7 +148,7 @@ protected:
 	
 	bool collide = false;
 
-	XMFLOAT3 oldPos = {};
+	XMFLOAT3 old_pos = {};
 	int stock = 0;
 	//コンポーネント
 	ActorComponent* compornent = nullptr;

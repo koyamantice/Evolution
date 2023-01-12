@@ -17,6 +17,8 @@ void BulletGreen::OnInit() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
 	landing = player->GetLockPos();
+	Color = DeathColor::Green;
+
 	Object2d* Lock_ = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Lock_->SetIsBillboard(true);

@@ -35,7 +35,9 @@ private:
 		BackScene,
 		Button,
 		moveTitle,
+		nomoveTitle,
 		moveDebug,
+		nomoveDebug,
 		SpriteMax,
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];

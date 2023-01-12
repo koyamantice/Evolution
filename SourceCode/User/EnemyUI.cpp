@@ -25,9 +25,11 @@ void EnemyUI::OnInitialize() {
 void EnemyUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Enemy");
 	
-
-	static const float MaxHp = AttachActor->GetHp();
-	HpGauge->SetSize({ 495 * (AttachActor->GetHp() / MaxHp) ,22 });
+	if (!magic) {
+		HpGauge->SetSize({ 495 * (AttachActor->GetHp() / 30) ,22 });
+	} else {
+		HpGauge->SetSize({ 495 * (AttachActor->GetHp() / 40) ,22 });
+	}
 	HpGauge->SetAnchorPoint({ 0,0 });
 	if (AttachActor->GetHp() < 0) {
 		HpGauge->SetSize({ 0 ,32 });

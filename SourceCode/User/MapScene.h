@@ -4,6 +4,7 @@
 #include "PauseUI.h"
 #include <SourceCode/FrameWork/collision/TouchableObject.h>
 #include <PostEffect.h>
+#include"Touch.h"
 
 /// <summary>
 /// タイトルシーン
@@ -41,6 +42,17 @@ private:
 	//画面を背中に
 	void ResetCamera();
 
+	//
+	void SkydomeUpdate();
+	//
+	void SkydomeSunny(int time);
+
+
+	//
+	void LoadData();
+	//
+	void UpdateCommand();
+
 	float RandHeight(const float& base);
 	int count = 0;
 	int speed = 1;
@@ -59,6 +71,11 @@ private:
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
 	Actor* goal_shadow = nullptr;
+
+
+	std::stringstream touch_pop;
+	std::list<std::unique_ptr<Touch>> touchs;
+	const float hight = 18.0f;
 
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};

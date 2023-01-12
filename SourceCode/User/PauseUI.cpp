@@ -1,7 +1,6 @@
 #include"PauseUI.h"
 #include"ImageManager.h"
 #include"Easing.h"
-#include <Input.h>
 #include <SceneManager.h>
 
 PauseUI::PauseUI() {
@@ -46,9 +45,38 @@ PauseUI::PauseUI() {
 	UI[Bar].reset(UI_[Bar]);
 
 
+	UI_[CameraOpt] = Sprite::Create(ImageManager::CameraOpt, { 0.0f,0.0f });
+	UI_[CameraOpt]->SetAnchorPoint({ 0.5f,0.5f });
+	UI_[CameraOpt]->SetPosition({ pos.x,pos.y - 180 });
+	UI_[CameraOpt]->SetSize(size[CameraOpt]);// ({440,80});
+	 UI[CameraOpt].reset(UI_[CameraOpt]);
+
+	 UI_[Normal] = Sprite::Create(ImageManager::Normal, { 0.0f,0.0f });
+	 UI_[Normal]->SetAnchorPoint({ 0.5f,0.5f });
+	 UI_[Normal]->SetPosition({ pos.x-150,pos.y - 70 });
+	 UI_[Normal]->SetSize(size[Normal]);// ({440,80});
+	 UI[Normal].reset(UI_[Normal]);
+
+	 UI_[Reverse] = Sprite::Create(ImageManager::Reverse, { 0.0f,0.0f });
+	 UI_[Reverse]->SetAnchorPoint({ 0.5f,0.5f });
+	 UI_[Reverse]->SetPosition({ pos.x+150,pos.y - 70 });
+	 UI_[Reverse]->SetSize(size[Reverse]);// ({440,80});
+	  UI[Reverse].reset(UI_[Reverse]);
+
+	  UI_[OptBack] = Sprite::Create(ImageManager::OptionBack, { 0.0f,0.0f });
+	  UI_[OptBack]->SetAnchorPoint({ 0.5f,0.5f });
+	  UI_[OptBack]->SetPosition({ pos.x,pos.y + 180 });
+	  UI_[OptBack]->SetSize(size[OptBack]);// ({440,80});
+	  UI[OptBack].reset(UI_[OptBack]);
+
+	  UI_[CameraBar] = Sprite::Create(ImageManager::CameraBar, { 0.0f,0.0f });
+	  UI_[CameraBar]->SetAnchorPoint({ 0.5f,0.5f });
+	  UI_[CameraBar]->SetPosition({ pos.x - 150,pos.y - 70 });
+	  UI_[CameraBar]->SetSize(size[CameraBar]);// ({440,80});
+	   UI[CameraBar].reset(UI_[CameraBar]);
 
 
-
+	  
 
 	ease = true;
 }
@@ -73,36 +101,38 @@ void PauseUI::Update() {
 void PauseUI::Draw() {
 	Sprite::PreDraw();
 	if (!option_system) {
-		for (int i = 0; i < Max; i++) {
+		for (int i = 0; i < CameraOpt; i++) {
 			UI[i]->Draw();
 		}
-		UI[kPause]->Draw();
 	} else {
-		UI[0]->Draw();
+		UI[Sheet]->Draw();
+		for (int i = CameraOpt; i < Max; i++) {
+			UI[i]->Draw();
+		}
 	}
 }
 
 void PauseUI::Reset() {
-	size[Sheet] = { 512,384 };
-	UI[Sheet]->SetSize(size[Sheet]);
-	for (int i = 1; i < Max; i++) {
+	for (int i = 0; i < Max; i++) {
 		size[i] = { 0,0 };
 		UI[i]->SetSize(size[i]);
 	}
 	frame = 0;
-	nowBar = 0;
 	ease = true;
+	nowBar = 0;
+
 }
 
 void PauseUI::FirstOpen() {
+	if (option_system) { return; }
 	if (!ease) { return; }
 		size[0].x = Ease(InOut, Quad, frame, 360, 880);
 		size[0].y = Ease(InOut, Quad, frame, 180, 520);
-		for (int i = 1; i < Max; i++) {
+		for (int i = 1; i < CameraOpt; i++) {
 			size[i].x = Ease(InOut, Quad, frame, 0, 600);
 			size[i].y = Ease(InOut, Quad, frame, 0, 96);
 		}
-		for (int i = 0; i < Max; i++) {
+		for (int i = 0; i < CameraOpt; i++) {
 			UI[i]->SetSize(size[i]);
 		}
 		if (frame < 1.0f) {
@@ -115,7 +145,6 @@ void PauseUI::FirstOpen() {
 void PauseUI::MoveSelect() {
 	if (ease) { return; }
 	if (option_system) { return; }
-	Input* input = Input::GetInstance();
 	if (input->TiltStick(Input::L_UP) || input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
 		nowBar--;
 	}
@@ -127,6 +156,13 @@ void PauseUI::MoveSelect() {
 			case 0:
 				SceneManager::GetInstance()->ChangeScene("TITLE");
 			case 1:
+				ease = true;
+				frame = 0.0f;
+				if (!reverse_camera) {
+					cameraNow = 0;
+				} else {
+					cameraNow = 1;
+				}
 				option_system = true;
 				break;
 			case 2:
@@ -159,12 +195,76 @@ void PauseUI::MoveSelect() {
 }
 
 void PauseUI::OptionSystem() {
-	if (ease) { return; }
 	if (!option_system) { return; }
+	if (ease) {
+		size[0].x = Ease(InOut, Quad, frame, 360, 880);
+		size[0].y = Ease(InOut, Quad, frame, 180, 520);
 
+		size[CameraOpt].x = Ease(InOut, Quad, frame, 0, 600);
+		size[CameraOpt].y = Ease(InOut, Quad, frame, 0, 96);
 
+		for (int i = Normal; i < Max; i++) {
+			size[i].x = Ease(InOut, Quad, frame, 0, 280);
+			size[i].y = Ease(InOut, Quad, frame, 0, 96);
+		}
+		UI[0]->SetSize(size[0]);
+		for (int i = CameraOpt; i < Max; i++) {
+			UI[i]->SetSize(size[i]);
+		}
+		if (frame < 1.0f) {
+			frame += 0.05f;
+		} else {
+			ease = false;
+		}
+		return;
+	}
+	if (input->TiltStick(Input::L_UP) || input->TiltStick(Input::L_LEFT) || input->TriggerKey(DIK_UP)) {
+		cameraNow--;
+	}
+	if (input->TiltStick(Input::L_DOWN) || input->TiltStick(Input::L_RIGHT) || input->TriggerKey(DIK_DOWN)) {
+		cameraNow++;
+	}
+	if (cameraNow < 0) { cameraNow = 0; }
+	if (cameraNow > 2) { cameraNow = 2; }
 
+	if (input->TriggerButton(input->A) || input->TriggerKey(DIK_SPACE)) {
+		option_system = false;
+		ease = true;
+		frame = 0.0f;
+		nowBar = 1;
+		switch (cameraNow) {
+		case 0:
+			if (reverse_camera) {
+				reverse_camera = false;
+			}
+			break;
+		case 1:
+			if (!reverse_camera) {
+				reverse_camera = true;
+			}
+			break;
+		case 2:
+			break;
+		default:
+			break;
+		}
+		return;
+	}
 
-
-
+	switch (cameraNow) {
+	case 0:
+		bar_pos = { pos.x - 150,pos.y - 70 };
+		break;
+	case 1:
+		bar_pos = { pos.x + 150,pos.y - 70 };
+		break;
+	case 2:
+		bar_pos = { pos.x,pos.y + 180 };
+		break;
+	default:
+		break;
+	}
+	move.x = Ease(In, Quad, 0.7f, UI[CameraBar]->GetPosition().x, bar_pos.x);
+	move.y = Ease(In, Quad, 0.7f, UI[CameraBar]->GetPosition().y, bar_pos.y);
+	UI[CameraBar]->SetPosition({ move.x,move.y });
 }

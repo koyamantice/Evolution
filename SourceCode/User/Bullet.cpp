@@ -55,6 +55,11 @@ void Bullet::IntroUpdate(const int& Timer) {
 			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
 		}
 		IntroOnUpdate(Timer);
+		if (Timer == 9999) {
+			fbxObj->SetRotation({ 0,180,0 });
+			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, 0, ((int)ID / 10) * 5.0f });
+			fbxObj->Update();
+		}
 	}
 }
 
@@ -122,6 +127,7 @@ void Bullet::CommonUpda() {
 }
 
 void Bullet::CommandUpda() {
+	if (DeadFlag) { return; }
 	switch (command) {
 	case Wait:
 		WaitUpda();
@@ -166,6 +172,9 @@ void Bullet::Draw(DirectXCommon* dxCommon) {
 
 void Bullet::LastDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
+		if (DeadFlag){	
+			Object2d::PreDraw();
+			CharaDead->Draw();}
 		if (enemy != NULL) {
 			if (enemy->GetIsActive()) {
 				if (command == Wait) { return; }
@@ -333,7 +342,6 @@ void Bullet::DamageInit() {
 
 
 void Bullet::DeadEnd() {
-	fbxObj->SetScale({ 0.003f,0.0001f, 0.003f });
 	if (deadframe > 1.0f) {
 		isRemove = true;
 	} else {
@@ -344,6 +352,10 @@ void Bullet::DeadEnd() {
 	vanishHight = Ease(Out, Quad, deadframe, 0.1f, 4.5f);
 	vanishAlpha = Ease(In, Quad, deadframe, 1.0f, 0.5f);
 	//XVˆ—
+	fbxObj->SetScale({ 0.003f,0.0001f, 0.003f });
+	fbxObj->Update();
+	Shadow->Update();
+	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 	CharaDead->SetPosition({ fbxObj->GetPosition().x,vanishHight, fbxObj->GetPosition().z });
 	CharaDead->SetColor({ 1,1,1,vanishAlpha });
 }

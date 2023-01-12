@@ -43,6 +43,10 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 
 }
 
+void BaseScene::UpdaCommon(DirectXCommon* dxCommon) {
+
+}
+
 void BaseScene::Feed(const std::string& sceneName) {
 	static float frame = 0.0f;
 	if (Change) {

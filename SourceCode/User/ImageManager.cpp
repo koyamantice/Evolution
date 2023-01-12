@@ -19,10 +19,17 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(TitleBack, L"Resources/2d/PauseUi/TitleBack.png");
 	Sprite::LoadTexture(Button, L"Resources/2d//Title/decide.png");
 	Sprite::LoadTexture(DebugMove, L"Resources/2d/Title/Debug.png");
+	Sprite::LoadTexture(noDebugMove, L"Resources/2d/Title/Debug2.png");
 	Sprite::LoadTexture(TitleMove, L"Resources/2d/Title/Title.png");
+	Sprite::LoadTexture(noTitleMove, L"Resources/2d/Title/Title2.png");
 	Sprite::LoadTexture(Bar, L"Resources/2d/PauseUi/Bar.png");
 	Sprite::LoadTexture(ZBack, L"Resources/2d/PauseUi/ZBack.png");
 	Sprite::LoadTexture(Option, L"Resources/2d/PauseUi/Option.png");
+	Sprite::LoadTexture(CameraOpt, L"Resources/2d/PauseUi/optioncamera.png");
+	Sprite::LoadTexture(Normal, L"Resources/2d/PauseUi/normal.png");
+	Sprite::LoadTexture(Reverse, L"Resources/2d/PauseUi/reverse.png");
+	Sprite::LoadTexture(CameraBar, L"Resources/2d/PauseUi/cameraBar.png");
+	Sprite::LoadTexture(OptionBack, L"Resources/2d/PauseUi/Back.png");
 	Sprite::LoadTexture(Vignette, L"Resources/2d/PlayUI/Vignette.png");
 	Sprite::LoadTexture(PlayerCover, L"Resources/2d/PlayUI/PlayerCover.png");
 	Sprite::LoadTexture(CharaCover, L"Resources/2d/PlayUI/CharaCover2.png");

@@ -36,10 +36,14 @@ private:
 	void AttackUpda();
 	//
 	void LifeCommon();
+	bool overDamage = false;
+	float pinchLife = 20;
 	//Ç©Ç‘ÇÁÇ»Ç¢ÇÊÇ§Ç…í≤êÆ
 	void HoneyControl();
 
+	void IntroOnUpdate(const int& Timer)override;
 
+	float DirRotation(const XMFLOAT3& target);
 
 	std::unique_ptr<EnemyAttack> Attack;
 	//
@@ -55,16 +59,25 @@ private:
 	Actor* honey[2]{};
 
 	float waitTimer = 0;
+	float commandTimer = 0;
 	float vel = 0;
 	float scale = 0.01f;
 	float scaframe = 0;
 	std::unique_ptr<FBXObject3d> fbxObject3d;
 
+	XMFLOAT3 h_pos{};
+	float time_f =0;
+	float time_e = 200;
 
+	enum {
+		Dawn=0,
+		Posing,
+		Fly
+	};
 
-
-
+	bool first_pose=false;
 	int rand_pattern = 0;
+	int countAttack = 0;
 	int  waiting_timer = 0;
 	int  change_time = 30;
 	bool WaitingElapsedTime();

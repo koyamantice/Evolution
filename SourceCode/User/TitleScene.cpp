@@ -20,16 +20,28 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
 	Sprite* sprite_ = Sprite::Create(ImageManager::Title, { 0.0f,0.0f });
 	UI[BackScene].reset(sprite_);
-	Sprite* sprite2_ = Sprite::Create(ImageManager::Button, { 840.0f,650.0f });
+	Sprite* sprite2_ = Sprite::Create(ImageManager::Button, { 880.0f,600.0f });
 	sprite2_->SetScale(0.5f);
 	UI[Button].reset(sprite2_);
-	Sprite* sprite3_ = Sprite::Create(ImageManager::TitleMove, { 840.0f,360.0f });
-	sprite3_->SetScale(0.7f);
+
+	Sprite* sprite3_ = Sprite::Create(ImageManager::TitleMove, { 880.0f,360.0f });
+	sprite3_->SetScale(0.5f);
 	UI[moveTitle].reset(sprite3_);
-	Sprite* sprite4_ = Sprite::Create(ImageManager::DebugMove, { 840.0f,460.0f });
+
+	Sprite* sprite6_ = Sprite::Create(ImageManager::noTitleMove, { 880.0f,360.0f });
+	sprite6_->SetScale(0.5f);
+	UI[nomoveTitle].reset(sprite6_);
+
+	Sprite* sprite4_ = Sprite::Create(ImageManager::DebugMove, { 880.0f,500.0f });
 	sprite4_->SetScale(0.5f);
-	sprite4_->SetColor({1.0f,1.0f,1.0f,0.5f});
+	sprite4_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	UI[moveDebug].reset(sprite4_);
+	Change = false;
+
+	Sprite* sprite5_ = Sprite::Create(ImageManager::noDebugMove, { 880.0f,500.0f });
+	sprite5_->SetScale(0.5f);
+	sprite5_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	UI[nomoveDebug].reset(sprite5_);
 	Change = false;
 
 	text = new TitleText();
@@ -57,33 +69,34 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 		nextScene = Portal::Debug;
 	}
 	if (nextScene == Portal::Title) {
-		UI[moveTitle]->SetColor({ 0.34f,0.56f,0.96f,1.0f });
-		UI[moveTitle]->SetSize({ 268.8f,89.6f });
+		UI[moveTitle]->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+		UI[moveTitle]->SetSize({ 567.8f/2.0f,192.6f/2.0f });
+		UI[nomoveTitle]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		UI[nomoveTitle]->SetSize({ 567.8f / 2.0f,192.6f / 2.0f });
 
-		UI[moveDebug]->SetColor({ 1.0f,1.0f,1.0f,0.5f });
-		UI[moveDebug]->SetSize({192.0f, 64.0f});
+		UI[moveDebug]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		UI[moveDebug]->SetSize({ 567.8f/2,192.6f/2});
+		UI[nomoveDebug]->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+		UI[nomoveDebug]->SetSize({ 567.8f / 2,192.6f / 2 });
 
 		moveTitleNow = 1;
 		moveDebugNow = 2;
 	}
 	if (nextScene == Portal::Debug) {
-		UI[moveTitle]->SetColor({1.0f, 1.0f, 1.0f, 0.5f});
-		UI[moveTitle]->SetSize({ 192.0f, 64.0f });
 
-		UI[moveDebug]->SetColor({ 0.34f,0.56f,0.96f,1.0f });
-		UI[moveDebug]->SetSize({ 268.8f,89.6f });
+		UI[moveTitle]->SetColor({1.0f, 1.0f, 1.0f, 1.0f});
+		UI[moveTitle]->SetSize({ 567.8f / 2.0f,192.6f / 2.0f });
+		UI[nomoveTitle]->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+		UI[nomoveTitle]->SetSize({ 567.8f / 2.0f,192.6f / 2.0f });
+
+		UI[moveDebug]->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+		UI[moveDebug]->SetSize({ 567.8f / 2,192.6f / 2 });
+		UI[nomoveDebug]->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		UI[nomoveDebug]->SetSize({ 567.8f / 2,192.6f / 2 });
 
 		moveTitleNow = 0;
 		moveDebugNow = 1;
 	}
-
-
-
-
-	moveText[0] = Ease(In,Quad, 0.7f,UI[moveTitle]->GetPosition().y,SetPos[moveTitleNow].y);
-	moveText[1] = Ease(In, Quad,0.7f,UI[moveDebug]->GetPosition().y,SetPos[moveDebugNow].y);
-	UI[moveTitle]->SetPosition({840,moveText[0]});
-	UI[moveDebug]->SetPosition({840,moveText[1]});
 
 
 
@@ -115,13 +128,14 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	//ImGui::Unindent();
 	//ImGui::End();
 	Sprite::PreDraw();
-	//UI[0]->Draw();
 	Object3d::PreDraw();
 	text->Draw(dxCommon);
 	Sprite::PreDraw();
 	for (int i = 1; i < SpriteMax; i++) {
 		UI[i]->Draw();
 	}
+	UI[0]->Draw();
+
 	Effect->Draw();
 
 	dxCommon->PostDraw();

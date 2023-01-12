@@ -1,6 +1,7 @@
 #pragma once
 #include"Sprite.h"
 #include <memory>
+#include <Input.h>
 
 class PauseUI {
 private:
@@ -10,6 +11,7 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
+	Input* input = Input::GetInstance();
 public:
 	PauseUI();
 	~PauseUI();
@@ -18,6 +20,9 @@ public:
 	void Update();
 	void Draw();
 	void Reset();
+
+	
+	const bool& GetReverseCamera() { return reverse_camera; }
 
 	const bool& GetEndFlag() { return endflag; }
 	void SetEndFlag(const bool& endflag) { this->endflag = endflag; }
@@ -29,6 +34,7 @@ private:
 
 	enum {
 		Sheet,
+
 		kPause,
 		TitleBack,
 		Option,
@@ -36,7 +42,11 @@ private:
 		Bar,
 
 
-
+		CameraOpt,
+		Normal,
+		Reverse,
+		OptBack,
+		CameraBar,
 
 
 
@@ -52,7 +62,11 @@ private:
 
 	bool option_system = false;
 	float SetPos = 250;
+
+	XMFLOAT2 bar_pos = {};
 	int nowBar = 0;
+	int cameraNow = 0;		
+	bool reverse_camera = false;
 	bool ease = false;
 	float frame = 0;
 	XMFLOAT2 pos={640,400};

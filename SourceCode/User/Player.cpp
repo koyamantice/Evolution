@@ -143,7 +143,6 @@ void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	Shadow->Draw();
 	partMan->Draw(alphaBle);
-	LockOn->Draw();
 
 }
 
@@ -154,6 +153,8 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 }
 
 void Player::OnLastDraw(DirectXCommon* dxCommon) {
+	LockOn->Draw();
+
 }
 
 void Player::OnFinal() {
@@ -274,13 +275,14 @@ void Player::HitBoundMotion() {
 		if (!knockBacking) {
 			Bullet* bullet = ActorManager::GetInstance()->SearchBulletBack();
 			if (bullet != nullptr) {
-				bullet->SetIsRemove(true);
+				bullet->SetDeadFlag(true);
 			}
 			compornent->SetIsDamage(true);
 			XMFLOAT3 pos = obj->GetPosition();
 			Start = pos;
 			XMFLOAT3 pos2 = hitBound.HitingPos;
-			distance = { pos2.x - pos.x,0,pos2.z - pos.z };
+			//distance = { pos2.x - pos.x,0,pos2.z - pos.z };
+			distance = { old_pos.x - pos.x,0,old_pos.z - pos.z };
 			rebound.x = pos.x + sin(atan2f(distance.x, distance.z)) * 15.5f;
 			rebound.z = pos.z + cos(atan2f(distance.x, distance.z)) * 15.5f;
 			knockBacking = true;

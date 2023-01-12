@@ -36,8 +36,9 @@ protected:
 	void LifeCommon();
 	void ChangeCommand(const int& num = 0, const int& command = 0, const int& count = 1);
 
-	std::unique_ptr<EnemyAttack> Attack;
+	void OnCollision(const std::string& Tag);
 
+	std::unique_ptr<EnemyAttack> Attack;
 
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;

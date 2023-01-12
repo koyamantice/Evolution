@@ -15,6 +15,7 @@ private:
 	float frame = 0;
 	float unload_frame = 0;
 
+	XMFLOAT3 base_sca = { 6,4,6 };
 
 	std::unique_ptr<Object2d> missions[2][6]{};
 	std::unique_ptr<Object2d> slash{};
@@ -29,5 +30,7 @@ private:
 	void LeaveUpda();
 	void WaitUpda();
 	void DeadUpda();
+	void IntroOnUpdate(const int& Timer)override;
+
 };
 

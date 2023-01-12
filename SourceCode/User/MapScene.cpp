@@ -14,6 +14,11 @@
 
 void MapScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
+	LoadData();
+	UpdateCommand();
+	for (std::unique_ptr<Touch>& touch : touchs) {
+		touch->SetColor(Touch::FireColor::f_blue);
+	}
 	//スプライト生成
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
@@ -22,6 +27,8 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
+	goal_shadow->SetIsActive(false);
+
 	for (int i = 0; i < 10; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
@@ -72,6 +79,9 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 
 	camera->SetTarget(player_shadow->GetPosition());
 
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::charge);
+
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
@@ -89,14 +99,26 @@ void MapScene::Finalize() {
 //更新
 void MapScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
+	for (std::unique_ptr<Touch>& touch : touchs) {
+		touch->Update();
+	}
 	if (clear) {
 		ResultCamera(count);
 		count++;
 		ActorManager::GetInstance()->ResultUpdate(count);
-		//ParticleManager::GetInstance()->Update();
-		if (input->TriggerButton(Input::A)) {
-			SceneManager::GetInstance()->ChangeScene("MAP");
+		const float rnd_vel = 1.4f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
+		partMan->Update();
+		if (input->TriggerButton(Input::A)|| input->TriggerButton(Input::B)) {
+			Change = true;
 		}
+		Feed("MAP");
+		SkydomeUpdate();
+		ground->Update();
 		return;
 	}
 	if (Intro) {
@@ -110,27 +132,18 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 			feedAlpha = Ease(In, Cubic, introFrame, 1, 0);
 			FeedBlack->SetColor({ 1,1,1,feedAlpha });
 		}
-		goal_shadow->SetIsActive(false);
-		ActorManager::GetInstance()->IntroUpdate(count);
-		kSkydome->Update();
-		ground->Update();
-		if (count > 1200) {
+		count += speed;
+		if (count > 900) {
+			ActorManager::GetInstance()->IntroUpdate(9999);
 			FeedBlack->SetColor({ 1,1,1,0 });
 			count = 0;
 			Intro = false;
 		}
-		count += speed;
-		if (input->PushButton(input->START)) {
-			if (count % 2 == 1) {
-				count--;
-			}
-			speed = 2;
-		}
-		if (count % 200 == 0) {
-			if (nowWord != 5) {
-				nowWord++;
-			}
-		}
+		player_shadow->IntroUpdate(count);
+		enemy_shadow->IntroUpdate(count);
+		SkydomeUpdate();
+		ground->Update();
+
 		return;
 	}
 	if (enemy_shadow->GetPause()) {
@@ -139,15 +152,17 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//ParticleManager::GetInstance()->Add(0, 120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
-		//ParticleManager::GetInstance()->Update();
+		partMan->Add(120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
+		partMan->Update();
 
 		finishTime++;
+
+		SkydomeSunny(finishTime);
+
 		if (finishTime > 200) {
 			enemy_shadow->SetPause(false);
 			enemy_shadow->SetCommand(Actor::DEAD);
 		}
-
 		return;
 	}
 	CameraUpda();
@@ -164,28 +179,11 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 			pauseUi->SetEndFlag(false);
 		}
 	}
-	animafrate++;
-	if (animafrate == 30) {
-		if (animation < 2 && animation > 0) {
-			animation += vec;
-		} else if (animation == 2) {
-			animation = 1;
-			vec *= -1;
-		} else if (animation == 0) {
-			animation = 1;
-			vec *= -1;
-		}
-		if (tapanima == 3) {
-			tapanima = 4;
-		} else {
-			tapanima = 3;
-		}
-		animafrate = 0;
-	}
-ActorManager::GetInstance()->Update();
-//ParticleManager::GetInstance()->Update();
-kSkydome->Update();
-ground->Update();
+
+	ActorManager::GetInstance()->Update();
+	SkydomeUpdate();
+	ground->Update();
+	partMan->Update();
 #pragma region "Clear"
 if (!enemy_shadow->GetIsActive()) {
 	goal_shadow->SetIsActive(true);
@@ -212,25 +210,39 @@ void MapScene::CameraUpda() {
 		return;
 	}
 	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
-
-		if (input->TiltPushStick(Input::R_RIGHT)) {
-			angle -= 3;
+		if (!cameraExplanation) {
+			cameraExplanation = true;
 		}
-		if (input->TiltPushStick(Input::R_LEFT)) {
-			angle += 3;
+		if (!pauseUi->GetReverseCamera()) {
+			if (input->TiltPushStick(Input::R_RIGHT)) {
+				angle -= 3;
+			}
+			if (input->TiltPushStick(Input::R_LEFT)) {
+				angle += 3;
+			}
+		} else {
+			if (input->TiltPushStick(Input::R_RIGHT)) {
+				angle += 3;
+			}
+			if (input->TiltPushStick(Input::R_LEFT)) {
+				angle -= 3;
+			}
 		}
 		if (angle > 360 || angle < 0) {
 			angle += 360;
 			angle = (float)((int)angle % 360);
 		}
-		dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
-		dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
+		dis.x = sinf(angle * (XM_PI / 180)) * 15.0f;
+		dis.y = cosf(angle * (XM_PI / 180)) * 15.0f;
 		distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
 		distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 
 	}
 	if (input->TriggerButton(Input::LT)) {
 		if (!Reset) {
+			if (!cameraExplanation) {
+				cameraExplanation = true;
+			}
 			angleframe = 0.0f;
 			firstangle = angle;
 			endangle = player_shadow->GetRotation().y;
@@ -239,42 +251,29 @@ void MapScene::CameraUpda() {
 		}
 	}
 	player_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle));
-	float hight = 10.0f;
-	if (player_shadow->GetHitBound()) {
-		hight = RandHeight(10.0f);
-	}
-	XMFLOAT3 PlayerPos = player_shadow->GetPosition();
-	camera->SetEye({ PlayerPos.x + distance.x,PlayerPos.y + hight,PlayerPos.z + distance.y });
+	camera->SetTarget(player_shadow->GetCameraPos(angle, 7));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
 void MapScene::IntroCamera(int Timer) {
-	if (Timer <= 720) {
-		if (speed == 1) {
-			angle += 0.5f;
-			if (IntroHight > 10.0f) {
-				IntroHight -= 0.075f;
-			} else {
-				IntroHight = 10.0f;
-			}
-		} else {
-			angle += 1.0f;
-			if (IntroHight > 10.0f) {
-				IntroHight -= 0.150f;
-			} else {
-				IntroHight = 10.0f;
-			}
-		}
-	}
+
+
+
+
+
+
+
+
+
+
 
 	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
 	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
 	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
-	player_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,20.0f,player_shadow->GetPosition().z + distance.y });
+	camera->SetTarget({0,5,0});
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,10,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
@@ -283,19 +282,12 @@ void MapScene::ResultCamera(int Timer) {
 		angle += 0.5f;
 	}
 
-	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
-	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
-	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
-	player_shadow->SetAngle(angle);
+	//player_shadow->SetAngle(angle);
 	camera->SetTarget(goal_shadow->GetPosition());
-	
-	XMFLOAT3 PlayerPos = player_shadow->GetPosition();
-	float hight = 10.0f;
-	camera->SetEye({ PlayerPos.x + distance.x,PlayerPos.y + hight,PlayerPos.z + distance.y });
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
-
 }
+
 
 //描画
 void MapScene::Draw(DirectXCommon* dxCommon) {
@@ -309,10 +301,12 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	kSkydome->Draw();
 	ground->Draw();
-	//grassPatch->Draw();
+	for (std::unique_ptr<Touch>& touch : touchs) {
+		touch->Draw();
+	}
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
-	//ParticleManager::GetInstance()->Draw(dxCommon->GetCmdList());
+	partMan->Draw(alphaBle);
 	Sprite::PreDraw();
 	if (Change) {
 		FeedBlack->Draw();
@@ -323,7 +317,7 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	if (Intro) {
 		Screen[0]->Draw();
 		Screen[1]->Draw();
-		IntroWord[nowWord]->Draw();
+		//IntroWord[nowWord]->Draw();
 	}
 	if (Result) {
 		Screen[0]->Draw();
@@ -389,6 +383,75 @@ float MapScene::RandHeight(const float& base) {
 	return itr;
 }
 
+void MapScene::SkydomeUpdate() {
+	float rot = kSkydome->GetRotation().y;
+	rot += 0.1f;
+
+	kSkydome->SetRotation({ 0,rot,0 });
+
+	kSkydome->Update();
+}
+
+void MapScene::SkydomeSunny(int time) {
 
 
 
+}
+
+void MapScene::LoadData() {
+	std::ifstream file;
+	file.open("Resources/csv/touchpop.csv");
+	assert(file.is_open());
+	touch_pop << file.rdbuf();
+	file.close();
+}
+
+void MapScene::UpdateCommand() {
+	std::string line;
+	while (getline(touch_pop, line)) {
+		//解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		//半角スペース区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+		//"//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			//飛ばす
+			continue;
+		}
+		//各コマンド
+		if (word.find("POP") == 0) {
+			getline(line_stream, word, ',');
+			XMFLOAT3 pos{};
+			pos.x = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			pos.y = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			pos.z = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			if (word.find("DIR") == 0) {
+				getline(line_stream, word, ',');
+				float rot = 0;
+				if (word.find("FRONT") == 0) {
+					rot = 0;
+				} else if (word.find("BACK") == 0) {
+					rot = 180;
+				} else if (word.find("RIGHT") == 0) {
+					rot = 90;
+				} else if (word.find("LEFT") == 0) {
+					rot = -90;
+				}
+				getline(line_stream, word, ',');
+				std::unique_ptr<Touch> new_touch;
+				new_touch.reset(new Touch(pos, { 0,rot,0 }));
+				touchs.push_back(std::move(new_touch));
+			}
+		}
+		if (word.find("END") == 0) {
+			break;
+		}
+	}
+
+
+}

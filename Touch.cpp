@@ -25,6 +25,17 @@ void Touch::Initialize(const XMFLOAT3& pos, const XMFLOAT3& rot) {
 	fire.reset(fire_);
 }
 
+void Touch::SetColor(const int color) {
+	if (color==f_green) {
+		s_color={ 0.0f,1.0f,0.0f,1.0f };
+		e_color={ 0.3f,1.0f,0.3f,1.0f };
+	}
+	if (color == f_blue) {
+		s_color= { 0.0f,0.0f,1.0f,1.0f };
+		e_color= { 0.3f,0.3f,1.0f,1.0f };
+	}
+}
+
 void Touch::Update() {
 	touch_obj->Update();
 	FireAdd();
@@ -46,7 +57,7 @@ void Touch::FireAdd() {
 	vel.y = (float)rand() / RAND_MAX * rnd_vel * 2.0f;// -rnd_vel / 2.0f;
 	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
-	fire->Add(20, { pos.x,pos.y + 3.0f,pos.z }, vel, {}, 1.0f, 0.0f, { 0.0f,0.0f,1.0f,1.0f }, { 0.3f,0.3f,1.0f,1.0f });
+	fire->Add(20, { pos.x,pos.y + 3.0f,pos.z }, vel, {}, 1.0f, 0.0f, s_color, e_color);
 
 	fire->Update();
 }

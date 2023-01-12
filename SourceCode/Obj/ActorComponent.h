@@ -23,6 +23,7 @@ protected:
 	//
 	bool isDamage = false;
 
+	bool magic = false;
 public:
 	virtual ~ActorComponent() {}
 
@@ -44,5 +45,10 @@ public:
 	//isDamageセッタ＆ゲッタ
 	void SetIsDamage(bool Damage) { isDamage = Damage; }
 	bool GetIsDamage() { return isDamage; }
+
+	//isDamageセッタ＆ゲッタ
+	void SetMagic(bool magic) { this->magic = magic; }
+	bool GetMagic() { return magic; }
+
 
 };
