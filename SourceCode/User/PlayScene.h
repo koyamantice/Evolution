@@ -40,7 +40,7 @@ private:
 	void ResetCamera();
 	//
 	void SkydomeUpdate();
-
+	//
 	void SkydomeSunny(int time);
 
 	//
@@ -57,6 +57,8 @@ private:
 	XMFLOAT2 firstdis{};
 	float angleframe = 0;
 	bool Reset = false;
+	const float hight = 18.0f;
+
 	XMFLOAT2 distance={0,0};
 	XMFLOAT2 dis = { 16,7 };
 	bool clear = false;

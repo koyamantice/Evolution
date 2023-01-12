@@ -19,25 +19,42 @@ public:
 	void Draw();
 	void Reset();
 
-	const bool& GetEase() { return ease; }
+	const bool& GetEndFlag() { return endflag; }
+	void SetEndFlag(const bool& endflag) { this->endflag = endflag; }
 	const int& GetBar() { return nowBar; }
 private:
+	void FirstOpen();
+	void MoveSelect();
+	void OptionSystem();
+
 	enum {
 		Sheet,
+		kPause,
 		TitleBack,
 		Option,
 		ZBack,
 		Bar,
+
+
+
+
+
+
+
 		Max
 	};
 	std::unique_ptr<Sprite> UI[Max];
 
 	XMFLOAT2 move{};
 
+	bool endflag = false;
+
+
+	bool option_system = false;
 	float SetPos = 250;
 	int nowBar = 0;
 	bool ease = false;
 	float frame = 0;
-	XMFLOAT2 pos={640,360};
+	XMFLOAT2 pos={640,400};
 	XMFLOAT2 size[Max]{  };
 };

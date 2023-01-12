@@ -26,8 +26,9 @@ private:
 	std::unique_ptr<Object2d> SecondUI[2]{};
 	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
+	ParticleManager* partMan = nullptr;
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
-	XMFLOAT3 AfterPos{};
+	XMFLOAT3 after_pos{};
 
 
 	bool first = true;

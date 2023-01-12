@@ -42,112 +42,16 @@ void BulletRed::OnInit() {
 }
 
 void BulletRed::OnUpda() {
-	if (collide) { collide = false; }
-	if (DeadFlag) {
-		DeadEnd();
-		return;
-	}
-	switch (command) {
-	case Wait:
-		WaitUpda();
-		break;
-	case Attack:
-		if (enemy->GetIsActive()) {
-			if (knockBacking) {
-				KnockBack();
-			} else {
-				AttackUpda();
-			}
-		} else {
-			if (knockBacking) {
-				KnockBack();
-			}
 
-		}
-		break;
-	case Slow:
-		if (wait) { wait = false; Followframe = 0.0f; }
-		SlowUpda();
-		break;
-	default:
-		assert(0);
-		break;
-	}
-	if (burning) {
-		Explo->Update();
-		BurnOut();
-	}
-	Status->Update();
-	Status->SetPosition({ fbxObj->GetPosition().x,fbxObj->GetPosition().y + 2.5f,fbxObj->GetPosition().z });
 }
 
 void BulletRed::OnDraw(DirectXCommon* dxCommon) {
-	if (enemy == NULL) { return; }
-	if (enemy->GetIsActive()) {
-		if (command == Wait) { return; }
-		Object2d::PreDraw();
-		if (!DeadFlag) {
-			if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-				Status->Draw();
-			}
-			if (burning) {
-				Explo->Draw();
-			}
-		} else {
-			CharaDead->Draw();
-		}
-	}
+
 }
+
 void BulletRed::OnFinal() {
 }
 
-void BulletRed::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
-		switch (command) {
-		case Wait:
-
-			break;
-		case Attack:
-			//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è
-			if (Tag == "Player") {
-				player->SetStock(player->GetStock() + 1);
-				command = Wait;
-			}
-			//–I–¨ˆÚ“®
-			if (Tag == "Honey") {
-				if (!isPlayActive) {
-					ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
-					if (ActionActor->GetStock() < 5) {
-						ActionActor->SetStock(ActionActor->GetStock() + 1);
-					} else {
-						ActionActor = nullptr;
-					}
-				}
-			}
-			//“G‚Æ‚Ì“–‚½‚è”»’è
-			if (Tag == "Enemy") {
-				switch (enemy->GetCommand()) {
-				case Actor::Phase::WAIT:
-					DamageInit();
-					break;
-				case Actor::Phase::ATTACK:
-					break;
-				case Actor::Phase::LEAVE:
-					DamageInit();
-					break;
-				case Actor::Phase::DEAD:
-
-				default:
-					break;
-				}
-			}
-			break;
-		case Slow:
-			break;
-		default:
-			assert(0);
-			break;
-		}
-}
 
 void BulletRed::ResultOnUpdate(const int& Timer) {
 	XMFLOAT3 rot = fbxObj->GetRotation();
@@ -178,7 +82,7 @@ void BulletRed::ResultOnUpdate(const int& Timer) {
 void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (collide) { return; }
 	if (command == Dead) { return; }
-	//if (command == Wait) { return; }
+	if (isPlayActive) { return; }
 	if (ID > Id) { return; }
 	XMFLOAT3 pos2 = fbxObj->GetPosition();
 	if (!collide) {

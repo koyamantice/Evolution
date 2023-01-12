@@ -1,5 +1,6 @@
 #pragma once
 #include"Object2d.h"
+#include <ParticleEmitter.h>
 
 
 class EnemyAttack {
@@ -26,5 +27,6 @@ private:
 	float scale = 0.0f;
 	float effectRate = 0.0f;
 	std::unique_ptr<Object2d> Explo = nullptr;
+	ParticleManager* partMan = nullptr;
 
 };

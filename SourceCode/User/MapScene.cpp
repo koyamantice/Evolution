@@ -153,27 +153,16 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 	CameraUpda();
 	if (pause) {
 		pauseUi->Update();
-		if (!pauseUi->GetEase()) {
-			if (input->TriggerButton(input->A) ||
-				input->TriggerKey(DIK_SPACE)) {
-				switch (pauseUi->GetBar()) {
-				case 0:
-					SceneManager::GetInstance()->ChangeScene("TITLE");
-				case 1:
-					break;
-				case 2:
-					pauseUi->Reset();
-					pause = false;
-					break;
-				default:
-					break;
-				}
-			}
+		if (pauseUi->GetEndFlag()) {
+			pause = false;
 		}
 		return;
 	}
 	if (input->TriggerButton(input->START)) {
 		pause = true;
+		if (pauseUi->GetEndFlag()) {
+			pauseUi->SetEndFlag(false);
+		}
 	}
 	animafrate++;
 	if (animafrate == 30) {
@@ -331,9 +320,6 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	if (clear) {
 		Clear->Draw();
 	}
-	if (pause) {
-		pauseUi->Draw();
-	}
 	if (Intro) {
 		Screen[0]->Draw();
 		Screen[1]->Draw();
@@ -346,6 +332,9 @@ void MapScene::Draw(DirectXCommon* dxCommon) {
 	}
 	if (GameOver) {
 		Over->Draw();
+	}
+	if (pause) {
+		pauseUi->Draw();
 	}
 	//Demo->Draw();
 	//miniMap->PreDraw();

@@ -1,5 +1,6 @@
 #include"Touch.h"
 #include"ModelManager.h"
+#include "ImageManager.h"
 
 
 
@@ -19,9 +20,8 @@ void Touch::Initialize(const XMFLOAT3& pos, const XMFLOAT3& rot) {
 	touch_obj_->SetScale({ 5,5,5 });
 	touch_obj.reset(touch_obj_);
 
-	ParticleManager::LoadTexture(2, "smoke1");
 	ParticleManager* fire_ = new ParticleManager();
-	fire_->Initialize(2);
+	fire_->Initialize(ImageManager::fire);
 	fire.reset(fire_);
 }
 

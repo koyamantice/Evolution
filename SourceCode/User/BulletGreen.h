@@ -10,7 +10,6 @@ private:
 	void OnUpda()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
-	void OnCollision(const std::string& Tag, const XMFLOAT3& pos) override;
 	void BulletCollision(const XMFLOAT3& pos,const int& Id) override;
 
 	

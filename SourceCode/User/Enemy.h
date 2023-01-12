@@ -24,14 +24,13 @@ protected:
 
 	void OnInit()override;
 	void OnUpda()override;
+	void OnFirstDraw(DirectXCommon* dxCommon)override;
 	void OnDraw(DirectXCommon* dxCommon)override;
+	void OnLastDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
-	void Collide();
 	//フェーズまとめ
 	void PhaseMove();
-	void ApprochUpda();
-	void LeaveUpda();
-	void WaitUpda();
+	void UnguardUpda();
 	void AttackUpda();
 	//
 	void LifeCommon();
@@ -50,4 +49,6 @@ protected:
 	float scale = 0.01f;
 	float scaframe = 0;
 	std::unique_ptr<FBXObject3d> fbxObject3d;
+
+	ParticleManager* partMan = nullptr;
 };

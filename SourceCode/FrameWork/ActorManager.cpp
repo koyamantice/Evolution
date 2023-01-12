@@ -49,11 +49,28 @@ void ActorManager::ResultUpdate(const int& Timer) {
 void ActorManager::Draw(DirectXCommon* dxCommon) {
 	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
 		Bullet* bullet = itr->get();
+		bullet->FirstDraw(dxCommon);
+	}
+	for (auto itr = Actors.rbegin(); itr != Actors.rend(); ++itr) {
+		Actor* Actor = itr->get();
+		Actor->FirstDraw(dxCommon);
+	}
+
+	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
+		Bullet* bullet = itr->get();
 		bullet->Draw(dxCommon);
 	}
-	for (auto itrA = Actors.rbegin(); itrA != Actors.rend(); ++itrA) {
-		Actor* ActorA = itrA->get();
-		ActorA->Draw(dxCommon);
+	for (auto itr = Actors.rbegin(); itr != Actors.rend(); ++itr) {
+		Actor* Actor = itr->get();
+		Actor->Draw(dxCommon);
+	}
+	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
+		Bullet* bullet = itr->get();
+		bullet->LastDraw(dxCommon);
+	}
+	for (auto itr = Actors.rbegin(); itr != Actors.rend(); ++itr) {
+		Actor* Actor = itr->get();
+		Actor->LastDraw(dxCommon);
 	}
 
 }
@@ -211,6 +228,7 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
 		if (bullet->GetCommand() != Bullet::command::Attack) { continue; }
+		if (bullet->GetIsPlayActive()) { continue; }
 		if (Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
 			bullet->SetCommand(Bullet::command::Wait);
 		}

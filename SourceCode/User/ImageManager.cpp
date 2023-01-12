@@ -1,4 +1,5 @@
 #include "ImageManager.h"
+#include <ParticleManager.h>
 
 ImageManager* ImageManager::GetIns() {
 	static ImageManager instans;
@@ -14,6 +15,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Clear, L"Resources/2d/PlayUI/GameClear.png");
 	Sprite::LoadTexture(Over, L"Resources/2d/PlayUI/GameOver.png");
 	Sprite::LoadTexture(UISheet, L"Resources/2d/PauseUi/UISheet.png");
+	Sprite::LoadTexture(optionline, L"Resources/2d/PauseUi/optionline1.png");
 	Sprite::LoadTexture(TitleBack, L"Resources/2d/PauseUi/TitleBack.png");
 	Sprite::LoadTexture(Button, L"Resources/2d//Title/decide.png");
 	Sprite::LoadTexture(DebugMove, L"Resources/2d/Title/Debug.png");
@@ -58,6 +60,22 @@ void ImageManager::LoadTex2D() {
 	Object2d::LoadTexture(SlowUI, L"Resources/2d/PlayUI/SlowUI.png");
 	Object2d::LoadTexture(SetUI, L"Resources/2d/PlayUI/SetUI.png");
 	Object2d::LoadTexture(SetUI2, L"Resources/2d/PlayUI/SetUI2.png");
+	Object2d::LoadTexture(kMission_0,L"Resources/2d/PlayUI/Number/mission_0.png");
+	Object2d::LoadTexture(kMission_1, L"Resources/2d/PlayUI/Number/mission_1.png");
+	Object2d::LoadTexture(kMission_2, L"Resources/2d/PlayUI/Number/mission_2.png");
+	Object2d::LoadTexture(kMission_3, L"Resources/2d/PlayUI/Number/mission_3.png");
+	Object2d::LoadTexture(kMission_4, L"Resources/2d/PlayUI/Number/mission_4.png");
+	Object2d::LoadTexture(kMission_5, L"Resources/2d/PlayUI/Number/mission_5.png");
+	Object2d::LoadTexture(kMission_s, L"Resources/2d/PlayUI/Number/mission_slash.png");
+
+}
+
+void ImageManager::LoadParticle() {
+
+	ParticleManager::LoadTexture(nul, "shine");
+	ParticleManager::LoadTexture(smoke, "Smoke");
+	ParticleManager::LoadTexture(fire, "smoke1");
+	ParticleManager::LoadTexture(charge, "Charge");
 
 
 }

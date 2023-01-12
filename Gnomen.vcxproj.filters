@@ -43,15 +43,15 @@
     <FxCompile Include="Resources\shaders\MiniMapTestVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleGS.hlsl" />
+    <FxCompile Include="Resources\shaders\ParticlePS.hlsl" />
+    <FxCompile Include="Resources\shaders\ParticleVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\User\TitleScene.cpp">
       <Filter>User\タイトル</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp">
-      <Filter>Obj\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Obj\2d\Texture.cpp">
       <Filter>Obj\2d</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Obj\3d\FbxLoader.cpp">
@@ -223,17 +223,11 @@
     <ClCompile Include="SourceCode\FrameWork\SceneChanger.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Obj\2d\Gauge.cpp">
-      <Filter>Obj\2d</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\EnemyUI.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\MapScene.cpp">
       <Filter>User\プレイシーン</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Obj\2d\MiniMap.cpp">
-      <Filter>Obj\2d</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\EnemyAttack.cpp">
       <Filter>User\Enemy</Filter>
@@ -268,6 +262,9 @@
     <ClCompile Include="SourceCode\System\LevelLoader.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp" />
+    <ClCompile Include="Touch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -275,9 +272,6 @@
       <Filter>User\タイトル</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Obj\2d\Sprite.h">
-      <Filter>Obj\2d</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Obj\2d\Texture.h">
       <Filter>Obj\2d</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Obj\3d\FbxLoader.h">
@@ -472,17 +466,11 @@
     <ClInclude Include="SourceCode\FrameWork\SceneChanger.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Obj\2d\Gauge.h">
-      <Filter>Obj\2d</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\EnemyUI.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\MapScene.h">
       <Filter>User\プレイシーン</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Obj\2d\MiniMap.h">
-      <Filter>Obj\2d</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\EnemyAttack.h">
       <Filter>User\Enemy</Filter>
@@ -511,6 +499,9 @@
     <ClInclude Include="SourceCode\System\LevelLoader.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Object2d.h" />
+    <ClInclude Include="Touch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -540,6 +531,7 @@
     <None Include="Resources\shaders\MiniMapTest.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
+    <None Include="Resources\shaders\Particle.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Imgui">

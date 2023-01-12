@@ -49,12 +49,16 @@ void Aim::Init() {
 		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.6f });
 		Guid[i].reset(Guid_);
 	}
+
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::nul);
 }
 
 void Aim::Upda(float angle) {
 	LockOn->Update();
 	Whistle->Update();
 	FirstUI->Update();
+	partMan->Update();
 	SecondUI[0]->Update();
 	SecondUI[1]->Update();
 	animeframe++;
@@ -81,12 +85,6 @@ void Aim::Upda(float angle) {
 }
 
 void Aim::Draw() {
-	//ImGui::Begin("test");
-	//for (int i = 0; i < GuidNum; i++) {
-	//	ImGui::SliderFloat("@:@", &GuidPos[i].y, 0, 360);
-	//}
-	//////ImGui::Unindent();
-	//ImGui::End();
 	Object2d::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
@@ -97,6 +95,7 @@ void Aim::Draw() {
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Draw();
 	}
+	partMan->Draw(addBle);
 }
 
 
@@ -140,14 +139,14 @@ void Aim::Move(float angle) {
 			const float rnd_rad = 360.0f;
 			XMFLOAT3 pos{};
 			float angle = (float)rand() / RAND_MAX * rnd_rad;
-			pos.x = base.x + Area * sinf(angle);
-			pos.z = base.z + Area * cosf(angle);
+			pos.x = base.x + (Area+0.5f) * sinf(angle);
+			pos.z = base.z + (Area+0.5f) * cosf(angle);
 			const float rnd_vel = 0.4f;
 			XMFLOAT3 vel{};
 			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
 			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
-			//ParticleManager::GetInstance()->Add(1, 15, pos, vel, XMFLOAT3(), 1.0f, 0.0f);
+			partMan->Add(45, pos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,0.0f });
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
 		Whistle->SetPosition({ base.x, base.y+(Area/4), base.z });
@@ -173,11 +172,11 @@ void Aim::Move(float angle) {
 		input->TiltPushStick(Input::L_DOWN ,0.1f) ||
 		input->TiltPushStick(Input::L_RIGHT,0.1f) ||
 		input->TiltPushStick(Input::L_LEFT ,0.1f)) {
-		AfterPos = player->GetCameraPos(player->GetRotation().y,10);
+		after_pos = player->GetCameraPos(player->GetRotation().y,10);
 	}
-	Lpos.x = Ease(In, Quad, 0.95f, Lpos.x, AfterPos.x);
-	Lpos.y = Ease(In, Quad, 0.95f, Lpos.y, AfterPos.y);
-	Lpos.z = Ease(In, Quad, 0.95f, Lpos.y, AfterPos.z);
+	Lpos.x = Ease(In, Quad, 0.95f, Lpos.x, after_pos.x);
+	Lpos.y = Ease(In, Quad, 0.95f, Lpos.y, after_pos.y);
+	Lpos.z = Ease(In, Quad, 0.95f, Lpos.y, after_pos.z);
 	if (Lpos.x > 48.0f) { Lpos.x = 48.0f; }
 	if (Lpos.x < -48.0f) { Lpos.x = -48.0f; }
 	if (Lpos.z > 48.0f) { Lpos.z = 48.0f; }
@@ -199,7 +198,6 @@ void Aim::Move(float angle) {
 void Aim::EnemySet() {
 	if (input->TriggerButton(Input::RT)) {
 		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(player->GetPosition());
-		//->SearchActor("Enemy");
 		XMFLOAT3 base = LockOn->GetPosition();
 		base = enemy->GetPosition();
 		base.y = 0.18f;

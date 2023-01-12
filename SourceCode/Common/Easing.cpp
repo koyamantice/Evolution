@@ -56,6 +56,7 @@ namespace EasingFunction {
     float InLinear(float t)     {
         return t;
     }
+
 }
 
 using namespace EasingFunction;

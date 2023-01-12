@@ -101,15 +101,16 @@ void Player::OnInit() {
 	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
 	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
 
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::smoke);
+
+
 	Aim* LockOn_ = new Aim();
 	LockOn.reset(LockOn_);
 	LockOn->Init();
 
 	compornent = new PlayerUI();
 	compornent->Initialize();
-	ParticleManager::LoadTexture(1, "Smoke");
-	partMan = new ParticleManager();
-	partMan->Initialize(1);
 
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
@@ -138,21 +139,21 @@ void Player::OnUpda() {
 	LockOn->Upda(angle);
 }
 
-void Player::OnDraw(DirectXCommon* dxCommon) {
-	//ImGui::Begin("player");
-	//float posX = fbxObj->GetPosition().x;
-	//float posY = fbxObj->GetPosition().y;
-	//float posZ = fbxObj->GetPosition().z;
-	//ImGui::SliderFloat("pos.x", &posX, -360, 360);
-	//ImGui::SliderFloat("pos.y", &posY, -360, 360);
-	//ImGui::SliderFloat("pos.z", &posZ, -360, 360);
-	//ImGui::End();
-	fbxObj->Draw(dxCommon->GetCmdList());
+void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	Shadow->Draw();
-	LockOn->Draw();
 	partMan->Draw(alphaBle);
-	Object3d::PreDraw();
+	LockOn->Draw();
+
+}
+
+void Player::OnDraw(DirectXCommon* dxCommon) {
+
+	fbxObj->Draw(dxCommon->GetCmdList());
+
+}
+
+void Player::OnLastDraw(DirectXCommon* dxCommon) {
 }
 
 void Player::OnFinal() {
@@ -182,9 +183,20 @@ void Player::Move() {
 	const float PI = 3.14159f;
 	const float STICK_MAX = 32768.0f;
 	if (onHoney) {
-		vel = speed * 0.65f;
+		vel = 0.2f;
+
+		const float rnd_pos = 2.0f;
+		XMFLOAT3 margin{};
+		margin.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		margin.y = 0.5f * (float)(rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f);
+		margin.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		const float rnd_vel = - 0.05f;
+		XMFLOAT3 vel{};
+		vel.y = (float)rand() / RAND_MAX * rnd_vel;
+		partMan->Add(30, {pos.x+margin.x, pos.y + 2.5f+ margin.y,pos.z + margin.z }, vel, {}, 1.0f, 0.0f, { 1.0f,1.0f,0.0f,0.8f }, { 1.0f,1.0f,0.0f,0.0f });
+
 		honeyCount++;
-		if (honeyCount == 60) {
+		if (honeyCount >= 60) {
 			onHoney = false;
 			honeyCount = 0;
 		}
@@ -196,6 +208,7 @@ void Player::Move() {
 		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
 		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
 		input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+		partPoint++;
 		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
@@ -216,12 +229,15 @@ void Player::Move() {
 			pos.x += vecvel.x * (StickX / STICK_MAX);
 			pos.z += vecvel.z * (StickX / STICK_MAX);
 		}
-		const float rnd_vel = 0.1f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(60, oldPos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
+		if (partPoint > 4) {
+			const float rnd_vel = 0.1f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			partMan->Add(60, pos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
+			partPoint = 0;
+		}
 		rot.y = angle + (atan2f(StickX / STICK_MAX, StickY / STICK_MAX) * (180.0f / XM_PI));
 		if (rot.y >= 0) {
 			rot.y = (float)((int)rot.y % 360);

@@ -7,8 +7,8 @@ float4 main(VSOutput input) : SV_TARGET
 {
 	// テクスチャマッピング
 	float4 texcolor = tex.Sample(smp, input.uv);
-	const float _ThresholdMin = 0.4;
-	const float _ThresholdMax = 0.6;
+	const float _ThresholdMin = 0.2;
+	const float _ThresholdMax = 0.8;
 	float3 lightv = normalize(float3(0, 1, -1)); // 右下奥　向きのライト
 
 	float3 eyeDir = normalize(cameraPos - input.worldpos.xyz);

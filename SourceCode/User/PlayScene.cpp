@@ -120,6 +120,8 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	dis.x = distance.x;
 	dis.y = distance.y;
 
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::charge);
 
 
 }
@@ -138,7 +140,14 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		ResultCamera(count);
 		count++;
 		ActorManager::GetInstance()->ResultUpdate(count);
-		//ParticleManager::GetInstance()->Update();
+		const float rnd_vel = 1.4f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
+		
+		partMan->Update();
 		if (input->TriggerButton(Input::A)) {
 			Change = true;
 		}
@@ -188,8 +197,8 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//ParticleManager::GetInstance()->Add(0, 120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f);
-		//ParticleManager::GetInstance()->Update();
+		partMan->Add(120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f,{1,1,1,1},{1,1,1,0});
+		partMan->Update();
 
 		finishTime++;
 
@@ -206,27 +215,16 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	CameraUpda();
 	if (pause) {
 		pauseUi->Update();
-		if (!pauseUi->GetEase()) {
-			if (input->TriggerButton(input->A) ||
-				input->TriggerKey(DIK_SPACE)) {
-				switch (pauseUi->GetBar()) {
-				case 0:
-					SceneManager::GetInstance()->ChangeScene("TITLE");
-				case 1:
-					break;
-				case 2:
-					pauseUi->Reset();
-					pause = false;
-					break;
-				default:
-					break;
-				}
-			}
+		if (pauseUi->GetEndFlag()) {
+			pause = false;
 		}
 		return;
 	}
 	if (input->TriggerButton(input->START)) {
 		pause = true;
+		if (pauseUi->GetEndFlag()) {
+			pauseUi->SetEndFlag(false);
+		}
 	}
 	animafrate++;
 	if (animafrate == 30) {
@@ -255,6 +253,7 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->Update();
 	SkydomeUpdate();
 	ground->Update();
+	partMan->Update();
 #pragma region "Clear"
 	if (!enemy_shadow->GetIsActive()) {
 		goal_shadow->SetIsActive(true);
@@ -315,8 +314,8 @@ void PlayScene::CameraUpda() {
 	}
 	player_shadow->SetAngle(angle);
 	//crystal_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->SetTarget(player_shadow->GetCameraPos(angle,7));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
@@ -324,17 +323,17 @@ void PlayScene::IntroCamera(int Timer) {
 	if (Timer <= 720) {
 		if (speed == 1) {
 			angle += 0.5f;
-			if (IntroHight > 10.0f) {
+			if (IntroHight > hight) {
 				IntroHight -= 0.075f;
 			} else {
-				IntroHight = 10.0f;
+				IntroHight = hight;
 			}
 		} else {
 			angle += 1.0f;
-			if (IntroHight > 10.0f) {
+			if (IntroHight > hight) {
 				IntroHight -= 0.150f;
 			} else {
-				IntroHight = 10.0f;
+				IntroHight = hight;
 			}
 		}
 	}
@@ -344,7 +343,7 @@ void PlayScene::IntroCamera(int Timer) {
 	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
 	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
 	player_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle));
+	camera->SetTarget(player_shadow->GetCameraPos(angle,7));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,IntroHight,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
@@ -356,7 +355,7 @@ void PlayScene::ResultCamera(int Timer) {
 
 	//player_shadow->SetAngle(angle);
 	camera->SetTarget(goal_shadow->GetPosition());
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
@@ -377,15 +376,13 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	}
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
+	partMan->Draw(alphaBle);
 	Sprite::PreDraw();
 	if (Change) {
 		FeedBlack->Draw();
 	}
 	if (clear) {
 		Clear->Draw();
-	}
-	if (pause) {
-		pauseUi->Draw();
 	}
 	if (Intro) {
 		Screen[0]->Draw();
@@ -404,22 +401,10 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	if (GameOver) {
 		Over->Draw();
 	}
-	//Demo->Draw();
-	//miniMap->PreDraw();
-	//miniMap->Draw(dxCommon->GetCmdList());
-	//miniMap->PostDraw();
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
-	//dxCommon->PreDraw();
-	//ImGui::Begin("test");
-	//float F = FPSManager::GetInstance()->GetFps();
-	//ImGui::SliderFloat("fps", &F, 120, 0);
-	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
-	//ImGui::Unindent();
-	//ImGui::End();
-	//postEffect->Draw(dxCommon->GetCmdList());
-
+	if (pause) {
+		pauseUi->Draw();
+	}
 	dxCommon->PostDraw();
-
 }
 
 void PlayScene::ResetCamera() {
@@ -442,8 +427,8 @@ void PlayScene::ResetCamera() {
 
 	distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
 	distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);
-	camera->SetTarget(player_shadow->GetCameraPos(angle));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
+	camera->SetTarget(player_shadow->GetCameraPos(angle,7));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 

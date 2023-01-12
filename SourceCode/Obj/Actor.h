@@ -26,6 +26,7 @@ public:
 	//各フェイズ
 	enum Phase {
 		APPROCH = 0,
+		UNGUARD,
 		LEAVE,
 		WAIT,
 		DEAD,
@@ -94,12 +95,16 @@ public:
 	//カメラ角度のセッタ＆ゲッタ
 	void SetAngle(const float& angle) { this->angle = angle; }
 	const float& GetAngle() { return angle; }
-	//
+	//ワイルドイント引数
 	void SetStock(const int& Stock) { this->stock = Stock; };
 	const int& GetStock() { return stock; }
-	//
+	//ワイルドブール引数
 	void SetPause(const bool& pause) { this->pause = pause; }
 	const bool& GetPause() { return pause; }
+	//衝突判定
+	void SetCollide(const bool& collide) { this->collide = collide; }
+	const bool& GetCollide() { return collide; }
+
 	//virtualにしようか悩み中//解決済み
 	void Initialize(Model* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
@@ -108,14 +113,18 @@ public:
 
 	void Demo();		//更新処理
 
+	void FirstDraw(DirectXCommon* dxCommon);	//先に描画処理
 	void Draw(DirectXCommon* dxCommon);	//描画処理
+	void LastDraw(DirectXCommon* dxCommon);	//後で描画処理
 
 	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
 	void Finalize();	//終了処理
 
 	virtual void OnInit() {};
 	virtual void OnUpda() {};
+	virtual void OnFirstDraw(DirectXCommon* dxCommon) {};
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
+	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
@@ -135,6 +144,9 @@ protected:
 	bool pause = false;
 	bool first = false;
 	bool DeadFlag = false;
+	
+	bool collide = false;
+
 	XMFLOAT3 oldPos = {};
 	int stock = 0;
 	//コンポーネント

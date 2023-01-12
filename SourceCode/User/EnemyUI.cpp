@@ -33,10 +33,10 @@ void EnemyUI::OnUpdate() {
 		HpGauge->SetSize({ 0 ,32 });
 	}
 
-	XMFLOAT2 AfterPos = HpGauge->GetSize();
+	XMFLOAT2 after_pos = HpGauge->GetSize();
 	XMFLOAT2 pos = UnderGauge->GetSize();
-	pos.x = Ease(In, Quad, 0.3f, pos.x, AfterPos.x);
-	pos.y = Ease(In, Quad, 0.3f, pos.y, AfterPos.y);
+	pos.x = Ease(In, Quad, 0.3f, pos.x, after_pos.x);
+	pos.y = Ease(In, Quad, 0.3f, pos.y, after_pos.y);
 	UnderGauge->SetSize(pos);
 }
 

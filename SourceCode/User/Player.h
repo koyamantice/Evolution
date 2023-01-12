@@ -25,7 +25,10 @@ private:
 	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
 	void OnInit()override;
 	void OnUpda()override;
+	void OnFirstDraw(DirectXCommon* dxCommon)override;
 	void OnDraw(DirectXCommon* dxCommon)override;
+	void OnLastDraw(DirectXCommon* dxCommon)override;
+
 	void OnFinal()override;
 	void DebugUpdate()override;
 	void IntroOnUpdate(const int& Timer)override;
@@ -59,7 +62,7 @@ private:
 	float vel = 0;
 	int charge = 0;
 	bool onGround = false;
-	//
+	int partPoint = 0;
 	// —Ž‰ºƒxƒNƒgƒ‹
 	DirectX::XMVECTOR fallV{};
 

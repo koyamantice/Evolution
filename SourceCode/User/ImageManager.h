@@ -11,7 +11,6 @@ private:
 	ImageManager& operator= (const ImageManager & r) = default;
 
 public:
-
 	enum texName {
 		Test,
 		DebugBack,
@@ -20,6 +19,7 @@ public:
 		Clear,
 		Over,
 		UISheet,
+		optionline,
 		TitleBack,
 		Button,
 		DebugMove,
@@ -59,12 +59,28 @@ public:
 		SlowUI,
 		SetUI,
 		SetUI2,
+		kMission_0,
+		kMission_1,
+		kMission_2,
+		kMission_3,
+		kMission_4,
+		kMission_5,
+		kMission_s
+	};
+	enum particleName {
+		nul = 0,
+		smoke,
+		fire,
+		charge,
+	
 	};
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p
 
 	void Load2D();
 	void LoadTex2D();
+	void LoadParticle();
+
 	void Finalize();
 };
 

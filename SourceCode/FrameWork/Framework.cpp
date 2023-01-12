@@ -50,6 +50,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	ImageManager::GetIns()->LoadTex2D();
 	Object3d::StaticInitialize(dxcommon->GetDev(), dxcommon->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	ActorManager::GetInstance()->Initialize();
+
 	// マウスカーソルの非表示
 	ShowCursor(TRUE);
 	//XorShiftの初期化

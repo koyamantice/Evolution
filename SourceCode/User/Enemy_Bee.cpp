@@ -70,40 +70,43 @@ void Enemy_Bee::OnInit() {
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kBee));
 	Mash_->SetScale({ 0.02f,0.02f, 0.02f });
 	Mash_->SetRotation({ 0,-90,0 });
-	Mash_->LoadAnimation();
-	fbxObject3d.reset(Mash_);
-	fbxObject3d->PlayAnimation();
-	LoadData();
-	UpdateCommand();
+Mash_->LoadAnimation();
+fbxObject3d.reset(Mash_);
+LoadData();
+UpdateCommand();
 
-	player = ActorManager::GetInstance()->SearchActor("Player");
+player = ActorManager::GetInstance()->SearchActor("Player");
 
-	compornent = new EnemyUI();
-	compornent->Initialize();
+compornent = new EnemyUI();
+compornent->Initialize();
 
-	ActorManager::GetInstance()->AttachActor("Honey");
-	ActorManager::GetInstance()->AttachActor("Honey");
-	Honey[0]= ActorManager::GetInstance()->SearchActor("Honey");
-	Honey[1]= ActorManager::GetInstance()->SearchActorBack("Honey");
+ActorManager::GetInstance()->AttachActor("Honey");
+ActorManager::GetInstance()->AttachActor("Honey");
+honey[0] = ActorManager::GetInstance()->SearchActor("Honey");
+honey[1] = ActorManager::GetInstance()->SearchActorBack("Honey");
 
-	Honey[0]->SetPosition({ 25,0,25 });
-	Honey[1]->SetPosition({-25,0,-25});
+honey[0]->SetPosition({ 25,0,25 });
+honey[1]->SetPosition({ -25,0,-25 });
 
-	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
+Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 	{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	//Shadow_->SetIsBillboard(true);
-	Shadow_->Object2dCreate();
-	Shadow_->SetRotation({ 90,0,0 });
-	Shadow.reset(Shadow_);
+Shadow_->Object2dCreate();
+Shadow_->SetRotation({ 90,0,0 });
+Shadow.reset(Shadow_);
 
-	command = LEAVE;
+command = LEAVE;
 }
 
 
 void Enemy_Bee::OnUpda() {
-	fbxObject3d->Update();
 	PhaseMove();
 	LifeCommon();
+	HoneyControl();
+
+
+
+
+	fbxObject3d->Update();
 	Shadow->Update();
 	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
@@ -111,22 +114,18 @@ void Enemy_Bee::OnUpda() {
 }
 
 void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
-	//float k = fbxObject3d->GetPosition().y;
-	//ImGui::Begin("test");
-	//ImGui::SliderInt("yabei", &pattern, 0, 10);
-	//ImGui::SliderFloat("yabai", &k, 0, 10);
-	//ImGui::End();
-
-	Object3d::PreDraw();
-	fbxObject3d->Draw(dxCommon->GetCmdList());
 	Object2d::PreDraw();
 	Shadow->Draw();
+	Object3d::PreDraw();
+	fbxObject3d->Draw(dxCommon->GetCmdList());
 }
 
 void Enemy_Bee::OnFinal() {
 }
+
+
 void Enemy_Bee::OnCollision(const std::string& Tag) {
-	if (Tag=="Player") {
+	if (Tag == "Player") {
 		switch (command) {
 		case ATTACK:
 			if (pattern == 1) {
@@ -139,21 +138,14 @@ void Enemy_Bee::OnCollision(const std::string& Tag) {
 		default:
 			break;
 		}
-
-
-
-
-
-
 	}
-
-
-
 }
+
+
 void Enemy_Bee::PhaseMove() {
 	switch (command) {
-	case Actor::Phase::APPROCH:
-		ApprochUpda();
+	case Actor::Phase::UNGUARD:
+		UnguardUpda();
 		break;
 	case Actor::Phase::LEAVE:
 		LeaveUpda();
@@ -169,99 +161,170 @@ void Enemy_Bee::PhaseMove() {
 	}
 }
 
-void Enemy_Bee::ApprochUpda() {
-	ChangeCommand(1,LEAVE,3);
+void Enemy_Bee::UnguardUpda() {
+	if (honey[0]->GetCommand() == APPROCH ) { honey[0]->SetCommand(DEAD); }
+	if (honey[1]->GetCommand() == APPROCH ) { honey[1]->SetCommand(DEAD); }
 
 }
 
 void Enemy_Bee::LeaveUpda() {
 	XMFLOAT3 pos = fbxObject3d->GetPosition();
-	waitTimer += 2.0f;
-	pos.y = sinf(waitTimer * XM_PI / 180);
-	fbxObject3d->SetPosition(pos);
-	ChangeCommand(2, ATTACK, 3);
-	Honey[0]->SetCommand(WAIT);
+	fbxObject3d->SetPosition({ pos.x,sinf(waitTimer * XM_PI / 180)*2.0f,pos.z });
+	waitTimer += 1.0f;
+	if(honey[0]->GetCommand() == APPROCH|| honey[1]->GetCommand() == APPROCH){
+		command = UNGUARD;
+	} else {
+		//ChangeCommand(2, ATTACK, 3);
+	}
 }
 
 void Enemy_Bee::WaitUpda() {
 	ChangeCommand(0, APPROCH, 3);
-
+	WaitingElapsedTime();
 }
 
 void Enemy_Bee::AttackUpda() {
 	//ChangeCommand(1,WAIT,2);
 	XMFLOAT3 PlaPos = player->GetPosition();
 	XMFLOAT3 pos = fbxObject3d->GetPosition();
+	rand_pattern = 1;// rand() % 2;
+	if (rand_pattern==0) {
+		switch (pattern) {
+		case 0:
+			waitTimer++;
+			after_pos = {
+			PlaPos.x,
+			sinf(waitTimer * XM_PI / 180),
+			PlaPos.z
+			};
+			pos.x = Ease(In, Quad, 0.3f, before_pos.x, after_pos.x);
+			pos.y = Ease(In, Quad, 0.3f, before_pos.y, after_pos.y);
+			pos.z = Ease(In, Quad, 0.3f, before_pos.z, after_pos.z);
+			if (waitTimer > 100) {
+				pattern++;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		case 1:
+			after_pos = {
+			pos.x,
+			-7,
+			pos.z
+			};
+			waitTimer++;
+			if ((float)(waitTimer / 100) < 1.0f) {
+				pos.y = Ease(In, Quad, (float)(waitTimer / 100), pos.y, after_pos.y);
 
-	switch (pattern) {
-	case 0:
-		waitTimer++;
+			}
+			if (waitTimer > 130) {
+				pattern++;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		case 2:
+			waitTimer++;
+			if (OnePunch) {
+				OnePunch = false;
+			}
+			after_pos = {
+			PlaPos.x,
+			sinf(waitTimer * XM_PI / 180),
+			PlaPos.z
+			};
+			pos.x = Ease(In, Quad, 0.3f, pos.x, after_pos.x);
+			pos.y = Ease(In, Quad, 0.3f, pos.y, after_pos.y);
+			pos.z = Ease(In, Quad, 0.3f, pos.z, after_pos.z);
+			if (waitTimer > 70) {
+				pattern = 0;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		case 3:
+			break;
+		default:
+			break;
+		}
+	} else {
+		switch (pattern) {
+		case 0:
+			waitTimer++;
+			after_pos = {
+			47,
+			sinf(waitTimer * XM_PI / 180),
+			47
+			};
+			pos.x = Ease(In, Quad, 0.3f, pos.x, after_pos.x);
+			pos.y = Ease(In, Quad, 0.3f, pos.y, after_pos.y);
+			pos.z = Ease(In, Quad, 0.3f, pos.z, after_pos.z);
+			if (waitTimer > 100) {
+				pattern++;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		case 1:
+			after_pos = {
+			47,
+			sinf(waitTimer * XM_PI / 180),
+			-47
+			};
+			waitTimer++;
+			if ((float)(waitTimer / 100) < 1.0f) {
+				pos.y = Ease(In, Quad, (float)(waitTimer / 100), pos.y, after_pos.y);
 
-		AfterPos = {
-		PlaPos.x,
-		sinf(waitTimer * XM_PI / 180),
-		PlaPos.z
-		};
-		pos.x = Ease(In,Quad,0.3f,pos.x,AfterPos.x);
-		pos.y = Ease(In,Quad,0.3f,pos.y,AfterPos.y);
-		pos.z = Ease(In,Quad,0.3f,pos.z,AfterPos.z);
-		if (waitTimer > 100) {
-			pattern++;
-			waitTimer = 0;
+			}
+			if (waitTimer > 130) {
+				pattern++;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		case 2:
+			waitTimer++;
+			if (OnePunch) {
+				OnePunch = false;
+			}
+			after_pos = {
+			-47,
+			sinf(waitTimer * XM_PI / 180),
+			47
+			};
+			pos.x = Ease(In, Quad, 0.3f, pos.x, after_pos.x);
+			pos.y = Ease(In, Quad, 0.3f, pos.y, after_pos.y);
+			pos.z = Ease(In, Quad, 0.3f, pos.z, after_pos.z);
+			if (waitTimer > 70) {
+				pattern = 3;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		case 3:
+			waitTimer++;
+			if (OnePunch) {
+				OnePunch = false;
+			}
+			after_pos = {
+			-47,
+			sinf(waitTimer * XM_PI / 180),
+			-47
+			};
+			pos.x = Ease(In, Quad, 0.3f, pos.x, after_pos.x);
+			pos.y = Ease(In, Quad, 0.3f, pos.y, after_pos.y);
+			pos.z = Ease(In, Quad, 0.3f, pos.z, after_pos.z);
+			if (waitTimer > 70) {
+				pattern = 0;
+				waitTimer = 0;
+			}
+			fbxObject3d->SetPosition(pos);
+			break;
+		default:
+			break;
 		}
-		fbxObject3d->SetPosition(pos);
-		break;
-	case 1:
-		AfterPos = {
-		pos.x,
-		-7,
-		pos.z
-		};
-		waitTimer++;
-		if ((float)(waitTimer / 100) < 1.0f) {
-			pos.y = Ease(In, Quad, (float)(waitTimer / 100), pos.y, AfterPos.y);
 
-		}
-		if (waitTimer > 130) {
-			pattern++;
-			waitTimer = 0;
-		}
-		fbxObject3d->SetPosition(pos);
-		break;
-	case 2:
-		waitTimer++;
-		if (OnePunch) {
-			OnePunch = false;
-		}
-		AfterPos = {
-		PlaPos.x,
-		sinf(waitTimer * XM_PI / 180),
-		PlaPos.z
-		};
-		pos.x = Ease(In, Quad, 0.3f, pos.x, AfterPos.x);
-		pos.y = Ease(In, Quad, 0.3f, pos.y, AfterPos.y);
-		pos.z = Ease(In, Quad, 0.3f, pos.z, AfterPos.z);
-		if (waitTimer > 70) {
-			pattern=0;
-			waitTimer = 0;
-		}
-		fbxObject3d->SetPosition(pos);
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		break;
-	default:
-		break;
 	}
-
-
-
-
-
-
 }
 
 void Enemy_Bee::LifeCommon() {
@@ -285,6 +348,19 @@ void Enemy_Bee::LifeCommon() {
 		fbxObject3d->SetScale({ scale * 0.01f,scale * 0.01f,scale * 0.01f });
 		fbxObject3d->SetRotation(rot);
 	}
+}
+
+void Enemy_Bee::HoneyControl() {
+		if(honey[0]->GetCommand()!=WAIT){
+			honey[1]->SetPause(true);
+		} else {
+			honey[1]->SetPause(false);
+		}
+		if (honey[1]->GetCommand() != WAIT) {
+			honey[0]->SetPause(true);
+		} else {
+			honey[0]->SetPause(false);
+		}
 }
 
 void Enemy_Bee::ChangeCommand(const int& num, const int& command, const int& count, const bool& reverese) {
@@ -313,4 +389,13 @@ void Enemy_Bee::ChangeCommand(const int& num, const int& command, const int& cou
 		MotionCount = 0;
 		waitTimer = 0;
 	}
+}
+
+bool Enemy_Bee::WaitingElapsedTime() {
+	
+	waiting_timer++;
+	if (waiting_timer > change_time) {
+
+	}
+	return true;
 }

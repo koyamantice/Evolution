@@ -49,6 +49,12 @@ void Actor::Demo() {
 	}
 }
 
+void Actor::FirstDraw(DirectXCommon* dxCommon) {
+	if (isActive) {
+		OnFirstDraw(dxCommon);
+	}
+}
+
 void Actor::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		if (isVisible) {
@@ -56,7 +62,13 @@ void Actor::Draw(DirectXCommon* dxCommon) {
 			obj->Draw();
 		}
 		OnDraw(dxCommon);
-		if (compornent) { compornent->Draw(); }
+	}
+}
+
+void Actor::LastDraw(DirectXCommon* dxCommon) {
+	if (isActive) {
+		OnLastDraw(dxCommon);
+	if (compornent) { compornent->Draw(); }
 	}
 }
 

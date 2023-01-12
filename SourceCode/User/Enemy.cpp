@@ -65,25 +65,21 @@ void Enemy::DebugUpdate() {
 }
 
 void Enemy::OnInit() {
-	isVisible = false;/*
-	obj->SetPosition(XMFLOAT3(0, 2, 0));
-	obj->SetRotation(XMFLOAT3{0,-98,0});
-	obj->SetScale(XMFLOAT3(2.0f,2.0f,2.0f));
-	float radius = 1.0f;
-	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
-	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);*/
+	isVisible = false;
 	FBXObject3d* Mash_= new FBXObject3d();
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash));
 	Mash_->SetScale({0.01f,0.01f, 0.01f});
 	Mash_->LoadAnimation();
-	//move_object_->SetPosition(position);
-	//move_object_->SetRotation(rot);
+
 	fbxObject3d.reset(Mash_);
 	fbxObject3d->PlayAnimation();
 
 	LoadData();
 	UpdateCommand();
+
+	command = Actor::Phase::UNGUARD;
+
 	player = ActorManager::GetInstance()->SearchActor("Player");
 
 	compornent = new EnemyUI();
@@ -92,12 +88,15 @@ void Enemy::OnInit() {
 	EnemyAttack* Attack_ = new EnemyAttack();
 	Attack_->Init();
 	Attack.reset(Attack_);
+
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	//Shadow_->SetIsBillboard(true);
 	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ 90,0,0 });
 	Shadow.reset(Shadow_);
+
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::nul);
 
 }
 
@@ -106,89 +105,34 @@ void Enemy::OnUpda() {
 	Attack->Upda();
 	PhaseMove();
 	LifeCommon();
-	//Collide();
 	Shadow->Update();
 	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
 	obj->SetPosition(fbxObject3d->GetPosition());
 }
 
-void Enemy::OnDraw(DirectXCommon* dxCommon) {
-//	ImGui::Begin("test");
-	//ImGui::SliderInt("bullet", &a, 0, 360);
-	//ImGui::SliderFloat("Anglet", &angle, 0, 360);
-//	ImGui::Unindent();
-//	ImGui::End();
-
-	Object3d::PreDraw();
-	fbxObject3d->Draw(dxCommon->GetCmdList());
+void Enemy::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	Shadow->Draw();
+}
+
+void Enemy::OnDraw(DirectXCommon* dxCommon) {
+	Object3d::PreDraw();
+	fbxObject3d->Draw(dxCommon->GetCmdList());
+}
+
+void Enemy::OnLastDraw(DirectXCommon* dxCommon) {
 	Attack->Draw();
 }
 
 void Enemy::OnFinal() {
 }
 
-void Enemy::Collide() {
-	XMFLOAT3 pos = obj->GetPosition();
-	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(obj->collider);
-	assert(sphereCollider);
-	obj->collider->Update();
-
-	// クエリーコールバッククラス
-	class PlayerQueryCallback : public QueryCallback {
-	public:
-		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
-
-		// 衝突時コールバック関数
-		bool OnQueryHit(const QueryHit& info) {
-
-			const XMVECTOR up = { 0,1,0,0 };
-
-			XMVECTOR rejectDir = XMVector3Normalize(info.reject);
-			float cos = XMVector3Dot(rejectDir, up).m128_f32[0];
-
-			// 地面判定しきい値
-			const float threshold = cosf(XMConvertToRadians(30.0f));
-
-			if (-threshold < cos && cos < threshold) {
-
-				sphere->center += info.reject;
-				move += info.reject;
-			}
-
-			return true;
-		}
-
-		Sphere* sphere = nullptr;
-		DirectX::XMVECTOR move = {};
-	};
-
-	PlayerQueryCallback callback(sphereCollider);
-
-	// 球と地形の交差を全検索
-	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISIONSHAPE_MESH);
-	// 交差による排斥分動かす
-	pos.x += callback.move.m128_f32[0];
-	pos.y += callback.move.m128_f32[1];
-	pos.z += callback.move.m128_f32[2];
-	// ワールド行列更新
-	obj->UpdateWorldMatrix();
-	obj->SetPosition(pos);
-	obj->collider->Update();
-}
 
 void Enemy::PhaseMove() {
 	switch (command) {
-	case Actor::Phase::APPROCH:
-		ApprochUpda();
-		break;
-	case Actor::Phase::LEAVE:
-		LeaveUpda();
-		break;
-	case Actor::Phase::WAIT:
-		WaitUpda();
+	case Actor::Phase::UNGUARD:
+		UnguardUpda();
 		break;
 	case Actor::Phase::ATTACK:
 		AttackUpda();
@@ -198,37 +142,7 @@ void Enemy::PhaseMove() {
 	}
 }
 
-void Enemy::ApprochUpda() {
-	XMFLOAT3 pos = fbxObject3d->GetPosition();
-
-	angle += 2.5f;
-	pos.x =sinf(angle * (XM_PI / 180)) *15.0f;
-	pos.z =cosf(angle * (XM_PI / 180)) *15.0f;
-	if (pos.y >= 0) {
-		pos.y += speed;
-		speed -= accel;
-	} else {
-		pos.y = 0;
-		speed = accel * 30.0f;
-	}
-	waitTimer++;
-	if (waitTimer == 300) {//150fps単位
-		pos.y = 0;
-		speed = accel * 30.0f;
-		fbxObject3d->ResetAnimation();
-		command = Actor::Phase::ATTACK;
-		fbxObject3d->PlayAnimation();
-		waitTimer = 0;
-	}
-	fbxObject3d->SetPosition(pos);
-
-
-}
-
-void Enemy::LeaveUpda() {
-}
-
-void Enemy::WaitUpda() {
+void Enemy::UnguardUpda() {
 	ChangeCommand(0, ATTACK, 3);
 }
 
@@ -239,7 +153,7 @@ void Enemy::AttackUpda() {
 		pos.y = 0;
 		fbxObject3d->ResetAnimation();
 		fbxObject3d->PlayAnimation();
-		command = Actor::Phase::WAIT;
+		command = Actor::Phase::UNGUARD;
 		waitTimer = 0;
 		fbxObject3d->SetPosition(pos);
 		return;
@@ -266,7 +180,6 @@ void Enemy::LifeCommon() {
 		XMFLOAT3 rot = fbxObject3d->GetRotation();
 		XMFLOAT3 sca = fbxObject3d->GetScale();
 		fbxObject3d->ResetAnimation();
-		
 		rot.y++;
 		scale = Ease(In,Quad, scaframe,1.0f,0.0f);
 		if (scaframe < 1.0f) {

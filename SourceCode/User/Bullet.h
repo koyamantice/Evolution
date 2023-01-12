@@ -36,6 +36,7 @@ public:
 	enum command {
 		Wait = 0,
 		Attack,
+		Control,
 		Slow,
 		Dead,
 	};
@@ -78,18 +79,25 @@ public:
 	void Demo();		//çXêVèàóù
 	void IntroUpdate(const int& Timer);
 	void ResultUpdate(const int& Timer);
+	void FirstDraw(DirectXCommon* dxCommon);
 	void Draw(DirectXCommon* dxCommon);	//ï`âÊèàóù
-
+	void LastDraw(DirectXCommon* dxCommon);
 	void DemoDraw(DirectXCommon* dxCommon);	//ï`âÊèàóù
 
 	void Finalize();	//èIóπèàóù
 
-	virtual void OnCollision(const std::string& Tag,const XMFLOAT3& pos) {};
+	float DirRotation(const XMFLOAT3& target);
+	
+	void Navigation(const XMFLOAT3& target);
+
+	void OnCollision(const std::string& Tag,const XMFLOAT3& pos);
 	virtual void BulletCollision(const XMFLOAT3& pos, const int& Id) {};
 protected:
 	virtual void OnInit() {};
 	virtual void OnUpda() {};
+	virtual void OnFirstDraw(DirectXCommon* dxCommon) {};
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
+	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const int& Timer) {};
@@ -98,6 +106,9 @@ protected:
 	void LimitArea();
 	void CommonUpda();
 
+	void CommandUpda();
+
+	void ControlUpda();
 	void WaitUpda();
 	void SlowUpda();
 	void AttackUpda();
@@ -155,10 +166,13 @@ protected:
 	bool DeadFlag = false;
 
 	bool collide = false;
-	XMFLOAT3 oldPos = {};
-	XMFLOAT3 AftaerPos{};
-	float Followframe = 0.0f;
-	XMFLOAT3 FollowPos{};
+	XMFLOAT3 old_pos = {};
+	bool navi = false;
+	float navi_frame = 0;
+	XMFLOAT3 before_pos{};
+	XMFLOAT3 after_pos{};
+	float follow_frame = 0.0f;
+	XMFLOAT3 follow_pos{};
 
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
