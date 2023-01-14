@@ -1,8 +1,7 @@
 #include"TitleText.h"
 #include <SourceCode/User/ModelManager.h>
 #include"Easing.h"
-
-
+#include"ImageManager.h"
 
 
 TitleText::TitleText() {
@@ -29,14 +28,31 @@ void TitleText::Init() {
 			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextN));
 		}
 		newText_->Initialize();
-		newText_->SetPosition({ 0,-10,-500 });
-		newText_->SetRotation({ 90,0,0 });
-		newText_->SetScale({ 5.0f,5.0f,5.0f });
+		newText_->SetPosition(pos[i]);
+		newText_->SetRotation({ 90,-90,0 });
+		newText_->SetScale({ 8.0f,8.0f,8.0f });
 		texts[i].reset(newText_);
 	}
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Initialize();
 	}
+
+	
+	Object3d* door_ = new Object3d();
+	door_->Initialize();
+	door_->SetPosition({0,0,15});
+	door_->SetRotation({ 0,0,0 });
+	door_->SetScale({ 4.0f,4.0f,4.0f });
+	door.reset(door_);
+
+
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::fire);
+
+
+
+
+
 
 	// ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
 	modelSkydome = Model::CreateFromOBJ("skydome");
@@ -46,8 +62,8 @@ void TitleText::Init() {
 	modelPine = Model::CreateFromOBJ("Pine1");
 
 	models.insert(std::make_pair("skydome", modelSkydome));
-	models.insert(std::make_pair("ground", modelGround));
-	models.insert(std::make_pair("house", modelFighter));
+	models.insert(std::make_pair("Ground", modelGround));
+	models.insert(std::make_pair("House", modelFighter));
 	models.insert(std::make_pair("snag", modelSphere));
 	models.insert(std::make_pair("Pine1",modelPine));
 	levelData = LevelLoader::LoadFile("level_editor");
@@ -93,32 +109,55 @@ void TitleText::Upda() {
 		texts[i]->Update();
 	}
 
-	frame += 0.01f;
+	frame += 0.001f;
 
-	if (frame < 1.0f) {
-		pos[0]=Ease(In,Back,frame,0,-16.0f);
-		pos[1]=Ease(In,Back,frame,0,-10.0f);
-		pos[2]=Ease(In,Back,frame,0,-4.0f);
-		pos[3]=Ease(In,Back,frame,0,2.0f);
-		pos[4]=Ease(In,Back,frame,0,8.0f);
-		pos[5]=Ease(In,Back,frame,0,14.0f);
-	} else {
-		frame = 1.0f;
-	}
 
 	for (int i = 0; i < 6; i++) {
-		texts[i]->SetPosition({ pos[i],8.0f,10.0f });
+		texts[i]->SetPosition({ pos[i]});
 	}
+
+
+
+
+	const float rnd_pos = 1.0f;
+	XMFLOAT3 mag{};
+	mag.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	mag.y = (float)rand() / RAND_MAX * rnd_pos;
+	mag.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	const float rnd_vel = 0.2f;
+	XMFLOAT3 vel{};
+	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	vel.y = (float)rand() / RAND_MAX * rnd_vel;
+	vel.z = (float)rand() / RAND_MAX * rnd_vel;
+	vel.y += 0.1f;
+	const float rnd_acc = 0.01f;
+	XMFLOAT3 acc{};
+	acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+	acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+	//acc.z = (float)rand() / RAND_MAX * rnd_acc;
+
+
+	partMan->Add(60,{-2+ mag.x,2+mag.y,12+mag.z}, vel, acc,3.0f,0.0f,{1.0f,1.0f,0,1.0f}, { 1.0f,1.0f,0,1.0f });
+	partMan->Update();
+
 	for (std::unique_ptr<Object3d>& obj : grounds) {
 		obj->Update();
 	}
 }
 
 void TitleText::Draw(DirectXCommon* dxCommon) {
+
+	ImGui::Begin("test");
+	XMFLOAT3 t = pos[0];
+	ImGui::SliderFloat("cameraPos.x", &t.x, 30, 0);
+	ImGui::SliderFloat("cameraPos.y", &t.y, 30, 0);
+	ImGui::SliderFloat("cameraPos.z", &t.z, 30, 0);
+	pos[0] = t;
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Draw();
 	}
 	for (std::unique_ptr<Object3d>& obj : grounds) {
 		obj->Draw();
 	}
+	partMan->Draw(addBle);
 }

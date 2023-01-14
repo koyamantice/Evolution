@@ -121,12 +121,6 @@ void Enemy_Bee::OnUpda() {
 }
 
 void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
-	ImGui::Begin("test");
-	ImGui::SliderInt("pattern", &pattern, 0, 5);
-	ImGui::SliderFloat("waitTimer", &waitTimer, 0, 360);
-	ImGui::SliderFloat("commandTimer", &commandTimer, 0, 360);
-	ImGui::End();
-
 	Object2d::PreDraw();
 	Shadow->Draw();
 	Object3d::PreDraw();

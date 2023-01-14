@@ -15,7 +15,9 @@ std::thread t;
 
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
-	camera->SetEye({0,0,-20});
+	c_x = sinf(rad * (XM_PI / 180.f)) * circ_x;
+	c_z = cosf(rad * (XM_PI / 180.f)) * circ_z;
+	camera->SetEye({ c_x,c_y,c_z });
 
 	//背景スプライト生成
 	Sprite* sprite_ = Sprite::Create(ImageManager::Title, { 0.0f,0.0f });
@@ -46,6 +48,14 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 
 	text = new TitleText();
 	text->Init();
+
+
+
+	//あとでcsv
+	eyes.push_back(80);
+	eyes.push_back(40);
+	eyes.push_back(50);
+
 }
 //開放処理
 void TitleScene::Finalize() {
@@ -54,8 +64,7 @@ void TitleScene::Finalize() {
 //更新
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
-
-	camera->Update();
+	CameraUpdate();
 	if (input->TiltStick(Input::L_UP) ||input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
 		nextScene--;
 	}
@@ -121,12 +130,17 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 //描画
 void TitleScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	//ImGui::Begin("test");
-	//float F = FPSManager::GetInstance()->GetFps();
-	//ImGui::SliderFloat("fps", &F, 120, 0);
-	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
-	//ImGui::Unindent();
-	//ImGui::End();
+	ImGui::Begin("test");
+	float F = FPSManager::GetInstance()->GetFps();
+	ImGui::SliderFloat("fps", &F, 120, 0);
+	ImGui::SliderFloat("cameraPos.x", &c_x, 1000, 0);
+	ImGui::SliderFloat("cameraPos.y", &c_y, 1000, 0);
+	ImGui::SliderFloat("cameraPos.z", &c_z, 1000, 0);
+	float t=eyes.front();
+	ImGui::SliderFloat("eye", &t, 1000, 0);
+
+	ImGui::Unindent();
+	ImGui::End();
 	Sprite::PreDraw();
 	Object3d::PreDraw();
 	text->Draw(dxCommon);
@@ -142,4 +156,30 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 }
 
 void TitleScene::Heavy() {
+}
+
+void TitleScene::CameraUpdate() {
+	rad_frame += 0.001f;
+	
+	rad= Ease(In, Linear, rad_frame,0, 360);
+	circ_x = Ease(In, Linear, rad_frame, s_camera.x, e_camera.x);
+	circ_z = Ease(In, Linear, rad_frame, s_camera.z, e_camera.z);
+	if (rad_frame > 1.0f) {
+		rad_frame = 0;
+		s_camera.x=e_camera.x;
+		s_camera.z=e_camera.z;
+		auto s = eyes.front();
+		e_camera.x= s;
+		e_camera.z = s;
+		eyes.pop_front();
+		eyes.push_back(s);
+	}
+	c_x=sinf(rad* (XM_PI/180.f)) * circ_x;
+	c_z=cosf(rad* (XM_PI/180.f)) * circ_z;
+
+
+
+	camera->SetEye({c_x,c_y,c_z});
+	camera->Update();
+
 }

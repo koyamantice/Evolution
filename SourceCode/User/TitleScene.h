@@ -29,6 +29,9 @@ public:
 	void Draw(DirectXCommon* dxCommon) override;
 
 	void Heavy();
+
+
+	void CameraUpdate();
 private:
 	//ƒƒ“ƒo•Ï”
 	enum {
@@ -66,5 +69,24 @@ private:
 	};
 	static int LoadState;
 	//static ‰æ–Ê = ƒQ[ƒ€‰æ–Ê;
+
+
+	float circ_x=80;
+	float circ_z=80;
+	float circ_vec_x = 1;
+	float circ_vec_z = 1;
+
+
+	float rad_frame = 0;
+	float rad = 0;
+	float c_x=80;
+	float c_y=40;
+	float c_z= 0;
+
+
+	std::list<float> eyes{};
+
+	XMFLOAT3 e_camera = {80,0,80};
+	XMFLOAT3 s_camera = {50,0,80};
 };
 
