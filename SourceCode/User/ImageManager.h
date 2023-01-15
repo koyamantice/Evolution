@@ -48,7 +48,7 @@ public:
 		Intro05,
 		Intro06,
 		CameCon,
-		Rockon,
+		Con_vis,
 		HpCover,
 		HpGreen,
 		HpRed,

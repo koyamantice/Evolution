@@ -24,7 +24,8 @@ public:
 		kTextE,
 		kHouse,
 		kHoney,
-		kTouch
+		kTouch,
+		kDoor,
 	};
 	enum FBXName {
 		kMash = 0,

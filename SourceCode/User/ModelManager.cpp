@@ -22,6 +22,7 @@ void ModelManager::Initialize() {
 	LoadModel(kHouse, "House");
 	LoadModel(kHoney, "Honey");
 	LoadModel(kTouch, "TouchNo");
+	LoadModel(kDoor, "Door");
 
 	//FBXフォルダを読み込みます。
 	LoadFBXModel(kMash,"Mash");

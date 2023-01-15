@@ -75,13 +75,16 @@ private:
 	std::unique_ptr<Sprite> Over{};
 	std::unique_ptr<Sprite> IntroWord[10];
 	std::unique_ptr<Sprite> Camecon[6]{};
-	std::unique_ptr<Sprite> Rockon[2]{};
+	std::unique_ptr<Sprite> con_vis[2]{};
 
 	std::unique_ptr<Object3d> kSkydome{};
 
 	std::unique_ptr<TouchableObject> ground{};
 
-	float CameraAlpha = 1.0f;
+
+
+	XMFLOAT2 base = { 640,530 };
+	float camera_frame = 0.0f;
 	int animation = 0;
 	int tapanima = 3;
 	int animafrate = 0;

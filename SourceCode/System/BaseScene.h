@@ -44,7 +44,7 @@ protected:
 	//killƒNƒŠƒbƒv
 	int finishTime = 0;
 
-	bool Intro = true;
+	bool Intro = false;
 	bool Result = false;
 	bool GameOver = false;
 

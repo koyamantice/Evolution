@@ -206,9 +206,9 @@ void PlayerUI::OnDraw() {
 	Bullet->Draw();
 	Damage->Draw();
 	Slash->Draw();
-	for (int i = 0; i < 2; i++) {
-		numBack[i]->Draw();
-	}
+	//for (int i = 0; i < 2; i++) {
+	//	numBack[i]->Draw();
+	//}
 	for (int i = 0; i < stock.size() && i < 2; i++) {
 		num[i][stock[i]]->Draw();
 	}

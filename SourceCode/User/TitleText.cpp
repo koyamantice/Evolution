@@ -39,9 +39,10 @@ void TitleText::Init() {
 
 	
 	Object3d* door_ = new Object3d();
+	door_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDoor));
 	door_->Initialize();
-	door_->SetPosition({0,0,15});
-	door_->SetRotation({ 0,0,0 });
+	door_->SetPosition({2,0,12});
+	door_->SetRotation({ 0,90,0 });
 	door_->SetScale({ 4.0f,4.0f,4.0f });
 	door.reset(door_);
 
@@ -118,28 +119,27 @@ void TitleText::Upda() {
 
 
 
-
-	const float rnd_pos = 1.0f;
-	XMFLOAT3 mag{};
-	mag.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-	mag.y = (float)rand() / RAND_MAX * rnd_pos;
-	mag.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-	const float rnd_vel = 0.2f;
-	XMFLOAT3 vel{};
-	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	vel.y = (float)rand() / RAND_MAX * rnd_vel;
-	vel.z = (float)rand() / RAND_MAX * rnd_vel;
-	vel.y += 0.1f;
-	const float rnd_acc = 0.01f;
-	XMFLOAT3 acc{};
-	acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-	acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-	//acc.z = (float)rand() / RAND_MAX * rnd_acc;
-
-
-	partMan->Add(60,{-2+ mag.x,2+mag.y,12+mag.z}, vel, acc,3.0f,0.0f,{1.0f,1.0f,0,1.0f}, { 1.0f,1.0f,0,1.0f });
+	if (start) {
+		const float rnd_pos = 1.0f;
+		XMFLOAT3 mag{};
+		mag.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		mag.y = (float)rand() / RAND_MAX * rnd_pos;
+		mag.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		const float rnd_vel = 0.2f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel;
+		vel.y += 0.1f;
+		const float rnd_acc = 0.01f;
+		XMFLOAT3 acc{};
+		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		//acc.z = (float)rand() / RAND_MAX * rnd_acc;
+		partMan->Add(60, { -2 + mag.x,2 + mag.y,12 + mag.z }, vel, acc, 3.0f, 0.0f, { 1.0f,1.0f,0,1.0f }, { 1.0f,1.0f,0,1.0f });
+	}
 	partMan->Update();
-
+	door->Update();
 	for (std::unique_ptr<Object3d>& obj : grounds) {
 		obj->Update();
 	}
@@ -147,17 +147,18 @@ void TitleText::Upda() {
 
 void TitleText::Draw(DirectXCommon* dxCommon) {
 
-	ImGui::Begin("test");
-	XMFLOAT3 t = pos[0];
-	ImGui::SliderFloat("cameraPos.x", &t.x, 30, 0);
-	ImGui::SliderFloat("cameraPos.y", &t.y, 30, 0);
-	ImGui::SliderFloat("cameraPos.z", &t.z, 30, 0);
-	pos[0] = t;
+	//ImGui::Begin("test");
+	//XMFLOAT3 t = pos[0];
+	//ImGui::SliderFloat("cameraPos.x", &t.x, 30, 0);
+	//ImGui::SliderFloat("cameraPos.y", &t.y, 30, 0);
+	//ImGui::SliderFloat("cameraPos.z", &t.z, 30, 0);
+	//pos[0] = t;
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Draw();
 	}
 	for (std::unique_ptr<Object3d>& obj : grounds) {
 		obj->Draw();
 	}
+	door->Draw();
 	partMan->Draw(addBle);
 }

@@ -22,25 +22,31 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	//”wŒiƒXƒvƒ‰ƒCƒg¶¬
 	Sprite* sprite_ = Sprite::Create(ImageManager::Title, { 0.0f,0.0f });
 	UI[BackScene].reset(sprite_);
-	Sprite* sprite2_ = Sprite::Create(ImageManager::Button, { 880.0f,600.0f });
+
+	Sprite* sprite1_ = Sprite::Create(ImageManager::DebugBack, { 0.0f,0.0f });
+	sprite1_->SetSize({1280.0f, 720.0f});
+	UI[kkskydome].reset(sprite1_);
+
+	
+	Sprite* sprite2_ = Sprite::Create(ImageManager::Button, { 950.0f,650.0f });
 	sprite2_->SetScale(0.5f);
 	UI[Button].reset(sprite2_);
 
-	Sprite* sprite3_ = Sprite::Create(ImageManager::TitleMove, { 880.0f,360.0f });
+	Sprite* sprite3_ = Sprite::Create(ImageManager::TitleMove, { 930.0f,360.0f });
 	sprite3_->SetScale(0.5f);
 	UI[moveTitle].reset(sprite3_);
 
-	Sprite* sprite6_ = Sprite::Create(ImageManager::noTitleMove, { 880.0f,360.0f });
+	Sprite* sprite6_ = Sprite::Create(ImageManager::noTitleMove, { 930.0f,360.0f });
 	sprite6_->SetScale(0.5f);
 	UI[nomoveTitle].reset(sprite6_);
 
-	Sprite* sprite4_ = Sprite::Create(ImageManager::DebugMove, { 880.0f,500.0f });
+	Sprite* sprite4_ = Sprite::Create(ImageManager::DebugMove, { 930.0f,500.0f });
 	sprite4_->SetScale(0.5f);
 	sprite4_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	UI[moveDebug].reset(sprite4_);
 	Change = false;
 
-	Sprite* sprite5_ = Sprite::Create(ImageManager::noDebugMove, { 880.0f,500.0f });
+	Sprite* sprite5_ = Sprite::Create(ImageManager::noDebugMove, { 930.0f,500.0f });
 	sprite5_->SetScale(0.5f);
 	sprite5_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	UI[nomoveDebug].reset(sprite5_);
@@ -130,25 +136,25 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	ImGui::Begin("test");
-	float F = FPSManager::GetInstance()->GetFps();
-	ImGui::SliderFloat("fps", &F, 120, 0);
-	ImGui::SliderFloat("cameraPos.x", &c_x, 1000, 0);
-	ImGui::SliderFloat("cameraPos.y", &c_y, 1000, 0);
-	ImGui::SliderFloat("cameraPos.z", &c_z, 1000, 0);
-	float t=eyes.front();
-	ImGui::SliderFloat("eye", &t, 1000, 0);
-
-	ImGui::Unindent();
-	ImGui::End();
+	//ImGui::Begin("test");
+	//float F = FPSManager::GetInstance()->GetFps();
+	//ImGui::SliderFloat("fps", &F, 120, 0);
+	//ImGui::SliderFloat("cameraPos.x", &c_x, 1000, 0);
+	//ImGui::SliderFloat("cameraPos.y", &c_y, 1000, 0);
+	//ImGui::SliderFloat("cameraPos.z", &c_z, 1000, 0);
+	//float t=eyes.front();
+	//ImGui::SliderFloat("eye", &t, 1000, 0);
+	//ImGui::Unindent();
+	//ImGui::End();
 	Sprite::PreDraw();
+	UI[1]->Draw();
 	Object3d::PreDraw();
 	text->Draw(dxCommon);
 	Sprite::PreDraw();
-	for (int i = 1; i < SpriteMax; i++) {
+	for (int i = 2; i < SpriteMax; i++) {
 		UI[i]->Draw();
 	}
-	UI[0]->Draw();
+//	UI[0]->Draw();
 
 	Effect->Draw();
 
@@ -159,7 +165,7 @@ void TitleScene::Heavy() {
 }
 
 void TitleScene::CameraUpdate() {
-	rad_frame += 0.001f;
+	rad_frame += 0.0008f;
 	
 	rad= Ease(In, Linear, rad_frame,0, 360);
 	circ_x = Ease(In, Linear, rad_frame, s_camera.x, e_camera.x);

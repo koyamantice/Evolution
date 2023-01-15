@@ -36,6 +36,7 @@ private:
 	//ƒƒ“ƒo•Ï”
 	enum {
 		BackScene,
+		kkskydome,
 		Button,
 		moveTitle,
 		nomoveTitle,
@@ -80,9 +81,8 @@ private:
 	float rad_frame = 0;
 	float rad = 0;
 	float c_x=80;
-	float c_y=40;
+	float c_y=50;
 	float c_z= 0;
-
 
 	std::list<float> eyes{};
 

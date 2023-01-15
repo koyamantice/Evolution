@@ -47,9 +47,9 @@ PauseUI::PauseUI() {
 
 	UI_[CameraOpt] = Sprite::Create(ImageManager::CameraOpt, { 0.0f,0.0f });
 	UI_[CameraOpt]->SetAnchorPoint({ 0.5f,0.5f });
-	UI_[CameraOpt]->SetPosition({ pos.x,pos.y - 180 });
+	UI_[CameraOpt]->SetPosition({ pos.x,pos.y - 190 });
 	UI_[CameraOpt]->SetSize(size[CameraOpt]);// ({440,80});
-	 UI[CameraOpt].reset(UI_[CameraOpt]);
+	UI[CameraOpt].reset(UI_[CameraOpt]);
 
 	 UI_[Normal] = Sprite::Create(ImageManager::Normal, { 0.0f,0.0f });
 	 UI_[Normal]->SetAnchorPoint({ 0.5f,0.5f });

@@ -9,7 +9,7 @@ ImageManager* ImageManager::GetIns() {
 void ImageManager::Load2D() {
 	// テクスチャ読み込み
 	Sprite::LoadTexture(Test, L"Resources/2d/Debug/Test.png");
-	Sprite::LoadTexture(DebugBack, L"Resources/2d/Debug/Back.png");
+	Sprite::LoadTexture(DebugBack, L"Resources/2d/Debug/skydome.png");
 	Sprite::LoadTexture(Black, L"Resources/2d/Effect/Blackfilter.png");
 	Sprite::LoadTexture(Title,L"Resources/2d/Title/TitleBack.png");
 	Sprite::LoadTexture(Clear, L"Resources/2d/PlayUI/GameClear.png");
@@ -44,7 +44,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Intro05, L"Resources/2d/IntroWord/Intro05.png");
 	Sprite::LoadTexture(Intro06, L"Resources/2d/IntroWord/Intro06.png");
 	Sprite::LoadTexture(CameCon, L"Resources/2d/PlayUI/CameCon.png");
-	Sprite::LoadTexture(Rockon, L"Resources/2d/PlayUI/Rockon.png");
+	Sprite::LoadTexture(Con_vis, L"Resources/2d/PlayUI/control.png");
 	Sprite::LoadTexture(HpCover , L"Resources/2d/PlayUI/HpCover2.png");
 	Sprite::LoadTexture(HpGreen, L"Resources/2d/PlayUI/Hp_Green.png");
 	Sprite::LoadTexture(HpRed, L"Resources/2d/PlayUI/Hp_Red.png");
