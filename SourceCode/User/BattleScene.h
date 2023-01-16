@@ -30,7 +30,12 @@ protected:
 	/// 説明表示用の更新
 	/// </summary>
 	virtual void DescriptionUpdate() {};
+	/// <summary>
+	/// クリア更新処理
+	/// </summary>
+	virtual void ClearUpdate() {};
 protected:
+	Input* input = Input::GetInstance();
 
 	std::unique_ptr<PauseUI> pauseUi{};
 	std::unique_ptr<Sprite>	screens[2]{};

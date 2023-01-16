@@ -1,6 +1,9 @@
 #include "ImageManager.h"
 #include <ParticleManager.h>
 
+
+bool ImageManager::load = false;
+
 ImageManager* ImageManager::GetIns() {
 	static ImageManager instans;
 	return &instans;
@@ -85,6 +88,6 @@ void ImageManager::LoadParticle() {
 	ParticleManager::LoadTexture(fire, "smoke1");
 	ParticleManager::LoadTexture(charge, "Charge");
 
-
+	load = true;
 }
 

@@ -1,9 +1,6 @@
 #pragma once
 #include "SceneManager.h"
-#include "Actor.h"
-#include <SourceCode/FrameWork/collision/TouchableObject.h>
 #include <PostEffect.h>
-#include"Touch.h"
 
 /// <summary>
 /// タイトルシーン
@@ -43,6 +40,10 @@ private:
 	/// 説明表示用の更新
 	/// </summary>
 	void DescriptionUpdate() override;
+	/// <summary>
+	/// クリア更新処理
+	/// </summary>
+	void ClearUpdate() override;
 
 	int count = 0;
 	int speed = 1;

@@ -94,6 +94,14 @@ Object3d* Object3d::Create()
 	return object3d;
 }
 
+void Object3d::StaticInitializeCommon(Camera* camera, LightGroup* lightGroup) {
+	// 3Dオブジェクトにカメラをセット
+	Object3d::SetCamera(camera);
+	// 3Dオブエクトにライトをセット
+	Object3d::SetLightGroup(lightGroup);
+
+}
+
 //void Object3d::SetEye(XMFLOAT3 eye)
 //{
 //	Object3d::eye = eye;

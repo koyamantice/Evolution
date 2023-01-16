@@ -55,6 +55,13 @@ public: // 静的メンバ関数
 	static void SetDevice(ID3D12Device* device) { FBXObject3d::device = device; }
 	static void SetCamera(Camera* camera) { FBXObject3d::camera = camera; }
 
+	/// <summary>
+	/// 共通の初期化処理
+	/// </summary>
+	/// <param name="device">デバイス</param>
+	/// <param name="camera">カメラ</param>
+	static void StaticInitializeCommon(ID3D12Device* device, Camera* camera);
+
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;

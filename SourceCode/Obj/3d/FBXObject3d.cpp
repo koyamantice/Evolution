@@ -176,6 +176,18 @@ void FBXObject3d::CreateGraphicsPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
+void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera) {
+
+	// デバイスをセット
+	FBXObject3d::SetDevice(device);
+	// カメラをセット
+	FBXObject3d::SetCamera(camera);
+	// グラフィックスパイプライン生成
+	FBXObject3d::CreateGraphicsPipeline();
+
+
+}
+
 void FBXObject3d::Initialize()
 {
 	HRESULT result;

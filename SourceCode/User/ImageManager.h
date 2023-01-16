@@ -85,6 +85,7 @@ public:
 public:
 	static ImageManager* GetIns();		//Žæ“¾—p
 
+	static bool load;
 	void Load2D();
 	void LoadTex2D();
 	void LoadParticle();

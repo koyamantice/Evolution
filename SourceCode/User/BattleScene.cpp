@@ -107,3 +107,5 @@ void BattleScene::TorchSetup(int color) {
 
 
 }
+
+

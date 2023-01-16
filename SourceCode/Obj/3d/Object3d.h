@@ -95,7 +95,12 @@ public: // 静的メンバ関数
 	static void SetLightGroup(LightGroup* lightGroup) {
 		Object3d::lightGroup = lightGroup;
 	}
-
+	/// <summary>
+	/// 共通の初期化処理
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <param name="lightGroup">ライト</param>
+	static void StaticInitializeCommon(Camera* camera, LightGroup* lightGroup);
 
 private: // 静的メンバ変数
 	// デバイス
