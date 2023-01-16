@@ -10,7 +10,7 @@
 /// タイトルシーン
 /// </summary>
 
-class MapScene : public BaseScene {
+class MapScene : public  BattleScene {
 private:
 	/// <summary>
 	/// 初期化

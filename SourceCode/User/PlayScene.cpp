@@ -13,6 +13,7 @@
 
 void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
+	BattleInit();
 	LoadData();
 	UpdateCommand();
 	for (std::unique_ptr<Touch>& touch : touchs) {
@@ -156,9 +157,9 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
 		partMan->Update();
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
-			Change = true;
+			scene_changer->ChangeStart();
 		}
-		Feed("MAP");
+		scene_changer->ChangeScene("MAP");
 		SkydomeUpdate();
 		ground->Update();
 

@@ -76,6 +76,11 @@ public: // 静的メンバ関数
 	/// <param name="isFlipY">上下反転</param>
 	/// <returns>生成されたスプライト</returns>
 	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
+	
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	/// <returns></returns>
 	static bool Finalize();
 protected: // 静的メンバ変数
 	// テクスチャの最大枚数

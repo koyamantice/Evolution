@@ -9,7 +9,7 @@
 /// タイトルシーン
 /// </summary>
 
-class PlayScene : public BaseScene {
+class PlayScene : public BattleScene {
 public:
 	/// <summary>
 	/// 初期化

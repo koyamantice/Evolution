@@ -15,6 +15,8 @@ std::thread t;
 
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
+
+
 	c_x = sinf(rad * (XM_PI / 180.f)) * circ_x;
 	c_z = cosf(rad * (XM_PI / 180.f)) * circ_z;
 	camera->SetEye({ c_x,c_y,c_z });
@@ -44,17 +46,14 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	sprite4_->SetScale(0.5f);
 	sprite4_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	UI[moveDebug].reset(sprite4_);
-	Change = false;
 
 	Sprite* sprite5_ = Sprite::Create(ImageManager::noDebugMove, { 930.0f,500.0f });
 	sprite5_->SetScale(0.5f);
 	sprite5_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	UI[nomoveDebug].reset(sprite5_);
-	Change = false;
 
 	text = new TitleText();
 	text->Init();
-
 
 
 	//‚ ‚Æ‚Åcsv
@@ -117,7 +116,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 
 
 	if (input->TriggerKey(DIK_SPACE)||input->TriggerButton(input->A)) {
-		Change = true;
+		scene_changer->ChangeStart();
 		switch (nextScene) {
 		case Portal::Title:
 			SceneName = "PLAY";
@@ -130,7 +129,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 			break;
 		}
 	}
-	Feed(SceneName);
+	scene_changer->ChangeScene(SceneName);
 	text->Upda();
 }
 //•`‰æ
@@ -156,7 +155,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	}
 //	UI[0]->Draw();
 
-	Effect->Draw();
+	scene_changer->Draw();
 
 	dxCommon->PostDraw();
 }
@@ -182,8 +181,6 @@ void TitleScene::CameraUpdate() {
 	}
 	c_x=sinf(rad* (XM_PI/180.f)) * circ_x;
 	c_z=cosf(rad* (XM_PI/180.f)) * circ_z;
-
-
 
 	camera->SetEye({c_x,c_y,c_z});
 	camera->Update();

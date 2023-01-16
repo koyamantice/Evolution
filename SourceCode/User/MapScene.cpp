@@ -14,6 +14,7 @@
 
 void MapScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
+	BattleInit();
 	LoadData();
 	UpdateCommand();
 	for (std::unique_ptr<Touch>& touch : touchs) {
@@ -59,10 +60,6 @@ void MapScene::Initialize(DirectXCommon* dxCommon) {
 	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
 	Over.reset(_Over);
 
-	//スプライト生成
-	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
-	FeedBlack.reset(Effect_);
-	FeedBlack->SetColor({ 1,1,1,feedAlpha });
 
 	Sprite* IntroWord_1 = Sprite::Create(ImageManager::Intro01, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	IntroWord[0].reset(IntroWord_1);
@@ -114,9 +111,9 @@ void MapScene::Update(DirectXCommon* dxCommon) {
 		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
 		partMan->Update();
 		if (input->TriggerButton(Input::A)|| input->TriggerButton(Input::B)) {
-			Change = true;
+			scene_changer->ChangeStart();
 		}
-		Feed("MAP");
+		scene_changer->ChangeScene("MAP");
 		SkydomeUpdate();
 		ground->Update();
 		return;

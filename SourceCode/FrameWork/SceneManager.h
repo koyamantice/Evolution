@@ -3,6 +3,7 @@
 #include <memory> 
 
 #include "BaseScene.h"
+#include "BattleScene.h"
 #include "AbstractSceneFactory.h"
 
 

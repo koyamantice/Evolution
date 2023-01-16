@@ -13,6 +13,7 @@ class SceneManager;
 #include "ParticleManager.h"
 #include"ImageManager.h"
 #include <SourceCode/User/PauseUI.h>
+#include <SceneChanger.h>
 /// <summary>
 /// シーン規定
 /// </summary>
@@ -27,27 +28,15 @@ protected:
 protected:
 	LightGroup* lightGroup = nullptr;
 	DebugCamera* camera = { nullptr };
+
 	ParticleManager* partMan = nullptr;
+
 	bool pause = false;
-
-	std::unique_ptr<PauseUI> pauseUi{};
-
-	std::unique_ptr<Sprite>	Screen[2]{};
-	std::unique_ptr<Sprite> FeedBlack{};
-	std::unique_ptr<Sprite> Effect;
-	bool Change = true;
-	float alpha = 0.0f;
 	float frame = 0.0f;
 
-	float feedAlpha = 0.0f;
+	bool Change = false;
 
-	//killクリップ
-	int finishTime = 0;
-
-	bool Intro = false;
-	bool Result = false;
-	bool GameOver = false;
-
+	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 public:
 	virtual ~BaseScene()=default;
 	/// <summary>
@@ -55,29 +44,23 @@ public:
 	/// </summary>
 	virtual void Initialize(DirectXCommon* dxCommon) = 0;
 	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="dxCommon"></param>
-	void InitCommon(DirectXCommon* dxCommon);
-	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
 	virtual void Update(DirectXCommon* dxCommon) = 0;
 	/// <summary>
+	/// 描画
+	/// </summary>
+	virtual void Draw(DirectXCommon* dxCommon) = 0;
+
+	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void UpdaCommon(DirectXCommon* dxCommon);
+	void InitCommon(DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// 終了
 	/// </summary>
 	virtual void Finalize()=0;
-	/// <summary>
-	/// 描画
-	/// </summary>
-	virtual void Draw(DirectXCommon* dxCommon)=0;
-
-	void Feed(const std::string& sceneName);
 };
 

@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include"TitleText.h"
 #include <thread>
+#include "SceneChanger.h"
 
 /// <summary>
 /// タイトルシーン
@@ -46,7 +47,6 @@ private:
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
 	TitleText* text;
-
 	enum Portal {
 		Title=0,
 		Debug,
