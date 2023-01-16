@@ -1,8 +1,8 @@
 #include "SceneFactory.h"
 #include "TitleScene.h"
-#include "PlayScene.h"
+#include "FirstStage.h"
 #include "DebugScene.h"
-#include "MapScene.h"
+#include "SecondStage.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	//éüÇÃÉVÅ[ÉìÇÃçÏê¨
@@ -11,13 +11,13 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 		newScene=new TitleScene();
 	}
 	if (sceneName == "PLAY") {
-		newScene = new PlayScene();
+		newScene = new FirstStage();
 	}
 	if (sceneName == "DEBUG") {
 		newScene = new DebugScene();
 	}
 	if (sceneName=="MAP") {
-		newScene = new MapScene();
+		newScene = new SecondStage();
 	}
 	return newScene;
 }

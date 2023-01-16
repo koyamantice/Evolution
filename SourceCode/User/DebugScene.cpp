@@ -88,7 +88,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 		if (ImGui::Button("SAVE", ImVec2(50, 40))) {
 			save = true;
 		}
-		if (ImGui::Button("PlayScene", ImVec2(100, 30))) {
+		if (ImGui::Button("FirstStage", ImVec2(100, 30))) {
 			SceneManager::GetInstance()->ChangeScene("PLAY");
 		}
 		if (ImGui::Button("TitleScene", ImVec2(100, 30))) {
@@ -124,7 +124,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 		if (ImGui::Button("SAVE", ImVec2(50, 40))) {
 			save = true;
 		}
-		if (ImGui::Button("PlayScene", ImVec2(100, 30))) {
+		if (ImGui::Button("FirstStage", ImVec2(100, 30))) {
 			SceneManager::GetInstance()->ChangeScene("PLAY");
 		}
 		if (ImGui::Button("TitleScene", ImVec2(100, 30))) {

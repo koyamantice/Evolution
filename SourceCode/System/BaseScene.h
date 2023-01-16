@@ -34,8 +34,9 @@ protected:
 	bool pause = false;
 	float frame = 0.0f;
 
-	bool Change = false;
-
+	bool scene_first_change = true;
+	bool intro_skip = false;
+	bool skip_frame = 0.0f;
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 public:
 	virtual ~BaseScene()=default;

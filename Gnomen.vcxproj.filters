@@ -184,11 +184,11 @@
     <ClCompile Include="SourceCode\Obj\ActorComponent.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\PlayScene.cpp">
+    <ClCompile Include="SourceCode\User\FirstStage.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\PauseUI.cpp">
-      <Filter>User\ポーズメニュー</Filter>
+      <Filter>User\ステージに必要</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\Player.cpp">
       <Filter>User\Player</Filter>
@@ -226,7 +226,7 @@
     <ClCompile Include="SourceCode\User\EnemyUI.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\MapScene.cpp">
+    <ClCompile Include="SourceCode\User\SecondStage.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\EnemyAttack.cpp">
@@ -428,14 +428,14 @@
     <ClInclude Include="SourceCode\Obj\ActorComponent.h">
       <Filter>Obj\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\PlayScene.h">
+    <ClInclude Include="SourceCode\User\FirstStage.h">
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\DebugScene.h">
       <Filter>User\デバック</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\PauseUI.h">
-      <Filter>User\ポーズメニュー</Filter>
+      <Filter>User\ステージに必要</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\Player.h">
       <Filter>User\Player</Filter>
@@ -473,7 +473,7 @@
     <ClInclude Include="SourceCode\User\EnemyUI.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\MapScene.h">
+    <ClInclude Include="SourceCode\User\SecondStage.h">
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\EnemyAttack.h">
@@ -599,9 +599,6 @@
     <Filter Include="User\デバック">
       <UniqueIdentifier>{d6a6130d-88fb-44e9-b239-382c7f4719a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="User\ポーズメニュー">
-      <UniqueIdentifier>{0012f487-6006-4812-b40d-62da62a658da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="User\Player">
       <UniqueIdentifier>{d7e0ad70-567d-4790-8c47-3debf3fd1da4}</UniqueIdentifier>
     </Filter>
@@ -613,6 +610,9 @@
     </Filter>
     <Filter Include="User\導入">
       <UniqueIdentifier>{6212de8a-f870-441b-81a2-3872f2e15771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\ステージに必要">
+      <UniqueIdentifier>{0012f487-6006-4812-b40d-62da62a658da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

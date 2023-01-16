@@ -1,47 +1,45 @@
-#include "PlayScene.h"
-#include "SceneManager.h"
+#include"SecondStage.h"
+#include"SceneManager.h"
 #include "AudioManager.h"
 #include "input.h"
-#include <string>
-#include "ModelManager.h"
+#include<string>
+#include"ImageManager.h"
+#include"ModelManager.h"
 #include <TisGame.h>
-#include "Player.h"
-#include "PlayerUI.h"
+#include"Player.h"
+#include"PlayerUI.h"
 #include"Enemy.h"
 #include <SourceCode/Common/Easing.h>
 #include"ActorManager.h"
 
-void PlayScene::Initialize(DirectXCommon* dxCommon) {
+void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	BattleInit();
 	LoadData();
 	UpdateCommand();
 	for (std::unique_ptr<Touch>& touch : touchs) {
-		touch->SetColor(Touch::FireColor::f_green);
+		touch->SetColor(Touch::FireColor::f_blue);
 	}
-
 	//スプライト生成
 	ActorManager::GetInstance()->AttachActor("Player");
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
-	ActorManager::GetInstance()->AttachActor("Enemy");
+	ActorManager::GetInstance()->AttachActor("Enemy_Bee");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);
+
 	for (int i = 0; i < 10; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
 	for (int i = 0; i < 10; i++) {
 		ActorManager::GetInstance()->AttachBullet("Green");
 	}
-
-
 	Object3d* Sky{};
 	Sky = new Object3d();
 	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
 	Sky->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
-	Sky->SetColor({ 0.3f,0.3f,0.3f,1.0f });
 	Sky->Initialize();
 	kSkydome.reset(Sky);
 
@@ -50,47 +48,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	kGround->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kGround));
 	kGround->SetPosition(XMFLOAT3(-50, -0.5f, 50));
 	kGround->SetScale(XMFLOAT3(5, 5, 5));
+	//kGround->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
+	//kGround->SetRotation(XMFLOAT3(0, 180, 0));
 	ground.reset(kGround);
-
-	const int w = 256;
-	const int h = 256;
-	const int l = 6;
-	for (int i = 0; i < 6; i++) {
-		Sprite* CameCon_[6]{};
-		CameCon_[i] = Sprite::Create(ImageManager::CameCon, { 0,0 });
-		Camecon[i].reset(CameCon_[i]);
-		int number_index_y = i / l;
-		int number_index_x = i % l;
-		Camecon[i]->SetTextureRect(
-			{ static_cast<float>(number_index_x) * w, static_cast<float>(number_index_y) * h },
-			{ static_cast<float>(w), static_cast<float>(h) });
-		Camecon[i]->SetSize({ 128,128 });
-		Camecon[i]->SetScale(1.0f);
-		Camecon[i]->SetAnchorPoint({ 0.5f,0.5f });
-	}
-	Camecon[0]->SetPosition({ base.x + Camecon[0]->GetSize().x,base.y });
-	Camecon[1]->SetPosition({ base.x + Camecon[1]->GetSize().x,base.y });
-	Camecon[2]->SetPosition({ base.x + Camecon[2]->GetSize().x,base.y });
-	Camecon[3]->SetPosition({ base.x - Camecon[3]->GetSize().x,base.y });
-	Camecon[4]->SetPosition({ base.x - Camecon[4]->GetSize().x,base.y });
-	Camecon[5]->SetPosition(base);
-	const int w_2 = 512;
-
-	const int p = 2;
-	for (int i = 0; i < 2; i++) {
-		Sprite* con_vis_[2]{};
-		con_vis_[i] = Sprite::Create(ImageManager::Con_vis, { 200,360 });
-		con_vis[i].reset(con_vis_[i]);
-		int number_index_y = i / p;
-		int number_index_x = i % p;
-		con_vis[i]->SetTextureRect(
-			{ static_cast<float>(number_index_x) * w_2, static_cast<float>(number_index_y) * h },
-			{ static_cast<float>(w_2), static_cast<float>(h) });
-		con_vis[i]->SetSize({ 128,64 });
-		con_vis[i]->SetAnchorPoint({ 0.5f,0.5f });
-	}
-	con_vis[0]->SetPosition({70,520});
-	con_vis[1]->SetPosition({70,600});
 
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
@@ -100,10 +60,6 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
 	Over.reset(_Over);
 
-	//スプライト生成
-	Sprite* Effect_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
-	FeedBlack.reset(Effect_);
-	FeedBlack->SetColor({ 1,1,1,feedAlpha });
 
 	Sprite* IntroWord_1 = Sprite::Create(ImageManager::Intro01, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	IntroWord[0].reset(IntroWord_1);
@@ -120,6 +76,9 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 
 	camera->SetTarget(player_shadow->GetPosition());
 
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::charge);
+
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
@@ -128,19 +87,14 @@ void PlayScene::Initialize(DirectXCommon* dxCommon) {
 
 	dis.x = distance.x;
 	dis.y = distance.y;
-
-	partMan = new ParticleManager();
-	partMan->Initialize(ImageManager::charge);
-
-
 }
 //開放処理
-void PlayScene::Finalize() {
+void SecondStage::Finalize() {
 	//３ｄのモデルのデリート
 	ActorManager::GetInstance()->Finalize();
 }
 //更新
-void PlayScene::Update(DirectXCommon* dxCommon) {
+void SecondStage::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
 	for (std::unique_ptr<Touch>& touch : touchs) {
 		touch->Update();
@@ -149,53 +103,44 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 		ResultCamera(count);
 		count++;
 		ActorManager::GetInstance()->ResultUpdate(count);
-		const float rnd_vel = 0.5f;
+		const float rnd_vel = 1.4f;
 		XMFLOAT3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
+		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
 		partMan->Update();
-		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
+		if (input->TriggerButton(Input::A)|| input->TriggerButton(Input::B)) {
 			scene_changer->ChangeStart();
 		}
 		scene_changer->ChangeScene("MAP");
 		SkydomeUpdate();
 		ground->Update();
-
 		return;
 	}
 	if (Intro) {
 		IntroCamera(count);
-		if (Change) {
+		if (scene_first_change) {
 			if (introFrame < 1.0f) {
 				introFrame += 0.01f;
 			} else {
-				Change = false;
+				scene_first_change = false;
 			}
-			feedAlpha = Ease(In, Cubic, introFrame, 1, 0);
-			FeedBlack->SetColor({ 1,1,1,feedAlpha });
+			filter_alpha = Ease(In, Cubic, introFrame, 1, 0);
+			filter_first->SetColor({ 1,1,1,filter_alpha });
 		}
-		ActorManager::GetInstance()->IntroUpdate(count);
-		kSkydome->Update();
-		ground->Update();
-		if (count > 1200) {
-			FeedBlack->SetColor({ 1,1,1,0 });
+		count += speed;
+		if (count > 900) {
+			ActorManager::GetInstance()->IntroUpdate(9999);
+			filter_first->SetColor({ 1,1,1,0 });
 			count = 0;
 			Intro = false;
 		}
-		count += speed;
-		if (input->PushButton(input->START)) {
-			if (count % 2 == 1) {
-				count--;
-			}
-			speed = 2;
-		}
-		if (count % 200 == 0) {
-			if (nowWord != 5) {
-				nowWord++;
-			}
-		}
+		player_shadow->IntroUpdate(count);
+		enemy_shadow->IntroUpdate(count);
+		SkydomeUpdate();
+		ground->Update();
+
 		return;
 	}
 	if (enemy_shadow->GetPause()) {
@@ -231,70 +176,31 @@ void PlayScene::Update(DirectXCommon* dxCommon) {
 			pauseUi->SetEndFlag(false);
 		}
 	}
-	animafrate++;
-	if (animafrate == 30) {
-		if (animation < 2 && animation > 0) {
-			animation += vec;
-		} else if (animation == 2) {
-			animation = 1;
-			vec *= -1;
-		} else if (animation == 0) {
-			animation = 1;
-			vec *= -1;
-		}
-		if (tapanima == 3) {
-			tapanima = 4;
-		} else {
-			tapanima = 3;
-		}
-		animafrate = 0;
-	}
-	if (cameraExplanation) {
-		if (camera_frame < 1.0f) {
-			camera_frame += 0.005f;
-		} else {
-			camera_frame = 1.0f;
-		}
-		XMFLOAT2 siz{};
-		for (int i = 0; i < 6; i++) {
-			siz.x = Ease(In, Quad, camera_frame, 128, 64);
-			siz.y = Ease(In, Quad, camera_frame, 128, 64);
-			Camecon[i]->SetSize(siz);
-		}
-		base.x = Ease(In, Quad, camera_frame, 640, 90);
-		base.y = Ease(In, Quad, camera_frame, 530, 680);
-		Camecon[0]->SetPosition({ base.x + siz.x,base.y });
-		Camecon[1]->SetPosition({ base.x + siz.x,base.y });
-		Camecon[2]->SetPosition({ base.x + siz.x,base.y });
-		Camecon[3]->SetPosition({ base.x - siz.x,base.y });
-		Camecon[4]->SetPosition({ base.x - siz.x,base.y });
-		Camecon[5]->SetPosition({ base.x       ,base.y });
 
-	}
 	ActorManager::GetInstance()->Update();
 	SkydomeUpdate();
 	ground->Update();
 	partMan->Update();
 #pragma region "Clear"
-	if (!enemy_shadow->GetIsActive()) {
-		goal_shadow->SetIsActive(true);
-		if (goal_shadow->GetPause() || player_shadow->GetPause()) {
-			Result = true;
-			clear = true;
-		}
+if (!enemy_shadow->GetIsActive()) {
+	goal_shadow->SetIsActive(true);
+	if (goal_shadow->GetPause()) {
+		Result = true;
+		clear = true;
 	}
+}
 #pragma endregion
 #pragma region "GameOver"
-	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
-		GameOver = true;
-		if (input->TriggerButton(Input::A)) {
-			SceneManager::GetInstance()->ChangeScene("TITLE");
-		}
+if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
+	GameOver = true;
+	if (input->TriggerButton(Input::A)) {
+		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
+}
 #pragma endregion
 }
 
-void PlayScene::CameraUpda() {
+void SecondStage::CameraUpda() {
 	Input* input = Input::GetInstance();
 	if (Reset) {
 		ResetCamera();
@@ -337,14 +243,6 @@ void PlayScene::CameraUpda() {
 			angleframe = 0.0f;
 			firstangle = angle;
 			endangle = player_shadow->GetRotation().y;
-			if (abs(endangle-firstangle)>=180) {
-				if (endangle > firstangle) {
-					firstangle -= 360;
-				} else {
-					endangle += 360;
-				}
-			}
-
 			firstdis = distance;
 			Reset = true;
 		}
@@ -355,36 +253,28 @@ void PlayScene::CameraUpda() {
 	camera->Update();
 }
 
-void PlayScene::IntroCamera(int Timer) {
-	if (Timer <= 720) {
-		if (speed == 1) {
-			angle += 0.5f;
-			if (IntroHight > hight) {
-				IntroHight -= 0.075f;
-			} else {
-				IntroHight = hight;
-			}
-		} else {
-			angle += 1.0f;
-			if (IntroHight > hight) {
-				IntroHight -= 0.150f;
-			} else {
-				IntroHight = hight;
-			}
-		}
-	}
+void SecondStage::IntroCamera(int Timer) {
+
+
+
+
+
+
+
+
+
+
 
 	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
 	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
 	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
 	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
-	player_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle, 7));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,IntroHight,player_shadow->GetPosition().z + distance.y });
+	camera->SetTarget({0,5,0});
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,10,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
-void PlayScene::ResultCamera(int Timer) {
+void SecondStage::ResultCamera(int Timer) {
 	if (Timer <= 720) {
 		angle += 0.5f;
 	}
@@ -395,18 +285,16 @@ void PlayScene::ResultCamera(int Timer) {
 	camera->Update();
 }
 
+
 //描画
-void PlayScene::Draw(DirectXCommon* dxCommon) {
+void SecondStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	ImGui::Begin("playscene");
-	ImGui::SliderFloat("firstangle", &firstangle, 0, 360);
-	ImGui::SliderFloat("endangle", &endangle, 0, 360);
-	ImGui::SliderFloat("Anglet", &angle, 0, 360);
-	float y= player_shadow->GetRotation().y;
-	ImGui::SliderFloat("rot", &y, 0, 360);
-
-	ImGui::End();
+	//ImGui::Begin("SecondStage");
+	//ImGui::SliderFloat("bulletX", &distance.x, 0, 360);
+	//ImGui::SliderFloat("bulletY", &distance.y, 0, 360);
+	//ImGui::SliderFloat("Anglet", &angle, 0, 360);
+	//ImGui::End();
 	Object3d::PreDraw();
 	kSkydome->Draw();
 	ground->Draw();
@@ -417,28 +305,20 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->Draw(dxCommon);
 	partMan->Draw(alphaBle);
 	Sprite::PreDraw();
-	if (Change) {
-		FeedBlack->Draw();
+	if (scene_first_change) {
+		filter_first->Draw();
 	}
 	if (clear) {
 		Clear->Draw();
 	}
 	if (Intro) {
-		Screen[0]->Draw();
-		Screen[1]->Draw();
-		IntroWord[nowWord]->Draw();
-	} else {
-		con_vis[0]->Draw();
-		con_vis[1]->Draw();
-		if (!clear) {
-			Camecon[animation]->Draw();
-			Camecon[tapanima]->Draw();
-			Camecon[5]->Draw();
-		}
+		screens[0]->Draw();
+		screens[1]->Draw();
+		//IntroWord[nowWord]->Draw();
 	}
 	if (Result) {
-		Screen[0]->Draw();
-		Screen[1]->Draw();
+		screens[0]->Draw();
+		screens[1]->Draw();
 		Clear->Draw();
 	}
 	if (GameOver) {
@@ -447,10 +327,26 @@ void PlayScene::Draw(DirectXCommon* dxCommon) {
 	if (pause) {
 		pauseUi->Draw();
 	}
+	//Demo->Draw();
+	//miniMap->PreDraw();
+	//miniMap->Draw(dxCommon->GetCmdList());
+	//miniMap->PostDraw();
+
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+
+	//dxCommon->PreDraw();
+	//ImGui::Begin("test");
+	//float F = FPSManager::GetInstance()->GetFps();
+	//ImGui::SliderFloat("fps", &F, 120, 0);
+	//ImGui::SliderFloat("cameraPos.y", &A, 35000, 0);
+	//ImGui::Unindent();
+	//ImGui::End();
+	//postEffect->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
+
 }
 
-void PlayScene::ResetCamera() {
+void SecondStage::ResetCamera() {
 	player_shadow->SetCanMove(false);
 
 	if (angleframe < 1.0f) {
@@ -470,12 +366,21 @@ void PlayScene::ResetCamera() {
 
 	distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
 	distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);
-	camera->SetTarget(player_shadow->GetCameraPos(angle, 7));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
+	camera->SetTarget(player_shadow->GetCameraPos(angle));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + 10.0f,player_shadow->GetPosition().z + distance.y });
 	camera->Update();
 }
 
-void PlayScene::SkydomeUpdate() {
+float SecondStage::RandHeight(const float& base) {
+	const float& rnd_vel = 0.95f;
+	float Rand= (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	float itr = 0;
+	itr = base + Rand;
+
+	return itr;
+}
+
+void SecondStage::SkydomeUpdate() {
 	float rot = kSkydome->GetRotation().y;
 	rot += 0.1f;
 
@@ -484,13 +389,13 @@ void PlayScene::SkydomeUpdate() {
 	kSkydome->Update();
 }
 
-void PlayScene::SkydomeSunny(int time) {
+void SecondStage::SkydomeSunny(int time) {
 
 
 
 }
 
-void PlayScene::LoadData() {
+void SecondStage::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/touchpop.csv");
 	assert(file.is_open());
@@ -498,7 +403,7 @@ void PlayScene::LoadData() {
 	file.close();
 }
 
-void PlayScene::UpdateCommand() {
+void SecondStage::UpdateCommand() {
 	std::string line;
 	while (getline(touch_pop, line)) {
 		//解析しやすくする
