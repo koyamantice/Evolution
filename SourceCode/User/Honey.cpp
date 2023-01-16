@@ -29,13 +29,12 @@ void Honey::OnInit() {
 
 void Honey::OnUpda() {
 	XMFLOAT3 pos = obj->GetPosition();
-		for (int j = 0; j < 6; j++) {
-			missions[0][j]->Update();
-			missions[0][j]->SetPosition({pos.x,pos.y+6.5f,pos.z});
-			missions[1][j]->Update();
-			missions[1][j]->SetPosition({ pos.x,pos.y + 3.5f,pos.z });
-
-		}
+	for (int i = 0; i < 6; i++) {
+		missions[0][i]->Update();
+		missions[0][i]->SetPosition({pos.x,pos.y+6.5f,pos.z});
+		missions[1][i]->Update();
+		missions[1][i]->SetPosition({ pos.x,pos.y + 3.5f,pos.z });
+	}
 	slash->Update();
 	slash->SetPosition({ pos.x,pos.y + 5.0f,pos.z });
 
@@ -131,6 +130,7 @@ void Honey::WaitUpda() {
 	if(pos.y < 0.0f){
 		pos.y += 0.02f;
 	} else {
+		if (stock > 6) { stock = 5; }
 		if (collide) {
 			driver[ride_num] = ActorManager::GetInstance()->SetActionBullet(obj->GetPosition());
 			if (driver[ride_num] != nullptr) {
@@ -140,8 +140,7 @@ void Honey::WaitUpda() {
 			}
 			collide = false;
 		}
-
-		if (stock >= 5 && !pause) {
+		if (stock == 5 && !pause) {
 			stock = 5;
 			first_pos = pos;
 			pos.y = 3.0f;

@@ -66,7 +66,7 @@ private:
 	XMFLOAT2 bar_pos = {};
 	int nowBar = 0;
 	int cameraNow = 0;		
-	bool reverse_camera = false;
+	static bool reverse_camera;
 	bool ease = false;
 	float frame = 0;
 	XMFLOAT2 pos={640,400};

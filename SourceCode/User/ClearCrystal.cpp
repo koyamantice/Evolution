@@ -13,6 +13,9 @@ void ClearCrystal::OnInit() {
 	InOut_->SetColor({ 1.0f,1.0f,1.0f ,1.0f });
 	in_out.reset(InOut_);
 
+	partMan = new ParticleManager();
+	partMan->Initialize(ImageManager::fire);
+
 }
 
 void ClearCrystal::OnUpda() {
@@ -36,6 +39,7 @@ void ClearCrystal::OnUpda() {
 	}
 	if (pause) {
 	}
+	partMan->Update();
 	in_out->Update();
 }
 void ClearCrystal::OnCollision(const std::string& Tag) {
@@ -49,6 +53,7 @@ void ClearCrystal::OnCollision(const std::string& Tag) {
 
 }
 void ClearCrystal::OnDraw(DirectXCommon* dxCommon) {
+	partMan->Draw(addBle);
 }
 
 void ClearCrystal::OnFinal() {

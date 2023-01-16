@@ -3,6 +3,9 @@
 #include"Easing.h"
 #include <SceneManager.h>
 
+
+bool PauseUI::reverse_camera=false;
+
 PauseUI::PauseUI() {
 	Sprite* UI_[Max]{};
 
@@ -40,7 +43,7 @@ PauseUI::PauseUI() {
 
 	UI_[Bar] = Sprite::Create(ImageManager::Bar, { 0.0f,0.0f });
 	UI_[Bar]->SetAnchorPoint({ 0.5f,0.5f });
-	UI_[Bar]->SetPosition({ pos.x,pos.y - 110 });
+	UI_[Bar]->SetPosition({ pos.x,pos.y - 70 });
 	UI_[Bar]->SetSize(size[Bar]);// ({440,80});
 	UI[Bar].reset(UI_[Bar]);
 
@@ -53,15 +56,25 @@ PauseUI::PauseUI() {
 
 	 UI_[Normal] = Sprite::Create(ImageManager::Normal, { 0.0f,0.0f });
 	 UI_[Normal]->SetAnchorPoint({ 0.5f,0.5f });
-	 UI_[Normal]->SetPosition({ pos.x-150,pos.y - 70 });
+	 UI_[Normal]->SetPosition({ pos.x-150,pos.y - 80 });
 	 UI_[Normal]->SetSize(size[Normal]);// ({440,80});
 	 UI[Normal].reset(UI_[Normal]);
 
 	 UI_[Reverse] = Sprite::Create(ImageManager::Reverse, { 0.0f,0.0f });
 	 UI_[Reverse]->SetAnchorPoint({ 0.5f,0.5f });
-	 UI_[Reverse]->SetPosition({ pos.x+150,pos.y - 70 });
+	 UI_[Reverse]->SetPosition({ pos.x+150,pos.y - 80 });
 	 UI_[Reverse]->SetSize(size[Reverse]);// ({440,80});
-	  UI[Reverse].reset(UI_[Reverse]);
+	 UI[Reverse].reset(UI_[Reverse]);
+
+	 //UI”ñ•\Ž¦
+
+
+
+
+
+
+
+
 
 	  UI_[OptBack] = Sprite::Create(ImageManager::OptionBack, { 0.0f,0.0f });
 	  UI_[OptBack]->SetAnchorPoint({ 0.5f,0.5f });
@@ -71,7 +84,7 @@ PauseUI::PauseUI() {
 
 	  UI_[CameraBar] = Sprite::Create(ImageManager::CameraBar, { 0.0f,0.0f });
 	  UI_[CameraBar]->SetAnchorPoint({ 0.5f,0.5f });
-	  UI_[CameraBar]->SetPosition({ pos.x - 150,pos.y - 70 });
+	  UI_[CameraBar]->SetPosition({ pos.x - 150,pos.y - 80 });
 	  UI_[CameraBar]->SetSize(size[CameraBar]);// ({440,80});
 	   UI[CameraBar].reset(UI_[CameraBar]);
 
@@ -117,6 +130,7 @@ void PauseUI::Reset() {
 		size[i] = { 0,0 };
 		UI[i]->SetSize(size[i]);
 	}
+	UI[Bar]->SetPosition({ pos.x,pos.y - 70 });
 	frame = 0;
 	ease = true;
 	nowBar = 0;
@@ -253,10 +267,10 @@ void PauseUI::OptionSystem() {
 
 	switch (cameraNow) {
 	case 0:
-		bar_pos = { pos.x - 150,pos.y - 70 };
+		bar_pos = { pos.x - 150,pos.y - 80 };
 		break;
 	case 1:
-		bar_pos = { pos.x + 150,pos.y - 70 };
+		bar_pos = { pos.x + 150,pos.y - 80 };
 		break;
 	case 2:
 		bar_pos = { pos.x,pos.y + 180 };

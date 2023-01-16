@@ -280,9 +280,10 @@ void Bullet::Follow2Enemy() {
 	position.z = (enemy->GetPosition().z - pos.z);
 	vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.3f;
 	vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.3f;
-	pos.x -= vel_follow.x;
-	pos.z += vel_follow.y;
-
+	if (powf(position.x, 2) + powf(position.z, 2) > 2) {
+		pos.x -= vel_follow.x;
+		pos.z += vel_follow.y;
+	}
 	fbxObj->SetPosition(pos);
 	fbxObj->SetRotation({0 ,DirRotation(enemy->GetPosition()),0 });
 }

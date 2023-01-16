@@ -209,7 +209,7 @@ void ActorManager::DamageBullet(XMFLOAT3 pos, float radius) {
 		if (bullet->GetCommand() == Bullet::command::Wait) { continue; }
 		XMFLOAT3 itrPos = bullet->GetPosition();
 		if (itrPos.y > 0.1f) { continue; }
-		if (Collision::CircleCollision(pos.x, pos.z, 1.0f, itrPos.x, itrPos.z, radius)) {
+		if (Collision::CircleCollision(pos.x, pos.z, radius, itrPos.x, itrPos.z,1.0f)) {
 			bullet->SetDeadFlag(true);
 		}
 	}

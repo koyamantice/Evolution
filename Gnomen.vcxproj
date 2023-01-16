@@ -216,6 +216,7 @@
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />
     <ClCompile Include="SourceCode\User\Aim.cpp" />
+    <ClCompile Include="SourceCode\User\BattleScene.cpp" />
     <ClCompile Include="SourceCode\User\Bullet.cpp" />
     <ClCompile Include="SourceCode\User\BulletGreen.cpp" />
     <ClCompile Include="SourceCode\User\BulletRed.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="SourceCode\System\SceneFactory.h" />
     <ClInclude Include="SourceCode\TisGame.h" />
     <ClInclude Include="SourceCode\User\Aim.h" />
+    <ClInclude Include="SourceCode\User\BattleScene.h" />
     <ClInclude Include="SourceCode\User\Bullet.h" />
     <ClInclude Include="SourceCode\User\BulletGreen.h" />
     <ClInclude Include="SourceCode\User\BulletRed.h" />

@@ -72,7 +72,8 @@ public:
 		kMission_3,
 		kMission_4,
 		kMission_5,
-		kMission_s
+		kMission_s,
+		kpredicted,
 	};
 	enum particleName {
 		nul = 0,

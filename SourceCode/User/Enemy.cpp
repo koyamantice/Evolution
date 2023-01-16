@@ -100,6 +100,7 @@ void Enemy::OnInit() {
 	partMan = new ParticleManager();
 	partMan->Initialize(ImageManager::nul);
 
+	fbxObject3d->PlayAnimation(0);
 }
 
 void Enemy::OnUpda() {
@@ -143,13 +144,39 @@ void Enemy::PhaseMove() {
 	case Actor::Phase::ATTACK:
 		AttackUpda();
 		break;
+	case Actor::Phase::WAIT:
+		WaitUpda();
+		break;
+
 	default:
 		break;
 	}
 }
 
 void Enemy::UnguardUpda() {
-	ChangeCommand(0, ATTACK, 3);
+	if (fbxObject3d->GetIsFinish()) { animecount++; }
+	if(animecount >= 2) {
+		fbxObject3d->StopAnimation();
+		waitTimer++;
+		Attack->SetPredict(true);
+		if (waitTimer == 240) {
+			Attack->SetPredict(false);
+			command = Actor::Phase::ATTACK;
+			waitTimer = 0;
+			scaframe = 0.0f;
+			animecount = 0;
+			return;
+		}
+
+		scale = Ease(In, Quad, scaframe, 25.0f, 0.0f);
+		if (scaframe < 1.0f) {
+			scaframe += 0.016f;
+		} else {
+			scaframe = 0.0f;
+		}
+		scale = Ease(In, Quad, scaframe, 25.0f, 16.0f);
+		fbxObject3d->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+	}
 }
 
 void Enemy::AttackUpda() {
@@ -176,6 +203,27 @@ void Enemy::AttackUpda() {
 	fbxObject3d->SetPosition(pos);
 }
 
+void Enemy::WaitUpda() {
+	waitTimer++;
+	Attack->SetPredict(true);
+	if (waitTimer == 240) {
+		Attack->SetPredict(false);
+		command = Actor::Phase::ATTACK;
+		waitTimer = 0;
+		return;
+	}
+
+	scale = Ease(In, Quad, scaframe, 25.0f, 0.0f);
+	if (scaframe < 1.0f) {
+		scaframe += 0.016f;
+	} else {
+		scaframe = 0.0f;
+	}
+	scale = Ease(In, Quad, scaframe, 25.0f, 16.0f);
+	fbxObject3d->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+
+}
+
 void Enemy::LifeCommon() {
 	if (hp < 0.0f) {
 		if (command != DEAD) {
@@ -187,13 +235,13 @@ void Enemy::LifeCommon() {
 		XMFLOAT3 sca = fbxObject3d->GetScale();
 		fbxObject3d->ResetAnimation();
 		rot.y++;
-		scale = Ease(In,Quad, scaframe,1.0f,0.0f);
+		scale = Ease(In,Quad, scaframe,25.0f,0.0f);
 		if (scaframe < 1.0f) {
 			scaframe += 0.01f;
 		} else {
 			isActive = false;
 		}
-		fbxObject3d->SetScale({scale * 0.01f,scale * 0.01f,scale * 0.01f });
+		fbxObject3d->SetScale({scale * 0.001f,scale * 0.001f,scale * 0.001f });
 		fbxObject3d->SetRotation(rot);
 	}
 }
@@ -213,3 +261,4 @@ void Enemy::ChangeCommand(const int& num, const int& command, const int& count) 
 		MotionCount = 0;
 	}
 }
+

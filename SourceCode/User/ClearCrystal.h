@@ -26,7 +26,7 @@ private:
 	void ResultOnUpdate(const int& Timer)override;
 	void OnCollision(const std::string& Tag)override;
 	Actor* player=nullptr;
-
+	ParticleManager* partMan = nullptr;
 	std::unique_ptr<Object2d> in_out = nullptr;
 	bool isCollide = false;
 	float frame = 0.0f;

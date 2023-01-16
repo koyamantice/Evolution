@@ -1,7 +1,10 @@
 #pragma once
+
+#include <memory> 
+
 #include "BaseScene.h"
 #include "AbstractSceneFactory.h"
-#include <memory> 
+
 
 /// <summary>
 /// シーンマネージャー
@@ -9,37 +12,44 @@
 class SceneManager {
 public:
 	static SceneManager* GetInstance();
-/// <summary>
-/// 更新
-/// </summary>
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update(DirectXCommon* dxCommon);
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon);
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	bool IsEndRequst() { return endResquest_; }
-
-	void SetEnd(bool endResquest_) { this->endResquest_ = endResquest_; }
+	//シーン終了リクエスト
+	const bool& IsEndRequst() { return endResquest_; }
+	void SetEnd(const bool& endResquest_) { this->endResquest_ = endResquest_; }
 
 public:
-	//次シーン予約
+	//次シーンに変更します。
 	void ChangeScene(const std::string& sceneName);
-
+	//シーンファクトリーをセットする
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
+
 private:
+
+	//シーン終了
 	bool endResquest_ = false;
 	//今のシーン
 	BaseScene* scene_ = nullptr;
 	//次のシーン
 	BaseScene* nextScene_ = nullptr;
-
+	//シーンファクトリー
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 
-	~SceneManager()=default;
-	SceneManager()=default;
-	SceneManager(const SceneManager&)=delete;
-	void operator =(const SceneManager&)=delete;
+private:
+	~SceneManager() = default;
+	SceneManager() = default;
+	SceneManager(const SceneManager&) = delete;
+	void operator =(const SceneManager&) = delete;
 };
 

@@ -253,18 +253,25 @@
     <ClCompile Include="SourceCode\User\Enemy_Bee.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\System\BaseScene.cpp">
-      <Filter>System\scene</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\Honey.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\LevelLoader.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleEmitter.cpp" />
-    <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp" />
     <ClCompile Include="Touch.cpp" />
+    <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp">
+      <Filter>Obj\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\BaseScene.cpp">
+      <Filter>User\プレイシーン</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\BattleScene.cpp">
+      <Filter>User\プレイシーン</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -371,9 +378,6 @@
       <Filter>System\scene</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\SceneFactory.h">
-      <Filter>System\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\System\BaseScene.h">
       <Filter>System\scene</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\FrameWork\AudioManager.h">
@@ -499,9 +503,19 @@
     <ClInclude Include="SourceCode\System\LevelLoader.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleEmitter.h" />
-    <ClInclude Include="SourceCode\Obj\2d\Object2d.h" />
     <ClInclude Include="Touch.h" />
+    <ClInclude Include="SourceCode\Obj\2d\Object2d.h">
+      <Filter>Obj\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\BaseScene.h">
+      <Filter>User\プレイシーン</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\BattleScene.h">
+      <Filter>User\プレイシーン</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

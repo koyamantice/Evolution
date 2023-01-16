@@ -41,7 +41,7 @@ void TitleText::Init() {
 	Object3d* door_ = new Object3d();
 	door_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDoor));
 	door_->Initialize();
-	door_->SetPosition({2,0,12});
+	door_->SetPosition({1.0f,0,12.0f});
 	door_->SetRotation({ 0,90,0 });
 	door_->SetScale({ 4.0f,4.0f,4.0f });
 	door.reset(door_);

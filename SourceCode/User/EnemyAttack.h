@@ -22,11 +22,15 @@ public:
 
 	bool Run();
 	void Stamp(XMFLOAT3 pos);
+
+	void SetPredict(const bool& predict) { this->predict = predict; }
 private:
 	bool burning = false;
 	float scale = 0.0f;
 	float effectRate = 0.0f;
 	std::unique_ptr<Object2d> Explo = nullptr;
+	std::unique_ptr<Object2d> Predicted = nullptr;
+	bool predict = false;
 	ParticleManager* partMan = nullptr;
 
 };

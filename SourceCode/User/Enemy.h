@@ -32,6 +32,8 @@ protected:
 	void PhaseMove();
 	void UnguardUpda();
 	void AttackUpda();
+	void WaitUpda();
+	
 	//
 	void LifeCommon();
 	void ChangeCommand(const int& num = 0, const int& command = 0, const int& count = 1);
@@ -44,6 +46,8 @@ protected:
 	const float accel = speed / 30.0f;
 	std::unique_ptr<Object2d> Shadow = nullptr;
 
+	int animecount = 0;
+	bool standby = false;
 
 	float waitTimer = 0;
 	float vel = 0;

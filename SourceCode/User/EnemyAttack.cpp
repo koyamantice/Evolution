@@ -18,6 +18,15 @@ void EnemyAttack::Init() {
 	Explo_->SetRotation({ 90,0,0 });
 	Explo.reset(Explo_);
 
+	Object2d* Predicted_ = Object2d::Create(ImageManager::kpredicted, { 0,0,0 },
+		{ 4,4,4 }, { 1,1,1,0.5f});
+	//Predicted_->SetIsBillboard(true);
+	Predicted_->Object2dCreate();
+	Predicted_->SetPosition({ 0,0.02f,0 });
+	Predicted_->SetRotation({ 90,0,0 });
+	Predicted.reset(Predicted_);
+
+
 	partMan = new ParticleManager();
 	partMan->Initialize(ImageManager::nul);
 
@@ -25,6 +34,7 @@ void EnemyAttack::Init() {
 
 void EnemyAttack::Upda() {
 	Explo->Update();
+	Predicted->Update();
 	partMan->Update();
 	if (burning) {
 		XMFLOAT3 pos = Explo->GetPosition();
@@ -38,8 +48,8 @@ void EnemyAttack::Upda() {
 		acc.y = -(float)vel.y / 10.0f;
 		//acc.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		partMan->Add(30, pos, vel, acc, 1.5, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
-		scale = Ease(In, Linear, effectRate, 1.5f, 4.0f);
-		ActorManager::GetInstance()->DamageBullet(pos, scale);
+		scale = Ease(In, Linear, effectRate, 2.5f, 5.0f);
+		ActorManager::GetInstance()->DamageBullet(pos, 10);
 		Explo->SetScale({ scale,scale,scale });
 		if (effectRate < 1.0f) {
 			effectRate += 0.04f;
@@ -57,6 +67,10 @@ void EnemyAttack::Draw() {
 		Object2d::PreDraw();
 		Explo->Draw();
 		partMan->Draw(addBle);
+	}
+	if (predict) {
+		Object2d::PreDraw();
+		Predicted->Draw();
 	}
 }
 
