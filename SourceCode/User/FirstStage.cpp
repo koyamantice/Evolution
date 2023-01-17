@@ -112,24 +112,9 @@ void FirstStage::Finalize() {
 }
 //XV
 void FirstStage::Update(DirectXCommon* dxCommon) {
-	Input* input = Input::GetInstance();
 #pragma region "Clear"
 	if (clear) {
-		ResultCamera(count);
-		count++;
-		ActorManager::GetInstance()->ResultUpdate(count);
-		const float rnd_vel = 0.5f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
-		partMan->Update();
-		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
-			scene_changer->ChangeStart();
-		}
-		scene_changer->ChangeScene("MAP");
-		FieldUpdate();
+		ClearUpdate();
 		return;
 	}
 	if (enemy_shadow->GetPause()) {
@@ -203,12 +188,12 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 			pause = false;
 		}
 		return;
-	} else {
-		if (input->TriggerButton(input->START)) {
-			pause = true;
-			if (pauseUi->GetEndFlag()) {
-				pauseUi->SetEndFlag(false);
-			}
+	}
+
+	if (input->TriggerButton(input->START)) {
+		pause = true;
+		if (pauseUi->GetEndFlag()) {
+			pauseUi->SetEndFlag(false);
 		}
 	}
 
@@ -219,11 +204,11 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 	CameraUpda();
 
 	FieldUpdate();
+
 	partMan->Update();
 }
 
 void FirstStage::CameraUpda() {
-	Input* input = Input::GetInstance();
 	if (Reset) {
 		ResetCamera();
 		return;
@@ -316,7 +301,6 @@ void FirstStage::ResultCamera(int Timer) {
 	if (Timer <= 720) {
 		angle += 0.5f;
 	}
-
 	//player_shadow->SetAngle(angle);
 	camera->SetTarget(goal_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
@@ -445,5 +429,24 @@ void FirstStage::DescriptionUpdate() {
 		Camecon[5]->SetPosition({ base.x       ,base.y });
 
 	}
+}
+
+void FirstStage::ClearUpdate() {
+	ResultCamera(count);
+	count++;
+	ActorManager::GetInstance()->ResultUpdate(count);
+	const float rnd_vel = 0.5f;
+	XMFLOAT3 vel{};
+	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
+	partMan->Update();
+	if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
+		scene_changer->ChangeStart();
+	}
+	scene_changer->ChangeScene("MAP");
+	FieldUpdate();
+
 }
 

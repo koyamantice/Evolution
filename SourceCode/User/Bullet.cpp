@@ -111,6 +111,7 @@ void Bullet::CommonUpda() {
 	if (collide) { collide = false; }
 	if (isPlayActive) { command = Control; }
 	if (!wait) { follow_frame = 0.0f; }
+	if (enemy->GetHp() < 0) { clear_s_pos = fbxObj->GetPosition(); }
 	if (burning) {
 		Explo->Update();
 		BurnOut();

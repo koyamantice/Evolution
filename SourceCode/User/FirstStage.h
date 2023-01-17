@@ -60,10 +60,9 @@ private:
 	XMFLOAT2 dis = { 16,7 };
 	bool clear = false;
 	float Cframe = 0.0f;
+
+
 private:
-	Actor* player_shadow = nullptr;
-	Actor* enemy_shadow = nullptr;
-	Actor* goal_shadow = nullptr;
 
 
 	std::unique_ptr<Sprite> Clear{};

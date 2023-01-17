@@ -6,7 +6,7 @@
 
 void ClearCrystal::OnInit() {
 	obj->SetColor({1,1,1,0});
-	obj->SetScale({1.5f,1.5f, 1.5f});
+	obj->SetScale({ 0,0,0 });
 	Object2d* InOut_ = Object2d::Create(ImageManager::InOut, { 0,3,0 }, { 0.5f,0.3f,0.5f }, { 1,1,1,1 });
 	InOut_->Object2dCreate();
 	InOut_->SetRotation({ 0,0,0 });
@@ -19,36 +19,40 @@ void ClearCrystal::OnInit() {
 }
 
 void ClearCrystal::OnUpda() {
-	obj->SetRotation(XMFLOAT3(0, rad, 0));
-	rad++;
-	frame += a;
 
-	if (frame > 1.0f || frame < 0.0f) {
-		a *= -1;
-	}
-	hight = Ease(In, Quad, frame, 0.5f, 1.5f);
-	if (alpha<1.0f) {
-		alpha += 0.1f;
-	}
-	obj->SetColor({1,1,1,alpha});
-	obj->SetPosition(XMFLOAT3{ 0.0f, hight,0.0f });
-	if(isCollide){
-		if (Input::GetInstance()->TriggerButton(Input::A)) {
-			pause = true;
+
+	if(ease){
+		if (ease_frame < 1.0f) {
+			ease_frame += 0.0066f;
+		} else {
+			ease = false;
+			ease_frame = 1.0f;
 		}
+
+		float sca = Ease(InOut,Quint,ease_frame,0.0f,2.0f);
+		obj->SetScale({ sca,sca,sca});
+	} else {
+		rad++;
+		frame += a;
+		if (frame > 1.0f || frame < 0.0f) {
+			a *= -1;
+		}
+		hight = Ease(In, Quad, frame, 0.5f, 1.5f);
+		if (alpha < 1.0f) {
+			alpha += 0.1f;
+		}
+		obj->SetRotation(XMFLOAT3(0, rad, 0));
+		obj->SetColor({ 1,1,1,alpha });
+		obj->SetPosition(XMFLOAT3{ 0.0f, hight,0.0f });
 	}
-	if (pause) {
-	}
+
 	partMan->Update();
 	in_out->Update();
 }
 void ClearCrystal::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
-		//if (input->TriggerButton(Input::A)) {
-			pause= true;
-		//}
+		pause= true;
 	} else {
-		isCollide = false;
 	}
 
 }

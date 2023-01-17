@@ -141,6 +141,13 @@ protected:
 	float effectRate = 0.0f;
 	bool follow = false;
 	XMFLOAT2 vel_follow{};
+
+
+
+	bool clear_ease =true;
+	float clear_frame = 0;
+	XMFLOAT3 clear_s_pos{};
+	XMFLOAT3 clear_e_pos{};
 protected:
 	//バレット専用
 	int ID;

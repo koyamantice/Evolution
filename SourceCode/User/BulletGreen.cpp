@@ -76,21 +76,38 @@ void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 void BulletGreen::ResultOnUpdate(const int& Timer) {
 	XMFLOAT3 rot = fbxObj->GetRotation();
 	XMFLOAT3 pos = fbxObj->GetPosition();
-	pos.y += vel; //+
-	vel -= 0.04f;//
-	if (frame < 0.7f) {
-		rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
-	}
-	if (pos.y < 0.0f) {
-		pos.y = 0;
-	}
-	if (frame < 1.0f) {
-		frame += 0.02f;
-	} else {
-		frame = 0.0f;
-		vel = 0.8f;
-		rot.x = 0.0f;
-		pos.y = 0.0f;
+	XMFLOAT3 p_pos = player->GetPosition();
+	if(clear_ease){
+		if (clear_frame<1.0f) {
+			clear_frame += 0.01f;
+		} else {
+			clear_ease = false;
+		}
+		clear_e_pos = {
+			p_pos.x + sinf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
+			0,
+			p_pos.z + cosf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
+		};
+		pos.x=Ease(In,Linear,clear_frame,clear_s_pos.x,clear_e_pos.x);
+		pos.z=Ease(In,Linear,clear_frame,clear_s_pos.z,clear_e_pos.z);
+	
+	}else {
+		pos.y += vel; //+
+		vel -= 0.04f;//
+		if (frame < 0.7f) {
+			rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
+		}
+		if (pos.y < 0.0f) {
+			pos.y = 0;
+		}
+		if (frame < 1.0f) {
+			frame += 0.02f;
+		} else {
+			frame = 0.0f;
+			vel = 0.8f;
+			rot.x = 0.0f;
+			pos.y = 0.0f;
+		}
 	}
 	fbxObj->SetPosition(pos);
 	fbxObj->SetRotation(rot);

@@ -28,7 +28,17 @@ private:
 	Actor* player=nullptr;
 	ParticleManager* partMan = nullptr;
 	std::unique_ptr<Object2d> in_out = nullptr;
-	bool isCollide = false;
+	
+	
+	
+	
+	
+	bool ease = true;
+	float ease_frame = 0.0f;
+
+
+
+
 	float frame = 0.0f;
 	float a = 0.02f;
 	float alpha = 0.0f;

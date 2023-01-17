@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-
+#include "Actor.h"
 
 
 class BattleScene : public BaseScene {
@@ -36,6 +36,10 @@ protected:
 	virtual void ClearUpdate() {};
 protected:
 	Input* input = Input::GetInstance();
+
+	Actor* player_shadow = nullptr;
+	Actor* enemy_shadow = nullptr;
+	Actor* goal_shadow = nullptr;
 
 	std::unique_ptr<PauseUI> pauseUi{};
 	std::unique_ptr<Sprite>	screens[2]{};
