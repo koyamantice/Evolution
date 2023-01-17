@@ -2,6 +2,7 @@
 #include"Sprite.h"
 #include <memory>
 #include <Input.h>
+#include <SceneChanger.h>
 
 class PauseUI {
 private:
@@ -54,6 +55,7 @@ private:
 		Max
 	};
 	std::unique_ptr<Sprite> UI[Max];
+	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 
 	XMFLOAT2 move{};
 
@@ -67,7 +69,8 @@ private:
 	int nowBar = 0;
 	int cameraNow = 0;		
 	static bool reverse_camera;
-	bool ease = false;
+	bool ease = true;
+
 	float frame = 0;
 	XMFLOAT2 pos={640,400};
 	XMFLOAT2 size[Max]{  };

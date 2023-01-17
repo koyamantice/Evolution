@@ -90,8 +90,10 @@ PauseUI::PauseUI() {
 
 
 	  
+	SceneChanger* scene_changer_ = new SceneChanger();
+	scene_changer_->Init();
+	scene_changer.reset(scene_changer_);
 
-	ease = true;
 }
 
 PauseUI::~PauseUI() {
@@ -123,6 +125,7 @@ void PauseUI::Draw() {
 			UI[i]->Draw();
 		}
 	}
+	scene_changer->Draw();
 }
 
 void PauseUI::Reset() {
@@ -159,6 +162,7 @@ void PauseUI::FirstOpen() {
 void PauseUI::MoveSelect() {
 	if (ease) { return; }
 	if (option_system) { return; }
+	if(scene_changer->GetEasingStart()){scene_changer->ChangeScene("TITLE"); return;}
 	if (input->TiltStick(Input::L_UP) || input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
 		nowBar--;
 	}
@@ -168,7 +172,9 @@ void PauseUI::MoveSelect() {
 	if (input->TriggerButton(input->A) ||input->TriggerKey(DIK_SPACE)) {
 			switch (nowBar) {
 			case 0:
-				SceneManager::GetInstance()->ChangeScene("TITLE");
+				scene_changer->ChangeStart();
+				return;
+				break;
 			case 1:
 				ease = true;
 				frame = 0.0f;
@@ -205,7 +211,6 @@ void PauseUI::MoveSelect() {
 	}
 	move.y = Ease(In, Quad, 0.7f, UI[Bar]->GetPosition().y, SetPos);
 	UI[Bar]->SetPosition({ 640,move.y });
-
 }
 
 void PauseUI::OptionSystem() {

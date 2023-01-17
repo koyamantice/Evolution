@@ -30,7 +30,21 @@ void ClearCrystal::OnUpda() {
 		}
 
 		float sca = Ease(InOut,Quint,ease_frame,0.0f,2.0f);
+
 		obj->SetScale({ sca,sca,sca});
+
+		XMFLOAT3 base=obj->GetPosition();
+		const float rnd_rad = 360.0f;
+		XMFLOAT3 pos{};
+		float angle = (float)rand() / RAND_MAX * rnd_rad;
+		float area = Ease(In,Linear,ease_frame,15.0f,1.0f);
+		pos.x = base.x + (area + 0.5f) * sinf(angle);
+		pos.z = base.z + (area + 0.5f) * cosf(angle);
+		const float rnd_vel = 0.4f;
+		XMFLOAT3 vel{};
+		vel.y = (float)rand() / RAND_MAX * rnd_vel;
+		partMan->Add(45, pos, vel, {}, 1.5f, 0.0f, { 0.5f,1.0f,0.5f,1.0f }, { 0.5f,1.0f,0.5f,1.0f });
+
 	} else {
 		rad++;
 		frame += a;
@@ -47,6 +61,7 @@ void ClearCrystal::OnUpda() {
 	}
 
 	partMan->Update();
+
 	in_out->Update();
 }
 void ClearCrystal::OnCollision(const std::string& Tag) {

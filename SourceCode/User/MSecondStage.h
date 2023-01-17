@@ -10,7 +10,7 @@
 /// タイトルシーン
 /// </summary>
 
-class SecondStage : public  BattleScene {
+class MSecondStage : public  BattleScene {
 private:
 	/// <summary>
 	/// 初期化
@@ -54,8 +54,6 @@ private:
 	void UpdateCommand();
 
 	float RandHeight(const float& base);
-
-
 	int count = 0;
 	int speed = 1;
 	float angle = 0;
@@ -70,8 +68,13 @@ private:
 	bool clear = false;
 	float Cframe = 0.0f;
 
+	Actor* player_shadow = nullptr;
+	Actor* enemy_shadow = nullptr;
+	Actor* goal_shadow = nullptr;
 
 
+	std::stringstream touch_pop;
+	std::list<std::unique_ptr<Touch>> touchs;
 	const float hight = 18.0f;
 
 	std::unique_ptr<Sprite> Clear{};
@@ -79,6 +82,10 @@ private:
 	std::unique_ptr<Sprite> IntroWord[10];
 
 	PostEffect* postEffect = nullptr;
+
+	std::unique_ptr<Object3d> kSkydome{};
+
+	std::unique_ptr<TouchableObject> ground{};
 
 	float CameraAlpha = 1.0f;
 	int animation = 0;

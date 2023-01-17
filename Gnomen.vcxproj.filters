@@ -272,6 +272,12 @@
     <ClCompile Include="SourceCode\User\BattleScene.cpp">
       <Filter>User\プレイシーン</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\MSecondStage.cpp">
+      <Filter>User\導入</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\ThirdStage.cpp">
+      <Filter>User\プレイシーン</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -514,6 +520,12 @@
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\BattleScene.h">
+      <Filter>User\プレイシーン</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\MSecondStage.h">
+      <Filter>User\導入</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\ThirdStage.h">
       <Filter>User\プレイシーン</Filter>
     </ClInclude>
   </ItemGroup>

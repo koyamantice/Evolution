@@ -1,4 +1,4 @@
-#include"SecondStage.h"
+#include"MSecondStage.h"
 #include"SceneManager.h"
 #include "AudioManager.h"
 #include "input.h"
@@ -12,18 +12,20 @@
 #include <SourceCode/Common/Easing.h>
 #include"ActorManager.h"
 
-void SecondStage::Initialize(DirectXCommon* dxCommon) {
+void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	BattleInit();
-
-
+	LoadData();
+	UpdateCommand();
+	for (std::unique_ptr<Touch>& torch : touchs) {
+		torch->SetColor(Touch::FireColor::f_blue);
+	}
 	//スプライト生成
 	ActorManager::GetInstance()->AttachActor("Player");
-	ActorManager::GetInstance()->AttachActor("Enemy_Bee");
-	ActorManager::GetInstance()->AttachActor("ClearCrystal");
-
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
+	ActorManager::GetInstance()->AttachActor("Enemy_Bee");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
+	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);
@@ -34,6 +36,21 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	for (int i = 0; i < 10; i++) {
 		ActorManager::GetInstance()->AttachBullet("Green");
 	}
+	Object3d* Sky{};
+	Sky = new Object3d();
+	Sky->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
+	Sky->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+	Sky->Initialize();
+	kSkydome.reset(Sky);
+
+	TouchableObject* kGround{};
+	kGround = new TouchableObject();
+	kGround->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kGround));
+	kGround->SetPosition(XMFLOAT3(-50, -0.5f, 50));
+	kGround->SetScale(XMFLOAT3(5, 5, 5));
+	//kGround->SetColor(XMFLOAT4(0.5f, 0.5f, 0.5f,1.0f))
+	//kGround->SetRotation(XMFLOAT3(0, 180, 0));
+	ground.reset(kGround);
 
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
@@ -72,13 +89,16 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	dis.y = distance.y;
 }
 //開放処理
-void SecondStage::Finalize() {
+void MSecondStage::Finalize() {
 	//３ｄのモデルのデリート
 	ActorManager::GetInstance()->Finalize();
 }
 //更新
-void SecondStage::Update(DirectXCommon* dxCommon) {
+void MSecondStage::Update(DirectXCommon* dxCommon) {
 	Input* input = Input::GetInstance();
+	for (std::unique_ptr<Touch>& torch : touchs) {
+		torch->Update();
+	}
 	if (clear) {
 		ResultCamera(count);
 		count++;
@@ -180,7 +200,7 @@ if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
 #pragma endregion
 }
 
-void SecondStage::CameraUpda() {
+void MSecondStage::CameraUpda() {
 	Input* input = Input::GetInstance();
 	if (Reset) {
 		ResetCamera();
@@ -233,17 +253,7 @@ void SecondStage::CameraUpda() {
 	camera->Update();
 }
 
-void SecondStage::IntroCamera(int Timer) {
-
-
-
-
-
-
-
-
-
-
+void MSecondStage::IntroCamera(int Timer) {
 
 	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
 	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
@@ -254,7 +264,7 @@ void SecondStage::IntroCamera(int Timer) {
 	camera->Update();
 }
 
-void SecondStage::ResultCamera(int Timer) {
+void MSecondStage::ResultCamera(int Timer) {
 	if (Timer <= 720) {
 		angle += 0.5f;
 	}
@@ -267,15 +277,20 @@ void SecondStage::ResultCamera(int Timer) {
 
 
 //描画
-void SecondStage::Draw(DirectXCommon* dxCommon) {
+void MSecondStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	//ImGui::Begin("SecondStage");
+	//ImGui::Begin("MSecondStage");
 	//ImGui::SliderFloat("bulletX", &distance.x, 0, 360);
 	//ImGui::SliderFloat("bulletY", &distance.y, 0, 360);
 	//ImGui::SliderFloat("Anglet", &angle, 0, 360);
 	//ImGui::End();
 	Object3d::PreDraw();
+	kSkydome->Draw();
+	ground->Draw();
+	for (std::unique_ptr<Touch>& torch : touchs) {
+		torch->Draw();
+	}
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
 	partMan->Draw(alphaBle);
@@ -321,7 +336,7 @@ void SecondStage::Draw(DirectXCommon* dxCommon) {
 
 }
 
-void SecondStage::ResetCamera() {
+void MSecondStage::ResetCamera() {
 	player_shadow->SetCanMove(false);
 
 	if (angleframe < 1.0f) {
@@ -346,11 +361,84 @@ void SecondStage::ResetCamera() {
 	camera->Update();
 }
 
-float SecondStage::RandHeight(const float& base) {
+float MSecondStage::RandHeight(const float& base) {
 	const float& rnd_vel = 0.95f;
 	float Rand= (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 	float itr = 0;
 	itr = base + Rand;
 
 	return itr;
+}
+
+void MSecondStage::SkydomeUpdate() {
+	float rot = kSkydome->GetRotation().y;
+	rot += 0.1f;
+
+	kSkydome->SetRotation({ 0,rot,0 });
+
+	kSkydome->Update();
+}
+
+void MSecondStage::SkydomeSunny(int time) {
+
+
+
+}
+
+void MSecondStage::LoadData() {
+	std::ifstream file;
+	file.open("Resources/csv/touchpop.csv");
+	assert(file.is_open());
+	touch_pop << file.rdbuf();
+	file.close();
+}
+
+void MSecondStage::UpdateCommand() {
+	std::string line;
+	while (getline(touch_pop, line)) {
+		//解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		//半角スペース区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+		//"//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			//飛ばす
+			continue;
+		}
+		//各コマンド
+		if (word.find("POP") == 0) {
+			getline(line_stream, word, ',');
+			XMFLOAT3 pos{};
+			pos.x = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			pos.y = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			pos.z = (float)std::atof(word.c_str());
+			getline(line_stream, word, ',');
+			if (word.find("DIR") == 0) {
+				getline(line_stream, word, ',');
+				float rot = 0;
+				if (word.find("FRONT") == 0) {
+					rot = 0;
+				} else if (word.find("BACK") == 0) {
+					rot = 180;
+				} else if (word.find("RIGHT") == 0) {
+					rot = 90;
+				} else if (word.find("LEFT") == 0) {
+					rot = -90;
+				}
+				getline(line_stream, word, ',');
+				std::unique_ptr<Touch> new_touch;
+				new_touch.reset(new Touch(pos, { 0,rot,0 }));
+				touchs.push_back(std::move(new_touch));
+			}
+		}
+		if (word.find("END") == 0) {
+			break;
+		}
+	}
+
+
 }

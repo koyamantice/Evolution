@@ -44,8 +44,8 @@ void BattleScene::FieldUpdate() {
 	rot += 0.1f;
 	skydome->SetRotation({ 0,rot,0 });
 	skydome->Update();
-	for (std::unique_ptr<Touch>& touch : torchs) {
-		touch->Update();
+	for (std::unique_ptr<Touch>& torch : torchs) {
+		torch->Update();
 	}
 	ground->Update();
 }

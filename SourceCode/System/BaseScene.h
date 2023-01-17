@@ -38,6 +38,9 @@ protected:
 	bool intro_skip = false;
 	bool skip_frame = 0.0f;
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
+
+
+
 public:
 	virtual ~BaseScene()=default;
 	/// <summary>

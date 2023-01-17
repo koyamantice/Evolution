@@ -7,9 +7,9 @@ public:
 	~BulletRed() {};
 private:
 	void OnInit()override;
-	void OnUpda()override;
-	void OnDraw(DirectXCommon* dxCommon)override;
-	void OnFinal()override;
+	//void OnUpda()override;
+	//void OnDraw(DirectXCommon* dxCommon)override;
+	//void OnFinal()override;
 	void ResultOnUpdate(const int& Timer) override;
 	void BulletCollision(const XMFLOAT3& pos, const int& Id) override;
 

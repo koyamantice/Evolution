@@ -108,6 +108,11 @@ void Aim::FirstSet() {
 }
 
 void Aim::Move(float angle) {
+	//“®‚«Ž‚½‚¹‚é‚½‚ßƒNƒ‹ƒNƒ‹‚³‚¹‚Ä‚Ü‚·B
+	XMFLOAT3 Lrot = LockOn->GetRotation();
+	Lrot.y += 2.0f;
+	LockOn->SetRotation(Lrot);
+
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
 		if (first) {
 			first = false;
@@ -119,11 +124,6 @@ void Aim::Move(float angle) {
 			bullet->SetCommand(Bullet::command::Slow, LockOn->GetPosition());
 		}
 	}
-	XMFLOAT3 Lrot = LockOn->GetRotation();
-
-	Lrot.y += 2.0f;
-
-	LockOn->SetRotation(Lrot);
 
 	if (input->PushButton(Input::A)) {
 		if (!first) {
@@ -131,8 +131,8 @@ void Aim::Move(float angle) {
 				second = false;
 			}
 		}
-		if (Area < 8.0f) {
-			Area += 0.08f;
+		if (Area < 10.0f) {
+			Area += 0.20f;
 		}
 		XMFLOAT3 base = LockOn->GetPosition();
 		for (int i = 0; i < 1; i++) {
@@ -152,7 +152,7 @@ void Aim::Move(float angle) {
 		Whistle->SetPosition({ base.x, base.y+(Area/4), base.z });
 		Whistle->SetScale({ Area * 0.3f,Area * 0.3f,Area * 0.3f });
 		Whistle->SetRotation({90 ,Lrot.y * 2.0f ,Lrot.z * 2.0f });
-		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f-(Area/8.0f) });
+		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f-(Area/10.0f) });
 
 	} else {
 		Area = 0.0f;
@@ -174,9 +174,9 @@ void Aim::Move(float angle) {
 		input->TiltPushStick(Input::L_LEFT ,0.1f)) {
 		after_pos = player->GetCameraPos(player->GetRotation().y,10);
 	}
-	Lpos.x = Ease(In, Quad, 0.95f, Lpos.x, after_pos.x);
-	Lpos.y = Ease(In, Quad, 0.95f, Lpos.y, after_pos.y);
-	Lpos.z = Ease(In, Quad, 0.95f, Lpos.y, after_pos.z);
+	Lpos.x = Ease(In, Quad, 0.5f, Lpos.x, after_pos.x);
+	Lpos.y = Ease(In, Quad, 0.5f, Lpos.y, after_pos.y);
+	Lpos.z = Ease(In, Quad, 0.5f, Lpos.z, after_pos.z);
 	if (Lpos.x > 48.0f) { Lpos.x = 48.0f; }
 	if (Lpos.x < -48.0f) { Lpos.x = -48.0f; }
 	if (Lpos.z > 48.0f) { Lpos.z = 48.0f; }

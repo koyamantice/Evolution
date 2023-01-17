@@ -90,10 +90,13 @@ void BulletGreen::ResultOnUpdate(const int& Timer) {
 		};
 		pos.x=Ease(In,Linear,clear_frame,clear_s_pos.x,clear_e_pos.x);
 		pos.z=Ease(In,Linear,clear_frame,clear_s_pos.z,clear_e_pos.z);
-	
+		rot.y = DirRotation(clear_e_pos);
+
 	}else {
 		pos.y += vel; //+
-		vel -= 0.04f;//
+		float rnd_vel = 0.04f;
+		float margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel -= 0.04f + margin;//
 		if (frame < 0.7f) {
 			rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
 		}
