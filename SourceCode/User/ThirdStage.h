@@ -1,12 +1,11 @@
 #pragma once
 #include "SceneManager.h"
-#include <PostEffect.h>
 
 /// <summary>
 /// タイトルシーン
 /// </summary>
 
-class FirstStage : public BattleScene {
+class ThirdStage : public BattleScene {
 public:
 	/// <summary>
 	/// 初期化
@@ -43,7 +42,7 @@ private:
 	/// <summary>
 	/// クリア更新処理
 	/// </summary>
-	void ClearUpdate() override;
+	bool ClearUpdate() override;
 
 	int count = 0;
 	int speed = 1;
@@ -59,7 +58,7 @@ private:
 	XMFLOAT2 distance={0,0};
 	XMFLOAT2 dis = { 16,7 };
 	bool clear = false;
-	float Cframe = 0.0f;
+	float clear_frame = 0.0f;
 
 
 private:
@@ -73,8 +72,6 @@ private:
 	std::unique_ptr<Sprite> IntroWord[intro_word_max];
 	std::unique_ptr<Sprite> Camecon[6]{};
 	std::unique_ptr<Sprite> con_vis[2]{};
-
-
 
 
 	XMFLOAT2 base = { 640,530 };

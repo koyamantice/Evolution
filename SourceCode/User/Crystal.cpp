@@ -56,7 +56,7 @@ void Crystal::OnCollision(const std::string& Tag) {
 	}
 
 }
-void Crystal::ResultOnUpdate(const int& Timer) {
+void Crystal::ResultOnUpdate(const float& Timer) {
 	isActive = false;
 
 

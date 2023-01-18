@@ -13,5 +13,5 @@ private:
 	void BulletCollision(const XMFLOAT3& pos,const int& Id) override;
 
 	
-	void ResultOnUpdate(const int& Timer) override;
+	void ResultOnUpdate(const float& Timer) override;
 };

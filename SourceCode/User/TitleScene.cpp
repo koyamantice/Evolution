@@ -1,17 +1,8 @@
 #include "TitleScene.h"
-#include"SceneManager.h"
-#include "AudioManager.h"
-#include "input.h"
-#include<string>
-#include"ImageManager.h"
-#include"ModelManager.h"
-#include <TisGame.h>
-#include"ActorManager.h"
-#include"Easing.h"
+
 
 static int LoadState=0;
 std::thread t;
-
 
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
@@ -119,10 +110,10 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 		scene_changer->ChangeStart();
 		switch (nextScene) {
 		case Portal::Title:
-			SceneName = "PLAY";
+			SceneName = "FIRSTSTAGE";
 			break;
 		case Portal::Debug:
-			SceneName = "MAP";
+			SceneName = "SECONDSTAGE";
 			break;
 		default:
 			assert(0);

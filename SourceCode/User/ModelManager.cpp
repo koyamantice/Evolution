@@ -12,15 +12,15 @@ ModelManager* ModelManager::GetIns() {
 void ModelManager::Initialize() {
 	//OBJフォルダを読み込みます。
 	LoadModel(kSkydome, "Skydome");
-	LoadModel(kGround, "DemoDungeon");
+	LoadModel(kDungeon, "DemoDungeon");
 	LoadModel(kGoalcrystal, "MonolithCrystal");
 	LoadModel(kTextG, "text01G");
 	LoadModel(kTextN, "text02N");
 	LoadModel(kTextO, "text03O");
 	LoadModel(kTextM, "text04M");
 	LoadModel(kTextE, "text05E");
-	LoadModel(kHouse, "House");
 	LoadModel(kHoney, "Honey");
+	LoadModel(kQuestionItem, "questionItem");
 	LoadModel(kTouch, "TouchNo");
 	LoadModel(kDoor, "Door");
 

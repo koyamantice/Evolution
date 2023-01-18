@@ -31,9 +31,9 @@ private:
 
 	void OnFinal()override;
 	void DebugUpdate()override;
-	void IntroOnUpdate(const int& Timer)override;
+	void IntroOnUpdate(const float& Timer)override;
 	void IntroMove();
-	void ResultOnUpdate(const int& Timer)override;
+	void ResultOnUpdate(const float& Timer)override;
 
 	void OnCollision(const std::string& Tag)override;
 	void HitBoundMotion();

@@ -4,8 +4,8 @@
 
 #include "BaseScene.h"
 #include "BattleScene.h"
-#include "AbstractSceneFactory.h"
 
+#include "AbstractSceneFactory.h"
 
 /// <summary>
 /// シーンマネージャー

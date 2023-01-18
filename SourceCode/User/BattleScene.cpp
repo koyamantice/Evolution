@@ -1,5 +1,5 @@
 #include "BattleScene.h"
-#include <ModelManager.h>
+
 
 void BattleScene::BattleInit() {
 	//導入枠
@@ -14,7 +14,7 @@ void BattleScene::BattleInit() {
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
 
-	//スプライト生成
+	//暗転画面生成
 	Sprite* first_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
 	filter_first.reset(first_);
 	filter_first->SetColor({ 1,1,1,filter_alpha });
@@ -31,7 +31,7 @@ void BattleScene::BattleInit() {
 
 	Object3d* ground_{};
 	ground_ = new Object3d();
-	ground_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kGround));
+	ground_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDungeon));
 	ground_->SetPosition(XMFLOAT3(-50, -0.5f, 50));
 	ground_->SetScale(XMFLOAT3(5, 5, 5));
 	ground_->Initialize();
@@ -40,13 +40,16 @@ void BattleScene::BattleInit() {
 }
 
 void BattleScene::FieldUpdate() {
+	//オブジェクトを改定して空を動かします
 	float rot = skydome->GetRotation().y;
 	rot += 0.1f;
 	skydome->SetRotation({ 0,rot,0 });
 	skydome->Update();
+	//松明の更新処理
 	for (std::unique_ptr<Touch>& torch : torchs) {
 		torch->Update();
 	}
+	//フィールドの更新処理
 	ground->Update();
 }
 
@@ -103,9 +106,109 @@ void BattleScene::TorchSetup(int color) {
 			break;
 		}
 	}
+}
 
+void BattleScene::CameraUpda() {
+	//カメラリセット処理中
+	if (reset_camera) {
+		ResetCamera();
+		return;
+	}
+	//カメラ回転入力
+	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
+		if (!camera_explanation) {camera_explanation = true;}
+		//スティック入力
+		int reverse = pauseUi->GetReverseCamera();
+		if (input->TiltPushStick(Input::R_RIGHT)) {
+			camera_angle -= camera_vel * reverse;
+		}
+		if (input->TiltPushStick(Input::R_LEFT)) {
+			camera_angle += camera_vel * reverse;
+		}
+		//負の整数をなくします
+		if (camera_angle > 360 || camera_angle < 0) {
+			camera_angle += 360;
+			camera_angle = (float)((int)camera_angle % 360);
+		}
+		//軽く補間をかけます
+		e_camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
+		e_camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
 
+		camera_distance.x = Ease(In, Quad, 0.75f, camera_distance.x, e_camera_distance.x);
+		camera_distance.z = Ease(In, Quad, 0.75f, camera_distance.z, e_camera_distance.z);
+	}
+	//カメラリセット入力
+	if (input->TriggerButton(Input::LT)) {
+		if (!reset_camera) {
+			if (!camera_explanation) {camera_explanation = true;}
 
+			reset_camera = true;
+			s_camera_distance = camera_distance;
+			angle_frame = 0.0f;
+			s_camera_angle = camera_angle;
+			e_camera_angle = player_shadow->GetRotation().y;
+
+			//始点終点の最短角度にします。
+			if (abs(e_camera_angle - s_camera_angle) >= 180) {
+				if (e_camera_angle > s_camera_angle) {
+					e_camera_angle -= 360;
+				} else {
+					s_camera_angle -= 360;
+				}
+			}
+		}
+	}
+	player_shadow->SetAngle(camera_angle);
+	//ターゲットをプレイヤーの正面ベクトルに合わせます
+	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
+	camera->SetEye({ 
+		player_shadow->GetPosition().x + camera_distance.x,
+		player_shadow->GetPosition().y + camera_hight,
+		player_shadow->GetPosition().z + camera_distance.z });
+	camera->Update();
+}
+
+void BattleScene::ResetCamera() {
+	//プレイヤーを動けなくします
+	player_shadow->SetCanMove(false);
+
+	if (angle_frame < 1.0f) {
+		angle_frame += 1.0f / angle_frame_max;
+	} else {
+		reset_camera = false;
+		player_shadow->SetCanMove(true);
+		angle_frame = 1.0f;
+	}
+
+	camera_angle = Ease(In, Quad, angle_frame, s_camera_angle, e_camera_angle);
+
+	XMFLOAT3 e_camera_distance{};
+	e_camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
+	e_camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+
+	camera_distance.x = Ease(In, Quad, angle_frame, s_camera_distance.x, e_camera_distance.x);
+	camera_distance.z = Ease(In, Quad, angle_frame, s_camera_distance.z, e_camera_distance.z);
+
+	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
+	camera->Update();
+}
+
+bool BattleScene::PauseUpdate() {
+	if (pause) {
+		pauseUi->Update();
+		if (pauseUi->GetEndFlag()) {
+			pause = false;
+		}
+		return true;
+	}
+	if (input->TriggerButton(input->START)) {
+		pause = true;
+		if (pauseUi->GetEndFlag()) {
+			pauseUi->SetEndFlag(false);
+		}
+	}
+	return false;
 }
 
 

@@ -23,7 +23,7 @@ public:
 	void Reset();
 
 	
-	const bool& GetReverseCamera() { return reverse_camera; }
+	const int& GetReverseCamera() { return reverse_camera; }
 
 	const bool& GetEndFlag() { return endflag; }
 	void SetEndFlag(const bool& endflag) { this->endflag = endflag; }
@@ -33,9 +33,15 @@ private:
 	void MoveSelect();
 	void OptionSystem();
 
+
+	enum CameraSystem{
+		REVERSE = -1,
+		NOREVERSE = 1
+	};
+
+
 	enum {
 		Sheet,
-
 		kPause,
 		TitleBack,
 		Option,
@@ -68,7 +74,7 @@ private:
 	XMFLOAT2 bar_pos = {};
 	int nowBar = 0;
 	int cameraNow = 0;		
-	static bool reverse_camera;
+	static int reverse_camera;
 	bool ease = true;
 
 	float frame = 0;

@@ -24,7 +24,7 @@ private:
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinal()override;
 	void OnCollision(const std::string& Tag)override;
-	void ResultOnUpdate(const int& Timer)override;
+	void ResultOnUpdate(const float& Timer)override;
 	Actor* player=nullptr;
 
 	std::unique_ptr<Object2d> in_out = nullptr;

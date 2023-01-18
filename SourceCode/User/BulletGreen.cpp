@@ -73,7 +73,7 @@ void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	fbxObj->SetPosition(pos2);
 }
 
-void BulletGreen::ResultOnUpdate(const int& Timer) {
+void BulletGreen::ResultOnUpdate(const float& Timer) {
 	XMFLOAT3 rot = fbxObj->GetRotation();
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();

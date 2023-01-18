@@ -59,7 +59,7 @@ void Player::DebugUpdate() {
 	obj->SetScale({ 1.0f,1.0f,1.0f });
 }
 
-void Player::IntroOnUpdate(const int& Timer) {
+void Player::IntroOnUpdate(const float& Timer) {
 	fbxObj->Update();
 	IntroMove();
 	compornent->SetIsActive(false);
@@ -70,7 +70,7 @@ void Player::IntroMove() {
 	fbxObj->SetRotation(obj->GetRotation());
 }
 
-void Player::ResultOnUpdate(const int& Timer) {
+void Player::ResultOnUpdate(const float& Timer) {
 }
 
 void Player::OnInit() {

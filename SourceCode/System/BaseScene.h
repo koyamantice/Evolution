@@ -1,21 +1,34 @@
 #pragma once
 class SceneManager;
+#include "FPSManager.h"
+#include "input.h"
 #include "DirectXCommon.h"
+
 #include "DebugCamera.h"
 #include "LightGroup.h"
-#include<memory>
-#include "Sprite.h"
+
+#include<string>
+#include <fstream>
+#include <iostream>
+
+#include <memory>
+#include <DirectXMath.h>
+
 #include "FBXObject3d.h"
 #include "Object3d.h"
-#include <DirectXMath.h>
-#include "input.h"
-#include "FPSManager.h"
+#include "Sprite.h"
+
 #include "ParticleManager.h"
-#include"ImageManager.h"
+#include "ModelManager.h"
+#include "ImageManager.h"
+#include "AudioManager.h"
+
+#include <SourceCode/Common/Easing.h>
 #include <SourceCode/User/PauseUI.h>
 #include <SceneChanger.h>
+
 /// <summary>
-/// シーン規定
+/// 基底シーン
 /// </summary>
 class BaseScene {
 protected:
@@ -39,8 +52,6 @@ protected:
 	bool skip_frame = 0.0f;
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 
-
-
 public:
 	virtual ~BaseScene()=default;
 	/// <summary>
@@ -57,7 +68,7 @@ public:
 	virtual void Draw(DirectXCommon* dxCommon) = 0;
 
 	/// <summary>
-	/// 
+	/// 共通の初期化
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void InitCommon(DirectXCommon* dxCommon);

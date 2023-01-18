@@ -1,13 +1,17 @@
 #pragma once
-#include"Object3d.h"
-#include"FBXObject3d.h"
 #include <list>
 #include <memory>
 #include<cassert>
-#include <SourceCode/System/DirectXCommon.h>
-#include <LevelLoader.h>
 #include <vector>
 #include <map>
+
+
+#include <SourceCode/System/DirectXCommon.h>
+#include <LevelLoader.h>
+
+#include"FBXObject3d.h"
+#include"Object3d.h"
+
 #include <ParticleManager.h>
 
 
@@ -38,11 +42,7 @@ private:
 
 	LevelData* levelData = nullptr;
 
-
-
 	bool start = false;
-
-
 
 	ParticleManager* partMan = nullptr;
 

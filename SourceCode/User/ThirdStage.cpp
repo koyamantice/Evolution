@@ -1,16 +1,6 @@
-#include "FirstStage.h"
-#include "SceneManager.h"
-#include "AudioManager.h"
-#include "input.h"
-#include "ModelManager.h"
-#include <TisGame.h>
-#include "Player.h"
-#include "PlayerUI.h"
-#include"Enemy.h"
-#include <SourceCode/Common/Easing.h>
-#include"ActorManager.h"
+#include "ThirdStage.h"
 
-void FirstStage::Initialize(DirectXCommon* dxCommon) {
+void ThirdStage::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 
 	BattleInit();
@@ -106,12 +96,12 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	partMan->Initialize(ImageManager::charge);
 }
 //開放処理
-void FirstStage::Finalize() {
+void ThirdStage::Finalize() {
 	//３ｄのモデルのデリート
 	ActorManager::GetInstance()->Finalize();
 }
 //更新
-void FirstStage::Update(DirectXCommon* dxCommon) {
+void ThirdStage::Update(DirectXCommon* dxCommon) {
 #pragma region "Clear"
 	if (clear) {
 		ClearUpdate();
@@ -137,20 +127,20 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 	if (enemy_shadow->GetCommand()== Actor::DEAD) {
 		goal_shadow->SetIsActive(true);
 		if (goal_shadow->GetPause() || player_shadow->GetPause()) {
-			Result = true;
+			battle_result = true;
 			clear = true;
 		}
 	}
 #pragma endregion
-#pragma region "GameOver"
+#pragma region "gameover"
 	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
-		GameOver = true;
+		gameover = true;
 		if (input->TriggerButton(Input::A)) {
 			SceneManager::GetInstance()->ChangeScene("TITLE");
 		}
 	}
 #pragma endregion
-	if (Intro) {
+	if (battle_intro) {
 		if (scene_first_change) {
 			if (introFrame < 1.0f) {
 				introFrame += 0.01f;
@@ -161,11 +151,11 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 			filter_first->SetColor({ 1,1,1,filter_alpha });
 		}
 		IntroCamera(count);
-		ActorManager::GetInstance()->IntroUpdate(count);
+		//ActorManager::GetInstance()->IntroUpdate(count);
 		if (count > 1200) {
 			filter_first->SetColor({ 1,1,1,0 });
 			count = 0;
-			Intro = false;
+			battle_intro = false;
 		}
 		count += speed;
 		if (input->PushButton(input->START)) {
@@ -208,7 +198,7 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 	partMan->Update();
 }
 
-void FirstStage::CameraUpda() {
+void ThirdStage::CameraUpda() {
 	if (Reset) {
 		ResetCamera();
 		return;
@@ -268,7 +258,7 @@ void FirstStage::CameraUpda() {
 	camera->Update();
 }
 
-void FirstStage::IntroCamera(int Timer) {
+void ThirdStage::IntroCamera(int Timer) {
 	if (Timer <= 720) {
 		if (speed == 1) {
 			angle += 0.5f;
@@ -297,7 +287,7 @@ void FirstStage::IntroCamera(int Timer) {
 	camera->Update();
 }
 
-void FirstStage::ResultCamera(int Timer) {
+void ThirdStage::ResultCamera(int Timer) {
 	if (Timer <= 720) {
 		angle += 0.5f;
 	}
@@ -308,7 +298,7 @@ void FirstStage::ResultCamera(int Timer) {
 }
 
 //描画
-void FirstStage::Draw(DirectXCommon* dxCommon) {
+void ThirdStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	ImGui::Begin("playscene");
@@ -335,7 +325,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	if (clear) {
 		Clear->Draw();
 	}
-	if (Intro) {
+	if (battle_intro) {
 		screens[0]->Draw();
 		screens[1]->Draw();
 		IntroWord[nowWord]->Draw();
@@ -348,12 +338,12 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 			Camecon[5]->Draw();
 		}
 	}
-	if (Result) {
+	if (battle_result) {
 		screens[0]->Draw();
 		screens[1]->Draw();
 		Clear->Draw();
 	}
-	if (GameOver) {
+	if (gameover) {
 		Over->Draw();
 	}
 	if (pause) {
@@ -362,7 +352,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PostDraw();
 }
 
-void FirstStage::ResetCamera() {
+void ThirdStage::ResetCamera() {
 	player_shadow->SetCanMove(false);
 
 	if (angleframe < 1.0f) {
@@ -387,7 +377,7 @@ void FirstStage::ResetCamera() {
 	camera->Update();
 }
 
-void FirstStage::DescriptionUpdate() {
+void ThirdStage::DescriptionUpdate() {
 	animafrate++;
 	if (animafrate == 30) {
 		if (animation < 2 && animation > 0) {
@@ -431,10 +421,10 @@ void FirstStage::DescriptionUpdate() {
 	}
 }
 
-void FirstStage::ClearUpdate() {
+bool ThirdStage::ClearUpdate() {
 	ResultCamera(count);
 	count++;
-	ActorManager::GetInstance()->ResultUpdate(count);
+	//ActorManager::GetInstance()->ResultUpdate(count);
 	const float rnd_vel = 0.5f;
 	XMFLOAT3 vel{};
 	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
@@ -445,8 +435,8 @@ void FirstStage::ClearUpdate() {
 	if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 		scene_changer->ChangeStart();
 	}
-	scene_changer->ChangeScene("MAP");
+	scene_changer->ChangeScene("SECONDSTAGE");
 	FieldUpdate();
-
+	return true;
 }
 

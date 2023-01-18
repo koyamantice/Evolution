@@ -16,7 +16,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Black, L"Resources/2d/Effect/Blackfilter.png");
 	Sprite::LoadTexture(Title,L"Resources/2d/Title/TitleBack.png");
 	Sprite::LoadTexture(Clear, L"Resources/2d/PlayUI/GameClear.png");
-	Sprite::LoadTexture(Over, L"Resources/2d/PlayUI/GameOver.png");
+	Sprite::LoadTexture(Over, L"Resources/2d/PlayUI/gameover.png");
 	Sprite::LoadTexture(UISheet, L"Resources/2d/PauseUi/UISheet.png");
 	Sprite::LoadTexture(optionline, L"Resources/2d/PauseUi/optionline1.png");
 	Sprite::LoadTexture(TitleBack, L"Resources/2d/PauseUi/TitleBack.png");

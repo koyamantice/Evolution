@@ -42,7 +42,7 @@ void BulletRed::OnInit() {
 }
 
 
-void BulletRed::ResultOnUpdate(const int& Timer) {
+void BulletRed::ResultOnUpdate(const float& Timer) {
 	XMFLOAT3 rot = fbxObj->GetRotation();
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();

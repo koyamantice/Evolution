@@ -41,7 +41,7 @@ private:
 	//Ç©Ç‘ÇÁÇ»Ç¢ÇÊÇ§Ç…í≤êÆ
 	void HoneyControl();
 
-	void IntroOnUpdate(const int& Timer)override;
+	void IntroOnUpdate(const float& Timer)override;
 
 	float DirRotation(const XMFLOAT3& target);
 

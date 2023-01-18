@@ -357,7 +357,7 @@ typedef struct
 //
 //     StbTexteditRow
 //
-// Result of layout query, used by stb_textedit to determine where
+// battle_result of layout query, used by stb_textedit to determine where
 // the text in each row is.
 
 // result of layout query

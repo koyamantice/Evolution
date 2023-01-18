@@ -1,21 +1,16 @@
 #pragma once
 #include "SceneManager.h"
-#include <PostEffect.h>
+
 
 /// <summary>
-/// タイトルシーン
+/// ボス：キノコ　第一ステージ
 /// </summary>
-
 class FirstStage : public BattleScene {
-public:
+private:
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize(DirectXCommon* dxCommon) override;
-	/// <summary>
-	/// 終了
-	/// </summary>
-	void Finalize() override;
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
@@ -24,58 +19,62 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
+	/// <summary>
+	/// /// 終了
+	/// </summary>
+	void Finalize() override;
 private:
 	/// <summary>
-	///	カメラ周り
+	/// 導入カメラ
 	/// </summary>
-	void CameraUpda();
-	//導入カメラ
-	void IntroCamera(int Timer);
-	//クリア後カメラ
-	void ResultCamera(int Timer);
-	//画面を背中に
-	void ResetCamera();
+	/// <param name="Timer"></param>
+	void IntroCamera(const float& Timer);
+	
+	/// <summary>
+	/// クリア後カメラ
+	/// </summary>
+	/// <param name="Timer"></param>
+	void ResultCamera(const float& Timer);
+
+	/// <summary>
+	///	導入部分の更新処理
+	/// </summary>
+	/// <returns></returns>
+	bool IntroUpdate()override;
 
 	/// <summary>
 	/// 説明表示用の更新
 	/// </summary>
 	void DescriptionUpdate() override;
+
 	/// <summary>
 	/// クリア更新処理
 	/// </summary>
-	void ClearUpdate() override;
+	bool ClearUpdate() override;
 
-	int count = 0;
-	int speed = 1;
-	float angle = 0;
-	float firstangle = 0;	
-	float endangle = 0;
+	/// <summary>
+	/// ゲームオーバーの更新処理
+	/// </summary>
+	void GameOverUpdate()override;
 
-	XMFLOAT2 firstdis{};
-	float angleframe = 0;
-	bool Reset = false;
-	const float hight = 18.0f;
+	float intro_count = 0;
+	const float intro_count_max = 800;
 
-	XMFLOAT2 distance={0,0};
-	XMFLOAT2 dis = { 16,7 };
-	bool clear = false;
-	float Cframe = 0.0f;
+	float intro_speed = 1;
+	float intro_speed_max = 2;
 
-
+	const float first_hight = 50.0f;
+	//導入部分変数
+	static const int intro_word_max = 6;
+	int nowWord = 0;
+	std::unique_ptr<Sprite> IntroWord[intro_word_max];
 private:
-
-
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};
 
 	//コントローラーの説明
-	static const int intro_word_max = 6;
-	std::unique_ptr<Sprite> IntroWord[intro_word_max];
 	std::unique_ptr<Sprite> Camecon[6]{};
 	std::unique_ptr<Sprite> con_vis[2]{};
-
-
-
 
 	XMFLOAT2 base = { 640,530 };
 	float camera_frame = 0.0f;
@@ -83,11 +82,8 @@ private:
 	int tapanima = 3;
 	int animafrate = 0;
 	int vec = 1;
-	int nowWord = 0;
 
-	bool cameraExplanation = false;
-	float IntroHight = 50.0f;
-	float introFrame = 0;
+
 	PostEffect* postEffect = nullptr;
 };
 

@@ -13,8 +13,8 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	Object3d::StaticInitializeCommon(camera, lightGroup);
 	//FBXの初期化
 	FBXObject3d::StaticInitializeCommon(dxCommon->GetDev(), camera);
-
 	//音の挿入
+
 
 	//パーティクルにカメラセット
 	ParticleManager::CreateCommon(dxCommon->GetDev(), camera, dxCommon->GetCmdList());

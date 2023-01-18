@@ -51,21 +51,15 @@ void TitleText::Init() {
 	partMan->Initialize(ImageManager::fire);
 
 
-
-
-
-
 	// モデル読み込み
 	modelSkydome = Model::CreateFromOBJ("skydome");
 	modelGround = Model::CreateFromOBJ("ground");
 	modelFighter = Model::CreateFromOBJ("House");
-	modelSphere = Model::CreateFromOBJ("snag");
-	modelPine = Model::CreateFromOBJ("Pine1");
+	modelPine = Model::CreateFromOBJ("Pine");
 
 	models.insert(std::make_pair("skydome", modelSkydome));
 	models.insert(std::make_pair("Ground", modelGround));
 	models.insert(std::make_pair("House", modelFighter));
-	models.insert(std::make_pair("snag", modelSphere));
 	models.insert(std::make_pair("Pine1",modelPine));
 	levelData = LevelLoader::LoadFile("level_editor");
 	// レベルデータからオブジェクトを生成、配置

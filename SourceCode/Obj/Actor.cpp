@@ -29,14 +29,14 @@ void Actor::Update() {
 	}
 }
 
-void Actor::IntroUpdate(const int& Timer) {
+void Actor::IntroUpdate(const float& Timer) {
 	if (isVisible) {
 		obj->Update();
 	}
 	IntroOnUpdate(Timer);
 }
 
-void Actor::ResultUpdate(const int& Timer) {
+void Actor::ResultUpdate(const float& Timer) {
 	if (isVisible) {
 		obj->Update();
 	}

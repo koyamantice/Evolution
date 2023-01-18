@@ -1,6 +1,7 @@
 #include"ActorManager.h"
 #include <algorithm>
 #include <SourceCode/FrameWork/collision/Collision.h>
+#include "NullActor.h"
 
 ActorManager* ActorManager::GetInstance() {
 	static ActorManager instance;
@@ -28,22 +29,27 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::IntroUpdate(const int& Timer) {
-	if (Timer==9999) {
+void ActorManager::IntroUpdate(const float& Timer, const std::string& voidname) {
+	if (voidname =="Bullet") {
+		for (std::unique_ptr<Actor>& actor : Actors) {
+			actor->IntroUpdate(Timer);
+		}
+		return;
+	} else if(voidname == "Actor"){
 		for (std::unique_ptr<Bullet>& bullet : Bullets) {
 			bullet->IntroUpdate(Timer);
 		}
 		return;
+	} else {
+		for (std::unique_ptr<Actor>& actor : Actors) {
+			actor->IntroUpdate(Timer);
+		}
+		for (std::unique_ptr<Bullet>& bullet : Bullets) {
+			bullet->IntroUpdate(Timer);
+		}
 	}
-	for (std::unique_ptr<Actor>& actor : Actors) {
-		actor->IntroUpdate(Timer);
-	}
-	for (std::unique_ptr<Bullet>& bullet : Bullets) {
-		bullet->IntroUpdate(Timer);
-	}
-	RemoveActor();
 }
-void ActorManager::ResultUpdate(const int& Timer) {
+void ActorManager::ResultUpdate(const float& Timer) {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->ResultUpdate(Timer);
 	}

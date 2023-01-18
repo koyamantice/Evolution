@@ -1,6 +1,7 @@
 #pragma once
 #include"Actor.h"
 #include"Bullet.h"
+
 class ActorFactory {
 public:
 	ActorFactory(){};

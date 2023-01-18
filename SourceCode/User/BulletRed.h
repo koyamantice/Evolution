@@ -10,7 +10,7 @@ private:
 	//void OnUpda()override;
 	//void OnDraw(DirectXCommon* dxCommon)override;
 	//void OnFinal()override;
-	void ResultOnUpdate(const int& Timer) override;
+	void ResultOnUpdate(const float& Timer) override;
 	void BulletCollision(const XMFLOAT3& pos, const int& Id) override;
 
 	float rad = 0.0f;

@@ -10,6 +10,10 @@
 
 class ActorComponent;
 
+#define AFTIMAGENUM	8
+#define DEGREE_MAX 360.0f
+#define DEGREE_HALF 180.0f
+#define DEGREE_QUARTER 90.0f
 class Actor {
 protected: // エイリアス
 	// Microsoft::WRL::を省略
@@ -108,8 +112,8 @@ public:
 	//virtualにしようか悩み中//解決済み
 	void Initialize(Model* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
-	void IntroUpdate(const int& Timer);
-	void ResultUpdate(const int& Timer);
+	void IntroUpdate(const float& Timer);
+	void ResultUpdate(const float& Timer);
 
 	void Demo();		//更新処理
 
@@ -127,14 +131,13 @@ public:
 	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
-	virtual void IntroOnUpdate(const int& Timer) {};
-	virtual void ResultOnUpdate(const int& Timer) {};
+	virtual void IntroOnUpdate(const float& Timer) {};
+	virtual void ResultOnUpdate(const float& Timer) {};
 	virtual void OnCollision(const std::string& Tag) {};
 protected:
 	int command = 0;
 	std::unique_ptr<Object3d> obj;
 	// 残像データの数
-#define AFTIMAGENUM	8
 	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
 	HitBound hitBound;
 	XMFLOAT3 cameraPos{};

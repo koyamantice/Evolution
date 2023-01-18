@@ -1,9 +1,9 @@
 #pragma once
+#include <SourceCode/System/DirectXCommon.h>
 #include <list>
 #include <memory>
 #include<cassert>
 #include"ActorFactory.h"
-#include <SourceCode/System/DirectXCommon.h>
 
 
 class ActorManager {
@@ -27,13 +27,13 @@ public:
 	/// </summary>
 	void DemoUpdate();
 	/// <summary>
-	/// 最初の更新
+	/// 最初の弾と役者更新
 	/// </summary>
-	void IntroUpdate(const int& Timer);
+	void IntroUpdate(const float& Timer, const std::string& voidname = "null");
 	/// <summary>
 	/// 最初の更新
 	/// </summary>
-	void ResultUpdate(const int& Timer);
+	void ResultUpdate(const float& Timer);
 	/// <summary>
 	/// 描画
 	/// </summary>

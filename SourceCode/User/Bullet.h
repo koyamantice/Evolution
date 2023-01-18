@@ -77,8 +77,8 @@ public:
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Demo();		//更新処理
-	void IntroUpdate(const int& Timer);
-	void ResultUpdate(const int& Timer);
+	void IntroUpdate(const float& Timer);
+	void ResultUpdate(const float& Timer);
 	void FirstDraw(DirectXCommon* dxCommon);
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 	void LastDraw(DirectXCommon* dxCommon);
@@ -100,8 +100,8 @@ protected:
 	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinal() {};
 	virtual void DebugUpdate() {};
-	virtual void IntroOnUpdate(const int& Timer) {};
-	virtual void ResultOnUpdate(const int& Timer) {};
+	virtual void IntroOnUpdate(const float& Timer) {};
+	virtual void ResultOnUpdate(const float& Timer) {};
 	void SetAggregation();
 	void LimitArea();
 	void CommonUpda();
@@ -190,6 +190,6 @@ protected:
 
 	float margin;
 
-	float hight = 100;
+	float hight;
 };
 

@@ -63,7 +63,7 @@ void DebugScene::Update(DirectXCommon* dxCommon) {
 	Chara[Select]->Demo();
 	Chara[Select]->SetRotation(rot);
 	if (input->TriggerButton(input->BACK)) {
-		SceneManager::GetInstance()->ChangeScene("PLAY");
+		SceneManager::GetInstance()->ChangeScene("FIRSTSTAGE");
 	}
 }
 //•`‰æ
@@ -89,7 +89,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 			save = true;
 		}
 		if (ImGui::Button("FirstStage", ImVec2(100, 30))) {
-			SceneManager::GetInstance()->ChangeScene("PLAY");
+			SceneManager::GetInstance()->ChangeScene("FIRSTSTAGE");
 		}
 		if (ImGui::Button("TitleScene", ImVec2(100, 30))) {
 			SceneManager::GetInstance()->ChangeScene("TITLE");
@@ -125,7 +125,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon) {
 			save = true;
 		}
 		if (ImGui::Button("FirstStage", ImVec2(100, 30))) {
-			SceneManager::GetInstance()->ChangeScene("PLAY");
+			SceneManager::GetInstance()->ChangeScene("FIRSTSTAGE");
 		}
 		if (ImGui::Button("TitleScene", ImVec2(100, 30))) {
 			SceneManager::GetInstance()->ChangeScene("TITLE");

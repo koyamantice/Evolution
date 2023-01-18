@@ -74,7 +74,7 @@ void Enemy_Bee::OnInit() {
 	obj->SetScale({ 2.0f,2.0f, 2.0f });
 	Mash_->SetRotation({ 0,-90,0 });
 	Mash_->LoadAnimation();
-	before_pos = {0,20,0};
+	before_pos = { 0,20,0 };
 	fbxObject3d.reset(Mash_);
 	LoadData();
 	UpdateCommand();
@@ -110,9 +110,6 @@ void Enemy_Bee::OnUpda() {
 	LifeCommon();
 	HoneyControl();
 
-
-
-
 	fbxObject3d->Update();
 	Shadow->Update();
 	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
@@ -130,12 +127,11 @@ void Enemy_Bee::OnDraw(DirectXCommon* dxCommon) {
 void Enemy_Bee::OnFinal() {
 }
 
-
 void Enemy_Bee::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
 		switch (command) {
 		case ATTACK:
-			if (rand_pattern==0) {
+			if (rand_pattern == 0) {
 				if (pattern == 1) {
 					if (!OnePunch) {
 						OnePunch = true;
@@ -155,7 +151,6 @@ void Enemy_Bee::OnCollision(const std::string& Tag) {
 		}
 	}
 }
-
 
 void Enemy_Bee::PhaseMove() {
 	switch (command) {
@@ -335,7 +330,7 @@ void Enemy_Bee::AttackUpda() {
 				rot.y = DirRotation(after_pos);
 			}
 			if (waitTimer > 150) {
-				pattern=1;
+				pattern = 1;
 				before_pos = pos;
 				waitTimer = 0;
 			}
@@ -343,7 +338,7 @@ void Enemy_Bee::AttackUpda() {
 			break;
 		case 1:
 			waitTimer++;
-			if (OnePunch) {	OnePunch = false;}
+			if (OnePunch) { OnePunch = false; }
 			after_pos = {
 			45,
 			0,
@@ -434,7 +429,6 @@ void Enemy_Bee::AttackUpda() {
 }
 
 void Enemy_Bee::LifeCommon() {
-
 	if (hp < 0.0f) {
 		if (command != DEAD) {
 			pause = true;
@@ -446,6 +440,7 @@ void Enemy_Bee::LifeCommon() {
 		fbxObject3d->ResetAnimation();
 
 		rot.y++;
+
 		scale = Ease(In, Quad, scaframe, 1.0f, 0.0f);
 		if (scaframe < 1.0f) {
 			scaframe += 0.01f;
@@ -470,63 +465,53 @@ void Enemy_Bee::HoneyControl() {
 	}
 }
 
-void Enemy_Bee::IntroOnUpdate(const int& Timer) {
+void Enemy_Bee::IntroOnUpdate(const float& Timer) {
 	XMFLOAT3 pos = fbxObject3d->GetPosition();
 	XMFLOAT3 rot = fbxObject3d->GetRotation();
-	if (Timer < 200) {
-		time_f+=1.0f;
-		time_e = 200;
+
+	if (Timer <= 0.2f) {
 		after_pos = {
 			0,
-			sinf(time_f * XM_PI / 180)*2.0f,
+			0,
 			0
 		};
-	} else if(Timer < 480) {
-		time_f = 0.0f;
-		time_e = 0.0f;
-		before_pos = after_pos;
-		if (!first_pose) {
+		if ((Timer / 0.2f) < 1.0f) {
+			pos.y = Ease(Out, Quad, Timer / 0.2f, before_pos.y, after_pos.y);
+		} else {
 			fbxObject3d->PlayAnimation(Posing);
-			first_pose = true;
+			before_pos = after_pos;
 		}
-
-		if(fbxObject3d->GetIsFinish()){
-			honey[0]->SetCommand(UNGUARD);
+	} else if (Timer <= 0.5f) {
+		if (fbxObject3d->GetIsFinish()) {
+			fbxObject3d->StopAnimation();
 			fbxObject3d->PlayAnimation(Fly);
 		}
-
-	} else if (Timer > 500) {
-		if (honey[0]->GetCommand() == UNGUARD) {
-			honey[0]->IntroOnUpdate(Timer);
-			rot.y = DirRotation(honey[0]->GetPosition());
-		} else if (honey[0]->GetCommand() == WAIT) {
-			time_f += 1.0f;
-			time_e = 120;
-			after_pos = { -35, 0 ,5 };
+		after_pos = {
+		15,
+		-8,
+		10
+		};
+	} else if (Timer <= 0.65f) {
+		float time = (Timer - 0.5f);
+		if (time <= 0.1f) {
+			pos.x = Ease(In, Linear, time / 0.1f, before_pos.x, after_pos.x);
+			pos.y = Ease(In, Linear, time / 0.1f, before_pos.y, after_pos.y);
+			pos.z = Ease(In, Linear, time / 0.1f, before_pos.z, after_pos.z);
 			rot.y = DirRotation(after_pos);
 		}
-		if (Timer >= 900) {
-			before_pos = { 0,0,0 };
-			after_pos = before_pos;
-			fbxObject3d->SetPosition(before_pos);
-			rot.y = -90;
-		}
-	}
+	} else {
 
 
-	if ((time_f / time_e) <=1.0f&& Timer < 895) {
-		pos.x = Ease(In, Quad, (time_f / time_e), before_pos.x, after_pos.x);
-		pos.y = Ease(In, Quad, (time_f / time_e), before_pos.y, after_pos.y);
-		pos.z = Ease(In, Quad, (time_f / time_e), before_pos.z, after_pos.z);
-		fbxObject3d->SetPosition(pos);
+
+
 	}
+
+	fbxObject3d->SetPosition(pos);
 	fbxObject3d->SetRotation(rot);
 	fbxObject3d->Update();
-	Shadow->Update();
-	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
-	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
-	obj->SetPosition(fbxObject3d->GetPosition());
 
+	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
+	Shadow->Update();
 }
 
 void Enemy_Bee::ChangeCommand(const int& num, const int& command, const int& count, const bool& reverese) {
@@ -571,7 +556,7 @@ float Enemy_Bee::DirRotation(const XMFLOAT3& target) {
 	XMFLOAT3 position{};
 	position.x = (target.x - pos.x);
 	position.z = (target.z - pos.z);
-	itr = (atan2f(position.x, position.z) * (180.0f / XM_PI))-90; //- 90;// *(XM_PI / 180.0f);
+	itr = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 90; //- 90;// *(XM_PI / 180.0f);
 	//if (itr >= 0) {
 	//	itr = (float)((int)itr % 360);
 	//} else {

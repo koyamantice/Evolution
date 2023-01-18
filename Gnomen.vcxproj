@@ -200,6 +200,7 @@
     <ClCompile Include="SourceCode\Obj\3d\Material.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Mesh.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Model.cpp" />
+    <ClCompile Include="SourceCode\Obj\3d\NullActor.cpp" />
     <ClCompile Include="SourceCode\Obj\3d\Object3d.cpp" />
     <ClCompile Include="SourceCode\Obj\Actor.cpp" />
     <ClCompile Include="SourceCode\Obj\ActorComponent.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="SourceCode\System\ActorFactory.cpp" />
     <ClCompile Include="SourceCode\System\BaseScene.cpp" />
     <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
+    <ClCompile Include="SourceCode\System\Hud.cpp" />
     <ClCompile Include="SourceCode\System\LevelLoader.cpp" />
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />
@@ -285,6 +287,7 @@
     <ClInclude Include="SourceCode\Obj\3d\Material.h" />
     <ClInclude Include="SourceCode\Obj\3d\Mesh.h" />
     <ClInclude Include="SourceCode\Obj\3d\Model.h" />
+    <ClInclude Include="SourceCode\Obj\3d\NullActor.h" />
     <ClInclude Include="SourceCode\Obj\3d\Object3d.h" />
     <ClInclude Include="SourceCode\Obj\Actor.h" />
     <ClInclude Include="SourceCode\Obj\ActorComponent.h" />
@@ -298,6 +301,7 @@
     <ClInclude Include="SourceCode\System\ActorFactory.h" />
     <ClInclude Include="SourceCode\System\BaseScene.h" />
     <ClInclude Include="SourceCode\System\DirectXCommon.h" />
+    <ClInclude Include="SourceCode\System\Hud.h" />
     <ClInclude Include="SourceCode\System\LevelLoader.h" />
     <ClInclude Include="SourceCode\System\SceneFactory.h" />
     <ClInclude Include="SourceCode\TisGame.h" />

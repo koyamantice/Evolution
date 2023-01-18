@@ -4,7 +4,7 @@
 #include <SceneManager.h>
 
 
-bool PauseUI::reverse_camera=false;
+int PauseUI::reverse_camera= NOREVERSE;
 
 PauseUI::PauseUI() {
 	Sprite* UI_[Max]{};
@@ -178,7 +178,7 @@ void PauseUI::MoveSelect() {
 			case 1:
 				ease = true;
 				frame = 0.0f;
-				if (!reverse_camera) {
+				if (reverse_camera == NOREVERSE) {
 					cameraNow = 0;
 				} else {
 					cameraNow = 1;
@@ -253,13 +253,13 @@ void PauseUI::OptionSystem() {
 		nowBar = 1;
 		switch (cameraNow) {
 		case 0:
-			if (reverse_camera) {
-				reverse_camera = false;
+			if (reverse_camera == REVERSE) {
+				reverse_camera = NOREVERSE;
 			}
 			break;
 		case 1:
-			if (!reverse_camera) {
-				reverse_camera = true;
+			if (reverse_camera == NOREVERSE) {
+				reverse_camera = REVERSE;
 			}
 			break;
 		case 2:

@@ -21,7 +21,7 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
 	Shadow_->Object2dCreate();
-	Shadow_->SetRotation({ 90,0,0 });
+	Shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 	Shadow.reset(Shadow_);
 
 	OnInit();
@@ -44,26 +44,27 @@ void Bullet::Update() {
 	}
 }
 
-void Bullet::IntroUpdate(const int& Timer) {
-	if (isActive) {
-		if (Timer > 5) {
-			if (hight > 0) {
-				hight -= 0.2f;
-			}
-			fbxObj->Update();
-			fbxObj->SetRotation({ 0,180,0 });
-			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
+void Bullet::IntroUpdate(const float& Timer) {
+		if (!isActive) { return; }
+		const float delay = 0.2f;
+		const float first_hight = 50;
+
+		if (Timer + delay <= 1.0f) {
+			hight = Ease(In, Linear, Timer + delay, first_hight, 0);
 		}
+		fbxObj->Update();
+		fbxObj->SetRotation({ 0,DirRotation(player->GetPosition()),0});
+		fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
 		IntroOnUpdate(Timer);
+
 		if (Timer == 9999) {
 			fbxObj->SetRotation({ 0,180,0 });
 			fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, 0, ((int)ID / 10) * 5.0f });
 			fbxObj->Update();
 		}
-	}
 }
 
-void Bullet::ResultUpdate(const int& Timer) {
+void Bullet::ResultUpdate(const float& Timer) {
 	ResultOnUpdate(Timer);
 }
 
@@ -111,7 +112,9 @@ void Bullet::CommonUpda() {
 	if (collide) { collide = false; }
 	if (isPlayActive) { command = Control; }
 	if (!wait) { follow_frame = 0.0f; }
-	if (enemy->GetHp() < 0) { clear_s_pos = fbxObj->GetPosition(); }
+	if (enemy!=nullptr) {
+		if (enemy->GetHp() < 0) { clear_s_pos = fbxObj->GetPosition(); }
+	}
 	if (burning) {
 		Explo->Update();
 		BurnOut();
@@ -134,13 +137,15 @@ void Bullet::CommandUpda() {
 		WaitUpda();
 		break;
 	case Attack:
-		if (enemy->GetIsActive()) {
-			if (knockBacking) {
-				KnockBack();
-			} else {
-				AttackUpda();
+		if (enemy != nullptr) {
+			if (enemy->GetIsActive()) {
+				if (knockBacking) {
+					KnockBack();
+				} else {
+					AttackUpda();
+				}
 			}
-		}
+		} 
 		break;
 	case Control:
 		ControlUpda();
@@ -173,11 +178,12 @@ void Bullet::Draw(DirectXCommon* dxCommon) {
 
 void Bullet::LastDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
+		if (enemy == nullptr) { return; }
 		if (DeadFlag){	
 			Object2d::PreDraw();
-			CharaDead->Draw();}
-		if (enemy != NULL) {
-			if (enemy->GetIsActive()) {
+			CharaDead->Draw();
+		}
+		if (enemy->GetIsActive()) {
 				if (command == Wait) { return; }
 				if (command == Control) { return; }
 				Object2d::PreDraw();
@@ -188,9 +194,7 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 				} else {
 					CharaDead->Draw();
 				}
-			}
 		}
-
 		OnLastDraw(dxCommon);
 	}
 }

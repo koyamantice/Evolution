@@ -1,18 +1,7 @@
 #include "FirstStage.h"
-#include "SceneManager.h"
-#include "AudioManager.h"
-#include "input.h"
-#include "ModelManager.h"
-#include <TisGame.h>
-#include "Player.h"
-#include "PlayerUI.h"
-#include"Enemy.h"
-#include <SourceCode/Common/Easing.h>
-#include"ActorManager.h"
 
 void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
-
 	BattleInit();
 	TorchSetup(Touch::FireColor::f_green);
 
@@ -92,233 +81,51 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 		IntroWord[i].reset(IntroWord_);	
 	}
 
-	camera->SetTarget(player_shadow->GetPosition());
-	distance.x = sinf(angle * (XM_PI / 180)) * 13.0f;
-	distance.y = cosf(angle * (XM_PI / 180)) * 13.0f;
-	dis.x = distance.x;
-	dis.y = distance.y;
+	//カメラの初期化
+	camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
+	camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+	player_shadow->SetAngle(camera_angle);
+	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
+	camera->SetEye(XMFLOAT3{ 
+		player_shadow->GetPosition().x + camera_distance.x,
+		first_hight,
+		player_shadow->GetPosition().z + camera_distance.z
+		});
+	camera->Update();
 
-
+	//ポストエフェクトの初期化
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
+	//パーティクルの初期化
 	partMan = new ParticleManager();
 	partMan->Initialize(ImageManager::charge);
 }
-//開放処理
-void FirstStage::Finalize() {
-	//３ｄのモデルのデリート
-	ActorManager::GetInstance()->Finalize();
-}
 //更新
 void FirstStage::Update(DirectXCommon* dxCommon) {
-#pragma region "Clear"
-	if (clear) {
-		ClearUpdate();
-		return;
-	}
-	if (enemy_shadow->GetPause()) {
-		const float rnd_vel = 0.4f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
-		partMan->Update();
-
-		finishTime++;
-
-		if (finishTime > 200) {
-			enemy_shadow->SetPause(false);
-			enemy_shadow->SetCommand(Actor::DEAD);
-		}
-		return;
-	}
-	if (enemy_shadow->GetCommand()== Actor::DEAD) {
-		goal_shadow->SetIsActive(true);
-		if (goal_shadow->GetPause() || player_shadow->GetPause()) {
-			Result = true;
-			clear = true;
-		}
-	}
-#pragma endregion
-#pragma region "GameOver"
-	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
-		GameOver = true;
-		if (input->TriggerButton(Input::A)) {
-			SceneManager::GetInstance()->ChangeScene("TITLE");
-		}
-	}
-#pragma endregion
-	if (Intro) {
-		if (scene_first_change) {
-			if (introFrame < 1.0f) {
-				introFrame += 0.01f;
-			} else {
-				scene_first_change = false;
-			}
-			filter_alpha = Ease(In, Cubic, introFrame, 1, 0);
-			filter_first->SetColor({ 1,1,1,filter_alpha });
-		}
-		IntroCamera(count);
-		ActorManager::GetInstance()->IntroUpdate(count);
-		if (count > 1200) {
-			filter_first->SetColor({ 1,1,1,0 });
-			count = 0;
-			Intro = false;
-		}
-		count += speed;
-		if (input->PushButton(input->START)) {
-			if (count % 2 == 1) {
-				count--;
-			}
-			speed = 2;
-		}
-		if (count % 200 == 0) {
-			if (nowWord != 5) {
-				nowWord++;
-			}
-		}
-		FieldUpdate();
-		return;
-	}
-	if (pause) {
-		pauseUi->Update();
-		if (pauseUi->GetEndFlag()) {
-			pause = false;
-		}
-		return;
-	}
-
-	if (input->TriggerButton(input->START)) {
-		pause = true;
-		if (pauseUi->GetEndFlag()) {
-			pauseUi->SetEndFlag(false);
-		}
-	}
-
+	if (IntroUpdate()) { return; }
+	//クリア後の処理
+	if (ClearUpdate()) { return; }
+	//ポーズ処理の更新
+	if (PauseUpdate()) { return; }
+	//ゲームオーバーの処理
+	GameOverUpdate();
+	//操作説明の更新処理
 	DescriptionUpdate();
-
+	//アクターすべての更新処理
 	ActorManager::GetInstance()->Update();
-
+	//カメラの更新処理
 	CameraUpda();
-
+	//ステージの更新処理
 	FieldUpdate();
-
+	//パーティクルの更新処理
 	partMan->Update();
-}
-
-void FirstStage::CameraUpda() {
-	if (Reset) {
-		ResetCamera();
-		return;
-	}
-	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
-		if (!cameraExplanation) {
-			cameraExplanation = true;
-		}
-		if (!pauseUi->GetReverseCamera()) {
-			if (input->TiltPushStick(Input::R_RIGHT)) {
-				angle -= 3;
-			}
-			if (input->TiltPushStick(Input::R_LEFT)) {
-				angle += 3;
-			}
-		} else {
-			if (input->TiltPushStick(Input::R_RIGHT)) {
-				angle += 3;
-			}
-			if (input->TiltPushStick(Input::R_LEFT)) {
-				angle -= 3;
-			}
-		}
-		if (angle > 360 || angle < 0) {
-			angle += 360;
-			angle = (float)((int)angle % 360);
-		}
-		dis.x = sinf(angle * (XM_PI / 180)) * 15.0f;
-		dis.y = cosf(angle * (XM_PI / 180)) * 15.0f;
-		distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
-		distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
-
-	}
-	if (input->TriggerButton(Input::LT)) {
-		if (!Reset) {
-			if (!cameraExplanation) {
-				cameraExplanation = true;
-			}
-			angleframe = 0.0f;
-			firstangle = angle;
-			endangle = player_shadow->GetRotation().y;
-			if (abs(endangle-firstangle)>=180) {
-				if (endangle > firstangle) {
-					firstangle -= 360;
-				} else {
-					endangle += 360;
-				}
-			}
-
-			firstdis = distance;
-			Reset = true;
-		}
-	}
-	player_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle, 7));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
-	camera->Update();
-}
-
-void FirstStage::IntroCamera(int Timer) {
-	if (Timer <= 720) {
-		if (speed == 1) {
-			angle += 0.5f;
-			if (IntroHight > hight) {
-				IntroHight -= 0.075f;
-			} else {
-				IntroHight = hight;
-			}
-		} else {
-			angle += 1.0f;
-			if (IntroHight > hight) {
-				IntroHight -= 0.150f;
-			} else {
-				IntroHight = hight;
-			}
-		}
-	}
-
-	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
-	distance.x = Ease(In, Quad, 0.6f, distance.x, dis.x);
-	distance.y = Ease(In, Quad, 0.6f, distance.y, dis.y);
-	player_shadow->SetAngle(angle);
-	camera->SetTarget(player_shadow->GetCameraPos(angle, 7));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,IntroHight,player_shadow->GetPosition().z + distance.y });
-	camera->Update();
-}
-
-void FirstStage::ResultCamera(int Timer) {
-	if (Timer <= 720) {
-		angle += 0.5f;
-	}
-	//player_shadow->SetAngle(angle);
-	camera->SetTarget(goal_shadow->GetPosition());
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
-	camera->Update();
 }
 
 //描画
 void FirstStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	ImGui::Begin("playscene");
-	ImGui::SliderFloat("firstangle", &firstangle, 0, 360);
-	ImGui::SliderFloat("endangle", &endangle, 0, 360);
-	ImGui::SliderFloat("Anglet", &angle, 0, 360);
-	float y= player_shadow->GetRotation().y;
-	ImGui::SliderFloat("rot", &y, 0, 360);
-
-	ImGui::End();
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -332,58 +139,111 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	if (scene_first_change) {
 		filter_first->Draw();
 	}
-	if (clear) {
+	if (stage_clear) {
 		Clear->Draw();
 	}
-	if (Intro) {
+	if (battle_intro) {
 		screens[0]->Draw();
 		screens[1]->Draw();
 		IntroWord[nowWord]->Draw();
 	} else {
 		con_vis[0]->Draw();
 		con_vis[1]->Draw();
-		if (!clear) {
+		if (!stage_clear) {
 			Camecon[animation]->Draw();
 			Camecon[tapanima]->Draw();
 			Camecon[5]->Draw();
 		}
 	}
-	if (Result) {
+	if (battle_result) {
 		screens[0]->Draw();
 		screens[1]->Draw();
 		Clear->Draw();
 	}
-	if (GameOver) {
+	if (gameover) {
 		Over->Draw();
 	}
 	if (pause) {
 		pauseUi->Draw();
 	}
+	scene_changer->Draw();
 	dxCommon->PostDraw();
 }
 
-void FirstStage::ResetCamera() {
-	player_shadow->SetCanMove(false);
+//開放処理
+void FirstStage::Finalize() {
+	//３ｄのモデルのデリート
+	ActorManager::GetInstance()->Finalize();
+}
 
-	if (angleframe < 1.0f) {
-		angleframe += 0.05f;
-	} else {
-		Reset = false;
-		player_shadow->SetCanMove(true);
-		angleframe = 1.0f;
-		distance.x = dis.x;
-		distance.x = dis.y;
+bool FirstStage::IntroUpdate() {
+	if (battle_intro) {
+		//フェードイン機能
+		if (scene_first_change) {
+			if (feedin_frame <= 1.0f) {
+				feedin_frame += 1.0f / feedin_frame_max;
+			} else {
+				scene_first_change = false;
+			}
+			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+			filter_first->SetColor({ 1,1,1,filter_alpha });
+			ActorManager::GetInstance()->IntroUpdate(intro_count);
+			FieldUpdate();
+			return true;
+		}
+
+		intro_count += intro_speed;
+
+		//導入部分終了処理
+		if (intro_count >= intro_count_max) {
+			intro_count = 0;
+			battle_intro = false;
+			return true;
+		}
+		//倍速機能
+		if (input->TriggerButton(input->START)) {
+			if ((int)intro_count % 2 == 1) { intro_count -= 1; }
+			intro_speed = intro_speed_max;
+		}
+		//導入の語りを分割しています.
+		if ((int)intro_count % ((int)(intro_count_max / intro_speed) / intro_word_max) == 0) {
+			if (nowWord != intro_word_max - 1) {
+				nowWord++;
+			}
+		}
+
+		IntroCamera(intro_count);
+		ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max);
+		FieldUpdate();
+		return true;
+	}
+	return false;
+}
+
+void FirstStage::IntroCamera(const float& Timer) {
+	//着地してからの猶予
+	const float delay = 0.9f;
+	const float reaching_time = intro_count_max * delay;
+	float hight = 0.0f;
+	if (Timer/ reaching_time <= 1.0f) {
+		camera_angle = Ease(In, Linear, Timer / reaching_time, DEGREE_MAX, 0);
+		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
 	}
 
-	angle = Ease(In, Quad, angleframe, firstangle, endangle);
+	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
+	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 
-	dis.x = sinf(angle * (XM_PI / 180)) * 13.0f;
-	dis.y = cosf(angle * (XM_PI / 180)) * 13.0f;
+	player_shadow->SetAngle(camera_angle);
+	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,hight,player_shadow->GetPosition().z + camera_distance.z });
+	camera->Update();
+}
 
-	distance.x = Ease(In, Quad, angleframe, firstdis.x, dis.x);
-	distance.y = Ease(In, Quad, angleframe, firstdis.y, dis.y);
-	camera->SetTarget(player_shadow->GetCameraPos(angle, 7));
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + distance.x,player_shadow->GetPosition().y + hight,player_shadow->GetPosition().z + distance.y });
+void FirstStage::ResultCamera(const float& Timer) {
+
+	player_shadow->SetAngle(camera_angle);
+	camera->SetTarget(goal_shadow->GetPosition());
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.y });
 	camera->Update();
 }
 
@@ -407,7 +267,7 @@ void FirstStage::DescriptionUpdate() {
 		animafrate = 0;
 	}
 
-	if (cameraExplanation) {
+	if (camera_explanation) {
 		if (camera_frame < 1.0f) {
 			camera_frame += 0.005f;
 		} else {
@@ -431,22 +291,59 @@ void FirstStage::DescriptionUpdate() {
 	}
 }
 
-void FirstStage::ClearUpdate() {
-	ResultCamera(count);
-	count++;
-	ActorManager::GetInstance()->ResultUpdate(count);
-	const float rnd_vel = 0.5f;
-	XMFLOAT3 vel{};
-	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
-	partMan->Update();
-	if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
-		scene_changer->ChangeStart();
-	}
-	scene_changer->ChangeScene("MAP");
-	FieldUpdate();
 
+bool FirstStage::ClearUpdate() {
+	if (stage_clear) {
+		ResultCamera(intro_count/intro_count_max);
+		intro_count++;
+		ActorManager::GetInstance()->ResultUpdate(intro_count / intro_count_max);
+		const float rnd_vel = 0.5f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
+		partMan->Update();
+		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
+			scene_changer->ChangeStart();
+		}
+		scene_changer->ChangeScene("MSECOND");
+		FieldUpdate();
+		return true;
+	}
+	if (enemy_shadow->GetPause()) {
+		const float rnd_vel = 0.4f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		partMan->Add(120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
+		partMan->Update();
+
+		finishTime++;
+
+		if (finishTime > 200) {
+			enemy_shadow->SetPause(false);
+			enemy_shadow->SetCommand(Actor::DEAD);
+		}
+		return true;
+	}
+	if (enemy_shadow->GetCommand() == Actor::DEAD) {
+		goal_shadow->SetIsActive(true);
+		if (goal_shadow->GetPause() || player_shadow->GetPause()) {
+			battle_result = true;
+			stage_clear = true;
+		}
+	}
+	return false;
 }
 
+
+void FirstStage::GameOverUpdate() {
+	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
+		gameover = true;
+		if (input->TriggerButton(Input::A)) {
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
+	}
+}

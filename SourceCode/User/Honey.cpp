@@ -1,11 +1,18 @@
 #include "Honey.h"
 #include <ActorManager.h>
 #include <Easing.h>
+#include <ModelManager.h>
 
 void Honey::OnInit() {
 	obj->SetScale(base_sca);
 	//必要人数
 	stock = 0;
+
+	Object3d* questionItem_ = new Object3d();
+	questionItem_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kQuestionItem));
+	questionItem_->SetScale(question_sca);
+	questionItem_->Initialize();
+	questionItem.reset(questionItem_);
 
 	for (int i = 0; i < 2;i++) {
 		for (int j = 0; j < 6;j++) {
@@ -28,15 +35,8 @@ void Honey::OnInit() {
 
 
 void Honey::OnUpda() {
-	XMFLOAT3 pos = obj->GetPosition();
-	for (int i = 0; i < 6; i++) {
-		missions[0][i]->Update();
-		missions[0][i]->SetPosition({pos.x,pos.y+6.5f,pos.z});
-		missions[1][i]->Update();
-		missions[1][i]->SetPosition({ pos.x,pos.y + 3.5f,pos.z });
-	}
-	slash->Update();
-	slash->SetPosition({ pos.x,pos.y + 5.0f,pos.z });
+	missionUpdate();
+	questionUpdate();
 
 	switch (command) {
 	case Actor::Phase::APPROCH:
@@ -60,6 +60,10 @@ void Honey::OnUpda() {
 }
 
 void Honey::OnDraw(DirectXCommon* dxCommon) {
+	Object3d::PreDraw();
+	if (command == LEAVE || command == WAIT) {
+		questionItem->Draw();
+	}
 	Object2d::PreDraw();
 	if (obj->GetPosition().y >= -0.01f) {
 		if (command == LEAVE || command == WAIT) {
@@ -78,6 +82,28 @@ void Honey::OnFinal() {
 void Honey::OnCollision(const std::string& Tag) {
 
 
+}
+
+void Honey::missionUpdate() {
+	XMFLOAT3 pos = obj->GetPosition();
+	for (int i = 0; i < 6; i++) {
+		missions[0][i]->Update();
+		missions[0][i]->SetPosition({ pos.x,pos.y + 6.5f,pos.z });
+		missions[1][i]->Update();
+		missions[1][i]->SetPosition({ pos.x,pos.y + 3.5f,pos.z });
+	}
+	slash->Update();
+	slash->SetPosition({ pos.x,pos.y + 5.0f,pos.z });
+}
+
+void Honey::questionUpdate() {
+	XMFLOAT3 rot = questionItem->GetRotation();
+	rot.y += 1.0f;
+
+
+	questionItem->SetPosition(obj->GetPosition());
+	questionItem->SetRotation(rot);
+	questionItem->Update();
 }
 
 void Honey::ApprochUpda() {
@@ -177,22 +203,25 @@ void Honey::DeadUpda() {
 
 }
 
-void Honey::IntroOnUpdate(const int& Timer) {
+void Honey::IntroOnUpdate(const float& Timer) {
+	//関数が渡す最初の値
+	const float start_timer = 0.5f;
+	//
 	XMFLOAT3 pos = obj->GetPosition();
-	if (frame > 1.0f) {
-		frame = 0.0f;
-		before_pos = { 25,0,25 };
-		obj->SetPosition(before_pos);
-		command = WAIT;
-		return;
+	//
+	float time = Timer - start_timer;
+	if (time <= 0.1f) {
+		pos.x = Ease(In, Linear, time/ 0.1f, 15,15);
+		pos.y = Ease(In, Linear, time/ 0.1f, 15, 0);
+		pos.z = Ease(In, Linear, time/ 0.1f, 10, 10);
 	} else {
-		frame += 0.0056f;
+		int a = 0;
+		a++;
+
 	}
-	after_pos = { -35, 0 ,5 };
-	pos.x = Ease(In, Linear, frame, 35, after_pos.x);
-	pos.z = Ease(In, Linear, frame, 5, after_pos.z);
+
 
 	obj->SetPosition(pos);
-	obj->Update();
+
 }
 
