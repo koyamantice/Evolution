@@ -19,6 +19,9 @@ void BattleScene::BattleInit() {
 	filter_first.reset(first_);
 	filter_first->SetColor({ 1,1,1,filter_alpha });
 
+	//カメラの操作説明
+	hud = std::make_unique<Hud>();
+
 
 	//ステージの生成します
 	Object3d* skydome_{};

@@ -7,6 +7,7 @@
 
 #include <Touch.h>
 #include <PostEffect.h>
+#include <Hud.h>
 
 
 class BattleScene : public BaseScene {
@@ -85,6 +86,8 @@ protected:
 	std::stringstream torch_pop;
 	std::list<std::unique_ptr<Touch>> torchs;
 
+	//コントローラーの説明
+	std::unique_ptr<Hud> hud=nullptr;
 
 	//killクリップ
 	int finish_time = 0;

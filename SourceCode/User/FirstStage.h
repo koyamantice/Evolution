@@ -72,18 +72,6 @@ private:
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};
 
-	//コントローラーの説明
-	std::unique_ptr<Sprite> Camecon[6]{};
-	std::unique_ptr<Sprite> con_vis[2]{};
-
-	XMFLOAT2 base = { 640,530 };
-	float camera_frame = 0.0f;
-	int animation = 0;
-	int tapanima = 3;
-	int animafrate = 0;
-	int vec = 1;
-
-
 	PostEffect* postEffect = nullptr;
 };
 

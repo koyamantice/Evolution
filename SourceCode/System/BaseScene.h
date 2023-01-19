@@ -49,6 +49,7 @@ protected:
 	bool scene_first_change = true;
 	bool intro_skip = false;
 	bool skip_frame = 0.0f;
+
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
 

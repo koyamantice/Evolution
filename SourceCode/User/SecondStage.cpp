@@ -71,6 +71,8 @@ void SecondStage::Update(DirectXCommon* dxCommon) {
 	CameraUpda();
 	//ステージの更新処理
 	FieldUpdate();
+	//操作説明の更新処理
+	hud->Update();
 	//パーティクルの更新処理
 	particleEmitter->Update();
 }
@@ -106,7 +108,11 @@ void SecondStage::Draw(DirectXCommon* dxCommon) {
 	if (battle_intro) {
 		screens[0]->Draw();
 		screens[1]->Draw();
-	} 
+	} else {
+		if (!stage_clear) {
+			hud->Draw();
+		}
+	}
 	if (battle_result) {
 		screens[0]->Draw();
 		screens[1]->Draw();

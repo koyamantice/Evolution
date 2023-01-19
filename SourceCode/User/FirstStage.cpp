@@ -22,49 +22,6 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);
 
-
-	//カメラの操作説明
-	const int w = 256;
-	const int h = 256;
-	const int l = 6;
-	for (int i = 0; i < 6; i++) {
-		Sprite* CameCon_[6]{};
-		CameCon_[i] = Sprite::Create(ImageManager::CameCon, { 0,0 });
-		Camecon[i].reset(CameCon_[i]);
-		int number_index_y = i / l;
-		int number_index_x = i % l;
-		Camecon[i]->SetTextureRect(
-			{ static_cast<float>(number_index_x) * w, static_cast<float>(number_index_y) * h },
-			{ static_cast<float>(w), static_cast<float>(h) });
-		Camecon[i]->SetSize({ 128,128 });
-		Camecon[i]->SetScale(1.0f);
-		Camecon[i]->SetAnchorPoint({ 0.5f,0.5f });
-	}
-	Camecon[0]->SetPosition({ base.x + Camecon[0]->GetSize().x,base.y });
-	Camecon[1]->SetPosition({ base.x + Camecon[1]->GetSize().x,base.y });
-	Camecon[2]->SetPosition({ base.x + Camecon[2]->GetSize().x,base.y });
-	Camecon[3]->SetPosition({ base.x - Camecon[3]->GetSize().x,base.y });
-	Camecon[4]->SetPosition({ base.x - Camecon[4]->GetSize().x,base.y });
-	Camecon[5]->SetPosition(base);
-	
-	//コントローラー説明の表示
-	const int w_2 = 512;
-	const int p = 2;
-	for (int i = 0; i < 2; i++) {
-		Sprite* con_vis_[2]{};
-		con_vis_[i] = Sprite::Create(ImageManager::Con_vis, { 200,360 });
-		con_vis[i].reset(con_vis_[i]);
-		int number_index_y = i / p;
-		int number_index_x = i % p;
-		con_vis[i]->SetTextureRect(
-			{ static_cast<float>(number_index_x) * w_2, static_cast<float>(number_index_y) * h },
-			{ static_cast<float>(w_2), static_cast<float>(h) });
-		con_vis[i]->SetSize({ 128,64 });
-		con_vis[i]->SetAnchorPoint({ 0.5f,0.5f });
-	}
-	con_vis[0]->SetPosition({70,520});
-	con_vis[1]->SetPosition({70,600});
-
 	//スプライト生成
 	Sprite* _clear = nullptr;
 	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
@@ -99,7 +56,6 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 
 	//パーティクルの初期化
 	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
-	//particleEmitter->Initialize(ImageManager::charge);
 }
 //更新
 void FirstStage::Update(DirectXCommon* dxCommon) {
@@ -110,14 +66,14 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 	if (PauseUpdate()) { return; }
 	//ゲームオーバーの処理
 	GameOverUpdate();
-	//操作説明の更新処理
-	DescriptionUpdate();
 	//アクターすべての更新処理
 	ActorManager::GetInstance()->Update();
 	//カメラの更新処理
 	CameraUpda();
 	//ステージの更新処理
 	FieldUpdate();
+	//操作説明の更新処理
+	hud->Update();
 	//パーティクルの更新処理
 	particleEmitter->Update();
 }
@@ -145,9 +101,6 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->Draw(dxCommon);
 	particleEmitter->Draw(alphaBle);
 	Sprite::PreDraw();
-	if (scene_first_change) {
-		filter_first->Draw();
-	}
 	if (stage_clear) {
 		Clear->Draw();
 	}
@@ -156,12 +109,8 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 		screens[1]->Draw();
 		IntroWord[nowWord]->Draw();
 	} else {
-		con_vis[0]->Draw();
-		con_vis[1]->Draw();
 		if (!stage_clear) {
-			Camecon[animation]->Draw();
-			Camecon[tapanima]->Draw();
-			Camecon[5]->Draw();
+			hud->Draw();
 		}
 	}
 	if (battle_result) {
@@ -174,6 +123,9 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	}
 	if (pause) {
 		pauseUi->Draw();
+	}
+	if (scene_first_change) {
+		filter_first->Draw();
 	}
 	scene_changer->Draw();
 	dxCommon->PostDraw();
@@ -249,47 +201,6 @@ void FirstStage::IntroCamera(const float& Timer) {
 }
 
 void FirstStage::DescriptionUpdate() {
-	animafrate++;
-	if (animafrate == 30) {
-		if (animation < 2 && animation > 0) {
-			animation += vec;
-		} else if (animation == 2) {
-			animation = 1;
-			vec *= -1;
-		} else if (animation == 0) {
-			animation = 1;
-			vec *= -1;
-		}
-		if (tapanima == 3) {
-			tapanima = 4;
-		} else {
-			tapanima = 3;
-		}
-		animafrate = 0;
-	}
-
-	if (camera_explanation) {
-		if (camera_frame < 1.0f) {
-			camera_frame += 0.005f;
-		} else {
-			camera_frame = 1.0f;
-		}
-		XMFLOAT2 siz{};
-		for (int i = 0; i < 6; i++) {
-			siz.x = Ease(In, Quad, camera_frame, 128, 64);
-			siz.y = Ease(In, Quad, camera_frame, 128, 64);
-			Camecon[i]->SetSize(siz);
-		}
-		base.x = Ease(In, Quad, camera_frame, 640, 90);
-		base.y = Ease(In, Quad, camera_frame, 530, 680);
-		Camecon[0]->SetPosition({ base.x + siz.x,base.y });
-		Camecon[1]->SetPosition({ base.x + siz.x,base.y });
-		Camecon[2]->SetPosition({ base.x + siz.x,base.y });
-		Camecon[3]->SetPosition({ base.x - siz.x,base.y });
-		Camecon[4]->SetPosition({ base.x - siz.x,base.y });
-		Camecon[5]->SetPosition({ base.x       ,base.y });
-
-	}
 }
 
 void FirstStage::ResultCamera(const float& Timer) {

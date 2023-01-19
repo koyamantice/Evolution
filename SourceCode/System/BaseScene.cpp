@@ -20,6 +20,7 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	ParticleManager::CreateCommon(dxCommon->GetDev(), camera, dxCommon->GetCmdList());
 	//
 	ImageManager::GetIns()->LoadParticle();
+
 	//ƒV[ƒ“Ø‚è‘Ö‚¦‚Ì‰Šú‰»
 	SceneChanger* scene_changer_ = new SceneChanger();
 	scene_changer_->Init();
