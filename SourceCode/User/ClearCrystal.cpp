@@ -91,20 +91,7 @@ void ClearCrystal::OnFinal() {
 }
 
 void ClearCrystal::ResultOnUpdate(const float& Timer) {
-	XMFLOAT3 pos = obj->GetPosition();
-	XMFLOAT3 sca = obj->GetScale();
-	if (Timer < 50) {
-		pos.y += 0.1f;
-	}else if (Timer < 150) {
-		if (sca.x > 0.0f) {
-			sca.x -= 0.022f;
-			sca.y -= 0.022f;
-			sca.z -= 0.022f;
-		}
-	}
 
 	partMan->Update();
-	obj->SetPosition(pos);
-	obj->SetScale(sca);
 
 }

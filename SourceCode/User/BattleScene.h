@@ -87,8 +87,8 @@ protected:
 
 
 	//killƒNƒŠƒbƒv
-	int finishTime = 0;
-
+	int finish_time = 0;
+	const int finish_time_Max = 150;
 
 	bool battle_intro = true;
 

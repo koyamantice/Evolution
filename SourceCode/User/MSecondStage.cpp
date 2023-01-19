@@ -50,8 +50,7 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	postEffect->Initialize();
 
 	//パーティクルの初期化
-	partMan = new ParticleManager();
-	partMan->Initialize(ImageManager::charge);
+	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
 }
 //開放処理
 void MSecondStage::Finalize() {
@@ -71,7 +70,7 @@ void MSecondStage::Update(DirectXCommon* dxCommon) {
 	//ステージの更新処理
 	FieldUpdate();
 	//パーティクルの更新処理
-	partMan->Update();
+	particleEmitter->Update();
 }
 
 
@@ -85,17 +84,14 @@ void MSecondStage::ResultCamera(int Timer) {
 bool MSecondStage::ClearUpdate() {
 	if (stage_clear) {
 		const float rnd_vel = 0.5f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
+		particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
+		particleEmitter->Update();
+
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			scene_changer->ChangeStart();
 		}
 		scene_changer->ChangeScene("SECONDSTAGE");
-
-		partMan->Update();
+		ResultCamera(0);
 		FieldUpdate();
 		return true;
 	}
@@ -117,7 +113,7 @@ void MSecondStage::Draw(DirectXCommon* dxCommon) {
 		torch->Draw();
 	}
 	ActorManager::GetInstance()->Draw(dxCommon);
-	partMan->Draw(alphaBle);
+	particleEmitter->Draw(alphaBle);
 	Sprite::PreDraw();
 	if (scene_first_change) {
 		filter_first->Draw();

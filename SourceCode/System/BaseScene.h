@@ -18,7 +18,6 @@ class SceneManager;
 #include "Object3d.h"
 #include "Sprite.h"
 
-#include "ParticleManager.h"
 #include "ModelManager.h"
 #include "ImageManager.h"
 #include "AudioManager.h"
@@ -26,6 +25,7 @@ class SceneManager;
 #include <SourceCode/Common/Easing.h>
 #include <SourceCode/User/PauseUI.h>
 #include <SceneChanger.h>
+#include <ParticleEmitter.h>
 
 /// <summary>
 /// Šî’êƒV[ƒ“
@@ -42,7 +42,6 @@ protected:
 	LightGroup* lightGroup = nullptr;
 	DebugCamera* camera = { nullptr };
 
-	ParticleManager* partMan = nullptr;
 
 	bool pause = false;
 	float frame = 0.0f;
@@ -51,6 +50,7 @@ protected:
 	bool intro_skip = false;
 	bool skip_frame = 0.0f;
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
+	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
 
 public:
 	virtual ~BaseScene()=default;

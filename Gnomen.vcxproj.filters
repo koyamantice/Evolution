@@ -275,9 +275,6 @@
     <ClCompile Include="SourceCode\User\MSecondStage.cpp">
       <Filter>User\導入</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\ThirdStage.cpp">
-      <Filter>User\プレイシーン</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Obj\3d\NullActor.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
@@ -530,9 +527,6 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\MSecondStage.h">
       <Filter>User\導入</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\User\ThirdStage.h">
-      <Filter>User\プレイシーン</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Obj\3d\NullActor.h">
       <Filter>Obj\Actor</Filter>

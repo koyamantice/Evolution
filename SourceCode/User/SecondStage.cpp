@@ -49,8 +49,7 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	postEffect->Initialize();
 
 	//パーティクルの初期化
-	partMan = new ParticleManager();
-	partMan->Initialize(ImageManager::charge);
+	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
 }
 
 //更新
@@ -73,7 +72,7 @@ void SecondStage::Update(DirectXCommon* dxCommon) {
 	//ステージの更新処理
 	FieldUpdate();
 	//パーティクルの更新処理
-	partMan->Update();
+	particleEmitter->Update();
 }
 
 //描画
@@ -96,7 +95,7 @@ void SecondStage::Draw(DirectXCommon* dxCommon) {
 	}
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
-	partMan->Draw(alphaBle);
+	particleEmitter->Draw(alphaBle);
 	Sprite::PreDraw();
 	if (scene_first_change) {
 		filter_first->Draw();

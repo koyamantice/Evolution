@@ -98,8 +98,8 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	postEffect->Initialize();
 
 	//パーティクルの初期化
-	partMan = new ParticleManager();
-	partMan->Initialize(ImageManager::charge);
+	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
+	//particleEmitter->Initialize(ImageManager::charge);
 }
 //更新
 void FirstStage::Update(DirectXCommon* dxCommon) {
@@ -119,13 +119,22 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 	//ステージの更新処理
 	FieldUpdate();
 	//パーティクルの更新処理
-	partMan->Update();
+	particleEmitter->Update();
 }
 
 //描画
 void FirstStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	ImGui::SetNextWindowPos(ImVec2(980, 0), 1);
+	ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
+	ImGui::Begin("test");
+	ImGui::SliderFloat("intro_count", &intro_count, 0, intro_count_max);
+	float frame = intro_count / intro_count_max;
+	ImGui::SliderFloat("frame", &frame, 0, 1);
+	ImGui::Unindent();
+	ImGui::End();
+
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();
@@ -134,7 +143,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	}
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
-	partMan->Draw(alphaBle);
+	particleEmitter->Draw(alphaBle);
 	Sprite::PreDraw();
 	if (scene_first_change) {
 		filter_first->Draw();
@@ -224,7 +233,7 @@ void FirstStage::IntroCamera(const float& Timer) {
 	//着地してからの猶予
 	const float delay = 0.9f;
 	const float reaching_time = intro_count_max * delay;
-	float hight = 0.0f;
+	float hight = camera_hight;
 	if (Timer/ reaching_time <= 1.0f) {
 		camera_angle = Ease(In, Linear, Timer / reaching_time, DEGREE_MAX, 0);
 		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
@@ -236,14 +245,6 @@ void FirstStage::IntroCamera(const float& Timer) {
 	player_shadow->SetAngle(camera_angle);
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,hight,player_shadow->GetPosition().z + camera_distance.z });
-	camera->Update();
-}
-
-void FirstStage::ResultCamera(const float& Timer) {
-
-	player_shadow->SetAngle(camera_angle);
-	camera->SetTarget(goal_shadow->GetPosition());
-	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.y });
 	camera->Update();
 }
 
@@ -291,38 +292,35 @@ void FirstStage::DescriptionUpdate() {
 	}
 }
 
+void FirstStage::ResultCamera(const float& Timer) {
+	camera->SetTarget(goal_shadow->GetPosition());
+	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
+	camera->Update();
+}
+
 
 bool FirstStage::ClearUpdate() {
 	if (stage_clear) {
-		ResultCamera(intro_count/intro_count_max);
-		intro_count++;
-		ActorManager::GetInstance()->ResultUpdate(intro_count / intro_count_max);
 		const float rnd_vel = 0.5f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(100, goal_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
-		partMan->Update();
+		particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0.0f, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
+		particleEmitter->Update();
+
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			scene_changer->ChangeStart();
 		}
+		ResultCamera(0);
 		scene_changer->ChangeScene("MSECOND");
+		ActorManager::GetInstance()->ResultUpdate(0);
 		FieldUpdate();
 		return true;
 	}
 	if (enemy_shadow->GetPause()) {
 		const float rnd_vel = 0.4f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		partMan->Add(120, enemy_shadow->GetPosition(), vel, XMFLOAT3(), 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
-		partMan->Update();
+		particleEmitter->AddCommon(120, enemy_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
+		particleEmitter->Update();
+		finish_time++;
 
-		finishTime++;
-
-		if (finishTime > 200) {
+		if (finish_time > finish_time_Max) {
 			enemy_shadow->SetPause(false);
 			enemy_shadow->SetCommand(Actor::DEAD);
 		}

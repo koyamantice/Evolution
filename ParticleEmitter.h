@@ -17,15 +17,37 @@ public: // 静的メンバ関数
 	//
 
 public: // メンバ関数
-	ParticleEmitter(ParticleManager* particleMan);
+	ParticleEmitter(const UINT& texnumber);
 	/// <summary>
 	/// 追加
 	/// </summary>
-	/// <param name="count">数</param>
+	/// <param name="num">数</param>
 	/// <param name="life">生存時間</param>
 	/// <param name="position">座標</param>
 	/// <param name="model">モデル</param>
-	void Add(const int& count, const int& life, const XMFLOAT3& position);
+	void Add(const int& num, const int& life,
+		const XMFLOAT3& position, const XMFLOAT3& average_vel, const XMFLOAT3& accel,
+		const float& start_scale, const float& end_scale,
+		const XMFLOAT4& start_color, const XMFLOAT4& end_color);
+
+	/// <summary>
+	/// 基本的なパーティクルモーション
+	/// </summary>
+	/// <param name="life"></param>
+	/// <param name="position"></param>
+	/// <param name="average_vel"></param>
+	/// <param name="accel"></param>
+	/// <param name="start_scale"></param>
+	/// <param name="end_scale"></param>
+	/// <param name="start_color"></param>
+	/// <param name="end_color"></param>
+	void AddCommon(const int& life,
+		const XMFLOAT3& position, const float& average_vel, const float& average_accel,
+		const float& start_scale, const float& end_scale,
+		const XMFLOAT4& start_color, const XMFLOAT4& end_color);
+
+
+
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -34,48 +56,9 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>
-	void Draw();
+	void Draw(blendType type = alphaBle);
 
-	/// <summary>
-	/// 座標の設定
-	/// </summary>
-	/// <param name="mdPos">座標</param>
-	void SetCenter(const XMFLOAT3& objMdPos) { objMdPos_ = objMdPos; }
-	/// <summary>
-	/// 速度の設定
-	/// </summary>
-	/// <param name="mdVel">速度</param>
-	void SetVelocity(const float& mdVel) { mdVel_ = mdVel; }
-	/// <summary>
-	/// 加速度の設定
-	/// </summary>
-	/// <param name="mdAcc">加速度</param>
-	void SetAccel(const float& mdAcc) { mdAcc_ = mdAcc; }
-	/// <summary>
-	/// スケールの初期値の設定
-	/// </summary>
-	/// <param name="startScale">スケールの初期値</param>
-	void SetStartScale(float startScale) { startScale_ = startScale; }
-	/// <summary>
-	/// スケールの初期値の設定
-	/// </summary>
-	/// <param name="endScale">スケールの初期値</param>
-	void SetEndScale(float endScale) { endScale_ = endScale; }
-	/// <summary>
-	/// 色(RGBA)初期値の設定
-	/// </summary>
-	/// <param name="s_color">色(RGBA)初期値</param>
-	void SetStartColor(XMFLOAT4 s_color) { startColor_ = s_color; }
-	/// <summary>
-	/// 色(RGBA)最終値の設定
-	/// </summary>
-	/// <param name="e_color">色(RGBA)最終値</param>
-	void SetEndColor(XMFLOAT4 e_color) { endColor_ = e_color; }
-	/// <summary>
-	/// マネージャーの設定
-	/// </summary>
-	/// <param name="particleMan">マネージャー</param>
-	//void SetParticleManager(ParticleManager* particleMan) { particleMan_ = particleMan; }
+	
 
 private: // メンバ変数
 	//座標
@@ -101,5 +84,5 @@ private: // メンバ変数
 	float mdVel_ = 0.1f;
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float mdAcc_ = 0.001f;
-
+	std::unique_ptr<ParticleManager> particleManager = nullptr;
 };
