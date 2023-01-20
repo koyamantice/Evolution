@@ -18,8 +18,6 @@ private:
 	XMFLOAT3 base_sca = { 4,4,4 };
 	XMFLOAT3 question_sca = { 5,5,5 };
 
-	std::unique_ptr<Object3d> questionItem;
-
 	std::unique_ptr<Object2d> missions[2][6]{};
 	std::unique_ptr<Object2d> slash{};
 private:

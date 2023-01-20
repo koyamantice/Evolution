@@ -24,7 +24,7 @@ public:
 		kTextE,
 		kHouse,
 		kHoney,
-		kQuestionItem,
+		//kQuestionItem,
 		kTouch,
 		kDoor,
 	};

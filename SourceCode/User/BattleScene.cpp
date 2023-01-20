@@ -22,7 +22,6 @@ void BattleScene::BattleInit() {
 	//カメラの操作説明
 	hud = std::make_unique<Hud>();
 
-
 	//ステージの生成します
 	Object3d* skydome_{};
 	skydome_ = new Object3d();
@@ -45,7 +44,8 @@ void BattleScene::BattleInit() {
 void BattleScene::FieldUpdate() {
 	//オブジェクトを改定して空を動かします
 	float rot = skydome->GetRotation().y;
-	rot += 0.1f;
+	const float vel = 0.1f;
+	rot += vel;
 	skydome->SetRotation({ 0,rot,0 });
 	skydome->Update();
 	//松明の更新処理
@@ -92,11 +92,11 @@ void BattleScene::TorchSetup(int color) {
 				if (word.find("FRONT") == 0) {
 					rot = 0;
 				} else if (word.find("BACK") == 0) {
-					rot = 180;
+					rot = DEGREE_HALF;
 				} else if (word.find("RIGHT") == 0) {
-					rot = 90;
+					rot = DEGREE_QUARTER;
 				} else if (word.find("LEFT") == 0) {
-					rot = -90;
+					rot = -DEGREE_QUARTER;
 				}
 				getline(line_stream, word, ',');
 				std::unique_ptr<Touch> new_torch;
@@ -129,16 +129,17 @@ void BattleScene::CameraUpda() {
 			camera_angle += camera_vel * reverse;
 		}
 		//負の整数をなくします
-		if (camera_angle > 360 || camera_angle < 0) {
-			camera_angle += 360;
-			camera_angle = (float)((int)camera_angle % 360);
+		if (camera_angle > DEGREE_MAX || camera_angle < 0) {
+			camera_angle += DEGREE_MAX;
+			camera_angle = (float)((int)camera_angle % (int)DEGREE_MAX);
 		}
 		//軽く補間をかけます
-		e_camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
-		e_camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+		e_camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
+		e_camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 
-		camera_distance.x = Ease(In, Quad, 0.75f, camera_distance.x, e_camera_distance.x);
-		camera_distance.z = Ease(In, Quad, 0.75f, camera_distance.z, e_camera_distance.z);
+		const float interpolation = 0.75f;
+		camera_distance.x = Ease(In, Quad, interpolation, camera_distance.x, e_camera_distance.x);
+		camera_distance.z = Ease(In, Quad, interpolation, camera_distance.z, e_camera_distance.z);
 	}
 	//カメラリセット入力
 	if (input->TriggerButton(Input::LT)) {
@@ -152,11 +153,11 @@ void BattleScene::CameraUpda() {
 			e_camera_angle = player_shadow->GetRotation().y;
 
 			//始点終点の最短角度にします。
-			if (abs(e_camera_angle - s_camera_angle) >= 180) {
+			if (abs(e_camera_angle - s_camera_angle) >= DEGREE_HALF) {
 				if (e_camera_angle > s_camera_angle) {
-					e_camera_angle -= 360;
+					e_camera_angle -= DEGREE_MAX;
 				} else {
-					s_camera_angle -= 360;
+					s_camera_angle -= DEGREE_MAX;
 				}
 			}
 		}
@@ -186,8 +187,8 @@ void BattleScene::ResetCamera() {
 	camera_angle = Ease(In, Quad, angle_frame, s_camera_angle, e_camera_angle);
 
 	XMFLOAT3 e_camera_distance{};
-	e_camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
-	e_camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+	e_camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
+	e_camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 
 	camera_distance.x = Ease(In, Quad, angle_frame, s_camera_distance.x, e_camera_distance.x);
 	camera_distance.z = Ease(In, Quad, angle_frame, s_camera_distance.z, e_camera_distance.z);

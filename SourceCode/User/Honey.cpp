@@ -8,11 +8,6 @@ void Honey::OnInit() {
 	//•K—vl”
 	stock = 0;
 
-	Object3d* questionItem_ = new Object3d();
-	questionItem_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kQuestionItem));
-	questionItem_->SetScale(question_sca);
-	questionItem_->Initialize();
-	questionItem.reset(questionItem_);
 
 	for (int i = 0; i < 2;i++) {
 		for (int j = 0; j < 6;j++) {
@@ -61,9 +56,7 @@ void Honey::OnUpda() {
 
 void Honey::OnDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
-	if (command == LEAVE || command == WAIT) {
-		questionItem->Draw();
-	}
+
 	Object2d::PreDraw();
 	if (obj->GetPosition().y >= -0.01f) {
 		if (command == LEAVE || command == WAIT) {
@@ -97,13 +90,6 @@ void Honey::missionUpdate() {
 }
 
 void Honey::questionUpdate() {
-	XMFLOAT3 rot = questionItem->GetRotation();
-	rot.y += 1.0f;
-
-
-	questionItem->SetPosition(obj->GetPosition());
-	questionItem->SetRotation(rot);
-	questionItem->Update();
 }
 
 void Honey::ApprochUpda() {
