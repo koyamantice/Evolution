@@ -26,6 +26,7 @@ class SceneManager;
 #include <SourceCode/User/PauseUI.h>
 #include <SceneChanger.h>
 #include <ParticleEmitter.h>
+#include <PostEffect.h>
 
 /// <summary>
 /// Šî’êƒV[ƒ“
@@ -53,6 +54,7 @@ protected:
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
 
+	PostEffect* postEffect = nullptr;
 public:
 	virtual ~BaseScene()=default;
 	/// <summary>

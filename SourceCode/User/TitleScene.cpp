@@ -125,7 +125,8 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 }
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
-	dxCommon->PreDraw();
+	//dxCommon->PreDraw();
+
 	//ImGui::Begin("test");
 	//float F = FPSManager::GetInstance()->GetFps();
 	//ImGui::SliderFloat("fps", &F, 120, 0);
@@ -144,11 +145,11 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	for (int i = 2; i < SpriteMax; i++) {
 		UI[i]->Draw();
 	}
-//	UI[0]->Draw();
+	//	UI[0]->Draw();
 
 	scene_changer->Draw();
 
-	dxCommon->PostDraw();
+	//dxCommon->PostDraw();
 }
 
 void TitleScene::Heavy() {

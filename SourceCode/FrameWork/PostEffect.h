@@ -1,7 +1,5 @@
 #pragma once
 #include "Sprite.h"
-#include <imgui.h>
-
 class PostEffect :
     public Sprite {
 public:
@@ -32,7 +30,7 @@ public:
 
     void CreateGraphicsPipelineState();
 public:
-    ComPtr<ID3D12Resource> texBuff;
+    ComPtr<ID3D12Resource> texBuff[2];
 
     ComPtr<ID3D12DescriptorHeap> descHeapSRV;
     ComPtr<ID3D12Resource> depthBuff;

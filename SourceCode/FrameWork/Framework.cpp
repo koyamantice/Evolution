@@ -60,7 +60,9 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(dxcommon->GetDev());
 	ModelManager::GetIns()->Initialize();
-	//ParticleManager::GetInstance()->Initialize(dxcommon->GetDev());
+
+	postEffect = new PostEffect();
+	postEffect->Initialize();
 }
 
 void Framework::Finalize() {
@@ -91,5 +93,12 @@ void Framework::Update(DirectXCommon* dxCommon) {
 
 
 void Framework::Draw(DirectXCommon* dxCommon) {
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	SceneManager::GetInstance()->Draw(dxCommon);
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
+
+	dxCommon->PreDraw();
+	postEffect->Draw(dxCommon->GetCmdList());
+	dxCommon->PostDraw();
+
 }

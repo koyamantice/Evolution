@@ -12,6 +12,7 @@
 #include"ModelManager.h"
 #include "XorShift.h"
 #include "ImageManager.h"
+#include "PostEffect.h"
 
 /// <summary>
 /// フレームワーク
@@ -56,4 +57,5 @@ protected:
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 	ImageManager* imageManager = nullptr;
 	SceneManager* scaneMana = nullptr;
+	PostEffect* postEffect = nullptr;
 };

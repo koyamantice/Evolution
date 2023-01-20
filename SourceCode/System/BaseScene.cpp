@@ -15,6 +15,8 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	FBXObject3d::StaticInitializeCommon(dxCommon->GetDev(), camera);
 	//音の挿入
 
+	postEffect = new PostEffect();
+	postEffect->Initialize();
 
 	//パーティクルにカメラセット
 	ParticleManager::CreateCommon(dxCommon->GetDev(), camera, dxCommon->GetCmdList());
