@@ -93,12 +93,12 @@ void Framework::Update(DirectXCommon* dxCommon) {
 
 
 void Framework::Draw(DirectXCommon* dxCommon) {
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	SceneManager::GetInstance()->Draw(dxCommon);
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	//dxCommon->PreDraw();
-	//postEffect->Draw(dxCommon->GetCmdList());
-	//dxCommon->PostDraw();
+	dxCommon->PreDraw();
+	postEffect->Draw(dxCommon->GetCmdList());
+	dxCommon->PostDraw();
 
 }

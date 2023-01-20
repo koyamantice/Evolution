@@ -21,12 +21,12 @@ float4 main(VSOutput input) :SV_TARGET
 	float4 colortex1 = tex1.Sample(smp,input.uv);
 
 	float4 color = colortex0;
-	if (fmod(input.uv.y,0.1f) < 0.05f) {
-		color = colortex1;
-	}
+	//if (fmod(input.uv.y,0.1f) < 0.05f) {
+	//	color = colortex1;
+	//}
 
-	float2 movePixel = 1.0f / 0.2f;
-	movePixel *= 0.0001f;
+	//float2 movePixel = 1.0f / 0.2f;
+	//movePixel *= 0.0001f;
 
 	//// ぼかし処理をかける
 	//color = tex.Sample(smp, input.uv);  // 自分自身のピクセル
