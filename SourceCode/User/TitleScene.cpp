@@ -125,7 +125,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 }
 //•`‰æ
 void TitleScene::Draw(DirectXCommon* dxCommon) {
-	//dxCommon->PreDraw();
+	dxCommon->PreDraw();
 
 	//ImGui::Begin("test");
 	//float F = FPSManager::GetInstance()->GetFps();
@@ -149,7 +149,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 
 	scene_changer->Draw();
 
-	//dxCommon->PostDraw();
+	dxCommon->PostDraw();
 }
 
 void TitleScene::Heavy() {
