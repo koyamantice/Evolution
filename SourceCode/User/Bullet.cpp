@@ -24,6 +24,11 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	Shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 	Shadow.reset(Shadow_);
 
+
+	audioManager = std::make_unique<AudioManager>();
+	audioManager->LoadWave("SE/attack.wav");
+	audioManager->LoadWave("SE/gnormDead.wav");
+
 	OnInit();
 	//ID‚²‚Æ‚ÌŒë·‚Ì”ÍˆÍ
 	if ((int)ID / 7 == 0) {
@@ -259,6 +264,7 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			if (isPlayActive) { return; }
 			switch (enemy->GetCommand()) {
 			case Actor::Phase::UNGUARD:
+				audioManager->PlayWave("SE/attack.wav", 0.5f);
 				DamageInit();
 				break;
 			default:
@@ -348,6 +354,9 @@ void Bullet::DamageInit() {
 
 
 void Bullet::DeadEnd() {
+	if(deadframe==0.0f){
+		audioManager->PlayWave("SE/gnormDead.wav",0.2f);
+	}
 	if (deadframe > 1.0f) {
 		isRemove = true;
 	} else {

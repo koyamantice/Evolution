@@ -33,9 +33,6 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	input = Input::GetInstance();
 	input->Initialize(winApp);
 
-	audio = AudioManager::GetInstance();
-	audio->Initialize();	
-	
 	fps = FPSManager::GetInstance();
 	fps->Init();
 	//スプライト関係

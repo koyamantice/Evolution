@@ -23,14 +23,14 @@ private:
 	std::unique_ptr<Object2d> Shadow = nullptr;
 
 	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
+
 	void OnInit()override;
 	void OnUpda()override;
 	void OnFirstDraw(DirectXCommon* dxCommon)override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnLastDraw(DirectXCommon* dxCommon)override;
-
 	void OnFinal()override;
-	void DebugUpdate()override;
+
 	void IntroOnUpdate(const float& Timer)override;
 	void IntroMove();
 	void ResultOnUpdate(const float& Timer)override;
@@ -45,27 +45,34 @@ private:
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
 	const DirectX::XMFLOAT3& GetCameraPos(const float& angle, const float& str = 10) override;
 	
-	void ContactObj();
-	XMMATRIX rot2;
-	XMFLOAT3 distance{};
-	XMFLOAT3 rebound{};
-	XMFLOAT3 Start{};
-	int holdpos = 0;
-	float damageframe = 0.0f;
+	XMFLOAT3 s_rebound_pos_{};
+	XMFLOAT3 e_rebound_pos_{};
+	const float kKnockBackRange = 15.5f;
+
+	int  aftImage_count_ = 0;
+	const int kAftLocateCountMax = 4;
+
+	float knock_back_frame_ = 0.0f;
+	const float kKnockBackFrameMax = 50.0f;
+	float collided_rot_ = 0.0f;
+
 	bool knockBacking = false;
+
+
+
 	bool isFasted = false;
-	Actor* Picmin[30]{};
-	float radius = 0;
+
 	bool onHoney = false;
 	int honeyCount = 0;
+
 	float speed = 0.0f;
 	float vel = 0;
+
 	int charge = 0;
-	bool onGround = false;
-	int partPoint = 0;
-	// —Ž‰ºƒxƒNƒgƒ‹
-	DirectX::XMVECTOR fallV{};
+	
+	int particle_pop_time_ = 0;
+	const int kPopTimeMax = 5;
 
 	std::unique_ptr<FBXObject3d> fbxObj;
-	ParticleManager* partMan = nullptr;
+	std::unique_ptr<ParticleEmitter> particleEmitter_ = nullptr;
 };

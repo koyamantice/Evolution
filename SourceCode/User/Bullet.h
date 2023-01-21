@@ -3,6 +3,7 @@
 #include"FBXObject3d.h"
 #include"Object2d.h"
 #include"ImageManager.h"
+#include <AudioManager.h>
 
 using namespace DirectX;
 class Bullet {
@@ -162,6 +163,7 @@ protected:
 	std::unique_ptr<Object2d> Status = nullptr;
 	std::unique_ptr<Object2d> Explo = nullptr;
 	std::unique_ptr<Object2d> CharaDead = nullptr;
+	std::unique_ptr<AudioManager> audioManager = nullptr;
 
 	enum DeathColor{
 		Red=ImageManager::RedDead,

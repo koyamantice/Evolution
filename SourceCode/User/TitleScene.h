@@ -62,7 +62,6 @@ private:
 	int moveDebugNow = 2;
 
 	std::string SceneName = "null";
-
 	enum {
 		UnLoad = 0,
 		Loading,

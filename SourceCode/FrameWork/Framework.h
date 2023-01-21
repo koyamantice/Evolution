@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "DirectXCommon.h"
-#include"SceneManager.h"
+#include "SceneManager.h"
 #include "WinApp.h"
 #include "Input.h"
 #include "AudioManager.h"
@@ -8,8 +8,8 @@
 #include "Sprite.h"
 #include "AbstractSceneFactory.h"
 #include "Object2d.h"
-#include"FPSManager.h"
-#include"ModelManager.h"
+#include "FPSManager.h"
+#include "ModelManager.h"
 #include "XorShift.h"
 #include "ImageManager.h"
 #include "PostEffect.h"
@@ -51,7 +51,6 @@ protected:
 	DirectXCommon* dxcommon = nullptr;
 
 	Input* input = nullptr;
-	AudioManager* audio = nullptr;
 	FPSManager* fps = nullptr;
 	XorShift* xorShift=nullptr;
 	AbstractSceneFactory* sceneFactory_ = nullptr;

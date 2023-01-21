@@ -74,15 +74,21 @@ protected:
 	Actor* enemy_shadow = nullptr;
 	Actor* goal_shadow = nullptr;
 
+	//ポーズUI
 	std::unique_ptr<PauseUI> pauseUi{};
+
+	//導入部分のスクリーン
 	std::unique_ptr<Sprite>	screens[2]{};
 
+	//暗闇からフェードします
 	std::unique_ptr<Sprite> filter_first{};
 	float filter_alpha = 0.0f;
+	float feedin_frame = 0;
+	const float feedin_frame_max = 20;
 
+	//ステージ関連
 	std::unique_ptr<Object3d> skydome{};
 	std::unique_ptr<Object3d> ground{};
-
 	std::stringstream torch_pop;
 	std::list<std::unique_ptr<Touch>> torchs;
 
@@ -92,17 +98,15 @@ protected:
 	//killクリップ
 	int finish_time = 0;
 	const int finish_time_Max = 150;
-
+	
 	bool battle_intro = true;
-
-	float feedin_frame = 0;
-	const float feedin_frame_max = 20;
-
 	bool battle_result = false;
-	bool gameover = false;
 
+	//クリア・ゲームオーバー
 	bool stage_clear = false;
 	float clear_frame = 0.0f;
+
+	bool gameover = false;
 
 	//カメラ関係
 	bool reset_camera = false;

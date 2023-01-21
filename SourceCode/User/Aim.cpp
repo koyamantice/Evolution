@@ -52,6 +52,11 @@ void Aim::Init() {
 
 	partMan = new ParticleManager();
 	partMan->Initialize(ImageManager::nul);
+
+	audioManager = std::make_unique<AudioManager>();
+
+	audioManager->LoadWave("SE/slow.wav");
+
 }
 
 void Aim::Upda(float angle) {
@@ -114,13 +119,11 @@ void Aim::Move(float angle) {
 	LockOn->SetRotation(Lrot);
 
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
-		if (first) {
-			first = false;
-		}
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock() - 1);
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
 		if (bullet != nullptr) {
+			audioManager->PlayWave("SE/slow.wav", 0.5f);
 			bullet->SetCommand(Bullet::command::Slow, LockOn->GetPosition());
 		}
 	}

@@ -24,6 +24,9 @@ private:
 	std::unique_ptr<Object2d> Guid[GuidNum]{};
 	std::unique_ptr<Object2d> FirstUI{};
 	std::unique_ptr<Object2d> SecondUI[2]{};
+	std::unique_ptr<AudioManager> audioManager = nullptr;
+
+
 	XMFLOAT3 GuidPos[GuidNum];
 	Input* input = Input::GetInstance();
 	ParticleManager* partMan = nullptr;

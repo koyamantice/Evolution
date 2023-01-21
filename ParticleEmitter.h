@@ -43,8 +43,14 @@ public: // ÉÅÉìÉoä÷êî
 	/// <param name="end_color"></param>
 	void AddCommon(const int& life,
 		const XMFLOAT3& position, const float& average_vel, const float& average_accel,
-		const float& start_scale, const float& end_scale,
-		const XMFLOAT4& start_color, const XMFLOAT4& end_color);
+		const float& start_scale=1.0f, const float& end_scale = 1.0f,
+		const XMFLOAT4& start_color={1,1,1,1}, const XMFLOAT4& end_color={1,1,1,1});
+
+
+	void AddInNest(const int& life,
+		const XMFLOAT3& position, const float& average_margin, const float& average_vel,
+		const float& start_scale = 1.0f, const float& end_scale = 0.0f,
+		const XMFLOAT4& start_color = { 1.0f,1.0f,0.0f,0.8f }, const XMFLOAT4& end_color = { 1.0f,1.0f,0.0f,0.0f });
 
 
 

@@ -40,6 +40,20 @@ void ParticleEmitter::AddCommon(const int& life, const XMFLOAT3& position, const
 
 }
 
+void ParticleEmitter::AddInNest(const int& life, const XMFLOAT3& position, const float& average_margin, const float& average_vel, const float& start_scale, const float& end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
+
+	XMFLOAT3 margin{};
+	margin.x = (float)rand() / RAND_MAX * average_margin - average_margin / 2.0f;
+	margin.y = (float)rand() / RAND_MAX * average_margin - average_margin / 2.0f;
+	margin.z = (float)rand() / RAND_MAX * average_margin - average_margin / 2.0f;
+	
+	XMFLOAT3 vel{};
+	vel.y = (float)rand() / RAND_MAX * average_vel;
+
+	particleManager->Add(life, { position.x + margin.x, position.y + 2.5f + margin.y,position.z + margin.z }, vel, {}, start_scale, end_scale, start_color, end_color);
+
+}
+
 void ParticleEmitter::Update() {
 	particleManager->Update();
 }

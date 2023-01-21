@@ -10,7 +10,7 @@
 #include"PlayerUI.h"
 #include "ParticleManager.h"
 #include <Easing.h>
-#define STICK__MAX 32767.0f
+
 
 
 
@@ -55,10 +55,6 @@ void Player::UpdateCommand() {
 	}
 }
 
-void Player::DebugUpdate() {
-	obj->SetScale({ 1.0f,1.0f,1.0f });
-}
-
 void Player::IntroOnUpdate(const float& Timer) {
 	fbxObj->Update();
 	IntroMove();
@@ -77,8 +73,10 @@ void Player::ResultOnUpdate(const float& Timer) {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
-	obj->SetPosition({ 0,0,15 });
+	obj->SetPosition({ 0,0,25 });
+	
 	isVisible = false;
+
 	LoadData();
 	UpdateCommand();
 
@@ -97,18 +95,11 @@ void Player::OnInit() {
 		PlayerX[i] = 0;
 		PlayerZ[i] = 18.0f + 10.0f * ((float)(AFTIMAGENUM - i) / AFTIMAGENUM);
 	}
+	
+	//足元のパーティクル
+	particleEmitter_ = std::make_unique <ParticleEmitter>(ImageManager::smoke);
 
-
-	float radius = 1.0f;
-	obj->SetCollider(new SphereCollider(XMVECTOR({ 0,radius,0,0 }), radius));
-	obj->collider->SetAttribute(COLLISION_ATTR_ALLIES);
-
-	partMan = new ParticleManager();
-	partMan->Initialize(ImageManager::smoke);
-
-
-	Aim* LockOn_ = new Aim();
-	LockOn.reset(LockOn_);
+	LockOn = std::make_unique<Aim>();
 	LockOn->Init();
 
 	compornent = new PlayerUI();
@@ -117,12 +108,12 @@ void Player::OnInit() {
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
 	Shadow_->Object2dCreate();
-	Shadow_->SetRotation({ 90,0,0 });
+	Shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 	Shadow.reset(Shadow_);
 }
 
 void Player::OnUpda() {
-	partMan->Update();
+	particleEmitter_->Update();
 	compornent->SetIsActive(true);
 	if (!first) {
 		LockOn->FirstSet();
@@ -144,19 +135,15 @@ void Player::OnUpda() {
 void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	Shadow->Draw();
-	partMan->Draw(alphaBle);
-
+	particleEmitter_->Draw(alphaBle);
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
-
 	fbxObj->Draw(dxCommon->GetCmdList());
-
 }
 
 void Player::OnLastDraw(DirectXCommon* dxCommon) {
 	LockOn->Draw();
-
 }
 
 void Player::OnFinal() {
@@ -165,8 +152,8 @@ void Player::OnFinal() {
 void Player::Move() {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 rot = obj->GetRotation();
-	holdpos++;
-	if (holdpos > 4) {
+	aftImage_count_++;
+	if (aftImage_count_ >= kAftLocateCountMax) {
 		if (((int)pos.x != (int)PlayerX[0] || (int)pos.z != (int)PlayerZ[0]) || !isFasted) {
 			// 残像データを一つづつずらす
 			for (int i = AFTIMAGENUM - 1; i > 0; i--) {
@@ -178,25 +165,15 @@ void Player::Move() {
 		PlayerX[0] = pos.x;
 		RotY[0] = rot.y;
 		PlayerZ[0] = pos.z;
-		holdpos = 0;
+		aftImage_count_ = 0;
 		isFasted = true;
 	}
-	float StickX = input->GetLeftControllerX();
-	float StickY = input->GetLeftControllerY();
-	const float PI = 3.14159f;
-	const float STICK_MAX = 32768.0f;
 	if (onHoney) {
 		vel = 0.2f;
-
+		const int life = 30;
 		const float rnd_pos = 2.0f;
-		XMFLOAT3 margin{};
-		margin.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		margin.y = 0.5f * (float)(rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f);
-		margin.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		const float rnd_vel = - 0.05f;
-		XMFLOAT3 vel{};
-		vel.y = (float)rand() / RAND_MAX * rnd_vel;
-		partMan->Add(30, {pos.x+margin.x, pos.y + 2.5f+ margin.y,pos.z + margin.z }, vel, {}, 1.0f, 0.0f, { 1.0f,1.0f,0.0f,0.8f }, { 1.0f,1.0f,0.0f,0.0f });
+		const float rnd_vel = -0.05f;
+		particleEmitter_->AddInNest(life, pos, rnd_pos, rnd_vel);
 
 		honeyCount++;
 		if (honeyCount >= 60) {
@@ -211,7 +188,13 @@ void Player::Move() {
 		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
 		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
 		input->TiltPushStick(Input::L_LEFT, 0.0f)) {
-		partPoint++;
+
+		float StickX = input->GetLeftControllerX();
+		float StickY = input->GetLeftControllerY();
+		const float STICK_MAX = 32767.0f;
+		
+		//移動処理
+
 		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
@@ -232,21 +215,23 @@ void Player::Move() {
 			pos.x += vecvel.x * (StickX / STICK_MAX);
 			pos.z += vecvel.z * (StickX / STICK_MAX);
 		}
-		if (partPoint > 4) {
+		//足元の煙
+		particle_pop_time_++;
+
+		if (particle_pop_time_ > kPopTimeMax) {
 			const float rnd_vel = 0.1f;
-			XMFLOAT3 vel{};
-			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			partMan->Add(60, pos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
-			partPoint = 0;
+			const int life = 60;
+			const float s_sce = 0.5f;
+			particleEmitter_->AddCommon(life, pos, rnd_vel, 0.0f, s_sce, 0.0f);	
+			particle_pop_time_ = 0;
 		}
-		rot.y = angle + (atan2f(StickX / STICK_MAX, StickY / STICK_MAX) * (180.0f / XM_PI));
+		//向き
+		rot.y = angle + (atan2f(StickX / STICK_MAX, StickY / STICK_MAX) * (DEGREE_HALF / XM_PI));
 		if (rot.y >= 0) {
-			rot.y = (float)((int)rot.y % 360);
+			rot.y = (float)((int)rot.y % (int)DEGREE_MAX);
 		} else {
-			rot.y += 360;
-			rot.y = (float)((int)rot.y % 360);
+			rot.y += DEGREE_MAX;
+			rot.y = (float)((int)rot.y %(int)DEGREE_MAX);
 		}
 		obj->SetPosition(pos);
 		obj->SetRotation(rot);
@@ -274,43 +259,48 @@ void Player::OnCollision(const std::string& Tag) {
 void Player::HitBoundMotion() {
 	if (hitBound.isHit) {
 		canMove = false;
+		XMFLOAT3 pos = obj->GetPosition();
+		float rot = obj->GetRotation().y;
 		if (!knockBacking) {
 			Bullet* bullet = ActorManager::GetInstance()->SearchBulletBack();
 			if (bullet != nullptr) {
 				bullet->SetDeadFlag(true);
 			}
 			compornent->SetIsDamage(true);
-			XMFLOAT3 pos = obj->GetPosition();
-			Start = pos;
-			XMFLOAT3 pos2 = hitBound.HitingPos;
-			//distance = { pos2.x - pos.x,0,pos2.z - pos.z };
+
+			collided_rot_ = rot;
+
+			s_rebound_pos_ = pos;
+
+			XMFLOAT3 distance{};
 			distance = { old_pos.x - pos.x,0,old_pos.z - pos.z };
-			rebound.x = pos.x + sin(atan2f(distance.x, distance.z)) * 15.5f;
-			rebound.z = pos.z + cos(atan2f(distance.x, distance.z)) * 15.5f;
+
+			e_rebound_pos_.x = pos.x + sin(atan2f(distance.x, distance.z)) * kKnockBackRange;
+			e_rebound_pos_.z = pos.z + cos(atan2f(distance.x, distance.z)) * kKnockBackRange;
+
 			knockBacking = true;
 		} else {
-			XMFLOAT3 pos = obj->GetPosition();
-			float rot = obj->GetRotation().y;
-			rot += 30;
-			if (damageframe >= 1.0f) {
-				//compornent->SetIsDamage(false);
-				damageframe = 0.0f;
+			if (knock_back_frame_ >= 1.0f) {
+				knock_back_frame_ = 0.0f;
 				knockBacking = false;
 				hitBound.isHit = false;
-				rot = 0;
+				rot = collided_rot_;
 				canMove = true;
 				obj->SetRotation({ 0,rot,0 });
 				obj->SetPosition(pos);
 				return;
 			} else {
-				damageframe += 0.02f;
+				knock_back_frame_ += 1.0f/ kKnockBackFrameMax;
 			}
 
 			pos = {
-			Ease(InOut,Quad,damageframe,Start.x,rebound.x),
+			Ease(InOut,Quad,knock_back_frame_,s_rebound_pos_.x,e_rebound_pos_.x),
 			0,
-			Ease(InOut,Quad,damageframe,Start.z,rebound.z)
+			Ease(InOut,Quad,knock_back_frame_,s_rebound_pos_.z,e_rebound_pos_.z)
 			};
+
+			float spinning = collided_rot_+ (DEGREE_MAX * 5);
+			rot = Ease(InOut, Quad, knock_back_frame_, collided_rot_, spinning);
 
 			obj->SetRotation({ 0,rot,0 });
 			obj->SetPosition(pos);
@@ -336,11 +326,9 @@ void Player::LimitArea() {
 	obj->SetPosition(pos);
 }
 
-
-
 XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
-	rot2 = XMMatrixRotationY(XMConvertToRadians(angle));
-	v = XMVector3TransformNormal(v, rot2);
+	XMMATRIX rot = XMMatrixRotationY(XMConvertToRadians(angle));
+	v = XMVector3TransformNormal(v, rot);
 	XMFLOAT3 pos = { v.m128_f32[0],v.m128_f32[1] ,v.m128_f32[2] };
 	return pos;
 }
@@ -350,101 +338,4 @@ const DirectX::XMFLOAT3& Player::GetCameraPos(const float& angle, const float& s
 	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,str,0 }, angle);
 	cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
 	return cameraPos;
-}
-
-
-void Player::ContactObj() {
-	XMFLOAT3 pos = obj->GetPosition();
-
-	if (!onGround) {
-		// 下向き加速度
-		const float fallAcc = -0.01f;
-		const float fallVYMin = -0.5f;
-		// 加速
-		fallV.m128_f32[1] = max(fallV.m128_f32[1] + fallAcc, fallVYMin);
-		// 移動
-		pos.x += fallV.m128_f32[0];
-		pos.y += fallV.m128_f32[1];
-		pos.z += fallV.m128_f32[2];
-	}
-	// ワールド行列更新
-	obj->UpdateWorldMatrix();
-	obj->SetPosition(pos);
-	obj->collider->Update();
-	SphereCollider* sphereCollider = dynamic_cast<SphereCollider*>(obj->collider);
-	assert(sphereCollider);
-
-	// クエリーコールバッククラス
-	class PlayerQueryCallback : public QueryCallback {
-	public:
-		PlayerQueryCallback(Sphere* sphere) : sphere(sphere) {};
-
-		// 衝突時コールバック関数
-		bool OnQueryHit(const QueryHit& info) {
-
-			const XMVECTOR up = { 0,1,0,0 };
-
-			XMVECTOR rejectDir = XMVector3Normalize(info.reject);
-			float cos = XMVector3Dot(rejectDir, up).m128_f32[0];
-
-			// 地面判定しきい値
-			const float threshold = cosf(XMConvertToRadians(30.0f));
-
-			if (-threshold < cos && cos < threshold) {
-
-				sphere->center += info.reject;
-				move += info.reject;
-			}
-
-			return true;
-		}
-
-		Sphere* sphere = nullptr;
-		DirectX::XMVECTOR move = {};
-	};
-
-	PlayerQueryCallback callback(sphereCollider);
-
-	// 球と地形の交差を全検索
-	CollisionManager::GetInstance()->QuerySphere(*sphereCollider, &callback, COLLISIONSHAPE_MESH);
-	// 交差による排斥分動かす
-	pos.x += callback.move.m128_f32[0];
-	pos.y += callback.move.m128_f32[1];
-	pos.z += callback.move.m128_f32[2];
-	// ワールド行列更新
-	obj->UpdateWorldMatrix();
-	obj->SetPosition(pos);
-	obj->collider->Update();
-
-	// 球の上端から球の下端までのレイキャスト
-	Ray ray;
-	ray.start = sphereCollider->center;
-	ray.start.m128_f32[1] += sphereCollider->GetRadius();
-	ray.dir = { 0,-1,0,0 };
-	RaycastHit raycastHit;
-	// 接地状態
-	if (onGround) {
-		// スムーズに坂を下る為の吸着距離
-		const float adsDistance = 0.2f;
-		// 接地を維持
-		if (CollisionManager::GetInstance()->Raycast(ray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f + adsDistance)) {
-			onGround = true;
-			pos.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
-		}
-		// 地面がないので落下
-		else {
-			onGround = false;
-			fallV = {};
-		}
-	}
-	// 落下状態
-	else if (fallV.m128_f32[1] <= 0.0f) {
-		if (CollisionManager::GetInstance()->Raycast(ray, COLLISION_ATTR_LANDSHAPE, &raycastHit, sphereCollider->GetRadius() * 2.0f)) {
-			// 着地
-			onGround = true;
-			pos.y -= (raycastHit.distance - sphereCollider->GetRadius() * 2.0f);
-		}
-	}
-
-
 }

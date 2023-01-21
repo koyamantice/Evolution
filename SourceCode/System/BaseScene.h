@@ -21,6 +21,7 @@ class SceneManager;
 #include "ModelManager.h"
 #include "ImageManager.h"
 #include "AudioManager.h"
+#include "ActorManager.h"
 
 #include <SourceCode/Common/Easing.h>
 #include <SourceCode/User/PauseUI.h>
@@ -39,19 +40,17 @@ protected:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 protected:
-	LightGroup* lightGroup = nullptr;
-	DebugCamera* camera = { nullptr };
-
-
-	bool pause = false;
-	float frame = 0.0f;
-
-	bool scene_first_change = true;
-	bool intro_skip = false;
-	bool skip_frame = 0.0f;
+	std::unique_ptr<DebugCamera> camera =  nullptr ;
+	std::unique_ptr<LightGroup> lightGroup = nullptr;
 
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
 	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
+	std::unique_ptr<AudioManager> audioManager = nullptr;
+
+	bool pause = false;
+
+	bool scene_first_change = true;
+	bool intro_skip = false;
 
 public:
 	virtual ~BaseScene()=default;

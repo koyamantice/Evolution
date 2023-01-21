@@ -39,8 +39,8 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	}
 
 	//カメラの初期化
-	camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
-	camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
+	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	player_shadow->SetAngle(camera_angle);
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ 
@@ -53,6 +53,11 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	//ポストエフェクトの初期化
 	postEffect = new PostEffect();
 	postEffect->Initialize();
+	//
+	audioManager = std::make_unique<AudioManager>();
+
+	audioManager->LoadWave("BGM/battle.wav");
+	audioManager->PlayWave("BGM/battle.wav", 0.5f);
 
 	//パーティクルの初期化
 	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);

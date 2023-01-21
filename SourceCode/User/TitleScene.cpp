@@ -46,6 +46,13 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	text = new TitleText();
 	text->Init();
 
+	audioManager = std::make_unique<AudioManager>();
+	
+	audioManager->LoadWave("BGM/titleBGM.wav");
+	audioManager->LoadWave("SE/pushstart.wav");
+
+	audioManager->PlayWave("BGM/titleBGM.wav",0.5f);
+
 
 	//‚ ‚Æ‚Åcsv
 	eyes.push_back(80);
@@ -108,6 +115,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 
 	if (input->TriggerKey(DIK_SPACE)||input->TriggerButton(input->A)) {
 		scene_changer->ChangeStart();
+		audioManager->PlayWave("SE/pushstart.wav",0.5f);
 		switch (nextScene) {
 		case Portal::Title:
 			SceneName = "FIRSTSTAGE";

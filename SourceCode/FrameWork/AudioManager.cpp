@@ -1,110 +1,62 @@
 #include "AudioManager.h"
 
-AudioManager* AudioManager::GetInstance() {
-	static AudioManager instance;
-	return &instance;
+#include <fstream>
+#include <cassert>
+
+
+
+
+AudioManager::AudioManager() {
+	Initialize();
 }
-bool AudioManager::Initialize() {
+
+AudioManager::~AudioManager() {
+	Finalize();
+}
+
+void  AudioManager::Initialize() {
 	HRESULT result;
 
 	// XAudioエンジンのインスタンスを生成
-	result = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	if FAILED(result) {
 		assert(0);
-		return false;
 	}
 
 	// マスターボイスを生成
-	result = xAudio2->CreateMasteringVoice(&masterVoice);
+	result = xAudio2_->CreateMasteringVoice(&masterVoice);
 	if FAILED(result) {
 		assert(0);
-		return false;
 	}
 
-	return true;
 }
 
-void AudioManager::LoadSound(int texnumber, const char* filename) {
-	HRESULT result;
+void AudioManager::Finalize() {
+
+	//XAudio2開放
+	xAudio2_.Reset();
+	//音声データ開放
+	std::map<std::string, SoundData>::iterator it = soundDatas_.begin();
+	for (; it != soundDatas_.end(); ++it) {
+		Unload(&it->second);
+	}
+	soundDatas_.clear();
+}
+
+void AudioManager::LoadWave(const std::string& filename){
+	//重複したら抜ける
+	if (soundDatas_.find(filename)!=soundDatas_.end()) {
+		return;
+	}
+	//ディレクトリパスとファイル名を連結してフルパスとして得る
+	std::string fullpath = directoryPath_ + filename;
+
 	// ファイルストリーム
 	std::ifstream file;
 	// Waveファイルを開く
-	file.open(filename, std::ios_base::binary);
+	file.open(fullpath, std::ios_base::binary);
 	// ファイルオープン失敗をチェック
-	if (file.fail()) {
-		assert(0);
-	}
-	strcpy_s(fileStamp[texnumber], filename);
-	// RIFFヘッダーの読み込み
-	file.read((char*)&riff[texnumber], sizeof(riff[texnumber]));
-	// ファイルがRIFFかチェック
-	if (strncmp(riff[texnumber].chunk.id, "RIFF", 4) != 0) {
-		assert(0);
-	}
-
-	// Formatチャンクの読み込み
-	file.read((char*)&format[texnumber], sizeof(format)[texnumber]);
-
-	// Dataチャンクの読み込み
-
-	file.read((char*)&data[texnumber], sizeof(data[texnumber]));
-
-	// Dataチャンクのデータ部（波形データ）の読み込み
-	pBuffer[texnumber] = new char[data[texnumber].size];
-	file.read(pBuffer[texnumber], data[texnumber].size);
-
-	// Waveファイルを閉じる
-	file.close();
-	// 波形フォーマットの設定
-	memcpy(&wfex[texnumber], &format[texnumber].fmt, sizeof(format[texnumber].fmt));
-	wfex[texnumber].wBitsPerSample = format[texnumber].fmt.nBlockAlign * 8 / format[texnumber].fmt.nChannels;
-
-	// 波形フォーマットを元にSourceVoiceの生成
-	result = xAudio2->CreateSourceVoice(&pSourceVoice[texnumber], &wfex[texnumber], 0, 2.0f, &voiceCallback);
-	if FAILED(result) {
-		delete[] pBuffer[texnumber];
-		assert(0);
-		return;
-	}
-}
-
-void AudioManager::LoopWave(int texnumber, float Volume) {
-
-	HRESULT result;
-
-	// 再生する波形データの設定
-	buf[texnumber].pAudioData = (BYTE*)pBuffer[texnumber];
-	buf[texnumber].pContext = pBuffer[texnumber];
-	buf[texnumber].Flags = XAUDIO2_END_OF_STREAM;
-	buf[texnumber].LoopCount = XAUDIO2_LOOP_INFINITE;
-	buf[texnumber].AudioBytes = data[texnumber].size;
-	pSourceVoice[texnumber]->SetVolume(Volume);
-	// 波形データの再生
-	result = pSourceVoice[texnumber]->SubmitSourceBuffer(&buf[texnumber]);
-	if FAILED(result) {
-		delete[] pBuffer[texnumber];
-		assert(0);
-		return;
-	}
-
-	result = pSourceVoice[texnumber]->Start(0);
-	if FAILED(result) {
-		delete[] pBuffer[texnumber];
-		assert(0);
-		return;
-	}
-}
-
-void AudioManager::PlayWave(const char* filename,const float Volume) {
-	HRESULT result;
-	// ファイルストリーム
-	std::ifstream file;
-	// Waveファイルを開く
-	file.open(filename, std::ios_base::binary);
-	// ファイルオープン失敗をチェック
-	if (file.fail()) {
-		assert(0);
-	}
+	assert(file.fail());
 
 	// RIFFヘッダーの読み込み
 	RiffHeader riff;
@@ -113,14 +65,35 @@ void AudioManager::PlayWave(const char* filename,const float Volume) {
 	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
 		assert(0);
 	}
+	// ファイルがRIFFかチェック
+	if (strncmp(riff.type, "WAVE", 4) != 0) {
+		assert(0);
+	}
 
 	// Formatチャンクの読み込み
-	FormatChunk format{};
-	file.read((char*)&format, sizeof(format));
+	FormatChunk format = {};
+	//チャンクヘッダーの確認
+	file.read((char*)&format,sizeof(ChunkHeader));
+	if (strncmp(format.chunk.id,"fmt",4)!=0) {
+		assert(0);
+	}
+	assert(format.chunk.size <= sizeof(format.fmt));
+	file.read((char*)&format.fmt, format.chunk.size);
 
 	// Dataチャンクの読み込み
-	Chunk data;
+	ChunkHeader data={};
 	file.read((char*)&data, sizeof(data));
+	//JUNKチャンクを検出した場合
+	if (strncmp(data.id, "JUNK", 4) == 0) {
+		//読み取り位置をJUNKチャンクの終わりまで進める
+		file.seekg(data.size, std::ios_base::cur);
+		//
+		file.read((char*)&data, sizeof(data));
+	}
+
+	if (strncmp(data.id, "data", 4)!=0) {
+		assert(0);
+	}
 
 	// Dataチャンクのデータ部（波形データ）の読み込み
 	char* pBuffer = new char[data.size];
@@ -128,43 +101,45 @@ void AudioManager::PlayWave(const char* filename,const float Volume) {
 
 	// Waveファイルを閉じる
 	file.close();
+	
+	SoundData soundData = {};
 
-	WAVEFORMATEX wfex{};
-	// 波形フォーマットの設定
-	memcpy(&wfex, &format.fmt, sizeof(format.fmt));
-	wfex.wBitsPerSample = format.fmt.nBlockAlign * 8 / format.fmt.nChannels;
+	soundData.wfex = format.fmt;
+	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	soundData.bufferSize = data.size;
+
+	//サウンドデータえお連想配列に格納
+	soundDatas_.insert(std::make_pair(filename,soundData));
+}
+
+void AudioManager::PlayWave(const std::string& filename, const float& Volume) {
+	HRESULT result;
+
+	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
+	//読み込んでなければアサート
+	assert(it != soundDatas_.end());
+
+	//サウンドデータの参照
+	SoundData& soundData = it->second;
 
 	// 波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2->CreateSourceVoice(&pSourceVoice, &wfex, 0, 2.0f, &voiceCallback);
-	if FAILED(result) {
-		delete[] pBuffer;
-		assert(0);
-		return;
-	}
+	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	
+	assert(SUCCEEDED(result));
 
 	// 再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = (BYTE*)pBuffer;
-	buf.pContext = pBuffer;
+	buf.pAudioData = (BYTE*)soundData.pBuffer;
+	buf.pContext = soundData.pBuffer;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
-	buf.AudioBytes = data.size;
+	buf.AudioBytes = soundData.bufferSize;
 	pSourceVoice->SetVolume(Volume);
 	// 波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
-	if FAILED(result) {
-		delete[] pBuffer;
-		assert(0);
-		return;
-	}
-	XAUDIO2_VOICE_STATE xaudio2state;
-	pSourceVoice->GetState(&xaudio2state);
 	result = pSourceVoice->Start(0);
-	if FAILED(result) {
-		delete[] pBuffer;
-		assert(0);
-		return;
-	}
+
+
 
 	//if (xaudio2state.BuffersQueued!=0) {
 	//	pSourceVoice->Stop(0);
@@ -179,18 +154,13 @@ void AudioManager::PlayWave(const char* filename,const float Volume) {
 }
 
 
+void AudioManager::Unload(SoundData* _SoundData) {
+	//バッファのメモリを開放	
+	delete[] _SoundData->pBuffer;
 
-void AudioManager::StopWave(int texnumber) {
-	if (pSourceVoice[texnumber]==nullptr) {
-		return;
-	}
+	_SoundData->pBuffer = 0;
+	_SoundData->bufferSize = 0;
+	_SoundData->wfex = {};
 
-	XAUDIO2_VOICE_STATE xa2state;
-	pSourceVoice[texnumber]->GetState(&xa2state);
-	if (xa2state.BuffersQueued!=0) {
-		pSourceVoice[texnumber]->Stop(0);
-		pSourceVoice[texnumber]->DestroyVoice();
-		LoadSound(texnumber, fileStamp[texnumber]);
-	}
 }
 

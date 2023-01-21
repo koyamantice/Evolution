@@ -43,11 +43,10 @@ Object2d::Object2d(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 co
 
 	this->position = position;
 	this->scale = size;
-	//this->anchorpoint = anchorpoint;//
 	this->matWorld = XMMatrixIdentity();
 	this->color = color;
 	this->texNumber = texNumber;
-	//this->texSize = size;
+
 }
 
 bool Object2d::StaticInitialize(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, int window_width, int window_height, Camera* camera)
@@ -86,8 +85,6 @@ void Object2d::PostDraw()
 
 Object2d* Object2d::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color)
 {
-	// âºÉTÉCÉY
-	//size = { 10.0f, 10.0f,3 };
 
 	if (texbuff[texNumber])
 	{
