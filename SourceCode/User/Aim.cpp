@@ -119,6 +119,9 @@ void Aim::Move(float angle) {
 	LockOn->SetRotation(Lrot);
 
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
+		if (!first) {
+			first = true;
+		}
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock() - 1);
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
@@ -139,7 +142,7 @@ void Aim::Move(float angle) {
 		}
 		XMFLOAT3 base = LockOn->GetPosition();
 		for (int i = 0; i < 1; i++) {
-			const float rnd_rad = 360.0f;
+			const float rnd_rad = DEGREE_MAX;
 			XMFLOAT3 pos{};
 			float angle = (float)rand() / RAND_MAX * rnd_rad;
 			pos.x = base.x + (Area+0.5f) * sinf(angle);
@@ -171,10 +174,10 @@ void Aim::Move(float angle) {
 	const float PI = 3.14159f;
 	const float STICK_MAX = 32768.0f;
 
-	if (input->TiltPushStick(Input::L_UP   ,0.1f) ||
-		input->TiltPushStick(Input::L_DOWN ,0.1f) ||
-		input->TiltPushStick(Input::L_RIGHT,0.1f) ||
-		input->TiltPushStick(Input::L_LEFT ,0.1f)) {
+	if (input->TiltPushStick(Input::L_UP   ,0.0f) ||
+		input->TiltPushStick(Input::L_DOWN ,0.0f) ||
+		input->TiltPushStick(Input::L_RIGHT,0.0f) ||
+		input->TiltPushStick(Input::L_LEFT ,0.0f)) {
 		after_pos = player->GetCameraPos(player->GetRotation().y,10);
 	}
 	Lpos.x = Ease(In, Quad, 0.5f, Lpos.x, after_pos.x);

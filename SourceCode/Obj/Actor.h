@@ -14,6 +14,7 @@ class ActorComponent;
 #define DEGREE_MAX 360.0f
 #define DEGREE_HALF 180.0f
 #define DEGREE_QUARTER 90.0f
+
 class Actor {
 protected: // エイリアス
 	// Microsoft::WRL::を省略
@@ -77,7 +78,7 @@ public:
 	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true; hitBound.HitingPos = pos; };
 	const bool& GetHitBound() { return  hitBound.isHit; }
 	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
-	const float& GetSize()const { return obj->GetSize(); }
+	const float& GetSize()const { return collide_size; }
 
 	//タグのセット
 	void SetTag(const std::string& Tag) { tag = Tag; };
@@ -137,12 +138,15 @@ public:
 protected:
 	int command = 0;
 	std::unique_ptr<Object3d> obj;
+	float collide_size = 1.0f;
 	// 残像データの数
 	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
 	HitBound hitBound;
 	XMFLOAT3 cameraPos{};
+
 	float max_hp = 0;
 	float hp = 0;
+	
 	float angle = 0;
 	bool canMove = true;
 	bool pause = false;
