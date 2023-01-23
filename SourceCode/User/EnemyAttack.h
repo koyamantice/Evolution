@@ -5,7 +5,7 @@
 
 class EnemyAttack {
 private: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -14,7 +14,7 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
 	EnemyAttack();
-	
+
 	~EnemyAttack();
 	void Init();
 	void Upda();
@@ -29,7 +29,12 @@ private:
 	float scale = 0.0f;
 	float effectRate = 0.0f;
 	std::unique_ptr<Object2d> Explo = nullptr;
-	std::unique_ptr<Object2d> Predicted = nullptr;
+	enum PredictKind {
+		PREDICTING = 0,
+		PREDICTED,
+		PREDICTMAX
+	};
+	std::unique_ptr<Object2d> Predicted[PREDICTMAX] = {};
 	bool predict = false;
 	ParticleManager* partMan = nullptr;
 

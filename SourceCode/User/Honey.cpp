@@ -7,6 +7,7 @@ void Honey::OnInit() {
 	obj->SetScale(base_sca);
 	//•K—vl”
 	stock = 0;
+	collide_size = 6.0f;
 
 
 	for (int i = 0; i < 2;i++) {

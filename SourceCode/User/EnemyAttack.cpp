@@ -12,20 +12,17 @@ EnemyAttack::~EnemyAttack() {
 void EnemyAttack::Init() {
 	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, {0,0,0},
 	{1,1,1}, { 1,1,1,1 });
-	//Explo_->SetIsBillboard(true);
-	Explo_->Object2dCreate();
 	Explo_->SetPosition({ 0,0.02f,0 });
 	Explo_->SetRotation({ 90,0,0 });
 	Explo.reset(Explo_);
 
-	Object2d* Predicted_ = Object2d::Create(ImageManager::kpredicted, { 0,0,0 },
-		{ 4,4,4 }, { 1,1,1,0.5f});
-	//Predicted_->SetIsBillboard(true);
-	Predicted_->Object2dCreate();
-	Predicted_->SetPosition({ 0,0.02f,0 });
-	Predicted_->SetRotation({ 90,0,0 });
-	Predicted.reset(Predicted_);
-
+	for (int i = 0; i < PREDICTMAX;i++) {
+		Object2d* Predicted_ = Object2d::Create(ImageManager::kpredicted, { 0,0,0 },
+			{ 4,4,4 }, { 1,1,1,0.5f });
+		Predicted_->SetPosition({ 0,0.02f,0 });
+		Predicted_->SetRotation({ 90,0,0 });
+		Predicted[i].reset(Predicted_);
+	}
 
 	partMan = new ParticleManager();
 	partMan->Initialize(ImageManager::nul);
@@ -34,7 +31,9 @@ void EnemyAttack::Init() {
 
 void EnemyAttack::Upda() {
 	Explo->Update();
-	Predicted->Update();
+	for (int i = 0; i < PREDICTMAX; i++) {
+		Predicted[i]->Update();
+	}
 	partMan->Update();
 	if (burning) {
 		XMFLOAT3 pos = Explo->GetPosition();
@@ -70,7 +69,9 @@ void EnemyAttack::Draw() {
 	}
 	if (predict) {
 		Object2d::PreDraw();
-		Predicted->Draw();
+		for (int i = 0; i < PREDICTMAX; i++) {
+			Predicted[i]->Draw();
+		}
 	}
 }
 

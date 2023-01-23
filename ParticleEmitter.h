@@ -52,7 +52,19 @@ public: // ƒƒ“ƒoŠÖ”
 		const float& start_scale = 1.0f, const float& end_scale = 0.0f,
 		const XMFLOAT4& start_color = { 1.0f,1.0f,0.0f,0.8f }, const XMFLOAT4& end_color = { 1.0f,1.0f,0.0f,0.0f });
 
+	void AddContraction(const int& _life,
+		const XMFLOAT3& _position,
+		const float& _area,
+		const float& _average_vel,
+		const float& _start_scale = 1.5f, const float& _end_scale = 0.0f,
+		const XMFLOAT4& _start_color = { 0.5f,1.0f,0.5f,1.0f }, const XMFLOAT4& _end_color = { 0.5f,1.0f,0.5f,1.0f });
 
+	void AddCrystalMove(const int& _life,
+		const XMFLOAT3& _position,
+		const float& _area,
+		const float& _average_vel,
+		const float& _start_scale = 1.5f, const float& _end_scale = 0.0f,
+		const XMFLOAT4& _start_color = { 0.5f,1.0f,0.5f,1.0f }, const XMFLOAT4& _end_color = { 0.5f,1.0f,0.5f,1.0f });
 
 	/// <summary>
 	/// –ˆƒtƒŒ[ƒ€ˆ—

@@ -1,5 +1,5 @@
 #include "ParticleEmitter.h"
-
+#include "Actor.h"
 ParticleEmitter::ParticleEmitter(const UINT& texnumber) {
 
 	//パーティクルの初期化
@@ -53,6 +53,37 @@ void ParticleEmitter::AddInNest(const int& life, const XMFLOAT3& position, const
 	particleManager->Add(life, { position.x + margin.x, position.y + 2.5f + margin.y,position.z + margin.z }, vel, {}, start_scale, end_scale, start_color, end_color);
 
 }
+
+void ParticleEmitter::AddContraction(const int& _life, const XMFLOAT3& _position, const float& _area, const float& _average_vel, const float& _start_scale, const float& _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
+
+	float angle = (float)rand() / RAND_MAX * DEGREE_MAX;
+
+	XMFLOAT3 pos{};
+	pos.x = _position.x + _area * sinf(angle);
+	pos.z = _position.z + _area * cosf(angle);
+	XMFLOAT3 vel{};
+	vel.y = (float)rand() / RAND_MAX * _average_vel;
+	particleManager->Add(45, pos, vel, {}, 1.5f, 0.0f, { 0.5f,1.0f,0.5f,1.0f }, { 0.5f,1.0f,0.5f,1.0f });
+
+
+}
+
+void ParticleEmitter::AddCrystalMove(const int& _life, const XMFLOAT3& _position, const float& _area, const float& _average_vel, const float& _start_scale, const float& _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
+	float angle = (float)rand() / RAND_MAX * DEGREE_MAX;
+
+	float area = (float)rand() / RAND_MAX * _area;
+
+	XMFLOAT3 pos{};
+	pos.x = _position.x + area * sinf(angle);
+	pos.z = _position.z + area * cosf(angle);
+
+	XMFLOAT3 vel{};
+	vel.y = (float)rand() / RAND_MAX * _average_vel;
+
+	particleManager->Add(_life, pos, vel, {}, _start_scale, _end_scale, _start_color, _end_color);
+
+}
+
 
 void ParticleEmitter::Update() {
 	particleManager->Update();

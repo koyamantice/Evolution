@@ -7,44 +7,30 @@ using namespace DirectX;
 
 void Aim::Init() {
 	Object2d* Lock_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Lock_->Object2dCreate();
 	Lock_->SetRotation({ 90,0,0 });
 	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 	LockOn.reset(Lock_);
 	LockOn->SetPosition({ 100,-50,0 });
 
 	Object2d* Whistle_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Whistle_->Object2dCreate();
 	Whistle_->SetRotation({ 90,0,0 });
 	Whistle_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
 	Whistle.reset(Whistle_);
 	Whistle->SetPosition({ 100,-50,0 });
 
 
-	Object2d* FirstUI_ = Object2d::Create(ImageManager::SlowUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	FirstUI_->Object2dCreate();
-	FirstUI_->SetRotation({ 0,0,0 });
-	FirstUI_->SetIsBillboard(true);
-	FirstUI.reset(FirstUI_);
-	FirstUI->SetPosition({ 100,-50,0 });
+	for (int i = 0; i < COMMENTMAX;i++) {
+		Object2d* UI_ = Object2d::Create(ImageManager::SlowUI + i, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+		UI_->SetRotation({ 0,0,0 });
+		UI_->SetIsBillboard(true);
+		comment_ui_[i].reset(UI_);
+		comment_ui_[i]->SetPosition({100,-50,0});
 
-	Object2d* SecondUI_ = Object2d::Create(ImageManager::SetUI, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	SecondUI_->Object2dCreate();
-	SecondUI_->SetRotation({ 0,0,0 });
-	SecondUI_->SetIsBillboard(true);
-	SecondUI[0].reset(SecondUI_);
-	SecondUI[0]->SetPosition({ 100,-50,0 });
+	}
 
-	Object2d* SecondUI2_ = Object2d::Create(ImageManager::SetUI2, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	SecondUI2_->Object2dCreate();
-	SecondUI2_->SetRotation({ 0,0,0 });
-	SecondUI2_->SetIsBillboard(true);
-	SecondUI[1].reset(SecondUI2_);
-	SecondUI[1]->SetPosition({ 100,-50,0 });
 
 	for (int i = 0; i < GuidNum; i++) {
 		Object2d* Guid_ = Object2d::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-		Guid_->Object2dCreate();
 		Guid_->SetRotation({ 90,0,0 });
 		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.6f });
 		Guid[i].reset(Guid_);
@@ -62,24 +48,25 @@ void Aim::Init() {
 void Aim::Upda(float angle) {
 	LockOn->Update();
 	Whistle->Update();
-	FirstUI->Update();
 	partMan->Update();
-	SecondUI[0]->Update();
-	SecondUI[1]->Update();
+	for (int i = 0; i < COMMENTMAX; i++) {
+		comment_ui_[i]->Update();
+	}
 	animeframe++;
 	if (animeframe > 50) {
 		Animation += vel;
 		vel *= -1;
 		animeframe = 0;
 	}
-	if (!first) {
+
+	if (explanation_now_ == RECOVERY) {
 		FirstAlpha *= 0.9f;
-		FirstUI->SetColor({ 1,1,1,FirstAlpha });
+		comment_ui_[SHOT]->SetColor({ 1,1,1,FirstAlpha });
 	}
-	if (!second) {
+	if (explanation_now_ == COMMENTMAX) {
 		SecondAlpha *= 0.9f;
-		SecondUI[0]->SetColor({ 1,1,1,SecondAlpha });
-		SecondUI[1]->SetColor({ 1,1,1,SecondAlpha });
+		comment_ui_[RECOVERY]->SetColor({ 1,1,1,SecondAlpha });
+		comment_ui_[RECOVERYPUSH]->SetColor({ 1,1,1,SecondAlpha });
 	}
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Update();
@@ -93,9 +80,9 @@ void Aim::Draw() {
 	Object2d::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
-	FirstUI->Draw();
-	if (FirstAlpha < 0.01f) {
-		SecondUI[Animation]->Draw();
+	comment_ui_[SHOT]->Draw();
+	if (explanation_now_ == RECOVERY) {
+		comment_ui_[RECOVERY+Animation]->Draw();
 	}
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Draw();
@@ -119,8 +106,8 @@ void Aim::Move(float angle) {
 	LockOn->SetRotation(Lrot);
 
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
-		if (!first) {
-			first = true;
+		if (explanation_now_== SHOT) {
+			explanation_now_ = RECOVERY;
 		}
 		player = ActorManager::GetInstance()->SearchActor("Player");
 		player->SetStock(player->GetStock() - 1);
@@ -132,10 +119,8 @@ void Aim::Move(float angle) {
 	}
 
 	if (input->PushButton(Input::A)) {
-		if (!first) {
-			if (second) {
-				second = false;
-			}
+		if (explanation_now_ == RECOVERY) {
+			explanation_now_ = COMMENTMAX;
 		}
 		if (Area < 10.0f) {
 			Area += 0.20f;
@@ -149,9 +134,8 @@ void Aim::Move(float angle) {
 			pos.z = base.z + (Area+0.5f) * cosf(angle);
 			const float rnd_vel = 0.4f;
 			XMFLOAT3 vel{};
-			//vel.x = (float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel;
-			//vel.z = -(float)rand() / RAND_MAX * rnd_vel;// -rnd_vel / 2.0f;
+
 			partMan->Add(45, pos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,0.0f });
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
@@ -171,7 +155,6 @@ void Aim::Move(float angle) {
 
 	float StickX = input->GetLeftControllerX();
 	float StickY = input->GetLeftControllerY();
-	const float PI = 3.14159f;
 	const float STICK_MAX = 32768.0f;
 
 	if (input->TiltPushStick(Input::L_UP   ,0.0f) ||
@@ -188,10 +171,10 @@ void Aim::Move(float angle) {
 	if (Lpos.z > 48.0f) { Lpos.z = 48.0f; }
 	if (Lpos.z < -48.0f) { Lpos.z = -48.0f; }
 	LockOn->SetPosition({ Lpos.x,0.01f,Lpos.z });
-	FirstUI->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
-	SecondUI[0]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
-	SecondUI[1]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * PI / 180.0f) + 3.5f ,Lpos.z });
 
+	for (int i = 0; i < COMMENTMAX; i++) {
+		comment_ui_[i]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * XM_PI / DEGREE_HALF) + 3.5f ,Lpos.z });
+	}
 
 	for (int i = 0; i < GuidNum; i++) {
 		GuidPos[i].x = Ease(InOut, Quad, (i + 1) * 0.1f, pos.x, Lpos.x);

@@ -66,7 +66,8 @@ void Enemy::DebugUpdate() {
 
 void Enemy::OnInit() {
 	isVisible = false;
-	obj->SetScale({3.0f, 3.0f, 3.0f});
+	collide_size = 3.0f;
+
 	FBXObject3d* Mash_= new FBXObject3d();
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash));
@@ -81,7 +82,6 @@ void Enemy::OnInit() {
 	UpdateCommand();
 
 	command = Actor::Phase::UNGUARD;
-
 	player = ActorManager::GetInstance()->SearchActor("Player");
 
 	compornent = new EnemyUI();
@@ -104,14 +104,15 @@ void Enemy::OnInit() {
 }
 
 void Enemy::OnUpda() {
-	fbxObject3d->Update();
-	Attack->Upda();
 	PhaseMove();
 	LifeCommon();
+
 	Shadow->Update();
 	Shadow->SetPosition({ fbxObject3d->GetPosition().x,0.01f, fbxObject3d->GetPosition().z });
-	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
+
 	obj->SetPosition(fbxObject3d->GetPosition());
+	fbxObject3d->Update();
+	Attack->Upda();
 }
 
 void Enemy::OnFirstDraw(DirectXCommon* dxCommon) {

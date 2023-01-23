@@ -106,7 +106,7 @@ Object2d* Object2d::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMF
 		assert(0);
 		return nullptr;
 	}
-
+	texture->Object2dCreate();
 	return texture;
 }
 

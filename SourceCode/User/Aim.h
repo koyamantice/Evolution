@@ -22,8 +22,15 @@ private:
 	std::unique_ptr<Object2d> Whistle{};
 	static const int GuidNum = 8;
 	std::unique_ptr<Object2d> Guid[GuidNum]{};
-	std::unique_ptr<Object2d> FirstUI{};
-	std::unique_ptr<Object2d> SecondUI[2]{};
+
+	enum Explanation {
+		SHOT=0,
+		RECOVERY,
+		RECOVERYPUSH,
+		COMMENTMAX
+	};
+
+	std::unique_ptr<Object2d> comment_ui_[COMMENTMAX]{};
 	std::unique_ptr<AudioManager> audioManager = nullptr;
 
 
@@ -33,7 +40,7 @@ private:
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
 	XMFLOAT3 after_pos{};
 
-
+	int explanation_now_ = 0;
 	bool first = true;
 	bool second = true;
 

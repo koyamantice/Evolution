@@ -550,18 +550,15 @@ bool Enemy_Bee::WaitingElapsedTime() {
 	}
 	return true;
 }
+
 float Enemy_Bee::DirRotation(const XMFLOAT3& target) {
 	float itr{};
 	XMFLOAT3 pos = fbxObject3d->GetPosition();
 	XMFLOAT3 position{};
+	
 	position.x = (target.x - pos.x);
 	position.z = (target.z - pos.z);
-	itr = (atan2f(position.x, position.z) * (180.0f / XM_PI)) - 90; //- 90;// *(XM_PI / 180.0f);
-	//if (itr >= 0) {
-	//	itr = (float)((int)itr % 360);
-	//} else {
-	//	itr += 360;
-	//	itr = (float)((int)itr % 360);
-	//}
+	itr = (atan2f(position.x, position.z) * (DEGREE_HALF / XM_PI)) - DEGREE_QUARTER;
+
 	return itr;
 }
