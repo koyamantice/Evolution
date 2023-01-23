@@ -87,7 +87,7 @@ void Enemy::OnInit() {
 	compornent = new EnemyUI();
 	compornent->Initialize();
 
-	EnemyAttack* Attack_ = new EnemyAttack();
+	EnemyAttack* Attack_ = new EnemyAttack(this);
 	Attack_->Init();
 	Attack.reset(Attack_);
 

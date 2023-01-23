@@ -1,6 +1,7 @@
 #pragma once
 #include"Object2d.h"
 #include <ParticleEmitter.h>
+#include "Actor.h"
 
 
 class EnemyAttack {
@@ -13,7 +14,7 @@ private: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	EnemyAttack();
+	EnemyAttack(Actor* _enemy);
 
 	~EnemyAttack();
 	void Init();

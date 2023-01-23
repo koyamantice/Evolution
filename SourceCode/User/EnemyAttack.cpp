@@ -3,7 +3,7 @@
 #include"ImageManager.h"
 #include<SourceCode/Common/Easing.h>
 #include"ActorManager.h"
-EnemyAttack::EnemyAttack() {
+EnemyAttack::EnemyAttack(Actor* _enemy) {
 }
 
 EnemyAttack::~EnemyAttack() {
@@ -43,9 +43,7 @@ void EnemyAttack::Upda() {
 		vel.y = (float)rand() / RAND_MAX * 2.0f;// -rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		XMFLOAT3 acc{};
-		//acc.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		acc.y = -(float)vel.y / 10.0f;
-		//acc.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		partMan->Add(30, pos, vel, acc, 1.5, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
 		scale = Ease(In, Linear, effectRate, 2.5f, 5.0f);
 		ActorManager::GetInstance()->DamageBullet(pos, 10);

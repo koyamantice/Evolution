@@ -202,9 +202,6 @@
     <ClCompile Include="SourceCode\System\ActorFactory.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\Crystal.cpp">
-      <Filter>User\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\PlayerUI.cpp">
       <Filter>User\Player</Filter>
     </ClCompile>
@@ -279,6 +276,9 @@
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\ClearCrystal.cpp">
+      <Filter>User\ステージに必要</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Crystal.cpp">
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
   </ItemGroup>
@@ -458,9 +458,6 @@
     <ClInclude Include="SourceCode\System\ActorFactory.h">
       <Filter>Obj\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\Crystal.h">
-      <Filter>User\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\PlayerUI.h">
       <Filter>User\Player</Filter>
     </ClInclude>
@@ -532,6 +529,9 @@
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\ClearCrystal.h">
+      <Filter>User\ステージに必要</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Crystal.h">
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
   </ItemGroup>
