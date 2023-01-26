@@ -163,6 +163,8 @@ void BattleScene::CameraUpda() {
 		}
 	}
 	player_shadow->SetAngle(camera_angle);
+	if (player_shadow->GetHitBound()) { camera_hight = RandHeight(camera_hight); }
+	else { camera_hight = kCameraHight; }
 	//ターゲットをプレイヤーの正面ベクトルに合わせます
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye({ 
@@ -184,14 +186,14 @@ void BattleScene::ResetCamera() {
 		angle_frame = 1.0f;
 	}
 
-	camera_angle = Ease(In, Quad, angle_frame, s_camera_angle, e_camera_angle);
+	camera_angle = Ease(In, Linear, angle_frame, s_camera_angle, e_camera_angle);
 
 	XMFLOAT3 e_camera_distance{};
 	e_camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	e_camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 
-	camera_distance.x = Ease(In, Quad, angle_frame, s_camera_distance.x, e_camera_distance.x);
-	camera_distance.z = Ease(In, Quad, angle_frame, s_camera_distance.z, e_camera_distance.z);
+	camera_distance.x = Ease(In, Linear, angle_frame, s_camera_distance.x, e_camera_distance.x);
+	camera_distance.z = Ease(In, Linear, angle_frame, s_camera_distance.z, e_camera_distance.z);
 
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
@@ -216,3 +218,12 @@ bool BattleScene::PauseUpdate() {
 }
 
 
+
+float BattleScene::RandHeight(const float& base) {
+	const float& rnd_vel = 0.95f;
+	float Rand = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	float itr = 0;
+	itr = base + Rand;
+
+	return itr;
+}

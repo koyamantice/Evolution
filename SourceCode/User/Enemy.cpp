@@ -14,39 +14,39 @@ void Enemy::LoadData() {
 	assert(file.is_open());
 
 	parameterCommands << file.rdbuf();
-	
+
 	file.close();
 }
 
 void Enemy::UpdateCommand() {
 	std::string line;
 
-	while (getline(parameterCommands,line)) {
+	while (getline(parameterCommands, line)) {
 		//解析しやすくする
 		std::istringstream line_stream(line);
 
 		std::string word;
 		//半角スペース区切りで行の先頭文字列を取得
-		getline(line_stream,word,',');
+		getline(line_stream, word, ',');
 		//"//"から始まる行はコメント
-		if (word.find("//")==0) {
+		if (word.find("//") == 0) {
 			//飛ばす
 			continue;
 		}
 		//各コマンド
-		if (word.find("HP")==0) {
+		if (word.find("HP") == 0) {
 			getline(line_stream, word, ',');
 			hp = (float)std::atof(word.c_str());
-		}else if(word.find("VEL")==0) {
+		} else if (word.find("VEL") == 0) {
 			getline(line_stream, word, ',');
 			vel = (float)std::atof(word.c_str());
 		} else if (word.find("PHASE") == 0) {
 			getline(line_stream, word, ',');
 			if (word.find("APPROCH") == 0) {
 				command = Actor::Phase::APPROCH;
-			}else if (word.find("LEAVE") == 0) {
+			} else if (word.find("LEAVE") == 0) {
 				command = Actor::Phase::LEAVE;
-			}else if (word.find("WAIT") == 0) {
+			} else if (word.find("WAIT") == 0) {
 				command = Actor::Phase::WAIT;
 			} else {
 				assert(0);//フェーズを書こうな
@@ -61,18 +61,17 @@ void Enemy::UpdateCommand() {
 
 void Enemy::DebugUpdate() {
 	fbxObject3d->Update();
-	fbxObject3d->SetPosition({0,-3,0});
+	fbxObject3d->SetPosition({ 0,-3,0 });
 }
 
 void Enemy::OnInit() {
 	isVisible = false;
 	collide_size = 3.0f;
 
-	FBXObject3d* Mash_= new FBXObject3d();
+	FBXObject3d* Mash_ = new FBXObject3d();
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash));
-	//Mash_->SetPosition({ 0.01f,0.0f, 0.01f });
-	Mash_->SetScale({0.025f,0.025f, 0.025f});
+	Mash_->SetScale({ 0.025f,0.025f, 0.025f });
 	Mash_->LoadAnimation();
 
 	fbxObject3d.reset(Mash_);
@@ -145,10 +144,6 @@ void Enemy::PhaseMove() {
 	case Actor::Phase::ATTACK:
 		AttackUpda();
 		break;
-	case Actor::Phase::WAIT:
-		WaitUpda();
-		break;
-
 	default:
 		break;
 	}
@@ -156,22 +151,20 @@ void Enemy::PhaseMove() {
 
 void Enemy::UnguardUpda() {
 	if (fbxObject3d->GetIsFinish()) { animecount++; }
-	if(animecount >= 2) {
+	if (animecount >= 2) {
 		fbxObject3d->StopAnimation();
 		waitTimer++;
-		Attack->SetPredict(true);
-		if (waitTimer == 240) {
-			Attack->SetPredict(false);
+		Attack->SetPredict(true, waitTimer / kPredictTime);
+		if (waitTimer == kPredictTime) {
+			Attack->SetPredict(false, 0);
 			command = Actor::Phase::ATTACK;
 			waitTimer = 0;
 			scaframe = 0.0f;
 			animecount = 0;
 			return;
 		}
-
-		scale = Ease(In, Quad, scaframe, 25.0f, 0.0f);
 		if (scaframe < 1.0f) {
-			scaframe += 0.016f;
+			scaframe += 1.0f / (kPredictTime / kScaleCount);
 		} else {
 			scaframe = 0.0f;
 		}
@@ -183,7 +176,7 @@ void Enemy::UnguardUpda() {
 void Enemy::AttackUpda() {
 	XMFLOAT3 pos = fbxObject3d->GetPosition();
 	waitTimer++;
-	if (waitTimer==150) {
+	if (waitTimer == kAttackTime) {
 		pos.y = 0;
 		fbxObject3d->ResetAnimation();
 		fbxObject3d->PlayAnimation();
@@ -200,30 +193,10 @@ void Enemy::AttackUpda() {
 		pos.y = 0;
 		speed = accel * 30.0f;
 	}
-	fbxObject3d->SetRotation({0,-180,0});
+	fbxObject3d->SetRotation({ 0,-180,0 });
 	fbxObject3d->SetPosition(pos);
 }
 
-void Enemy::WaitUpda() {
-	waitTimer++;
-	Attack->SetPredict(true);
-	if (waitTimer == 240) {
-		Attack->SetPredict(false);
-		command = Actor::Phase::ATTACK;
-		waitTimer = 0;
-		return;
-	}
-
-	scale = Ease(In, Quad, scaframe, 25.0f, 0.0f);
-	if (scaframe < 1.0f) {
-		scaframe += 0.016f;
-	} else {
-		scaframe = 0.0f;
-	}
-	scale = Ease(In, Quad, scaframe, 25.0f, 16.0f);
-	fbxObject3d->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
-
-}
 
 void Enemy::LifeCommon() {
 	if (hp < 0.0f) {
@@ -236,13 +209,13 @@ void Enemy::LifeCommon() {
 		XMFLOAT3 sca = fbxObject3d->GetScale();
 		fbxObject3d->ResetAnimation();
 		rot.y++;
-		scale = Ease(In,Quad, scaframe,25.0f,0.0f);
+		scale = Ease(In, Quad, scaframe, 25.0f, 0.0f);
 		if (scaframe < 1.0f) {
 			scaframe += 0.01f;
 		} else {
 			isActive = false;
 		}
-		fbxObject3d->SetScale({scale * 0.001f,scale * 0.001f,scale * 0.001f });
+		fbxObject3d->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
 		fbxObject3d->SetRotation(rot);
 	}
 }

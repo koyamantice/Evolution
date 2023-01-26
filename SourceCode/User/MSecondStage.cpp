@@ -11,10 +11,10 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Green");
 	}
 
@@ -35,8 +35,8 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 
 	//カメラの初期化
 	camera->SetTarget(player_shadow->GetPosition());
-	camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
-	camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
+	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	e_camera_distance.x = camera_distance.x;
 	e_camera_distance.z = camera_distance.z;
 	camera->SetEye({

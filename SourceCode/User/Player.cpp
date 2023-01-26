@@ -299,7 +299,7 @@ void Player::HitBoundMotion() {
 			Ease(InOut,Quad,knock_back_frame_,s_rebound_pos_.z,e_rebound_pos_.z)
 			};
 
-			float spinning = collided_rot_+ (DEGREE_MAX * 5);
+			float spinning = collided_rot_+ (DEGREE_MAX * 3);
 			rot = Ease(InOut, Quad, knock_back_frame_, collided_rot_, spinning);
 
 			obj->SetRotation({ 0,rot,0 });

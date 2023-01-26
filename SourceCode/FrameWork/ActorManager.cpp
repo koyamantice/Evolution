@@ -29,7 +29,7 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::IntroUpdate(const float& Timer, const std::string& voidname) {
+void ActorManager::IntroUpdate(const float& Timer, const std::string& voidname,const int& _stage) {
 	if (voidname =="Bullet") {
 		for (std::unique_ptr<Actor>& actor : Actors) {
 			actor->IntroUpdate(Timer);
@@ -37,7 +37,7 @@ void ActorManager::IntroUpdate(const float& Timer, const std::string& voidname) 
 		return;
 	} else if(voidname == "Actor"){
 		for (std::unique_ptr<Bullet>& bullet : Bullets) {
-			bullet->IntroUpdate(Timer);
+			bullet->IntroUpdate(Timer, _stage);
 		}
 		return;
 	} else {
@@ -45,7 +45,7 @@ void ActorManager::IntroUpdate(const float& Timer, const std::string& voidname) 
 			actor->IntroUpdate(Timer);
 		}
 		for (std::unique_ptr<Bullet>& bullet : Bullets) {
-			bullet->IntroUpdate(Timer);
+			bullet->IntroUpdate(Timer, _stage);
 		}
 	}
 }
@@ -123,7 +123,7 @@ void ActorManager::CheckBulletCollisions() {
 		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
 			Actor* actor = itrA->get();
 			Bullet* bullet = itrB->get();
-			if (Collision::SphereCollision2(actor->GetPosition(),actor->GetSize(), bullet->GetPosition(), 1.5f)) {
+			if (Collision::SphereCollision2(actor->GetPosition(),actor->GetSize(), bullet->GetPosition(), 2.0f)) {
 				actor->OnCollision("Bullet");
 				bullet->OnCollision(actor->GetTag(), actor->GetPosition());
 			}
@@ -248,11 +248,11 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	}
 }
 
-Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos) {
+Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos, const float& _collide_size) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
 		if (bullet->GetCommand() != Bullet::command::Attack) { continue; }
-		if (Collision::CircleCollision(pos.x, pos.z, 3.0f, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
+		if (Collision::CircleCollision(pos.x, pos.z, _collide_size, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
 			if (!bullet->GetIsPlayActive()) {
 				return bullet;
 			}
@@ -283,7 +283,7 @@ Actor* ActorManager::SearchActorArea(const XMFLOAT3& pos) {
 
 Actor* ActorManager::GetAreaActor(const XMFLOAT3& pos, const std::string& tag) {
 	Actor* itrActor = nullptr;
-	const float limit = 30.0f;
+	const float limit = 40.0f;
 	float check = limit;
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();

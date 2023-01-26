@@ -9,10 +9,11 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
-	for (int i = 0; i < 10; i++) {
+
+	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Green");
 	}
 	//シーン内で必要なアクターを参照します。

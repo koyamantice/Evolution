@@ -40,7 +40,7 @@ void EnemyAttack::Upda() {
 		const float rnd_vel = 5.0f;
 		XMFLOAT3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * 2.0f;// -rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		XMFLOAT3 acc{};
 		acc.y = -(float)vel.y / 10.0f;
@@ -73,17 +73,18 @@ void EnemyAttack::Draw() {
 	}
 }
 
-bool EnemyAttack::Run() {
-
-	return true;
-
-}
-
-void EnemyAttack::Stamp(XMFLOAT3 pos) {
+void EnemyAttack::Stamp(const XMFLOAT3& pos) {
 	if (!burning) {
 		burning = true;
 		effectRate = 0.0f;
 		Explo->SetPosition({ pos.x,0,pos.z });
 	}
+}
+
+void EnemyAttack::SetPredict(const bool& _predict, const float& _timer) {
+	 this->predict = _predict;
+	 
+	 float sca = Ease(In,Linear,_timer,0, Predicted[PREDICTED]->GetScale().x);
+	 Predicted[PREDICTING]->SetScale({sca,sca,sca});
 }
 

@@ -15,16 +15,15 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
 	EnemyAttack(Actor* _enemy);
-
 	~EnemyAttack();
+
 	void Init();
 	void Upda();
 	void Draw();
 
-	bool Run();
-	void Stamp(XMFLOAT3 pos);
+	void Stamp(const XMFLOAT3& pos);
 
-	void SetPredict(const bool& predict) { this->predict = predict; }
+	void SetPredict(const bool& _predict, const float& _timer);
 private:
 	bool burning = false;
 	float scale = 0.0f;
@@ -38,5 +37,4 @@ private:
 	std::unique_ptr<Object2d> Predicted[PREDICTMAX] = {};
 	bool predict = false;
 	ParticleManager* partMan = nullptr;
-
 };

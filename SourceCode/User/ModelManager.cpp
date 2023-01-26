@@ -19,7 +19,7 @@ void ModelManager::Initialize() {
 	LoadModel(kTextO, "text03O");
 	LoadModel(kTextM, "text04M");
 	LoadModel(kTextE, "text05E");
-	LoadModel(kHoney, "Honey");
+	LoadModel(kHoney, "nest");
 	//LoadModel(kQuestionItem, "questionItem");
 	LoadModel(kTouch, "TouchNo");
 	LoadModel(kDoor, "Door");

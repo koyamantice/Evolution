@@ -145,7 +145,7 @@ void Honey::WaitUpda() {
 	} else {
 		if (stock > 6) { stock = 5; }
 		if (collide) {
-			driver[ride_num] = ActorManager::GetInstance()->SetActionBullet(obj->GetPosition());
+			driver[ride_num] = ActorManager::GetInstance()->SetActionBullet(obj->GetPosition(), collide_size);
 			if (driver[ride_num] != nullptr) {
 				driver[ride_num]->SetsPlayActive(true);
 				ride_num++;
@@ -161,10 +161,10 @@ void Honey::WaitUpda() {
 			command = LEAVE;
 		}
 	}
-	for (int i = 0; i < 5;i++) {
-		if (driver[i] == nullptr) { continue; }
-		driver[i]->SetPosition({ pos.x+(sinf(((i+1)*72)*XM_PI/180)*6.0f),0,pos.z + (cosf(((i + 1) * 72) * XM_PI / 180) * 6.0f) });
-	}
+	//for (int i = 0; i < 5;i++) {
+	//	if (driver[i] == nullptr) { continue; }
+	//	driver[i]->SetPosition({ pos.x+(sinf(((i+1)*72)*XM_PI/180)*6.0f),0,pos.z + (cosf(((i + 1) * 72) * XM_PI / 180) * 6.0f) });
+	//}
 
 	obj->SetPosition(pos);
 }
@@ -208,7 +208,7 @@ void Honey::IntroOnUpdate(const float& Timer) {
 	}
 
 
-	obj->SetPosition(pos);
+	//obj->SetPosition(pos);
 
 }
 

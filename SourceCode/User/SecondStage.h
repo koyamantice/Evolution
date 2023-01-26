@@ -52,11 +52,10 @@ private:
 	/// </summary>
 	void GameOverUpdate()override;
 
-	float RandHeight(const float& base);
 
 
 	float intro_count = 0;
-	const float intro_count_max = 1200;
+	const float intro_count_max = 100;
 	float intro_speed = 1;
 	float intro_speed_max = 2;
 

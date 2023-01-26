@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// 最初の弾と役者更新
 	/// </summary>
-	void IntroUpdate(const float& Timer, const std::string& voidname = "null");
+	void IntroUpdate(const float& Timer, const std::string& voidname = "null", const int& _stage=0);
 	/// <summary>
 	/// 最初の更新
 	/// </summary>
@@ -65,7 +65,7 @@ public:
 	Bullet* CommandBullet(const int& ID);
 	Bullet* SearchWaitBullet();
 	Bullet* SearchBulletBack();
-	Bullet* SetActionBullet(const XMFLOAT3& pos);
+	Bullet* SetActionBullet(const XMFLOAT3& pos,const float& _collide_size=5.0f);
 	Bullet* SearchID(int ID);
 
 	void DamageBullet(XMFLOAT3 pos, float radius = 1.0f);

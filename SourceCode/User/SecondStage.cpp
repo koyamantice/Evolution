@@ -9,10 +9,10 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("Enemy_Bee");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Green");
 	}
 	//シーン内で必要なアクターを参照します。
@@ -145,7 +145,7 @@ bool SecondStage::IntroUpdate() {
 			}
 			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
 			filter_first->SetColor({ 1,1,1,filter_alpha });
-			ActorManager::GetInstance()->IntroUpdate(intro_count);
+			ActorManager::GetInstance()->IntroUpdate(intro_count,"",1);
 			FieldUpdate();
 			return true;
 		}
@@ -179,13 +179,4 @@ bool SecondStage::ClearUpdate() {
 	return false;
 }
 void SecondStage::GameOverUpdate() {
-}
-
-float SecondStage::RandHeight(const float& base) {
-	const float& rnd_vel = 0.95f;
-	float Rand= (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	float itr = 0;
-	itr = base + Rand;
-
-	return itr;
 }

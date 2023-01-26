@@ -32,7 +32,6 @@ protected:
 	void PhaseMove();
 	void UnguardUpda();
 	void AttackUpda();
-	void WaitUpda();
 	
 	//
 	void LifeCommon();
@@ -50,6 +49,9 @@ protected:
 	bool standby = false;
 
 	float waitTimer = 0;
+	const float kPredictTime = 240;
+	const float kScaleCount = 4.0f;
+	const float kAttackTime = 150;
 	float vel = 0;
 	float scale = 0.01f;
 	float scaframe = 0;

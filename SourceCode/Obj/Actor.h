@@ -77,7 +77,7 @@ public:
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
 	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true; hitBound.HitingPos = pos; };
 	const bool& GetHitBound() { return  hitBound.isHit; }
-	//OBJサイズ取得（X軸のやつを取っているので拡大はまとめてするの推奨）
+	//当たり判定サイズ取得
 	const float& GetSize()const { return collide_size; }
 
 	//タグのセット

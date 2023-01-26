@@ -15,7 +15,7 @@ private:
 	float frame = 0;
 	float unload_frame = 0;
 
-	XMFLOAT3 base_sca = { 4,4,4 };
+	XMFLOAT3 base_sca = { 6,4,6 };
 	XMFLOAT3 question_sca = { 5,5,5 };
 
 	std::unique_ptr<Object2d> missions[2][6]{};

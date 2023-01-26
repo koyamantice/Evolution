@@ -67,13 +67,21 @@ protected:
 	/// クリア更新処理
 	/// </summary>
 	virtual bool ClearUpdate() { return false; };
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="base"></param>
+	/// <returns></returns>
+	float RandHeight(const float& base);
+
 protected:
 	Input* input = Input::GetInstance();
 
 	Actor* player_shadow = nullptr;
 	Actor* enemy_shadow = nullptr;
 	Actor* goal_shadow = nullptr;
-
+	//
+	const int kGnormNum = 10;
 	//ポーズUI
 	std::unique_ptr<PauseUI> pauseUi{};
 
@@ -115,7 +123,8 @@ protected:
 
 	bool camera_explanation = false;
 
-	const float camera_hight = 18.0f;
+	const float kCameraHight = 18.0f;
+	float camera_hight = kCameraHight;
 	const float camera_radius = 15.0f;
 
 	float camera_angle = 0.0f;

@@ -9,7 +9,7 @@ float4 main(VSOutput input) : SV_TARGET
 	float4 texcolor = tex.Sample(smp, input.uv);
 	const float _ThresholdMin = 0.2;
 	const float _ThresholdMax = 0.8;
-	float3 lightv = normalize(float3(0, 1, -1)); // 右下奥　向きのライト
+	float3 lightv = normalize(float3(1, 1, 1)); // 右下奥　向きのライト
 
 	float3 eyeDir = normalize(cameraPos - input.worldpos.xyz);
 	float3 halfVec = normalize(lightv + eyeDir);
@@ -21,7 +21,7 @@ float4 main(VSOutput input) : SV_TARGET
 	float dark = 1 - smoothstep(_ThresholdMin, _ThresholdMax, intensity);
 
 	float4 lightColor = texcolor;
-	float4 darkColor = float4(texcolor.xyz * 0.5, 1.0);
+	float4 darkColor = float4(texcolor.xyz * 0.4f, 1.0);
 
 
 	float4 ambient = dark * darkColor * float4(m_ambient.xyz,1.0);

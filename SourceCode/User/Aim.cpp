@@ -59,11 +59,11 @@ void Aim::Upda(float angle) {
 		animeframe = 0;
 	}
 
-	if (explanation_now_ == RECOVERY) {
+	if (explanation_now_ >= RECOVERY) {
 		FirstAlpha *= 0.9f;
 		comment_ui_[SHOT]->SetColor({ 1,1,1,FirstAlpha });
 	}
-	if (explanation_now_ == COMMENTMAX) {
+	if (explanation_now_ >= COMMENTMAX) {
 		SecondAlpha *= 0.9f;
 		comment_ui_[RECOVERY]->SetColor({ 1,1,1,SecondAlpha });
 		comment_ui_[RECOVERYPUSH]->SetColor({ 1,1,1,SecondAlpha });
