@@ -78,7 +78,7 @@ public:
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Demo();		//更新処理
-	void IntroUpdate(const float& Timer);
+	void IntroUpdate(const float& Timer, const int& _stage);
 	void ResultUpdate(const float& Timer);
 	void FirstDraw(DirectXCommon* dxCommon);
 	void Draw(DirectXCommon* dxCommon);	//描画処理
@@ -113,29 +113,33 @@ protected:
 	void WaitUpda();
 	void SlowUpda();
 	void AttackUpda();
-	void Follow2Enemy();
-
+	bool Follow2Position(const XMFLOAT3& _pos,const float& _radius = 2.0f);
+	float follow_vel_ = 0.3f;
 	void KnockBack();
 	bool knockBacking = false;
 
 	void DamageInit();
-	XMFLOAT3 rebound{};
-	XMFLOAT3 distance{};
+	XMFLOAT3 s_rebound_{};
+	XMFLOAT3 e_rebound_{};
+
 	XMFLOAT3 exploPos{};
 	float damageframe = 0.0f;
-	float fall = 0.4f;
+	const float kFallHeight = 1.0f;
+	float fall = kFallHeight;
+	const float kDeadFrameMax = 20.0f;
+	float deadframe = 0;
+
 	bool isLeft = false;
 	bool throwReady = false;
 	float frame = 0.0f;
-
-
+	const float kSlowFrameMax = 50.0f;
+	const float kSlowHight = 1.0f;
+	float vel = kSlowHight;
 	void DeadEnd();
-	float deadframe = 0;
 	float vanishHight = 0.1f;
 	float vanishAlpha = 1.0f;
 	int CoolTime = 0;
 	bool wait = false;
-	float vel = 0.8f;
 	bool burning = false;
 	void BurnOut();
 	float scale = 0.0f;

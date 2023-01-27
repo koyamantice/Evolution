@@ -57,6 +57,7 @@ private:
 	const float accel = speed / 30.0f;
 	std::unique_ptr<Object2d> Shadow = nullptr;
 	Actor* honey[2]{};
+	int honey_approch_ = 0;
 
 	float waitTimer = 0;
 	float commandTimer = 0;

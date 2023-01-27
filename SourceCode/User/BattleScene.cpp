@@ -54,6 +54,7 @@ void BattleScene::FieldUpdate() {
 	}
 	//フィールドの更新処理
 	ground->Update();
+
 }
 
 void BattleScene::TorchSetup(int color) {

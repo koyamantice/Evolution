@@ -78,6 +78,7 @@ void Enemy_Bee::OnInit() {
 	fbxObject3d.reset(Mash_);
 	LoadData();
 	UpdateCommand();
+	collide_size = 2.0f;
 
 	player = ActorManager::GetInstance()->SearchActor("Player");
 
@@ -174,19 +175,29 @@ void Enemy_Bee::PhaseMove() {
 void Enemy_Bee::UnguardUpda() {
 	if (honey[0]->GetCommand() == APPROCH) { honey[0]->SetCommand(DEAD); }
 	if (honey[1]->GetCommand() == APPROCH) { honey[1]->SetCommand(DEAD); }
-	XMFLOAT3 pos = fbxObject3d->GetPosition();
-	if (!overDamage) {
-		if (pinchLife > hp) {
-			hp = pinchLife;
-		}
+	collide_size = 4.0f;
+
+	if (commandTimer < 1.0f) {
+		commandTimer += 0.01f;
+		XMFLOAT3 rot{};
+		rot.y = DirRotation(after_pos);
+		fbxObject3d->SetRotation(rot);
 	}
-	commandTimer += 1.0f;
-	fbxObject3d->SetPosition({ pos.x,-3,pos.z });
-	if (honey[0]->GetCommand() == WAIT && honey[1]->GetCommand() == WAIT) {
+	XMFLOAT3 pos{};
+	pos.x=Ease(In,Quad,commandTimer, before_pos.x, after_pos.x);
+	pos.y=Ease(In,Quad,commandTimer, 0, -3);
+	pos.z=Ease(In,Quad,commandTimer, before_pos.z, after_pos.z);
+	fbxObject3d->SetPosition(pos);
+
+	if ((honey[0]->GetCommand() == WAIT && honey[1]->GetCommand() == WAIT)||
+		(!overDamage&& pinchLife > hp)) {
 		fbxObject3d->StopAnimation();
 		fbxObject3d->PlayAnimation(Fly);
-		if (pinchLife >= hp) {
+		if (!overDamage) {
 			overDamage = true;
+			collide_size = 2.5f;
+		} else {
+			collide_size = 2.0f;
 		}
 		commandTimer = 0;
 		command = LEAVE;
@@ -199,8 +210,17 @@ void Enemy_Bee::LeaveUpda() {
 	fbxObject3d->SetPosition({ pos.x,sinf(commandTimer * XM_PI / 180) * 2.0f,pos.z });
 
 	if (honey[0]->GetCommand() == APPROCH || honey[1]->GetCommand() == APPROCH) {
+		for (int i = 0; i < 2;i++) {
+			if (honey[i]->GetCommand() == APPROCH) {
+				honey_approch_ = i;
+			}
+		}
+		
+		
 		fbxObject3d->StopAnimation();
 		fbxObject3d->PlayAnimation(Dawn);
+		before_pos = pos;
+		after_pos = honey[honey_approch_]->GetPosition();
 		commandTimer = 0.0f;
 		command = UNGUARD;
 	} else {
@@ -429,7 +449,7 @@ void Enemy_Bee::AttackUpda() {
 }
 
 void Enemy_Bee::LifeCommon() {
-	if (hp < 0.0f) {
+	if (hp <= 0.0f) {
 		if (command != DEAD) {
 			pause = true;
 			return;

@@ -65,6 +65,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 }
 //更新
 void FirstStage::Update(DirectXCommon* dxCommon) {
+	//導入部分の処理
 	if (IntroUpdate()) { return; }
 	//クリア後の処理
 	if (ClearUpdate()) { return; }
@@ -88,15 +89,6 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 void FirstStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	ImGui::SetNextWindowPos(ImVec2(980, 0), 1);
-	ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
-	ImGui::Begin("test");
-	ImGui::SliderFloat("intro_count", &intro_count, 0, intro_count_max);
-	float frame = intro_count / intro_count_max;
-	ImGui::SliderFloat("frame", &frame, 0, 1);
-	ImGui::Unindent();
-	ImGui::End();
-
 	Object3d::PreDraw();
 	skydome->Draw();
 	ground->Draw();

@@ -23,8 +23,8 @@ public:
 		kTextM,
 		kTextE,
 		kHouse,
+		kNest,
 		kHoney,
-		//kQuestionItem,
 		kTouch,
 		kDoor,
 	};

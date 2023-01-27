@@ -307,6 +307,7 @@ Actor* ActorManager::SearchActor(const std::string& tag) {
 
 	for (auto itr = Actors.begin(); itr != Actors.end(); ++itr) {
 		Actor* actor = itr->get();
+		if (actor->GetIsRefer()) { continue; }
 		if (actor->GetTag() == tag) {
 			return actor;
 		}

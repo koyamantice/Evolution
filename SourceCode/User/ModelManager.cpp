@@ -19,8 +19,8 @@ void ModelManager::Initialize() {
 	LoadModel(kTextO, "text03O");
 	LoadModel(kTextM, "text04M");
 	LoadModel(kTextE, "text05E");
-	LoadModel(kHoney, "nest");
-	//LoadModel(kQuestionItem, "questionItem");
+	LoadModel(kNest, "nest");
+	LoadModel(kHoney, "honey");
 	LoadModel(kTouch, "TouchNo");
 	LoadModel(kDoor, "Door");
 

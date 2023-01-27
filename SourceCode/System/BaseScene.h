@@ -28,6 +28,15 @@ class SceneManager;
 #include <SceneChanger.h>
 #include <ParticleEmitter.h>
 
+
+enum SceneNum{
+	kFirstScene=0,
+	kMSecondScene,
+	kSecondScene,
+
+};
+
+
 /// <summary>
 /// Šî’êƒV[ƒ“
 /// </summary>
@@ -51,7 +60,6 @@ protected:
 
 	bool scene_first_change = true;
 	bool intro_skip = false;
-
 public:
 	virtual ~BaseScene()=default;
 	/// <summary>

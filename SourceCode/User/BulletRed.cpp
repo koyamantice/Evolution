@@ -33,12 +33,6 @@ void BulletRed::OnInit() {
 	Lock_->SetRotation({ 0,0,0 });
 	Status.reset(Lock_);
 
-	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
-		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-	Explo_->SetIsBillboard(true);
-	Explo_->Object2dCreate();
-	Explo_->SetRotation({ 0,0,0 });
-	Explo.reset(Explo_);
 }
 
 

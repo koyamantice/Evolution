@@ -42,7 +42,7 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 	}
 	if (sceneName == "Honey") {
 		newActor = new Honey();
-		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kHoney), "Honey");
+		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kNest), "Honey");
 
 	}
 	return newActor;

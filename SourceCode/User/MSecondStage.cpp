@@ -6,7 +6,7 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	TorchSetup(Touch::FireColor::f_blue);
 
 	//導入はボスステージじゃないので不要
-	battle_intro = false;
+	battle_intro = true;
 
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
@@ -21,7 +21,15 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	//シーン内で必要なアクターを参照します。
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
-
+	goal_shadow->SetIsActive(false);
+	for (int i = 0; i < kMaxNestNum; i++) {
+		ActorManager::GetInstance()->AttachActor("Honey");
+		honey_[i] = ActorManager::GetInstance()->SearchActor("Honey");
+		honey_[i]->SetIsRefer(true);
+	}
+	honey_[0]->SetPosition({ -20.0f,0,20.0f});
+	honey_[1]->SetPosition({ 0.0f,0,-20.0f });
+	honey_[2]->SetPosition({ 20.0f,0,20.0f});
 
 	//スプライト生成
 	Sprite* _clear = nullptr;
@@ -59,7 +67,11 @@ void MSecondStage::Finalize() {
 }
 //更新
 void MSecondStage::Update(DirectXCommon* dxCommon) {
+	//導入部分の処理
+	if (IntroUpdate()) { return; }
+	//クリア後の処理
 	if (ClearUpdate()) { return; }
+	//ポーズ処理の更新
 	if (PauseUpdate()) { return; }
 	//操作説明の更新処理
 	DescriptionUpdate();
@@ -69,11 +81,31 @@ void MSecondStage::Update(DirectXCommon* dxCommon) {
 	CameraUpda();
 	//ステージの更新処理
 	FieldUpdate();
+	//蜂蜜の更新処理
+	HoneyUpdate();
 	//パーティクルの更新処理
 	particleEmitter->Update();
 }
 
-
+bool MSecondStage::IntroUpdate() {
+	//フェードイン機能
+	if (scene_first_change) {
+		if (feedin_frame <= 1.0f) {
+			feedin_frame += 1.0f / feedin_frame_max;
+		} else {
+			battle_intro = false;
+			scene_first_change = false;
+		}
+		filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+		filter_first->SetColor({ 1,1,1,filter_alpha });
+		ActorManager::GetInstance()->IntroUpdate(0,"", kSecondScene);
+		CameraUpda();
+		FieldUpdate();
+		return true;
+	} else {
+		return false;
+	}
+}
 
 void MSecondStage::ResultCamera(int Timer) {
 	camera->SetTarget(goal_shadow->GetPosition());
@@ -95,11 +127,33 @@ bool MSecondStage::ClearUpdate() {
 		FieldUpdate();
 		return true;
 	}
+	if (!goal_shadow->GetIsActive()) {
+		if (honey_[kLeftNest]->GetCommand() == Actor::APPROCH &&
+			honey_[kMiddleNest]->GetCommand() == Actor::APPROCH &&
+			honey_[kRightNest]->GetCommand() == Actor::APPROCH) {
+			finish_time++;
+			if (finish_time > finish_time_Max) {
+				goal_shadow->SetIsActive(true);
+			}
+			return true;
+		}
+	}
 	if (goal_shadow->GetPause()) {
 		battle_result = true;
 		stage_clear = true;
 	}
+
 	return false;
+}
+
+void MSecondStage::HoneyUpdate() {
+	for (int i = 0; i < kMaxNestNum; i++) {
+		if (honey_[i]->GetCommand() == Actor::APPROCH) {
+			const float rnd_vel = 0.1f;
+			particleEmitter->AddCommon(60, honey_[i]->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1.0f,1.0f,0.0f,0.8f }, { 1,1,0,0 });
+			particleEmitter->Update();
+		}
+	}
 }
 
 

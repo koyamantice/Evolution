@@ -51,6 +51,8 @@ protected:
 	bool isRemove = false;
 	//objは必要化
 	bool isVisible = true;
+	//参照されているか
+	bool isRefer = false;
 public:
 	virtual ~Actor() = default;
 	//座標の取得
@@ -92,7 +94,11 @@ public:
 	//isRemoveセッタ＆ゲッタ
 	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
 	const bool& GetIsRemove() { return isRemove; }
-
+	
+	//isReferセッタ＆ゲッタ
+	void SetIsRefer(const bool& _isRefer) { isRefer = _isRefer; };
+	const bool& GetIsRefer() { return isRefer; }
+	
 	//canMoveセッタ＆ゲッタ
 	void SetCanMove(const bool& canMove) { this->canMove = canMove; };
 	const bool& GetCanMove() { return canMove; }

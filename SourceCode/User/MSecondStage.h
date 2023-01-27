@@ -25,14 +25,27 @@ private:
 	void Draw(DirectXCommon* dxCommon) override;
 
 private:
+	/// <summary>
+	///	導入部分の更新処理
+	/// </summary>
+	bool IntroUpdate()override;
+
 	//クリア後カメラ
 	void ResultCamera(int Timer);
 	/// <summary>
 	/// クリア更新処理
 	/// </summary>
 	bool ClearUpdate() override;
-
+	void HoneyUpdate();
 private:
+	enum {
+		kLeftNest = 0,
+		kMiddleNest,
+		kRightNest,
+		kMaxNestNum
+	};
+
+	Actor* honey_[kMaxNestNum] = {};
 
 	std::unique_ptr<Sprite> Clear{};
 	std::unique_ptr<Sprite> Over{};
