@@ -31,14 +31,7 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	honey_[1]->SetPosition({ 0.0f,0,-20.0f });
 	honey_[2]->SetPosition({ 20.0f,0,20.0f});
 
-	//スプライト生成
-	Sprite* _clear = nullptr;
-	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
-	Clear.reset(_clear);
 
-	Sprite* _Over = nullptr;
-	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
-	Over.reset(_Over);
 
 
 	//カメラの初期化
@@ -131,11 +124,13 @@ bool MSecondStage::ClearUpdate() {
 		if (honey_[kLeftNest]->GetCommand() == Actor::APPROCH &&
 			honey_[kMiddleNest]->GetCommand() == Actor::APPROCH &&
 			honey_[kRightNest]->GetCommand() == Actor::APPROCH) {
-			finish_time++;
-			if (finish_time > finish_time_Max) {
+			//finish_time++;
+			//if (finish_time > finish_time_Max) {
 				goal_shadow->SetIsActive(true);
-			}
-			return true;
+			//}
+			//return true;
+			return false;
+
 		}
 	}
 	if (goal_shadow->GetPause()) {
@@ -160,36 +155,12 @@ void MSecondStage::HoneyUpdate() {
 //描画
 void MSecondStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	Object3d::PreDraw();
-	skydome->Draw();
-	ground->Draw();
-	for (std::unique_ptr<Touch>& torch : torchs) {
-		torch->Draw();
-	}
+	
+	BattleBackDraw();
+
 	ActorManager::GetInstance()->Draw(dxCommon);
-	particleEmitter->Draw(alphaBle);
-	Sprite::PreDraw();
-	if (scene_first_change) {
-		filter_first->Draw();
-	}
-	if (stage_clear) {
-		Clear->Draw();
-	}
-	if (battle_intro) {
-		screens[0]->Draw();
-		screens[1]->Draw();
-	}
-	if (battle_result) {
-		screens[0]->Draw();
-		screens[1]->Draw();
-		Clear->Draw();
-	}
-	if (gameover) {
-		Over->Draw();
-	}
-	if (pause) {
-		pauseUi->Draw();
-	}
-	scene_changer->Draw();
+
+	BattleFrontDraw();
+
 	dxCommon->PostDraw();
 }

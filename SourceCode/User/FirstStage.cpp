@@ -23,16 +23,6 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);
 
-	//スプライト生成
-	Sprite* _clear = nullptr;
-	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
-	Clear.reset(_clear);
-
-	Sprite* _Over = nullptr;
-	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
-	Over.reset(_Over);
-
-
 	//導入部分の言葉
 	for(int i=0;i<intro_word_max;i++){ 
 		Sprite* IntroWord_ = Sprite::Create(ImageManager::Intro01 + i, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
@@ -89,43 +79,10 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 void FirstStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	Object3d::PreDraw();
-	skydome->Draw();
-	ground->Draw();
-	for (std::unique_ptr<Touch>& torch : torchs) {
-		torch->Draw();
-	}
+	BattleBackDraw();
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
-	particleEmitter->Draw(alphaBle);
-	Sprite::PreDraw();
-	if (stage_clear) {
-		Clear->Draw();
-	}
-	if (battle_intro) {
-		screens[0]->Draw();
-		screens[1]->Draw();
-		IntroWord[nowWord]->Draw();
-	} else {
-		if (!stage_clear) {
-			hud->Draw();
-		}
-	}
-	if (battle_result) {
-		screens[0]->Draw();
-		screens[1]->Draw();
-		Clear->Draw();
-	}
-	if (gameover) {
-		Over->Draw();
-	}
-	if (pause) {
-		pauseUi->Draw();
-	}
-	if (scene_first_change) {
-		filter_first->Draw();
-	}
-	scene_changer->Draw();
+	BattleFrontDraw(IntroWord[nowWord].get());
 	dxCommon->PostDraw();
 }
 

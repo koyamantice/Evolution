@@ -47,8 +47,6 @@ private:
 
 	Actor* honey_[kMaxNestNum] = {};
 
-	std::unique_ptr<Sprite> Clear{};
-	std::unique_ptr<Sprite> Over{};
 
 	PostEffect* postEffect = nullptr;
 };

@@ -22,17 +22,7 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);
 
-	//スプライト生成
-	Sprite* _clear = nullptr;
-	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
-	Clear.reset(_clear);
-
-	Sprite* _Over = nullptr;
-	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
-	Over.reset(_Over);
-
 	//カメラの初期化
-
 	camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
 	camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
 	player_shadow->SetAngle(camera_angle);
@@ -81,51 +71,10 @@ void SecondStage::Update(DirectXCommon* dxCommon) {
 void SecondStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
 	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	ImGui::SetNextWindowPos(ImVec2(980, 0), 1);
-	ImGui::SetNextWindowSize(ImVec2(280, 300), 1);
-	ImGui::Begin("test");
-	ImGui::SliderFloat("intro_count", &intro_count, 0, intro_count_max);
-	float frame = intro_count / intro_count_max;
-	ImGui::SliderFloat("frame", &frame, 0, 1);
-	ImGui::Unindent();
-	ImGui::End();	
-	Object3d::PreDraw();
-	skydome->Draw();
-	ground->Draw();
-	for (std::unique_ptr<Touch>& torch : torchs) {
-		torch->Draw();
-	}
+	BattleBackDraw();
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
-	particleEmitter->Draw(alphaBle);
-	Sprite::PreDraw();
-	if (scene_first_change) {
-		filter_first->Draw();
-	}
-	if (stage_clear) {
-		Clear->Draw();
-	}
-	if (battle_intro) {
-		screens[0]->Draw();
-		screens[1]->Draw();
-	} else {
-		if (!stage_clear) {
-			hud->Draw();
-		}
-	}
-	if (battle_result) {
-		screens[0]->Draw();
-		screens[1]->Draw();
-		Clear->Draw();
-	}
-	if (gameover) {
-		Over->Draw();
-	}
-	if (pause) {
-		pauseUi->Draw();
-	}
-	scene_changer->Draw();
-	//postEffect->Draw(dxCommon->GetCmdList());
+	BattleFrontDraw();
 	dxCommon->PostDraw();
 
 }

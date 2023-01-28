@@ -69,8 +69,6 @@ private:
 	int nowWord = 0;
 	std::unique_ptr<Sprite> IntroWord[intro_word_max];
 private:
-	std::unique_ptr<Sprite> Clear{};
-	std::unique_ptr<Sprite> Over{};
 
 	PostEffect* postEffect = nullptr;
 };

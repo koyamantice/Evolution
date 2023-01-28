@@ -73,6 +73,14 @@ protected:
 	/// <param name="base"></param>
 	/// <returns></returns>
 	float RandHeight(const float& base);
+	/// <summary>
+	/// バトルステージ専用の描画処理(前)
+	/// </summary>
+	void BattleBackDraw();
+	/// <summary>
+	/// バトルステージ専用の描画処理(後ろ)
+	/// </summary>
+	void BattleFrontDraw(Sprite* _sprite = nullptr);
 
 protected:
 	Input* input = Input::GetInstance();
@@ -84,6 +92,10 @@ protected:
 	const int kGnormNum = 10;
 	//ポーズUI
 	std::unique_ptr<PauseUI> pauseUi{};
+	//クリア文字
+	std::unique_ptr<Sprite> clear_comment_{};
+	//ゲームオーバー文字
+	std::unique_ptr<Sprite> over_comment_{};
 
 	//導入部分のスクリーン
 	std::unique_ptr<Sprite>	screens[2]{};

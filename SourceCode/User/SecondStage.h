@@ -62,9 +62,6 @@ private:
 	const float first_hight = 10;
 	const XMFLOAT3 first_target = {0,5,0};
 
-	std::unique_ptr<Sprite> Clear{};
-	std::unique_ptr<Sprite> Over{};
-
 	
 	PostEffect* postEffect = nullptr;
 };

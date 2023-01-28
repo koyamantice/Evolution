@@ -14,6 +14,16 @@ void BattleScene::BattleInit() {
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
 
+	//くりあ生成
+	Sprite* _clear = nullptr;
+	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
+	clear_comment_.reset(_clear);
+	//ゲームオーバー生成
+	Sprite* _Over = nullptr;
+	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
+	over_comment_.reset(_Over);
+
+
 	//暗転画面生成
 	Sprite* first_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
 	filter_first.reset(first_);
@@ -228,3 +238,45 @@ float BattleScene::RandHeight(const float& base) {
 
 	return itr;
 }
+
+void BattleScene::BattleBackDraw() {
+	Object3d::PreDraw();
+	skydome->Draw();
+	ground->Draw();
+	for (std::unique_ptr<Touch>& torch : torchs) {
+		torch->Draw();
+	}
+}
+
+void BattleScene::BattleFrontDraw(Sprite* _sprite) {
+	particleEmitter->Draw(alphaBle);
+	Sprite::PreDraw();
+	if (battle_intro || battle_result) {
+		screens[0]->Draw();
+		screens[1]->Draw();
+		if (battle_intro) {
+			if (_sprite!=nullptr) {
+				_sprite->Draw();
+			}
+		}
+		if (stage_clear) {
+			clear_comment_->Draw();
+		}
+	} else {
+		if (!stage_clear) {
+			hud->Draw();
+		}
+	}
+	if (gameover) {
+		over_comment_->Draw();
+	}
+	if (scene_first_change) {
+		filter_first->Draw();
+	}
+	if (pause) {
+		pauseUi->Draw();
+	}
+
+	scene_changer->Draw();
+}
+
