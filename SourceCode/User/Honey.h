@@ -19,7 +19,17 @@ private:
 
 	int leave_timer_= 0;
 	const int kLeaveTimeMax = 60;
+	
+	int particle_draw_num_ = 0;		
+	const int kDrawTiming = 30;
+	
 	const XMFLOAT3 base_sca = { 6,4,6 };
+
+	float scale_damaged_frame_ = 0.0f;
+	const float kScaleFrameMax = 1000.0f;
+	float scale_damage_ =1.0f/ kScaleFrameMax;
+	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
+
 	std::unique_ptr<Object3d> honey_obj_{};
 
 	std::unique_ptr<Object2d> missions[2][6]{};

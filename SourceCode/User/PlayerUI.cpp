@@ -14,10 +14,6 @@ void PlayerUI::OnInitialize() {
 	Damage.reset(_Damage);
 	Dmapos = Damage->GetPosition();
 
-	Sprite* _Chara;
-	_Chara = Sprite::Create(ImageManager::PlayerCover, { 10,582 });
-	Chara.reset(_Chara);
-
 	Sprite* _Bullet;
 	_Bullet = Sprite::Create(ImageManager::CharaCover, { 700,612 });
 	_Bullet->SetScale(0.8f);

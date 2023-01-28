@@ -3,8 +3,12 @@
 #include"Easing.h"
 #include"ImageManager.h"
 
+#define DEGREE_MAX 360.0f
+#define DEGREE_HALF 180.0f
+#define DEGREE_QUARTER 90.0f
 
 TitleText::TitleText() {
+	Init();
 }
 
 TitleText::~TitleText() {
@@ -36,13 +40,16 @@ void TitleText::Init() {
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Initialize();
 	}
+	for (int i = 0; i < 6; i++) {
+		texts[i]->SetPosition({ pos[i] });
+	}
 
 	
 	Object3d* door_ = new Object3d();
 	door_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDoor));
 	door_->Initialize();
 	door_->SetPosition({1.0f,0,12.0f});
-	door_->SetRotation({ 0,90,0 });
+	door_->SetRotation({ 0,DEGREE_QUARTER,0 });
 	door_->SetScale({ 4.0f,4.0f,4.0f });
 	door.reset(door_);
 
@@ -104,16 +111,26 @@ void TitleText::Upda() {
 		texts[i]->Update();
 	}
 
-	frame += 0.001f;
+	DoorUpdate();
 
-
-	for (int i = 0; i < 6; i++) {
-		texts[i]->SetPosition({ pos[i]});
+	for (std::unique_ptr<Object3d>& obj : grounds) {
+		obj->Update();
 	}
+}
 
+void TitleText::Draw(DirectXCommon* dxCommon) {
+	for (int i = 0; i < 6; i++) {
+		texts[i]->Draw();
+	}
+	for (std::unique_ptr<Object3d>& obj : grounds) {
+		obj->Draw();
+	}
+	door->Draw();
+	partMan->Draw(addBle);
+}
 
-
-	if (start) {
+void TitleText::DoorUpdate() {
+	if (door_status == kOpening) {
 		const float rnd_pos = 1.0f;
 		XMFLOAT3 mag{};
 		mag.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -129,30 +146,23 @@ void TitleText::Upda() {
 		XMFLOAT3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		//acc.z = (float)rand() / RAND_MAX * rnd_acc;
 		partMan->Add(60, { -2 + mag.x,2 + mag.y,12 + mag.z }, vel, acc, 3.0f, 0.0f, { 1.0f,1.0f,0,1.0f }, { 1.0f,1.0f,0,1.0f });
 	}
 	partMan->Update();
+
+	float rot = 0;
+	frame += door_vel * door_status;
+	if (frame <= 1.0f && frame >= 0.0f) {
+		rot = Ease(In, Linear, frame, DEGREE_QUARTER, DEGREE_HALF);
+	} else {
+		if (door_status == kOpening) {
+			door_status = kClosing;
+			rot = DEGREE_HALF;
+		} else {
+			door_status = kOpening;
+			rot = DEGREE_QUARTER;
+		}
+	}
+	door->SetRotation({ 0,rot,0 });
 	door->Update();
-	for (std::unique_ptr<Object3d>& obj : grounds) {
-		obj->Update();
-	}
-}
-
-void TitleText::Draw(DirectXCommon* dxCommon) {
-
-	//ImGui::Begin("test");
-	//XMFLOAT3 t = pos[0];
-	//ImGui::SliderFloat("cameraPos.x", &t.x, 30, 0);
-	//ImGui::SliderFloat("cameraPos.y", &t.y, 30, 0);
-	//ImGui::SliderFloat("cameraPos.z", &t.z, 30, 0);
-	//pos[0] = t;
-	for (int i = 0; i < 6; i++) {
-		texts[i]->Draw();
-	}
-	for (std::unique_ptr<Object3d>& obj : grounds) {
-		obj->Draw();
-	}
-	door->Draw();
-	partMan->Draw(addBle);
 }

@@ -36,7 +36,12 @@ private:
 	/// クリア更新処理
 	/// </summary>
 	bool ClearUpdate() override;
+	/// <summary>
+	/// ハチミツの処理
+	/// </summary>
 	void HoneyUpdate();
+
+	void DrawLocal() override;
 private:
 	enum {
 		kLeftNest = 0,
@@ -46,7 +51,17 @@ private:
 	};
 
 	Actor* honey_[kMaxNestNum] = {};
+	
+	//ミッション
+	std::unique_ptr<Sprite> mission_{};
 
+
+	enum {
+		kHoneyNumMax=4,
+	};
+	int nowOpenHoney = 0;
+	//蜂蜜ゲット
+	std::unique_ptr<Sprite>	honey_get_[kHoneyNumMax]{};
 
 	PostEffect* postEffect = nullptr;
 };

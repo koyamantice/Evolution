@@ -11,6 +11,7 @@ void Honey::OnInit() {
 
 	honey_obj_ = std::make_unique<Object3d>();
 	honey_obj_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kHoney));
+	honey_obj_->SetScale({});
 	honey_obj_->Initialize();
 
 	for (int i = 0; i < 2; i++) {
@@ -29,7 +30,13 @@ void Honey::OnInit() {
 	slash_->Object2dCreate();
 	slash_->SetRotation({ 0,0,0 });
 	slash.reset(slash_);
+
+
 	command = WAIT;
+
+	//パーティクルの初期化
+	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::smoke);
+
 }
 
 
@@ -62,15 +69,13 @@ void Honey::OnDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	honey_obj_->Draw();
 	Object2d::PreDraw();
-	if (obj->GetPosition().y >= -0.01f) {
-		if (command == LEAVE || command == WAIT) {
-			if (stock <= 5) {
-				missions[0][stock]->Draw();
-			}
-			missions[1][5]->Draw();
-			slash->Draw();
-		}
+	if (command == WAIT) {
+		missions[0][stock]->Draw();
+		missions[1][5]->Draw();
+		slash->Draw();
 	}
+	particleEmitter->Draw();
+
 }
 
 void Honey::OnFinal() {
@@ -89,17 +94,24 @@ void Honey::missionUpdate() {
 		missions[1][i]->Update();
 		missions[1][i]->SetPosition({ pos.x,pos.y + 3.5f,pos.z });
 	}
+	particleEmitter->Update();
 	slash->Update();
 	slash->SetPosition({ pos.x,pos.y + 5.0f,pos.z });
 }
 
 void Honey::questionUpdate() {
 	XMFLOAT3 pos = obj->GetPosition();
-	honey_obj_->SetPosition(pos);
+	if (command == WAIT) {
+		honey_obj_->SetPosition(pos);
+	}
 	honey_obj_->Update();
 }
 
 void Honey::ApprochUpda() {
+
+}
+
+void Honey::LeaveUpda() {
 	for (int i = 0; i < ride_num; i++) {
 		if (driver[i] != nullptr) {
 			driver[i]->SetsPlayActive(false);
@@ -108,31 +120,30 @@ void Honey::ApprochUpda() {
 		}
 	}
 	ride_num = 0;
-}
-
-void Honey::LeaveUpda() {
 	leave_timer_++;
 	if (leave_timer_ > kLeaveTimeMax) {
 		if (frame > 1.0f) {
+			if (pause) { return; }
 			frame = 0.0f;
 			command = APPROCH;
 			leave_timer_ = 0;
 			return;
 		} else {
-			frame += 0.055f;
+			frame += 1 / 45.0f;
+		}
+		float height = 0.0f;
+		if (frame < 0.5f) {
+			height = Ease(In, Quad, frame, 0, 10.0f);
+		} else {
+			height = Ease(Out, Quad, frame, 10.0, 0.0f);
 		}
 
-		XMFLOAT3 sca = obj->GetScale();
-		sca.x = Ease(In, Linear, frame, base_sca.x, 0);
-		sca.y = Ease(In, Linear, frame, base_sca.y, 0);
-		sca.z = Ease(In, Linear, frame, base_sca.z, 0);
-		obj->SetScale(sca);
-
 		XMFLOAT3 sca_honey = honey_obj_->GetScale();
-		sca_honey.x = Ease(In, Linear, frame, 0, base_sca.x);
-		sca_honey.y = Ease(In, Linear, frame, 0, base_sca.y);
-		sca_honey.z = Ease(In, Linear, frame, 0, base_sca.z);
+		sca_honey.x = Ease(Out, Quad, frame, 0, base_sca.x);
+		sca_honey.y = Ease(Out, Quad, frame, 0, base_sca.y);
+		sca_honey.z = Ease(Out, Quad, frame, 0, base_sca.z);
 		honey_obj_->SetScale(sca_honey);
+		honey_obj_->SetPosition({ obj->GetPosition().x, height ,obj->GetPosition().z });
 	}
 }
 
@@ -141,9 +152,38 @@ void Honey::WaitUpda() {
 	if (pos.y < 0.0f) {
 		pos.y += 0.1f;
 	} else {
+
+		if (scale_damaged_frame_ >= 1.0f) {
+				first_pos = pos;
+				before_pos = pos;
+				command = LEAVE;
+		
+		}
+		if (driver[0] != nullptr) {
+
+			if (stock < 5) {
+				scale_damaged_frame_ += scale_damage_;
+			} else {
+				scale_damaged_frame_ += scale_damage_ * 10.0f;
+			}
+			if (scale_damaged_frame_ < 1.0f) {
+				XMFLOAT3 sca = obj->GetScale();
+				sca.x = Ease(InOut, Circ, scale_damaged_frame_, base_sca.x, 0.0f);
+				sca.y = Ease(InOut, Circ, scale_damaged_frame_, base_sca.y, 0.0f);
+				sca.z = Ease(InOut, Circ, scale_damaged_frame_, base_sca.z, 0.0f);
+				obj->SetScale(sca);
+			}
+			const float rnd_vel = 0.3f;
+			const float rnd_height = 0.3f;
+			particle_draw_num_ += 1 * ride_num;
+			if (particle_draw_num_ > kDrawTiming) {
+				particleEmitter->AddParabo(60, pos, rnd_height, rnd_vel, 1.5f, 0.0f, { 1.0f,1.0f,0.0f,0.8f }, { 1,1,0,0 });
+				particle_draw_num_ = 0;
+			}
+			obj->SetPosition({ pos.x + RandHeight(pos.x),pos.y,pos.z + RandHeight(pos.z) });
+		}
 		if (collide) {
-			if (stock > 5) { return; }
-			if (ride_num > 4) { return; }
+			if (stock > 5 || ride_num > 4) { return; }
 			driver[ride_num] = ActorManager::GetInstance()->SetActionBullet(obj->GetPosition(), collide_size);
 			if (driver[ride_num] != nullptr) {
 				driver[ride_num]->SetsPlayActive(true);
@@ -152,17 +192,8 @@ void Honey::WaitUpda() {
 			}
 			collide = false;
 		}
-		if (stock == 5 && !pause) {
-			stock = 5;
-			first_pos = pos;
-			before_pos = pos;
-			command = LEAVE;
-		}
-	}
-	if (driver[0] != nullptr) {
-		obj->SetPosition({ pos.x + RandHeight(pos.x),pos.y,pos.z + RandHeight(pos.z) });
-	}
 
+	}
 }
 
 void Honey::DeadUpda() {
@@ -171,6 +202,8 @@ void Honey::DeadUpda() {
 		frame = 0.0f;
 		leave_timer_ = 0;
 		stock = 0;
+		ride_num = 0;
+		scale_damaged_frame_ = 0.0f;
 		honey_obj_->SetScale({ 0,0,0 });
 		obj->SetScale(base_sca);
 		const float rnd_area = 80.0f;

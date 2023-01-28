@@ -3,7 +3,7 @@
 ParticleEmitter::ParticleEmitter(const UINT& texnumber) {
 
 	//パーティクルの初期化
-	particleManager =std::make_unique<ParticleManager>();
+	particleManager = std::make_unique<ParticleManager>();
 	particleManager->Initialize(texnumber);
 
 
@@ -46,7 +46,7 @@ void ParticleEmitter::AddInNest(const int& life, const XMFLOAT3& position, const
 	margin.x = (float)rand() / RAND_MAX * average_margin - average_margin / 2.0f;
 	margin.y = (float)rand() / RAND_MAX * average_margin - average_margin / 2.0f;
 	margin.z = (float)rand() / RAND_MAX * average_margin - average_margin / 2.0f;
-	
+
 	XMFLOAT3 vel{};
 	vel.y = (float)rand() / RAND_MAX * average_vel;
 
@@ -84,6 +84,23 @@ void ParticleEmitter::AddCrystalMove(const int& _life, const XMFLOAT3& _position
 
 }
 
+void ParticleEmitter::AddParabo(const int& _life, const XMFLOAT3& _position, const float& _downHeight, const float& _average_vel, const float& _start_scale, const float& _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
+
+	const float rnd_pos = 8.0f;
+	XMFLOAT3 pos{};
+	pos.x = _position.x + (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	pos.y = _position.y;
+	pos.z = _position.z + (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	XMFLOAT3 vel{};
+	vel.x = (float)rand() / RAND_MAX * _average_vel - _average_vel / 2.0f;
+	vel.y = _downHeight;
+	vel.z = (float)rand() / RAND_MAX * _average_vel - _average_vel / 2.0f;
+	XMFLOAT3 acc{};
+	acc.y = -(float)vel.y / (_life / 2.0f);
+	particleManager->Add(_life, pos, vel, acc, _start_scale, _end_scale, _start_color, _end_color);
+
+}
+
 
 void ParticleEmitter::Update() {
 	particleManager->Update();
@@ -92,5 +109,5 @@ void ParticleEmitter::Update() {
 void ParticleEmitter::Draw(blendType type) {
 
 	particleManager->Draw(type);
-	
+
 }

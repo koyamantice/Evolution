@@ -37,16 +37,24 @@ private:
 	//ÉÅÉìÉoïœêî
 	enum {
 		BackScene,
-		kkskydome,
-		Button,
-		moveTitle,
-		nomoveTitle,
 		moveDebug,
 		nomoveDebug,
+		moveTitle,
+		nomoveTitle,
 		SpriteMax,
 	};
 	std::unique_ptr<Sprite> UI[SpriteMax];
-	TitleText* text;
+	
+	std::unique_ptr <TitleText> text;
+
+
+	const XMFLOAT2 kWord2DebugPos = { 930.0f,500.0f };
+	const XMFLOAT2 kWord2TitlegPos = { 930.0f,360.0f };
+
+	const XMFLOAT4 kVisivleColor = { 1,1,1,1 };
+	const XMFLOAT4 kInVisivleColor = { 1,1,1,0 };
+
+
 	enum Portal {
 		Title=0,
 		Debug,
@@ -55,21 +63,7 @@ private:
 
 	int nextScene = Portal::Title;
 
-	XMFLOAT2 SetPos[3]={ { 640.0f,300.0f } ,{ 640.0f,360.0f } ,{ 640.0f,460.0f } };
-	
-	float moveText[2]{};
-	int moveTitleNow = 1;
-	int moveDebugNow = 2;
-
 	std::string SceneName = "null";
-	enum {
-		UnLoad = 0,
-		Loading,
-		LoadFinish
-	};
-	static int LoadState;
-	//static âÊñ  = ÉQÅ[ÉÄâÊñ ;
-
 
 	float circ_x=80;
 	float circ_z=80;
@@ -78,6 +72,7 @@ private:
 
 
 	float rad_frame = 0;
+	const float kRoundFrameMax = 1200;
 	float rad = 0;
 	float c_x=80;
 	float c_y=50;

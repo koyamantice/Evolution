@@ -16,6 +16,8 @@
 
 
 class TitleText {
+private:
+	using XMFLOAT3 = DirectX::XMFLOAT3;
 public:
 	TitleText();
 	~TitleText();
@@ -24,9 +26,10 @@ public:
 	void Upda();
 	void Draw(DirectXCommon* dxCommon);
 
-
 private:
-	using XMFLOAT3 = DirectX::XMFLOAT3;
+
+	void DoorUpdate();
+
 private:
 	std::unique_ptr<Object3d> texts[6];
 	std::unique_ptr<Object3d> door;
@@ -42,11 +45,22 @@ private:
 
 	LevelData* levelData = nullptr;
 
-	bool start = false;
+
+	enum DoorStatus {
+		kOpening = 1,
+		kClosing = -1
+	};
+	float frame = 0;
+	float door_vel = 0.01f;
+	int door_status = kOpening;
+
+
+
 
 	ParticleManager* partMan = nullptr;
 
-	XMFLOAT3 pos[6]	={
+
+	XMFLOAT3 pos[6] = {
 	{24.5f,5,-15.5f},
 	{22.5f,5,-10.5f},
 	{19.5f,5,-4.5f},
@@ -56,5 +70,4 @@ private:
 
 	};
 
-	float frame=0;
 };

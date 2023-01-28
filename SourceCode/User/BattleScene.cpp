@@ -248,15 +248,15 @@ void BattleScene::BattleBackDraw() {
 	}
 }
 
-void BattleScene::BattleFrontDraw(Sprite* _sprite) {
-	particleEmitter->Draw(alphaBle);
+void BattleScene::BattleFrontDraw(blendType _blendType,Sprite* _introword) {
+	particleEmitter->Draw(_blendType);
 	Sprite::PreDraw();
 	if (battle_intro || battle_result) {
 		screens[0]->Draw();
 		screens[1]->Draw();
 		if (battle_intro) {
-			if (_sprite!=nullptr) {
-				_sprite->Draw();
+			if (_introword !=nullptr) {
+				_introword->Draw();
 			}
 		}
 		if (stage_clear) {
@@ -264,6 +264,7 @@ void BattleScene::BattleFrontDraw(Sprite* _sprite) {
 		}
 	} else {
 		if (!stage_clear) {
+			DrawLocal();
 			hud->Draw();
 		}
 	}
@@ -275,6 +276,7 @@ void BattleScene::BattleFrontDraw(Sprite* _sprite) {
 	}
 	if (pause) {
 		pauseUi->Draw();
+		return;
 	}
 
 	scene_changer->Draw();

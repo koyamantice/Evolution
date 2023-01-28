@@ -80,7 +80,9 @@ protected:
 	/// <summary>
 	/// バトルステージ専用の描画処理(後ろ)
 	/// </summary>
-	void BattleFrontDraw(Sprite* _sprite = nullptr);
+	void BattleFrontDraw(blendType _blendType = alphaBle, Sprite* _introwo = nullptr);
+
+	virtual void DrawLocal() {};
 
 protected:
 	Input* input = Input::GetInstance();

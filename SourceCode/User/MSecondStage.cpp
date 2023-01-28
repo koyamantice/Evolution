@@ -31,7 +31,28 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	honey_[1]->SetPosition({ 0.0f,0,-20.0f });
 	honey_[2]->SetPosition({ 20.0f,0,20.0f});
 
+	const XMFLOAT2 kBasicAnchor = { 0.5f,0.5f };
 
+	Sprite* _mission{};
+	_mission = Sprite::Create(ImageManager::kMissionMsecond, { 640,100 });
+	_mission->SetAnchorPoint(kBasicAnchor);
+	mission_.reset(_mission);
+	
+	const XMFLOAT2 kBasicSize = { 64,64 };
+	for (int i = 0; i < kHoneyNumMax; i++) {
+		Sprite* _honey_get[kHoneyNumMax]{};
+		_honey_get[i] = Sprite::Create(ImageManager::kMsecondNum, { 640-64,135 });
+		honey_get_[i].reset(_honey_get[i]);
+		int number_index_y = i / kHoneyNumMax;
+		int number_index_x = i % kHoneyNumMax;
+		honey_get_[i]->SetTextureRect(
+			{ static_cast<float>(number_index_x) * kBasicSize.x, static_cast<float>(number_index_y) * kBasicSize.y },
+			{ static_cast<float>(kBasicSize.x), static_cast<float>(kBasicSize.y) });
+		
+		honey_get_[i]->SetSize(kBasicSize);
+		//中心座標にします。
+		honey_get_[i]->SetAnchorPoint(kBasicAnchor);
+	}
 
 
 	//カメラの初期化
@@ -51,7 +72,7 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	postEffect->Initialize();
 
 	//パーティクルの初期化
-	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
+	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::nul);
 }
 //開放処理
 void MSecondStage::Finalize() {
@@ -76,6 +97,8 @@ void MSecondStage::Update(DirectXCommon* dxCommon) {
 	FieldUpdate();
 	//蜂蜜の更新処理
 	HoneyUpdate();
+	//操作説明の更新処理
+	hud->Update();
 	//パーティクルの更新処理
 	particleEmitter->Update();
 }
@@ -101,7 +124,7 @@ bool MSecondStage::IntroUpdate() {
 }
 
 void MSecondStage::ResultCamera(int Timer) {
-	camera->SetTarget(goal_shadow->GetPosition());
+	camera->SetTarget(player_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();
 }
@@ -124,13 +147,8 @@ bool MSecondStage::ClearUpdate() {
 		if (honey_[kLeftNest]->GetCommand() == Actor::APPROCH &&
 			honey_[kMiddleNest]->GetCommand() == Actor::APPROCH &&
 			honey_[kRightNest]->GetCommand() == Actor::APPROCH) {
-			//finish_time++;
-			//if (finish_time > finish_time_Max) {
-				goal_shadow->SetIsActive(true);
-			//}
-			//return true;
+			goal_shadow->SetIsActive(true);
 			return false;
-
 		}
 	}
 	if (goal_shadow->GetPause()) {
@@ -142,13 +160,23 @@ bool MSecondStage::ClearUpdate() {
 }
 
 void MSecondStage::HoneyUpdate() {
+	nowOpenHoney = 0;
 	for (int i = 0; i < kMaxNestNum; i++) {
 		if (honey_[i]->GetCommand() == Actor::APPROCH) {
-			const float rnd_vel = 0.1f;
-			particleEmitter->AddCommon(60, honey_[i]->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1.0f,1.0f,0.0f,0.8f }, { 1,1,0,0 });
+			nowOpenHoney++;
+			const float rnd_vel = 0.2f;
+			const float rnd_height = 0.3f;
+			particleEmitter->AddParabo(50, honey_[i]->GetPosition(), rnd_height, rnd_vel, 1.5f, 0.0f, { 1.0f,1.0f,0.0f,0.8f }, { 1,1,0,0 });
 			particleEmitter->Update();
 		}
 	}
+}
+
+void MSecondStage::DrawLocal() {
+
+	mission_->Draw();
+	honey_get_[nowOpenHoney]->Draw();
+
 }
 
 
@@ -160,7 +188,7 @@ void MSecondStage::Draw(DirectXCommon* dxCommon) {
 
 	ActorManager::GetInstance()->Draw(dxCommon);
 
-	BattleFrontDraw();
+	BattleFrontDraw(addBle);
 
 	dxCommon->PostDraw();
 }

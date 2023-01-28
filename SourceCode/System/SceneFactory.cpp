@@ -1,6 +1,5 @@
 #include "SceneFactory.h"
 #include "TitleScene.h"
-#include "DebugScene.h"
 #include "FirstStage.h"
 #include "SecondStage.h"
 #include "MSecondStage.h"
@@ -10,9 +9,6 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	BaseScene* newScene = nullptr;
 	if (sceneName=="TITLE") {
 		newScene=new TitleScene();
-	}
-	if (sceneName == "DEBUG") {
-		newScene = new DebugScene();
 	}
 	if (sceneName == "FIRSTSTAGE") {
 		newScene = new FirstStage();

@@ -82,7 +82,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	BattleBackDraw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
-	BattleFrontDraw(IntroWord[nowWord].get());
+	BattleFrontDraw(alphaBle,IntroWord[nowWord].get());
 	dxCommon->PostDraw();
 }
 

@@ -13,34 +13,37 @@ private:
 public:
 	enum texName {
 		Test,
-		DebugBack,
 		Black,
 		Title,
-		Clear,
-		Over,
-		UISheet,
-		optionline,
-		TitleBack,
-		Button,
 		DebugMove,
 		noDebugMove,
 		TitleMove,
 		noTitleMove,
+
+		Clear,
+		Over,
+
+		UISheet,
+		optionline,
+		TitleBack,
 		Bar,
 		ZBack,
+
 		Option,
 		CameraOpt,
 		Normal,
 		Reverse,
+
 		CameraBar,
 		OptionBack,
-		Vignette,
-		PlayerCover,
+
 		CharaCover,
+
 		Num,
 		numBack,
 		slash,
 		SceneCover,
+
 		Intro01,
 		Intro02,
 		Intro03,
@@ -53,6 +56,8 @@ public:
 		HpGreen,
 		HpRed,
 		Damage,
+		kMissionMsecond,
+		kMsecondNum,
 	};
 	enum tex2dName {
 		Lock,

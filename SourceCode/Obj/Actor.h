@@ -4,7 +4,7 @@
 #include<string>
 #include"Object3d.h"
 #include <DirectXMath.h>
-#include"ParticleManager.h"
+#include"ParticleEmitter.h"
 #include "DirectXCommon.h"
 #include "FBXObject3d.h"
 

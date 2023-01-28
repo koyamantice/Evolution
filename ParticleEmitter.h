@@ -66,6 +66,14 @@ public: // ƒƒ“ƒoŠÖ”
 		const float& _start_scale = 1.5f, const float& _end_scale = 0.0f,
 		const XMFLOAT4& _start_color = { 0.5f,1.0f,0.5f,1.0f }, const XMFLOAT4& _end_color = { 0.5f,1.0f,0.5f,1.0f });
 
+	void AddParabo(const int& _life,
+		const XMFLOAT3& _position,
+		const float& _downHeight,
+		const float& _average_vel,
+		const float& _start_scale = 1.0f, const float& _end_scale = 0.0f,
+		const XMFLOAT4& _start_color = { 1.0f,1.0f,1.0f,1.0f }, const XMFLOAT4& _end_color = { 1.0f,1.0f,1.0f,1.0f });
+
+
 	/// <summary>
 	/// –ˆƒtƒŒ[ƒ€ˆ—
 	/// </summary>
