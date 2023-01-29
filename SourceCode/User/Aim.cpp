@@ -160,8 +160,10 @@ void Aim::Move(float angle) {
 	if (input->TiltPushStick(Input::L_UP   ,0.0f) ||
 		input->TiltPushStick(Input::L_DOWN ,0.0f) ||
 		input->TiltPushStick(Input::L_RIGHT,0.0f) ||
-		input->TiltPushStick(Input::L_LEFT ,0.0f)) {
+		input->TiltPushStick(Input::L_LEFT ,0.0f) ||
+		enemy_set) {
 		after_pos = player->GetCameraPos(player->GetRotation().y,10);
+		enemy_set = false;
 	}
 	Lpos.x = Ease(In, Quad, 0.5f, Lpos.x, after_pos.x);
 	Lpos.y = Ease(In, Quad, 0.5f, Lpos.y, after_pos.y);
@@ -186,11 +188,27 @@ void Aim::Move(float angle) {
 
 void Aim::EnemySet() {
 	if (input->TriggerButton(Input::RT)) {
-		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(player->GetPosition());
-		XMFLOAT3 base = LockOn->GetPosition();
-		base = enemy->GetPosition();
-		base.y = 0.18f;
-		LockOn->SetPosition(base);
+		Actor* enemy = ActorManager::GetInstance()->SearchActor("Enemy");
+		XMFLOAT3 base = player->GetPosition();
+		XMFLOAT3 boss = enemy->GetPosition();
+
+		float itr = 0;
+		XMFLOAT3 position{};
+		position.x = (boss.x - base.x);
+		position.z = (boss.z - base.z);
+		itr = (atan2f(position.x, position.z) * (DEGREE_HALF / XM_PI)) + DEGREE_HALF; //- 90;// *(XM_PI / 180.0f);
+		if (itr >= 0) {
+			itr = (float)((int)itr % (int)DEGREE_MAX);
+		} else {
+			itr += DEGREE_MAX;
+			itr = (float)((int)itr % (int)DEGREE_MAX);
+		}
+
+		player->SetRotation({ 0,itr,0 });
+		player->SetPause(true);
+		if (!enemy_set) {
+			enemy_set = true;
+		}
 	}
 }
 

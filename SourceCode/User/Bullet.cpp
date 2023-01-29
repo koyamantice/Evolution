@@ -58,15 +58,17 @@ void Bullet::Update() {
 
 void Bullet::IntroUpdate(const float& Timer, const int& _stage) {
 	if (!isActive) { return; }
-	const float delay = 0.2f;
-	const float first_hight = 50;
-
+	const float delay = 0.5f;
+	const float first_hight = 100;
+	XMFLOAT3 player_pos = player->GetPosition();
 	if (Timer + delay <= 1.0f) {
 		hight = Ease(In, Linear, Timer + delay, first_hight, 0);
 	}
 	fbxObj->Update();
-	fbxObj->SetRotation({ 0,DirRotation(player->GetPosition()),0 });
-	fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, hight, ((int)ID / 10) * 5.0f });
+	fbxObj->SetRotation({ 0,DirRotation(player_pos),0 });
+	const float angle = DEGREE_HALF / 10;
+	const float radius = 7.0f;
+	fbxObj->SetPosition({ player_pos.x + sinf(((int)ID)* angle * (XM_PI/DEGREE_HALF)) * radius, hight,  player_pos.z + cos(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius });
 	IntroOnUpdate(Timer);
 
 	if (_stage == SceneNum::kSecondScene) {
@@ -97,7 +99,7 @@ void Bullet::SetAggregation() {
 	if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
 		rotation = Ease(In, Quad, 0.5f, fbxObj->GetRotation().y, pos.y);
 	} else {
-		rotation = (atan2f(position.x, position.z) * (180.0f / XM_PI)); //- 90;// *(XM_PI / 180.0f);
+		rotation = (atan2f(position.x, position.z) * (DEGREE_HALF / XM_PI)); //- 90;// *(XM_PI / 180.0f);
 	}
 	fbxObj->SetPosition(BulletPos);
 	fbxObj->SetRotation({ 0,rotation,0 });

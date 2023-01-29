@@ -50,6 +50,8 @@ private:
 	float FirstAlpha = 1;
 	float SecondAlpha = 1;
 
+
+	bool enemy_set = false;
 	void Move(float angle);
 	void EnemySet();
 	float Area = 0.3f;

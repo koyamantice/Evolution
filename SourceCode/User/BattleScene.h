@@ -133,7 +133,7 @@ protected:
 	//ƒJƒƒ‰ŠÖŒW
 	bool reset_camera = false;
 	float angle_frame = 0.0f;
-	const float angle_frame_max = 60.0f;
+	const float angle_frame_max = 30.0f;
 
 	bool camera_explanation = false;
 

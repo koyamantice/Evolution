@@ -153,7 +153,7 @@ void BattleScene::CameraUpda() {
 		camera_distance.z = Ease(In, Quad, interpolation, camera_distance.z, e_camera_distance.z);
 	}
 	//カメラリセット入力
-	if (input->TriggerButton(Input::LT)) {
+	if (input->TriggerButton(Input::LT)|| player_shadow->GetPause()) {
 		if (!reset_camera) {
 			if (!camera_explanation) {camera_explanation = true;}
 
@@ -194,6 +194,7 @@ void BattleScene::ResetCamera() {
 	} else {
 		reset_camera = false;
 		player_shadow->SetCanMove(true);
+		player_shadow->SetPause(false);
 		angle_frame = 1.0f;
 	}
 
