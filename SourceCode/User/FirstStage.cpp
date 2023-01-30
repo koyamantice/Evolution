@@ -108,6 +108,29 @@ bool FirstStage::IntroUpdate() {
 			return true;
 		}
 
+		//スキップ
+		if (intro_skip) {
+			if (feedin_frame > 0.0f) {
+				feedin_frame -= 1.0f / feedin_frame_max;
+			} else {
+				intro_skip = false;
+				intro_count = intro_count_max;
+				IntroCamera(intro_count_max);
+				ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max, "", kSecondScene);
+				FieldUpdate();
+			}
+			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+			filter_first->SetColor({ 1,1,1,filter_alpha });
+			
+			return true;
+		}
+
+		if (input->TriggerButton(input->START)) {
+			if (!intro_skip) {
+				intro_skip = true;
+			}
+		}
+
 		intro_count += intro_speed;
 
 		//導入部分終了処理
@@ -116,11 +139,7 @@ bool FirstStage::IntroUpdate() {
 			battle_intro = false;
 			return true;
 		}
-		//倍速機能
-		if (input->TriggerButton(input->START)) {
-			if ((int)intro_count % 2 == 1) { intro_count -= 1; }
-			intro_speed = intro_speed_max;
-		}
+
 		//導入の語りを分割しています.
 		if ((int)intro_count % ((int)(intro_count_max / intro_speed) / intro_word_max) == 0) {
 			if (nowWord != intro_word_max - 1) {
@@ -145,7 +164,10 @@ void FirstStage::IntroCamera(const float& Timer) {
 		camera_angle = Ease(In, Linear, Timer / reaching_time, DEGREE_MAX, 0);
 		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
 	}
-
+	if (Timer/ intro_count_max >= 1.0f) {
+		camera_angle = 0;
+		hight = camera_hight;
+	}
 	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 

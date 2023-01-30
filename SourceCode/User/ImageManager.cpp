@@ -41,6 +41,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(numBack, L"Resources/2d/PlayUI/numBack.png");
 	Sprite::LoadTexture(slash, L"Resources/2d/PlayUI/slash.png");
 	Sprite::LoadTexture(SceneCover, L"Resources/2d/Effect/SceneCover.png");
+	Sprite::LoadTexture(Skip, L"Resources/2d/Effect/skip.png");
 
 	Sprite::LoadTexture(Intro01, L"Resources/2d/IntroWord/Intro01.png");
 	Sprite::LoadTexture(Intro02, L"Resources/2d/IntroWord/Intro02.png");

@@ -43,6 +43,7 @@ public:
 		numBack,
 		slash,
 		SceneCover,
+		Skip,
 
 		Intro01,
 		Intro02,

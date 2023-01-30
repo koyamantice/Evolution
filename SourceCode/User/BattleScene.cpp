@@ -10,6 +10,11 @@ void BattleScene::BattleInit() {
 	_Screen2 = Sprite::Create(ImageManager::SceneCover, { 0,600 });
 	screens[1].reset(_Screen2);
 
+	Sprite* skip = nullptr;
+	skip = Sprite::Create(ImageManager::Skip, { 20,20 });
+	skip_ui_.reset(skip);
+
+
 	//ƒ|[ƒYUI‚ð¶¬
 	PauseUI* pause_ui = new PauseUI();
 	pauseUi.reset(pause_ui);
@@ -263,6 +268,9 @@ void BattleScene::BattleFrontDraw(blendType _blendType,Sprite* _introword) {
 		if (stage_clear) {
 			clear_comment_->Draw();
 		}
+		if (battle_intro) {
+			skip_ui_->Draw();
+		}
 	} else {
 		if (!stage_clear) {
 			DrawLocal();
@@ -272,7 +280,7 @@ void BattleScene::BattleFrontDraw(blendType _blendType,Sprite* _introword) {
 	if (gameover) {
 		over_comment_->Draw();
 	}
-	if (scene_first_change) {
+	if (battle_intro) {
 		filter_first->Draw();
 	}
 	if (pause) {

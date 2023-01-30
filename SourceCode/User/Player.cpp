@@ -73,7 +73,7 @@ void Player::ResultOnUpdate(const float& Timer) {
 
 void Player::OnInit() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
-	obj->SetPosition({ 0,0,25 });
+	obj->SetPosition({ 0,0,20 });
 	
 	isVisible = false;
 

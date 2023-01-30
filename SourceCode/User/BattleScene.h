@@ -101,6 +101,8 @@ protected:
 
 	//導入部分のスクリーン
 	std::unique_ptr<Sprite>	screens[2]{};
+	//スキップUI
+	std::unique_ptr<Sprite>	skip_ui_{};
 
 	//暗闇からフェードします
 	std::unique_ptr<Sprite> filter_first{};

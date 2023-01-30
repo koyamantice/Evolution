@@ -23,8 +23,8 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	goal_shadow->SetIsActive(false);
 
 	//カメラの初期化
-	camera_distance.x = sinf(camera_angle * (XM_PI / 180)) * camera_radius;
-	camera_distance.z = cosf(camera_angle * (XM_PI / 180)) * camera_radius;
+	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
+	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	player_shadow->SetAngle(camera_angle);
 	camera->SetTarget(first_target);
 	camera->SetEye(XMFLOAT3{
@@ -98,6 +98,27 @@ bool SecondStage::IntroUpdate() {
 			ActorManager::GetInstance()->IntroUpdate(intro_count,"", kSecondScene);
 			FieldUpdate();
 			return true;
+		}
+		//スキップ
+		if(intro_skip){
+			if (feedin_frame > 0.0f) {
+				feedin_frame -= 1.0f / feedin_frame_max;
+			} else {
+				intro_skip = false;
+				intro_count = intro_count_max;
+			}
+			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+			filter_first->SetColor({ 1,1,1,filter_alpha });
+
+			ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max, "", kSecondScene);
+			FieldUpdate();
+			return true;
+		}
+
+		if (input->TriggerButton(input->START)) {
+			if (!intro_skip) {
+				intro_skip = true;
+			}
 		}
 		intro_count += intro_speed;
 

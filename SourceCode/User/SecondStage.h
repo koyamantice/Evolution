@@ -55,7 +55,7 @@ private:
 
 
 	float intro_count = 0;
-	const float intro_count_max = 100;
+	const float intro_count_max = 600;
 	float intro_speed = 1;
 	float intro_speed_max = 2;
 

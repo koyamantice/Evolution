@@ -10,13 +10,11 @@ void Aim::Init() {
 	Lock_->SetRotation({ 90,0,0 });
 	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 	LockOn.reset(Lock_);
-	LockOn->SetPosition({ 100,-50,0 });
 
 	Object2d* Whistle_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	Whistle_->SetRotation({ 90,0,0 });
 	Whistle_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
 	Whistle.reset(Whistle_);
-	Whistle->SetPosition({ 100,-50,0 });
 
 
 	for (int i = 0; i < COMMENTMAX;i++) {
@@ -43,6 +41,7 @@ void Aim::Init() {
 
 	audioManager->LoadWave("SE/slow.wav");
 
+	enemy_set = true;
 }
 
 void Aim::Upda(float angle) {
@@ -150,12 +149,6 @@ void Aim::Move(float angle) {
 	} 
 
 	XMFLOAT3 Lpos = LockOn->GetPosition();
-	XMFLOAT3 pos = player->GetPosition();
-
-
-	float StickX = input->GetLeftControllerX();
-	float StickY = input->GetLeftControllerY();
-	const float STICK_MAX = 32768.0f;
 
 	if (input->TiltPushStick(Input::L_UP   ,0.0f) ||
 		input->TiltPushStick(Input::L_DOWN ,0.0f) ||
@@ -178,6 +171,7 @@ void Aim::Move(float angle) {
 		comment_ui_[i]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * XM_PI / DEGREE_HALF) + 3.5f ,Lpos.z });
 	}
 
+	XMFLOAT3 pos = player->GetPosition();
 	for (int i = 0; i < GuidNum; i++) {
 		GuidPos[i].x = Ease(InOut, Quad, (i + 1) * 0.1f, pos.x, Lpos.x);
 		GuidPos[i].y = 0.1f;
@@ -188,8 +182,9 @@ void Aim::Move(float angle) {
 
 void Aim::EnemySet() {
 	if (input->TriggerButton(Input::RT)) {
-		Actor* enemy = ActorManager::GetInstance()->SearchActor("Enemy");
 		XMFLOAT3 base = player->GetPosition();
+		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(base);
+		if (enemy->GetTag()=="Player") { return; }
 		XMFLOAT3 boss = enemy->GetPosition();
 
 		float itr = 0;
