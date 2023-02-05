@@ -12,6 +12,13 @@ TitleText::TitleText() {
 }
 
 TitleText::~TitleText() {
+	delete modelSkydome;
+	delete modelGround;
+	delete modelFighter;
+	delete modelSphere;
+	delete modelPine;
+	grounds.clear();
+	models.clear();
 }
 
 void TitleText::Init() {
@@ -33,24 +40,22 @@ void TitleText::Init() {
 		}
 		newText_->Initialize();
 		newText_->SetPosition(pos[i]);
-		newText_->SetRotation({ 90,-90,0 });
+		newText_->SetRotation({ DEGREE_QUARTER,DEGREE_HALF,0 });
 		newText_->SetScale({ 8.0f,8.0f,8.0f });
 		texts[i].reset(newText_);
 	}
 	for (int i = 0; i < 6; i++) {
 		texts[i]->Initialize();
-	}
-	for (int i = 0; i < 6; i++) {
 		texts[i]->SetPosition({ pos[i] });
-	}
 
+	}
 	
 	Object3d* door_ = new Object3d();
 	door_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDoor));
 	door_->Initialize();
-	door_->SetPosition({1.0f,0,12.0f});
+	door_->SetPosition({2.0f,0,10.0f});
 	door_->SetRotation({ 0,DEGREE_QUARTER,0 });
-	door_->SetScale({ 4.0f,4.0f,4.0f });
+	door_->SetScale({ 3.0f,3.0f,3.0f });
 	door.reset(door_);
 
 
@@ -67,7 +72,7 @@ void TitleText::Init() {
 	models.insert(std::make_pair("skydome", modelSkydome));
 	models.insert(std::make_pair("Ground", modelGround));
 	models.insert(std::make_pair("House", modelFighter));
-	models.insert(std::make_pair("Pine1",modelPine));
+	models.insert(std::make_pair("Pine",modelPine));
 	levelData = LevelLoader::LoadFile("level_editor");
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {
@@ -146,7 +151,7 @@ void TitleText::DoorUpdate() {
 		XMFLOAT3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		partMan->Add(60, { -2 + mag.x,2 + mag.y,12 + mag.z }, vel, acc, 3.0f, 0.0f, { 1.0f,1.0f,0,1.0f }, { 1.0f,1.0f,0,1.0f });
+		partMan->Add(60, { -2.0f + mag.x,2 + mag.y,10.0f + mag.z }, vel, acc, 3.0f, 0.0f, { 1.0f,1.0f,0,1.0f }, { 1.0f,1.0f,0,1.0f });
 	}
 	partMan->Update();
 

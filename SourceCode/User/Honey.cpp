@@ -156,6 +156,7 @@ void Honey::WaitUpda() {
 		if (scale_damaged_frame_ >= 1.0f) {
 				first_pos = pos;
 				before_pos = pos;
+				collide_size = 6.0f;
 				command = LEAVE;
 		
 		}
@@ -172,6 +173,9 @@ void Honey::WaitUpda() {
 				sca.y = Ease(InOut, Circ, scale_damaged_frame_, base_sca.y, 0.0f);
 				sca.z = Ease(InOut, Circ, scale_damaged_frame_, base_sca.z, 0.0f);
 				obj->SetScale(sca);
+				if (collide_size > 1.0f) {
+					collide_size = sca.x;
+				}
 			}
 			const float rnd_vel = 0.3f;
 			const float rnd_height = 0.3f;

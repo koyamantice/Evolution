@@ -89,7 +89,7 @@ private:
 	const XMFLOAT2 kCameraHudPos2Edge = { 90,680 };
 	const XMFLOAT2 kCameraHudSize2Edge = { 64,64 };
 	float edge_frame = 0.0f;
-	const float kEdgeFrameMax = 200.0f;
+	const float kEdgeFrameMax = 100.0f;
 
 	//É{É^ÉìÇÃê‡ñæ
 	std::unique_ptr<Sprite> button_hud[BUTTONCONTROLMAX]{};
@@ -103,6 +103,7 @@ private:
 	} ;
 
 
+	static bool isVisible;
 	ButtonEasingSystem button_system[BUTTONCONTROLMAX];	
 
 };

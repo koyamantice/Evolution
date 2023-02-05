@@ -184,13 +184,13 @@ void Enemy_Bee::UnguardUpda() {
 		fbxObject3d->SetRotation(rot);
 	}
 	XMFLOAT3 pos{};
-	pos.x=Ease(In,Quad,commandTimer, before_pos.x, after_pos.x);
-	pos.y=Ease(In,Quad,commandTimer, 0, -3);
-	pos.z=Ease(In,Quad,commandTimer, before_pos.z, after_pos.z);
+	pos.x = Ease(In, Quad, commandTimer, before_pos.x, after_pos.x);
+	pos.y = Ease(In, Quad, commandTimer, 0, -3);
+	pos.z = Ease(In, Quad, commandTimer, before_pos.z, after_pos.z);
 	fbxObject3d->SetPosition(pos);
 
-	if ((honey[0]->GetCommand() == WAIT && honey[1]->GetCommand() == WAIT)||
-		(!overDamage&& pinchLife > hp)) {
+	if ((honey[0]->GetCommand() == WAIT && honey[1]->GetCommand() == WAIT) ||
+		(!overDamage && pinchLife > hp)) {
 		fbxObject3d->StopAnimation();
 		fbxObject3d->PlayAnimation(Fly);
 		if (!overDamage) {
@@ -210,13 +210,13 @@ void Enemy_Bee::LeaveUpda() {
 	fbxObject3d->SetPosition({ pos.x,sinf(commandTimer * XM_PI / 180) * 2.0f,pos.z });
 
 	if (honey[0]->GetCommand() == APPROCH || honey[1]->GetCommand() == APPROCH) {
-		for (int i = 0; i < 2;i++) {
+		for (int i = 0; i < 2; i++) {
 			if (honey[i]->GetCommand() == APPROCH) {
 				honey_approch_ = i;
 			}
 		}
-		
-		
+
+
 		fbxObject3d->StopAnimation();
 		fbxObject3d->PlayAnimation(Dawn);
 		before_pos = pos;
@@ -450,17 +450,17 @@ void Enemy_Bee::AttackUpda() {
 
 void Enemy_Bee::LifeCommon() {
 	if (hp <= 0.0f) {
+		XMFLOAT3 rot = fbxObject3d->GetRotation();
 		if (command != DEAD) {
 			pause = true;
+			dead_rot_ = rot.y;
 			return;
 		}
 		XMFLOAT3 pos = fbxObject3d->GetPosition();
-		XMFLOAT3 rot = fbxObject3d->GetRotation();
 		XMFLOAT3 sca = fbxObject3d->GetScale();
 		fbxObject3d->ResetAnimation();
 
-		rot.y++;
-
+		rot.y = Ease(In, Quad, scaframe, dead_rot_, dead_rot_ + DEGREE_MAX * 4.0f);
 		scale = Ease(In, Quad, scaframe, 1.0f, 0.0f);
 		if (scaframe < 1.0f) {
 			scaframe += 0.01f;
@@ -511,19 +511,6 @@ void Enemy_Bee::IntroOnUpdate(const float& Timer) {
 		-8,
 		10
 		};
-	} else if (Timer <= 0.65f) {
-		float time = (Timer - 0.5f);
-		if (time <= 0.1f) {
-			pos.x = Ease(In, Linear, time / 0.1f, before_pos.x, after_pos.x);
-			pos.y = Ease(In, Linear, time / 0.1f, before_pos.y, after_pos.y);
-			pos.z = Ease(In, Linear, time / 0.1f, before_pos.z, after_pos.z);
-			rot.y = DirRotation(after_pos);
-		}
-	} else {
-
-
-
-
 	}
 
 	fbxObject3d->SetPosition(pos);
@@ -575,7 +562,7 @@ float Enemy_Bee::DirRotation(const XMFLOAT3& target) {
 	float itr{};
 	XMFLOAT3 pos = fbxObject3d->GetPosition();
 	XMFLOAT3 position{};
-	
+
 	position.x = (target.x - pos.x);
 	position.z = (target.z - pos.z);
 	itr = (atan2f(position.x, position.z) * (DEGREE_HALF / XM_PI)) - DEGREE_QUARTER;

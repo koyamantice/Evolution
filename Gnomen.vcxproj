@@ -162,7 +162,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
     <ClCompile Include="SourceCode\Common\Vec.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
@@ -180,6 +179,7 @@
     <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Framework.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Input.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\ParticleEmitter.cpp" />
     <ClCompile Include="SourceCode\FrameWork\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\PostEffect.cpp" />
     <ClCompile Include="SourceCode\FrameWork\SceneChanger.cpp" />
@@ -239,10 +239,9 @@
     <ClCompile Include="SourceCode\User\FirstStage.cpp" />
     <ClCompile Include="SourceCode\User\TitleScene.cpp" />
     <ClCompile Include="SourceCode\User\TitleText.cpp" />
-    <ClCompile Include="Touch.cpp" />
+    <ClCompile Include="SourceCode\User\Touch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
     <ClInclude Include="SourceCode\Common\Vec.h" />
@@ -264,6 +263,7 @@
     <ClInclude Include="SourceCode\FrameWork\FPSManager.h" />
     <ClInclude Include="SourceCode\FrameWork\Framework.h" />
     <ClInclude Include="SourceCode\FrameWork\Input.h" />
+    <ClInclude Include="SourceCode\FrameWork\ParticleEmitter.h" />
     <ClInclude Include="SourceCode\FrameWork\ParticleManager.h" />
     <ClInclude Include="SourceCode\FrameWork\PostEffect.h" />
     <ClInclude Include="SourceCode\FrameWork\SceneChanger.h" />
@@ -325,7 +325,7 @@
     <ClInclude Include="SourceCode\User\FirstStage.h" />
     <ClInclude Include="SourceCode\User\TitleScene.h" />
     <ClInclude Include="SourceCode\User\TitleText.h" />
-    <ClInclude Include="Touch.h" />
+    <ClInclude Include="SourceCode\User\Touch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />

@@ -17,6 +17,7 @@ public:
 	void Upda(float angle);
 	void Draw();
 	void FirstSet();
+	void  SetIsActive(const bool& _isActive) { isActive = _isActive; }
 private:
 	std::unique_ptr<Object2d> LockOn{};
 	std::unique_ptr<Object2d> Whistle{};
@@ -61,4 +62,6 @@ private:
 	bool collect = false;
 	Actor* player = nullptr;
 	Bullet* bullet = nullptr;
+
+	bool isActive = true;
 };

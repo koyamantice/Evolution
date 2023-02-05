@@ -22,11 +22,15 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+	enum ReverseType{
+		NonReverse=1,
+		Reverse=-1
+	};
 	/// <summary>
 	/// シーン切り替え
 	/// </summary>
 	/// <param name="sceneName"></param>
-	void ChangeScene(const std::string& sceneName);
+	void ChangeScene(const std::string& sceneName,const ReverseType& _reverse= NonReverse);
 	/// <summary>
 	/// イージングスタート
 	/// </summary>
@@ -37,6 +41,8 @@ private:
 
 	float width = WinApp::window_width;
 	float height = WinApp::window_height;
+
+
 
 	const int base_size = 80;
 	int width_num  = (int)width / base_size;

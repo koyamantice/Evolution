@@ -69,6 +69,7 @@ void Player::IntroMove() {
 void Player::ResultOnUpdate(const float& Timer) {
 	fbxObj->Update();
 	compornent->SetIsActive(false);
+	LockOn->SetIsActive(false);
 }
 
 void Player::OnInit() {

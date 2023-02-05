@@ -139,6 +139,7 @@ bool MSecondStage::ClearUpdate() {
 			scene_changer->ChangeStart();
 		}
 		scene_changer->ChangeScene("SECONDSTAGE");
+		ActorManager::GetInstance()->ResultUpdate(0);
 		ResultCamera(0);
 		FieldUpdate();
 		return true;

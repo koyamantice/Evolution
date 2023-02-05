@@ -69,7 +69,7 @@ private:
 	XMFLOAT3 h_pos{};
 	float time_f =0;
 	float time_e = 200;
-
+	float dead_rot_ = 0;
 	enum {
 		Dawn=0,
 		Posing,

@@ -21,7 +21,7 @@ void SceneChanger::Init() {
 			itr = Sprite::Create(ImageManager::Test, { 0,0 });
 			itr->SetAnchorPoint({ 0.5f,0.5f });
 			itr->SetPosition({ (float)(i * base_size) + base_size / 2,(float)(j * base_size) + base_size / 2 });
-			itr->SetSize({ (float)base_size ,(float)base_size });
+			itr->SetSize({ 0,0 });
 			DirectX::XMFLOAT4 col = {0,0,0,1};
 			itr->SetColor(col);
 			std::unique_ptr<Sprite> newSprite;
@@ -40,7 +40,7 @@ void SceneChanger::Draw() {
 	}
 }
 
-void SceneChanger::ChangeScene(const std::string& sceneName) {
+void SceneChanger::ChangeScene(const std::string& sceneName, const ReverseType& _reverse) {
 	if (easing_start) {
 		if (ease_frame >= 1.0f) {
 			SceneManager::GetInstance()->ChangeScene(sceneName);
@@ -48,7 +48,7 @@ void SceneChanger::ChangeScene(const std::string& sceneName) {
 			ease_frame += 1.0f / end_frame;
 		}
 		float rot = 0;
-		rot = Ease(InOut, Quint, ease_frame, 0, 360);
+		rot = Ease(InOut, Quint, ease_frame, 0, 360 * (float)_reverse);
 		DirectX::XMFLOAT2 size{};
 		size.x = Ease(InOut, Quint, ease_frame, 0, (float)base_size);
 		size.y = Ease(InOut, Quint, ease_frame, 0, (float)base_size);

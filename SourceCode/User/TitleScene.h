@@ -28,10 +28,20 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw(DirectXCommon* dxCommon) override;
+private:
 
-	void Heavy();
-
-
+	/// <summary>
+	/// テキスト関連更新処理
+	/// </summary>
+	void SelectTextUpdate();
+	
+	/// <summary>
+	/// 入力関連更新処理
+	/// </summary>
+	void InputUpdate();
+	/// <summary>
+	/// カメラ更新処理
+	/// </summary>
 	void CameraUpdate();
 private:
 	//メンバ変数
@@ -63,6 +73,13 @@ private:
 
 	int nextScene = Portal::Title;
 
+
+
+	float sin_frame_ = 0.0f;
+	float sin_add_ = 0.1f;
+
+
+
 	std::string SceneName = "null";
 
 	float circ_x=80;
@@ -80,7 +97,7 @@ private:
 
 	std::list<float> eyes{};
 
+	XMFLOAT3 s_camera = { 50,0,50 };
 	XMFLOAT3 e_camera = {80,0,80};
-	XMFLOAT3 s_camera = {50,0,80};
 };
 

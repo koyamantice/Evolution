@@ -5,6 +5,12 @@
 #include <d3d12.h>
 #include <DirectXMath.h>
 
+
+
+#define DEFALUT_ALPHA {1,1,1,1}
+#define HALF_ALPHA {1,1,1,0.5f}
+#define INVISIBLE_ALPHA {1,1,1,0.0f}
+
 /// <summary>
 /// スプライト
 /// </summary>

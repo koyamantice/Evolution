@@ -250,12 +250,8 @@
     <ClCompile Include="SourceCode\System\LevelLoader.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="Touch.cpp" />
     <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp">
       <Filter>Obj\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleEmitter.cpp">
-      <Filter>FrameWork</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\BaseScene.cpp">
       <Filter>User\プレイシーン</Filter>
@@ -276,6 +272,12 @@
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\Crystal.cpp">
+      <Filter>User\ステージに必要</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\FrameWork\ParticleEmitter.cpp">
+      <Filter>FrameWork</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Touch.cpp">
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
   </ItemGroup>
@@ -500,12 +502,8 @@
     <ClInclude Include="SourceCode\System\LevelLoader.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="Touch.h" />
     <ClInclude Include="SourceCode\Obj\2d\Object2d.h">
       <Filter>Obj\2d</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleEmitter.h">
-      <Filter>FrameWork</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\BaseScene.h">
       <Filter>User\プレイシーン</Filter>
@@ -526,6 +524,12 @@
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\Crystal.h">
+      <Filter>User\ステージに必要</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FrameWork\ParticleEmitter.h">
+      <Filter>FrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Touch.h">
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
   </ItemGroup>

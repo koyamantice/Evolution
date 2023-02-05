@@ -143,26 +143,26 @@ void PauseUI::Reset() {
 void PauseUI::FirstOpen() {
 	if (option_system) { return; }
 	if (!ease) { return; }
-		size[0].x = Ease(InOut, Quad, frame, 360, 880);
-		size[0].y = Ease(InOut, Quad, frame, 180, 520);
-		for (int i = 1; i < CameraOpt; i++) {
-			size[i].x = Ease(InOut, Quad, frame, 0, 600);
-			size[i].y = Ease(InOut, Quad, frame, 0, 96);
-		}
-		for (int i = 0; i < CameraOpt; i++) {
-			UI[i]->SetSize(size[i]);
-		}
-		if (frame < 1.0f) {
-			frame += 0.05f;
-		} else {
-			ease = false;
-		}
+	if (frame < 1.0f) {
+		frame += 0.05f;
+	} else {
+		ease = false;
+	}
+	size[0].x = Ease(InOut, Quad, frame, 360, 880);
+	size[0].y = Ease(InOut, Quad, frame, 180, 520);
+	for (int i = 1; i < CameraOpt; i++) {
+		size[i].x = Ease(InOut, Quad, frame, 0, 600);
+		size[i].y = Ease(InOut, Quad, frame, 0, 96);
+	}
+	for (int i = 0; i < CameraOpt; i++) {
+		UI[i]->SetSize(size[i]);
+	}
 }
 
 void PauseUI::MoveSelect() {
 	if (ease) { return; }
 	if (option_system) { return; }
-	if(scene_changer->GetEasingStart()){scene_changer->ChangeScene("TITLE"); return;}
+	if(scene_changer->GetEasingStart()){scene_changer->ChangeScene("TITLE", SceneChanger::Reverse); return;}
 	if (input->TiltStick(Input::L_UP) || input->TriggerButton(Input::UP) || input->TriggerKey(DIK_UP)) {
 		nowBar--;
 	}
@@ -178,6 +178,7 @@ void PauseUI::MoveSelect() {
 			case 1:
 				ease = true;
 				frame = 0.0f;
+
 				if (reverse_camera == NOREVERSE) {
 					cameraNow = 0;
 				} else {
@@ -250,6 +251,13 @@ void PauseUI::OptionSystem() {
 		option_system = false;
 		ease = true;
 		frame = 0.0f;
+		for (int i = 1; i < CameraOpt; i++) {
+			size[i].x = Ease(InOut, Quad, frame, 0, 600);
+			size[i].y = Ease(InOut, Quad, frame, 0, 96);
+		}
+		for (int i = 0; i < CameraOpt; i++) {
+			UI[i]->SetSize(size[i]);
+		}
 		nowBar = 1;
 		switch (cameraNow) {
 		case 0:

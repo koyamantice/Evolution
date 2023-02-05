@@ -2,6 +2,9 @@
 #include <ImageManager.h>
 #include <Easing.h>
 
+
+bool Hud::isVisible = true;
+
 Hud::Hud() {
 	Initialize();
 }
@@ -85,6 +88,10 @@ void Hud::Update() {
 
 	if (input->TriggerButton(Input::A)) {
 		button_system[GNOMERECOVERY].isvisible = true;
+	}
+	if (input->TriggerButton(Input::Y)) {
+		if (!isVisible) { isVisible = true; }
+		else{ isVisible = false; }
 	}
 
 	//コントローラー説明の更新
@@ -185,6 +192,7 @@ void Hud::BottonHudUpdate() {
 }
 
 void Hud::Draw() {
+	if (!isVisible) { return; }
 	Sprite::PreDraw();
 	//カメラ回転用説明
 	camera_hud[visible_trigger]->Draw();

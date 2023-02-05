@@ -29,8 +29,8 @@ void Aim::Init() {
 
 	for (int i = 0; i < GuidNum; i++) {
 		Object2d* Guid_ = Object2d::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-		Guid_->SetRotation({ 90,0,0 });
-		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.6f });
+		Guid_->SetRotation({ DEGREE_QUARTER,0,0 });
+		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
 		Guid[i].reset(Guid_);
 	}
 
@@ -76,6 +76,7 @@ void Aim::Upda(float angle) {
 }
 
 void Aim::Draw() {
+	if (!isActive) { return; }
 	Object2d::PreDraw();
 	LockOn->Draw();
 	Whistle->Draw();
@@ -186,7 +187,6 @@ void Aim::EnemySet() {
 		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(base);
 		if (enemy->GetTag()=="Player") { return; }
 		XMFLOAT3 boss = enemy->GetPosition();
-
 		float itr = 0;
 		XMFLOAT3 position{};
 		position.x = (boss.x - base.x);
