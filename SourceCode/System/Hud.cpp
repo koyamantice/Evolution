@@ -60,6 +60,29 @@ void Hud::Initialize() {
 		button_hud[i]->SetSize(kVisibleButtonSize);
 		button_hud[i]->SetAnchorPoint(kBasicAnchor);
 	}
+
+
+
+
+
+	Sprite* button_option_{};
+	button_option_ = Sprite::Create(ImageManager::kStartOption, { 10,10 });
+	button_option.reset(button_option_);
+
+	Sprite* button_target_{};
+	button_target_ = Sprite::Create(ImageManager::ControlRT, { -64,440 });
+	button_target_->SetSize(kVisibleButtonSize);
+	//中心座標にします。
+	button_target_->SetAnchorPoint(kBasicAnchor);
+	button_target.reset(button_target_);
+
+	Sprite* button_visible_{};
+	button_visible_ = Sprite::Create(ImageManager::ControlY, { 600,680 });
+	button_visible_->SetSize(kVisibleButtonSize);
+	//中心座標にします。
+	button_visible_->SetAnchorPoint(kBasicAnchor);
+	button_visible.reset(button_visible_);
+
 	//構造体の初期化
 	button_system[GNOMESHOT].isvisible = false;
 	button_system[GNOMESHOT].ease_frame = 0.0f;
@@ -72,6 +95,14 @@ void Hud::Initialize() {
 	button_system[GNOMERECOVERY].ease_frame_max = 60.0f;
 	button_system[GNOMERECOVERY].s_pos = { -64,600 };
 	button_system[GNOMERECOVERY].e_pos = {  70,600 };
+
+	target_system.isvisible = false;
+	target_system.ease_frame = 0.0f;
+	target_system.ease_frame_max = 60.0f;
+	target_system.s_pos = { -64,440 };
+	target_system.e_pos = { 70,440 };
+
+
 }
 
 void Hud::Update() {
@@ -189,11 +220,42 @@ void Hud::BottonHudUpdate() {
 			button_hud[i]->SetPosition(pos);
 		}
 	}
+	if (button_system[GNOMESHOT].ease_frame >= 1.0f&&
+		button_system[GNOMERECOVERY].ease_frame >= 1.0f) {
+		target_system.isvisible = true;
+	}
+	if (target_system.isvisible) {
+		XMFLOAT2 pos{};
+
+		if (target_system.ease_frame < 1.0f) {
+			target_system.ease_frame += 1.0f / target_system.ease_frame_max;
+		} else {
+			target_system.ease_frame = 1.0f;
+		}
+
+		pos.x = Ease(In, Quad,
+			target_system.ease_frame,
+			target_system.s_pos.x,
+			target_system.e_pos.x);
+
+		pos.y = Ease(In, Quad,
+			target_system.ease_frame,
+			target_system.s_pos.y,
+			target_system.e_pos.y);
+
+		button_target->SetPosition(pos);
+	}
+
+
 }
 
 void Hud::Draw() {
-	if (!isVisible) { return; }
 	Sprite::PreDraw();
+	button_visible->Draw();
+	button_option->Draw();
+
+	if (!isVisible) { return; }
+	button_target->Draw();
 	//カメラ回転用説明
 	camera_hud[visible_trigger]->Draw();
 	camera_hud[COMMENT]->Draw();

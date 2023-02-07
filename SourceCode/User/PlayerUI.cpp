@@ -12,6 +12,7 @@ void PlayerUI::OnInitialize() {
 	Sprite* _Damage;
 	_Damage = Sprite::Create(ImageManager::Damage, { 480,50 });
 	Damage.reset(_Damage);
+	Damage->SetColor({ 1,1,1,0 });
 	Dmapos = Damage->GetPosition();
 
 	Sprite* _Bullet;

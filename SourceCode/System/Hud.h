@@ -93,6 +93,9 @@ private:
 
 	//É{É^ÉìÇÃê‡ñæ
 	std::unique_ptr<Sprite> button_hud[BUTTONCONTROLMAX]{};
+	std::unique_ptr<Sprite> button_option{};
+	std::unique_ptr<Sprite> button_target{};
+	std::unique_ptr<Sprite> button_visible{};
 
 	struct ButtonEasingSystem {
 		bool isvisible = false;
@@ -105,5 +108,5 @@ private:
 
 	static bool isVisible;
 	ButtonEasingSystem button_system[BUTTONCONTROLMAX];	
-
+	ButtonEasingSystem target_system;
 };

@@ -50,8 +50,11 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(Intro05, L"Resources/2d/IntroWord/Intro05.png");
 	Sprite::LoadTexture(Intro06, L"Resources/2d/IntroWord/Intro06.png");
 
+	Sprite::LoadTexture(kStartOption, L"Resources/2d/PlayUI/Option.png");
 	Sprite::LoadTexture(CameCon, L"Resources/2d/PlayUI/CameCon.png");
 	Sprite::LoadTexture(Con_vis, L"Resources/2d/PlayUI/control.png");
+	Sprite::LoadTexture(ControlRT, L"Resources/2d/PlayUI/controlRT.png");
+	Sprite::LoadTexture(ControlY, L"Resources/2d/PlayUI/controlY.png");
 
 	Sprite::LoadTexture(HpCover , L"Resources/2d/PlayUI/HpCover2.png");
 	Sprite::LoadTexture(HpGreen, L"Resources/2d/PlayUI/Hp_Green.png");
@@ -62,7 +65,7 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(kMissionMsecond, L"Resources/2d/IntroWord/MSecondMission.png");
 	Sprite::LoadTexture(kMsecondNum, L"Resources/2d/IntroWord/MSecondMissionNum.png");
 
-
+	Sprite::LoadTexture(kMsecondNum, L"Resources/2d/IntroWord/MSecondMissionNum.png");
 }
 
 void ImageManager::LoadTex2D() {

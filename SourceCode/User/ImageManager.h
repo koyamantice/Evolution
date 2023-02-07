@@ -51,8 +51,12 @@ public:
 		Intro04,
 		Intro05,
 		Intro06,
+		kStartOption,
 		CameCon,
 		Con_vis,
+		ControlRT,
+		ControlY,
+
 		HpCover,
 		HpGreen,
 		HpRed,
