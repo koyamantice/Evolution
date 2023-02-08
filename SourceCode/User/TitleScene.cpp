@@ -7,6 +7,8 @@ std::thread t;
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 
+	bossLevelLoader_ = new BossLevelLoader();
+	bossLevelLoader_->LoadData("BossLevel");
 
 	c_x = sinf(rad * (XM_PI / DEGREE_HALF)) * circ_x;
 	c_z = cosf(rad * (XM_PI / DEGREE_HALF)) * circ_z;
@@ -52,6 +54,7 @@ void TitleScene::Finalize() {
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	CameraUpdate();
 	text->Upda();
+
 	if (scene_changer->GetEasingStart()) { scene_changer->ChangeScene(SceneName); return; }
 	InputUpdate();
 	SelectTextUpdate();

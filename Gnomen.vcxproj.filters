@@ -280,6 +280,7 @@
     <ClCompile Include="SourceCode\User\Touch.cpp">
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\System\BossLevelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -532,6 +533,7 @@
     <ClInclude Include="SourceCode\User\Touch.h">
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\System\BossLevelLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

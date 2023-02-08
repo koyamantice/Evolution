@@ -4,6 +4,7 @@
 #include"TitleText.h"
 #include <thread>
 #include "SceneChanger.h"
+#include "BossLevelLoader.h"
 
 /// <summary>
 /// タイトルシーン
@@ -56,7 +57,7 @@ private:
 	std::unique_ptr<Sprite> UI[SpriteMax];
 	
 	std::unique_ptr <TitleText> text;
-
+	BossLevelLoader* bossLevelLoader_;
 
 	const XMFLOAT2 kWord2DebugPos = { 930.0f,500.0f };
 	const XMFLOAT2 kWord2TitlegPos = { 930.0f,360.0f };

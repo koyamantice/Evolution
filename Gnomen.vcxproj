@@ -212,6 +212,7 @@
     <ClCompile Include="SourceCode\System\AbstractSceneFactory.cpp" />
     <ClCompile Include="SourceCode\System\ActorFactory.cpp" />
     <ClCompile Include="SourceCode\System\BaseScene.cpp" />
+    <ClCompile Include="SourceCode\System\BossLevelLoader.cpp" />
     <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\System\Hud.cpp" />
     <ClCompile Include="SourceCode\System\LevelLoader.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="SourceCode\System\AbstractSceneFactory.h" />
     <ClInclude Include="SourceCode\System\ActorFactory.h" />
     <ClInclude Include="SourceCode\System\BaseScene.h" />
+    <ClInclude Include="SourceCode\System\BossLevelLoader.h" />
     <ClInclude Include="SourceCode\System\DirectXCommon.h" />
     <ClInclude Include="SourceCode\System\Hud.h" />
     <ClInclude Include="SourceCode\System\LevelLoader.h" />
