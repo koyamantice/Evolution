@@ -44,7 +44,9 @@ private:
 
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
 	const DirectX::XMFLOAT3& GetCameraPos(const float& angle, const float& str = 10) override;
-	
+	XMVECTOR move_ = { };
+
+
 	XMFLOAT3 s_rebound_pos_{};
 	XMFLOAT3 e_rebound_pos_{};
 	const float kKnockBackRange = 15.5f;

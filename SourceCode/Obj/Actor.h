@@ -7,6 +7,7 @@
 #include"ParticleEmitter.h"
 #include "DirectXCommon.h"
 #include "FBXObject3d.h"
+#include <algorithm>
 
 class ActorComponent;
 

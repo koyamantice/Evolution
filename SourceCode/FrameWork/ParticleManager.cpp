@@ -840,7 +840,6 @@ void ParticleManager::LoadTexture(UINT texNumber, const std::string& filename) {
 
 	// WICテクスチャのロード
 	TexMetadata metadata{};
-	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
 	//ディレクトリパスとファイル名を連結してフルパスを得る

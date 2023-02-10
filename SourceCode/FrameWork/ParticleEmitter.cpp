@@ -1,5 +1,7 @@
 #include "ParticleEmitter.h"
-#include "Actor.h"
+
+#define DEGREE_MAX 360.0f
+
 ParticleEmitter::ParticleEmitter(const UINT& texnumber) {
 
 	//パーティクルの初期化

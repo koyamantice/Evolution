@@ -14,6 +14,7 @@
 
 
 
+
 void Player::LoadData() {
 	std::ifstream file;
 	file.open("Resources/csv/status.csv");
@@ -197,25 +198,24 @@ void Player::Move() {
 		//ˆÚ“®ˆ—
 
 		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
-			pos.x -= vecvel.x * (StickY / STICK_MAX);
-			pos.z -= vecvel.z * (StickY / STICK_MAX);
+			move_.m128_f32[2] = vel;
 		}
 		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
-			pos.x += vecvel.x * (StickY / STICK_MAX);
-			pos.z += vecvel.z * (StickY / STICK_MAX);
+			move_.m128_f32[2] = -vel;
 		}
 		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
-			pos.x -= vecvel.x * (StickX / STICK_MAX);
-			pos.z -= vecvel.z * (StickX / STICK_MAX);
+			move_.m128_f32[0] = vel;
 		}
 		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
-			pos.x += vecvel.x * (StickX / STICK_MAX);
-			pos.z += vecvel.z * (StickX / STICK_MAX);
+			move_.m128_f32[0] = -vel;
 		}
+		XMFLOAT3 vecvel = MoveVECTOR(move_, angle);
+		pos.x += vecvel.x * (StickY / STICK_MAX);
+		pos.z += vecvel.z * (StickY / STICK_MAX);
+
+
+
+
 		//‘«Œ³‚Ì‰Œ
 		particle_pop_time_++;
 
@@ -311,18 +311,15 @@ void Player::HitBoundMotion() {
 
 void Player::LimitArea() {
 	XMFLOAT3 pos = obj->GetPosition();
-	if (pos.x > 48.0f) {
-		pos.x = 48.0f;
-	}
-	if (pos.x < -48.0f) {
-		pos.x = -48.0f;
-	}
-	if (pos.z > 48.0f) {
-		pos.z = 48.0f;
-	}
-	if (pos.z < -48.0f) {
-		pos.z = -48.0f;
-	}
+
+	const float limit_ = 48.0f;
+
+	pos.x= min(pos.x, limit_);
+	pos.x = max(pos.x, -limit_);
+
+	pos.z = min(pos.z, limit_);
+	pos.z =max(pos.z, -limit_);
+
 	obj->SetPosition(pos);
 }
 
