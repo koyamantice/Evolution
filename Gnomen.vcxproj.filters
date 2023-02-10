@@ -281,6 +281,9 @@
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\BossLevelLoader.cpp" />
+    <ClCompile Include="SourceCode\Common\Singleton.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -534,6 +537,9 @@
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\BossLevelLoader.h" />
+    <ClInclude Include="SourceCode\Common\Singleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

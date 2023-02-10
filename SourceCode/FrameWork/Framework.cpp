@@ -1,6 +1,8 @@
 ﻿#include "Framework.h"
 #include "FbxLoader.h"
 #include <SourceCode/FrameWork/ActorManager.h>
+#include <Singleton.h>
+#include <BossLevelLoader.h>
 
 void Framework::Run() {
 	
@@ -64,11 +66,12 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 
 void Framework::Finalize() {
 	ModelManager::GetIns()->Finalize();
+	SceneManager::GetInstance()->Finalize();
+	Input::GetInstance()->Finalize();
 	Sprite::Finalize();
 	Object2d::Finalize();
 	LightGroup::Finalize();
-	SceneManager::GetInstance()->Finalize();
-	input->GetInstance()->Finalize();
+	SingletonFinalizer::finalize();
 	delete sceneFactory_;
 	dxcommon->Finalize();
 	dxcommon->Reset();
@@ -78,7 +81,7 @@ void Framework::Finalize() {
 }
 
 void Framework::Update(DirectXCommon* dxCommon) {
-	input->Update();
+	Input::GetInstance()->Update();
 	XorShift::GetInstance()->initrand((unsigned int)time(NULL));
 	XorShift::GetInstance()->init_xor128((unsigned long)time(NULL));
 	if (winApp->ProcessMessage() || input->TriggerKey(DIK_ESCAPE) || SceneManager::GetInstance()->IsEndRequst()) {

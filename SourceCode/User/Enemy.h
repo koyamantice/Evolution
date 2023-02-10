@@ -8,6 +8,10 @@
 #include"EnemyUI.h"
 #include"EnemyAttack.h"
 
+
+#include <BossLevelLoader.h>
+#include <Singleton.h>
+
 class Bullet;
 
 class Enemy :public Actor {
@@ -58,4 +62,7 @@ protected:
 	std::unique_ptr<FBXObject3d> fbxObject3d;
 
 	ParticleManager* partMan = nullptr;
+
+	BossLevelLoader::LevelData leveldata_ = {};
+
 };

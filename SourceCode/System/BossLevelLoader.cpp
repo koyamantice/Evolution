@@ -1,9 +1,24 @@
 #include "BossLevelLoader.h"
 
-BossLevelLoader::BossLevelLoader() {
-}
+
+
 
 BossLevelLoader::~BossLevelLoader() {
+	//音声データ開放
+	std::map<std::string, LevelData>::iterator it = levelDatas_.begin();
+	for (; it != levelDatas_.end(); ++it) {
+		Unload(&it->second);
+	}
+	levelDatas_.clear();
+
+}
+
+void BossLevelLoader::Unload(LevelData* _LevelData) {
+
+	_LevelData->name = {};
+	_LevelData->vel = 0;
+	_LevelData->firstPhase = {};
+	_LevelData->coolTime = 0;
 }
 
 void BossLevelLoader::LoadData(const std::string& _filename) {
@@ -44,7 +59,14 @@ void BossLevelLoader::LoadData(const std::string& _filename) {
 
 		//レベルデータを連想配列に格納
 		levelDatas_.insert(std::make_pair(_leveldata.name, _leveldata));
-		
-		
+
 	}
+}
+
+BossLevelLoader::LevelData BossLevelLoader::takeData(const std::string& _bossname) {
+	std::map<std::string, LevelData>::iterator it = levelDatas_.find(_bossname);
+	//読み込んでなければアサート
+	assert(it != levelDatas_.end());
+
+	return it->second;
 }

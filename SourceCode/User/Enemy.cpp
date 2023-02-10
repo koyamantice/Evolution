@@ -77,6 +77,9 @@ void Enemy::OnInit() {
 	fbxObject3d.reset(Mash_);
 	fbxObject3d->PlayAnimation();
 
+	BossLevelLoader& gFoo = Singleton<BossLevelLoader>::get_instance();
+	leveldata_ = gFoo.takeData("Mash");
+
 	LoadData();
 	UpdateCommand();
 

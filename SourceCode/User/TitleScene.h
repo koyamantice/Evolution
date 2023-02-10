@@ -5,6 +5,7 @@
 #include <thread>
 #include "SceneChanger.h"
 #include "BossLevelLoader.h"
+#include "Singleton.h"
 
 /// <summary>
 /// タイトルシーン

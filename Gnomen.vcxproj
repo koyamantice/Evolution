@@ -163,6 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
+    <ClCompile Include="SourceCode\Common\Singleton.cpp" />
     <ClCompile Include="SourceCode\Common\Vec.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
     <ClCompile Include="SourceCode\FrameWork\ActorManager.cpp" />
@@ -245,6 +246,7 @@
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
+    <ClInclude Include="SourceCode\Common\Singleton.h" />
     <ClInclude Include="SourceCode\Common\Vec.h" />
     <ClInclude Include="SourceCode\Common\XorShift.h" />
     <ClInclude Include="SourceCode\FrameWork\ActorManager.h" />

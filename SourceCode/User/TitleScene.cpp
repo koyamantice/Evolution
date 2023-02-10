@@ -7,8 +7,9 @@ std::thread t;
 void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 
-	bossLevelLoader_ = new BossLevelLoader();
-	bossLevelLoader_->LoadData("BossLevel");
+	BossLevelLoader& gFoo = Singleton<BossLevelLoader>::get_instance();
+	gFoo.LoadData("BossLevel");
+	
 
 	c_x = sinf(rad * (XM_PI / DEGREE_HALF)) * circ_x;
 	c_z = cosf(rad * (XM_PI / DEGREE_HALF)) * circ_z;

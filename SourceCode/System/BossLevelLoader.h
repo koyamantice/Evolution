@@ -20,11 +20,14 @@ public:
 	
 	};
 public:
-	BossLevelLoader();
+	BossLevelLoader() {};
 	~BossLevelLoader();
+	void Unload(LevelData* _LevelData);
 
 	// レベルデータの読み込みと再生
 	void LoadData(const std::string& _filename);
+	//
+	LevelData takeData(const std::string& _bossname);
 
 private:
 	//レベルデータの連想配列
