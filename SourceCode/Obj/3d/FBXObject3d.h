@@ -2,6 +2,7 @@
 
 #include "FBXModel.h"
 #include "Camera.h"
+#include "LightGroup.h"
 
 #include <Windows.h>
 #include <wrl.h>
@@ -10,8 +11,7 @@
 
 #include <string>
 
-class FBXObject3d
-{
+class FBXObject3d {
 protected: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -21,23 +21,33 @@ protected: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:	//定数
-//ボーンの最大数
+	//ボーンの最大数
 	static const int MAX_BONES = 32;
 
 	//定数バッファ用データ構造体（スキニング）
-	struct ConstBufferDataSkin
-	{
+	struct ConstBufferDataSkin {
 		XMMATRIX bones[MAX_BONES];
 	};
 public: // サブクラス
 	// 定数バッファ用データ構造体（座標変換行列用）
-	struct ConstBufferDataTransform
-	{
+	struct ConstBufferDataTransform {
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
 		XMFLOAT4 color;	// 色 (RGBA)
 	};
+	// 定数バッファ用データ構造体B1
+	struct ConstBufferDataB1 {
+		XMFLOAT3 ambient; // アンビエント係数
+		float pad1; // パディング
+		XMFLOAT3 diffuse; // ディフューズ係数
+		float pad2; // パディング
+		XMFLOAT3 specular; // スペキュラー係数
+		float alpha;	// アルファ
+	};
+	// 定数バッファ
+	ComPtr<ID3D12Resource> constBuff;
+
 	// アニメーション用データ構造体
 	struct AnimationInfo {
 		std::string name;
@@ -51,16 +61,31 @@ public: // 静的メンバ関数
 	/// グラフィックパイプラインの生成
 	/// </summary>
 	static void CreateGraphicsPipeline();
-	// setter
+	/// <summary>
+	///デバイスセット
+	/// </summary>
+	/// <returns>デバイス</returns>
 	static void SetDevice(ID3D12Device* device) { FBXObject3d::device = device; }
+	/// <summary>
+	///カメラセット
+	/// </summary>
+	/// <returns>カメラ</returns>
 	static void SetCamera(Camera* camera) { FBXObject3d::camera = camera; }
+	/// <summary>
+	///ライトセット
+	/// </summary>
+	/// <returns>ライトグループ</returns>
+	static void SetLightGroup(LightGroup* lightGroup) {
+		FBXObject3d::lightGroup = lightGroup;
+	}
 
 	/// <summary>
 	/// 共通の初期化処理
 	/// </summary>
 	/// <param name="device">デバイス</param>
 	/// <param name="camera">カメラ</param>
-	static void StaticInitializeCommon(ID3D12Device* device, Camera* camera);
+	/// <param name="lightGroup">ライトグループ</param>
+	static void StaticInitializeCommon(ID3D12Device* device, Camera* camera, LightGroup* lightGroup);
 
 private: // 静的メンバ変数
 	// デバイス
@@ -71,6 +96,8 @@ private: // 静的メンバ変数
 	static ComPtr<ID3D12RootSignature> rootsignature;
 	// パイプラインステートオブジェクト
 	static ComPtr<ID3D12PipelineState> pipelinestate;
+	// ライト
+	static LightGroup* lightGroup;
 
 public: // メンバ関数
 	/// <summary>
@@ -141,6 +168,12 @@ protected: // メンバ変数
 	XMFLOAT3 position = { 0,0,0 };
 	//色
 	XMFLOAT4 color = { 1,1,1,1 };
+
+	XMFLOAT3 ambient;	// アンビエント影響度
+	XMFLOAT3 diffuse;	// ディフューズ影響度
+	XMFLOAT3 specular;	// スペキュラー影響度
+	float alpha;		// アルファ
+
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
 	// モデル

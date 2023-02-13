@@ -31,18 +31,6 @@
     <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\GaugePS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\GaugeVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\MiniMapTestPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\MiniMapTestVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\shaders\ParticleGS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticleVS.hlsl" />
@@ -76,12 +64,6 @@
       <Filter>Obj\3d</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Obj\light\LightGroup.cpp">
-      <Filter>Obj\light</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Obj\light\PointLight.cpp">
-      <Filter>Obj\light</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Obj\light\SpotLight.cpp">
       <Filter>Obj\light</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp">
@@ -280,9 +262,11 @@
     <ClCompile Include="SourceCode\User\Touch.cpp">
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\System\BossLevelLoader.cpp" />
     <ClCompile Include="SourceCode\Common\Singleton.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\BossLevelLoader.cpp">
+      <Filter>User\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -536,9 +520,11 @@
     <ClInclude Include="SourceCode\User\Touch.h">
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\System\BossLevelLoader.h" />
     <ClInclude Include="SourceCode\Common\Singleton.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\BossLevelLoader.h">
+      <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -561,12 +547,6 @@
       <Filter>Imgui</Filter>
     </None>
     <None Include="Resources\shaders\PostEffectTest.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\Gauge.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\MiniMapTest.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\Particle.hlsli" />

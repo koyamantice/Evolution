@@ -1,7 +1,6 @@
 #include "FBXObject3d.h"
 #include "FbxLoader.h"
 #include <d3dcompiler.h>
-#include <imgui.h>
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace Microsoft::WRL;
@@ -14,6 +13,7 @@ ID3D12Device* FBXObject3d::device = nullptr;
 Camera* FBXObject3d::camera = nullptr;
 ComPtr<ID3D12RootSignature> FBXObject3d::rootsignature;
 ComPtr<ID3D12PipelineState> FBXObject3d::pipelinestate;
+LightGroup* FBXObject3d::lightGroup = nullptr;
 
 void FBXObject3d::CreateGraphicsPipeline()
 {
@@ -148,13 +148,15 @@ void FBXObject3d::CreateGraphicsPipeline()
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[4];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
 	//CBV（スキニング用）
 	rootparams[2].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
+	//ライト
+	rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
 
@@ -176,12 +178,15 @@ void FBXObject3d::CreateGraphicsPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
-void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera) {
+void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera, LightGroup* lightGroup) {
 
 	// デバイスをセット
 	FBXObject3d::SetDevice(device);
 	// カメラをセット
 	FBXObject3d::SetCamera(camera);
+	// 3Dオブエクトにライトをセット
+	FBXObject3d::SetLightGroup(lightGroup);
+
 	// グラフィックスパイプライン生成
 	FBXObject3d::CreateGraphicsPipeline();
 
@@ -190,6 +195,11 @@ void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera) {
 
 void FBXObject3d::Initialize()
 {
+	ambient = { 0.3f, 0.3f, 0.3f };
+	diffuse = { 0.0f, 0.0f, 0.0f };
+	specular = { 0.0f, 0.0f, 0.0f };
+	alpha = 1.0f;
+
 	HRESULT result;
 	// 定数バッファの生成
 	result = device->CreateCommittedResource(
@@ -199,6 +209,14 @@ void FBXObject3d::Initialize()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffTransform));
+	// 定数バッファの生成
+	result = device->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff) & ~0xff),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuff));
 
 	//定数バッファの生成
 	result = device->CreateCommittedResource(
@@ -208,6 +226,7 @@ void FBXObject3d::Initialize()
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin));
+
 	//1フレーム分の時間を60FPSで設定
 	frameTime = (FbxLongLong)1.0f;
 }
@@ -249,6 +268,8 @@ void FBXObject3d::Update()
 		constBuffTransform->Unmap(0, nullptr);
 	}
 
+
+
 	//ボーン配列
 	std::vector<FBXModel::Bone>& bones = model->GetBones();
 
@@ -275,6 +296,7 @@ void FBXObject3d::Update()
 			isFinish = false;
 		}
 	}
+
 	//定数バッファへデータ転送
 	ConstBufferDataSkin* constMapSkin = nullptr;
 	result = constBuffSkin->Map(0, nullptr, (void**)&constMapSkin);
@@ -291,6 +313,16 @@ void FBXObject3d::Update()
 		constMapSkin->bones[i] = bindMatrix * bones[i].invInitialPose * matCurrentPose * inverseBindMatrix;
 	}
 	constBuffSkin->Unmap(0, nullptr);
+	// 定数バッファへデータ転送
+	ConstBufferDataB1* constMapB1 = nullptr;
+	result = constBuff->Map(0, nullptr, (void**)&constMapB1);
+	if (SUCCEEDED(result)) {
+		constMapB1->ambient = ambient;
+		constMapB1->diffuse = diffuse;
+		constMapB1->specular = specular;
+		constMapB1->alpha = alpha;
+		constBuff->Unmap(0, nullptr);
+	}
 }
 
 void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -301,10 +333,6 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	}
 
 
-	//ImGui::Begin("test");
-	//ImGui::Text("%d", isPlay);
-	//ImGui::Unindent();
-	//ImGui::End();
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
 	// ルートシグネチャの設定
@@ -315,6 +343,8 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffTransform->GetGPUVirtualAddress());
 	//定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffSkin->GetGPUVirtualAddress());
+	// ライトの描画
+	lightGroup->Draw(cmdList, 3);
 
 	// モデル描画
 	model->Draw(cmdList);

@@ -16,7 +16,7 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	Object3d::StaticInitializeCommon(camera.get(), lightGroup.get());
 	
 	//FBXの初期化
-	FBXObject3d::StaticInitializeCommon(dxCommon->GetDev(), camera.get());
+	FBXObject3d::StaticInitializeCommon(dxCommon->GetDev(), camera.get(), lightGroup.get());
 
 	//パーティクルにカメラセット
 	ParticleManager::CreateCommon(dxCommon->GetDev(), camera.get(), dxCommon->GetCmdList());

@@ -198,22 +198,25 @@ void Player::Move() {
 		//ˆÚ“®ˆ—
 
 		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
-			move_.m128_f32[2] = vel;
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
+			pos.x -= vecvel.x * (StickY / STICK_MAX);
+			pos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
 		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
-			move_.m128_f32[2] = -vel;
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
+			pos.x += vecvel.x * (StickY / STICK_MAX);
+			pos.z += vecvel.z * (StickY / STICK_MAX);
 		}
 		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
-			move_.m128_f32[0] = vel;
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
+			pos.x -= vecvel.x * (StickX / STICK_MAX);
+			pos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
 		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
-			move_.m128_f32[0] = -vel;
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
+			pos.x += vecvel.x * (StickX / STICK_MAX);
+			pos.z += vecvel.z * (StickX / STICK_MAX);
 		}
-		XMFLOAT3 vecvel = MoveVECTOR(move_, angle);
-		pos.x += vecvel.x * (StickY / STICK_MAX);
-		pos.z += vecvel.z * (StickY / STICK_MAX);
-
-
 
 
 		//‘«Œ³‚Ì‰Œ
