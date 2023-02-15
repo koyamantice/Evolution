@@ -56,7 +56,9 @@ void AudioManager::LoadWave(const std::string& filename){
 	// Waveファイルを開く
 	file.open(fullpath, std::ios_base::binary);
 	// ファイルオープン失敗をチェック
-	assert(file.fail());
+	if (file.fail()) {
+		assert(0);
+	}
 
 	// RIFFヘッダーの読み込み
 	RiffHeader riff;
@@ -74,9 +76,9 @@ void AudioManager::LoadWave(const std::string& filename){
 	FormatChunk format = {};
 	//チャンクヘッダーの確認
 	file.read((char*)&format,sizeof(ChunkHeader));
-	if (strncmp(format.chunk.id,"fmt",4)!=0) {
-		assert(0);
-	}
+	//if (strncmp(format.chunk.id,"fmt",4)!=0) {
+	//	assert(0);
+	//}
 	assert(format.chunk.size <= sizeof(format.fmt));
 	file.read((char*)&format.fmt, format.chunk.size);
 

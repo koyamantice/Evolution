@@ -132,13 +132,6 @@ private: // 静的メンバ変数
 private:// 静的メンバ関数
 
 	/// <summary>
-	/// カメラ初期化
-	/// </summary>
-	/// <param name="window_width">画面横幅</param>
-	/// <param name="window_height">画面縦幅</param>
-	static void InitializeCamera(int window_width, int window_height);
-
-	/// <summary>
 	/// ビュー行列を更新
 	/// </summary>
 	static void UpdateViewMatrix();
@@ -166,12 +159,15 @@ public: // メンバ関数
 	/// </summary>
 	//void Update();
 	virtual void Update();
+
 	/// <summary>
 	/// 描画
 	/// </summary>
-	//void Draw();
 	virtual void Draw();
-	//行列の更新
+	
+	/// <summary>
+	/// 行列の更新
+	/// </summary>
 	void UpdateWorldMatrix();
 
 	/// <summary>
@@ -235,7 +231,6 @@ public: // メンバ関数
 
 	BaseCollider* collider = nullptr;
 
-//private: // メンバ変数
 protected: // メンバ変数
 	const char* name = nullptr;
 
@@ -258,7 +253,5 @@ protected: // メンバ変数
 	Model* model = nullptr;
 	// ビルボード
 	bool isBillboard = false;
-	//コライダー
-	//BaseCollider* collider = nullptr;
 };
 

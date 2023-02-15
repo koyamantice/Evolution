@@ -18,7 +18,7 @@ ComPtr<ID3D12DescriptorHeap> ParticleManager::descHeap;
 CD3DX12_GPU_DESCRIPTOR_HANDLE ParticleManager::gpuDescHandleSRV;
 CD3DX12_CPU_DESCRIPTOR_HANDLE ParticleManager::cpuDescHandleSRV;
 ComPtr<ID3D12Resource> ParticleManager::texbuff[srvCount];
-UINT ParticleManager::descriptorHandleIncrementSize = 0u;
+UINT ParticleManager::descriptorHandleIncrementSize = 0;
 std::string ParticleManager::directoryPath="Resources/2d/Effect/";
 std::string ParticleManager::extensionPath = ".png";
 
@@ -41,7 +41,7 @@ static const DirectX::XMFLOAT3 operator-(const DirectX::XMFLOAT3& lhs, const Dir
 	return result;
 }
 
-const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs) {
+static const DirectX::XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs) {
 	XMFLOAT3 result;
 	result.x = lhs.x / rhs;
 	result.y = lhs.y / rhs;
@@ -60,8 +60,6 @@ void ParticleManager::CreateCommon(ID3D12Device* device,Camera* camera, ID3D12Gr
 	ParticleManager::camera = camera;
 	ParticleManager::cmdList = cmdList;
 
-	//HRESULT result;
-
 	// デスクリプタヒープの初期化
 	InitializeDescriptorHeap();
 	// パイプライン初期化
@@ -73,10 +71,8 @@ void ParticleManager::CreateCommon(ID3D12Device* device,Camera* camera, ID3D12Gr
 
 void ParticleManager::Initialize(UINT texNumber) {
 	HRESULT result;
-
-	// モデル生成
-	CreateModel(texNumber);
-
+	this->texNumber = texNumber;
+	CreateModel();
 	// 定数バッファの生成
 	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
@@ -232,7 +228,7 @@ void ParticleManager::InitializeDescriptorHeap() {
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
-	descHeapDesc.NumDescriptors = 1; // シェーダーリソースビュー1つ
+	descHeapDesc.NumDescriptors = srvCount; // シェーダーリソースビュー1つ
 	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
 	if (FAILED(result)) {
 		assert(0);
@@ -347,8 +343,7 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	gpipeline.SampleMask = D3D12_DEFAULT_SAMPLE_MASK; // 標準設定
 	// ラスタライザステート
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-	//gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-	//gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+
 	// デプスステンシルステート
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	// デプスの書き込みを禁止
@@ -361,15 +356,7 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//半透明
 	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//半透明
-	// 加算ブレンディング
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;
-	//// 減算ブレンディング
-	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;
-
+	//
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
@@ -389,7 +376,6 @@ void ParticleManager::InitializeGraphicsPipeline() {
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
-	//DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
@@ -560,21 +546,6 @@ void ParticleManager::CreateAddBlendPipeline() {
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;	//加算
 	blenddesc.SrcBlend = D3D12_BLEND_ONE;	//ソースの値を100%使う
 	blenddesc.DestBlend = D3D12_BLEND_ONE;	//デストの値を100%使う
-
-	//減算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;	//デストからソースを減算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;	//ソースの値を100%使う
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;	//デストの値を100%使う
-
-	//色反転
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;	//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;	//1.0f-デストカラーの値
-	//blenddesc.DestBlend = D3D12_BLEND_ZERO;	//使わない
-
-	//半透明合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;	//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;	//ソースのアルファ値
-	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;	//1.0f-ソ
 
 	//深度値フォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
@@ -758,27 +729,12 @@ void ParticleManager::CreateSubBlendPipeline() {
 	blenddesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;	//加算
 	blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;	//ソースの値を100%使う
 	blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;	//デストの値を0%使う
+	
 	//色合成
-
-	//加算合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;	//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_ONE;	//ソースの値を100%使う
-	//blenddesc.DestBlend = D3D12_BLEND_ONE;	//デストの値を100%使う
-
 	//減算合成
 	blenddesc.BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;	//デストからソースを減算
 	blenddesc.SrcBlend = D3D12_BLEND_ONE;	//ソースの値を100%使う
 	blenddesc.DestBlend = D3D12_BLEND_ONE;	//デストの値を100%使う
-
-	//色反転
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;	//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_INV_DEST_COLOR;	//1.0f-デストカラーの値
-	//blenddesc.DestBlend = D3D12_BLEND_ZERO;	//使わない
-
-	//半透明合成
-	//blenddesc.BlendOp = D3D12_BLEND_OP_ADD;	//加算
-	//blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;	//ソースのアルファ値
-	//blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;	//1.0f-ソ
 
 	//深度値フォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
@@ -907,16 +863,16 @@ void ParticleManager::LoadTexture(UINT texNumber, const std::string& filename) {
 	);
 }
 
-void ParticleManager::CreateModel(UINT texNumber) {
+void ParticleManager::CreateModel() {
 	HRESULT result = S_FALSE;
 
-	this->texNumber = texNumber;
+	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos) * vertexCount);
 
 	// 頂点バッファ生成
 	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPos) * vertexCount),
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeVB),
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&vertBuff));
@@ -927,6 +883,6 @@ void ParticleManager::CreateModel(UINT texNumber) {
 
 	// 頂点バッファビューの作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = sizeof(VertexPos) * vertexCount;
+	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(VertexPos);
 }

@@ -164,7 +164,7 @@ public: // ƒƒ“ƒoŠÖ”
 	/// <summary>
 	/// ƒ‚ƒfƒ‹ì¬
 	/// </summary>
-	void CreateModel(UINT texNumber);
+	void CreateModel();
 
 private: // ƒƒ“ƒo•Ï”
 	static const int srvCount = 213;
