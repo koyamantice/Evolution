@@ -15,8 +15,7 @@ Camera* FBXObject3d::camera = nullptr;
 ComPtr<ID3D12RootSignature> FBXObject3d::rootsignature;
 ComPtr<ID3D12PipelineState> FBXObject3d::pipelinestate;
 
-void FBXObject3d::CreateGraphicsPipeline()
-{
+void FBXObject3d::CreateGraphicsPipeline() {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;    // ピクセルシェーダオブジェクト
@@ -139,7 +138,7 @@ void FBXObject3d::CreateGraphicsPipeline()
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
-	gpipeline.RTVFormats[0] =  DXGI_FORMAT_R8G8B8A8_UNORM;// DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;// DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
 	// DXGI_FORMAT_R8G8B8A8_UNORM
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
@@ -188,8 +187,7 @@ void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera) {
 
 }
 
-void FBXObject3d::Initialize()
-{
+void FBXObject3d::Initialize() {
 	HRESULT result;
 	// 定数バッファの生成
 	result = device->CreateCommittedResource(
@@ -212,8 +210,7 @@ void FBXObject3d::Initialize()
 	frameTime = (FbxLongLong)1.0f;
 }
 
-void FBXObject3d::Update()
-{
+void FBXObject3d::Update() {
 	XMMATRIX matScale, matRot, matTrans;
 
 	// スケール、回転、平行移動行列の計算
@@ -293,8 +290,7 @@ void FBXObject3d::Update()
 	constBuffSkin->Unmap(0, nullptr);
 }
 
-void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
-{
+void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList) {
 	// モデルの割り当てがなければ描画しない
 	if (model == nullptr) {
 		return;
@@ -320,8 +316,7 @@ void FBXObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	model->Draw(cmdList);
 }
 
-void FBXObject3d::PlayAnimation(const int& num)
-{
+void FBXObject3d::PlayAnimation(const int& num) {
 	FbxScene* fbxScene = model->GetFbxScene();
 	//アニメーションの変更
 	fbxScene->SetCurrentAnimationStack(Animations[num].stack);
@@ -379,7 +374,7 @@ void FBXObject3d::LoadAnimation() {
 	FbxScene* fbxScene = model->GetFbxScene();
 	//アニメーションの数を取得
 	int animaStackCount = fbxScene->GetSrcObjectCount<FbxAnimStack>();
-	
+
 	for (int i = 0; i < animaStackCount; ++i) {
 		//i番目のアニメーションを取得
 		FbxAnimStack* stack = fbxScene->GetSrcObject<FbxAnimStack>(i);
@@ -398,11 +393,11 @@ void FBXObject3d::LoadAnimation() {
 		std::string name = takeInfo->mName;
 
 		AnimationInfo info;
-		info.name=name;
-		info.stack=stack;
-		info.fbxinfo=takeInfo;
-		info.start=start;
-		info.end=end;
+		info.name = name;
+		info.stack = stack;
+		info.fbxinfo = takeInfo;
+		info.start = start;
+		info.end = end;
 		//格納する
 		Animations.emplace_back(info);
 	}
