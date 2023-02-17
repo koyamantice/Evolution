@@ -2,12 +2,16 @@
 #include<vector>
 #include <memory>
 #include<string>
-#include"Object3d.h"
 #include <DirectXMath.h>
-#include"ParticleEmitter.h"
+#include <algorithm>
+
 #include "DirectXCommon.h"
 #include "FBXObject3d.h"
-#include <algorithm>
+#include "Object3d.h"
+#include "Object2d.h"
+
+
+#include"ParticleEmitter.h"
 
 class ActorComponent;
 

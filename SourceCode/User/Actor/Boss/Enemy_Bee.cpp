@@ -71,16 +71,14 @@ void Enemy_Bee::OnInit() {
 	Mash_->Initialize();
 	Mash_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kBee));
 	Mash_->SetScale({ 0.02f,0.02f, 0.02f });
-	obj->SetScale({ 2.0f,2.0f, 2.0f });
 	Mash_->SetRotation({ 0,-90,0 });
 	Mash_->LoadAnimation();
-	before_pos = { 0,20,0 };
 	fbxObject3d.reset(Mash_);
 	LoadData();
 	UpdateCommand();
 	collide_size = 2.0f;
+	before_pos = { 0,20,0 };
 
-	player = ActorManager::GetInstance()->SearchActor("Player");
 
 	compornent = new EnemyUI();
 	compornent->Initialize();
@@ -94,11 +92,6 @@ void Enemy_Bee::OnInit() {
 	honey[0]->SetPosition({ 25,0,25 });
 	honey[1]->SetPosition({ -25,0,-25 });
 
-	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
-		{ 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Shadow_->Object2dCreate();
-	Shadow_->SetRotation({ 90,0,0 });
-	Shadow.reset(Shadow_);
 
 	command = LEAVE;
 	fbxObject3d->PlayAnimation(Fly);

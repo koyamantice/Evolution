@@ -187,7 +187,7 @@ void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera) {
 
 }
 
-void FBXObject3d::Initialize() {
+void FBXObject3d::Initialize(FBXModel* model, XMFLOAT3 scale, XMFLOAT3 rotation) {
 	HRESULT result;
 	// 定数バッファの生成
 	result = device->CreateCommittedResource(
@@ -206,6 +206,11 @@ void FBXObject3d::Initialize() {
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffSkin));
+
+	SetModel(model);
+	SetScale(scale);
+	SetRotation(rotation);
+
 	//1フレーム分の時間を60FPSで設定
 	frameTime = (FbxLongLong)1.0f;
 }

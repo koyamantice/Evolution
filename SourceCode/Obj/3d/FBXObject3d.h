@@ -103,7 +103,7 @@ public: // ƒƒ“ƒoŠÖ”
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void Initialize();
+	void Initialize(FBXModel* model=nullptr, XMFLOAT3 scale={1,1,1}, XMFLOAT3 rotation = { 0,0,0 });
 
 	/// <summary>
 	/// –ˆƒtƒŒ[ƒ€ˆ—

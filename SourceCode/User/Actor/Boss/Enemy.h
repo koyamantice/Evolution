@@ -1,31 +1,18 @@
 #pragma once
-#include"Actor.h"
-#include"Input.h"
-#include<list>
-#include <sstream>
-#include <SourceCode/Obj/2d/Object2d.h>
+#include"Boss.h"
+
 #include "Player.h"
 #include"EnemyUI.h"
 #include"EnemyAttack.h"
 
 
-#include <BossLevelLoader.h>
-#include <Singleton.h>
-
 class Bullet;
 
-class Enemy :public Actor {
+class Enemy :public Boss {
 public:
 	Enemy(){};
-	void LoadData();
-	void UpdateCommand();
-	void DebugUpdate();
+
 protected:
-	Input* input =Input::GetInstance();
-	std::stringstream parameterCommands;
-
-	Actor* player;
-
 	void OnInit()override;
 	void OnUpda()override;
 	void OnFirstDraw(DirectXCommon* dxCommon)override;
@@ -47,7 +34,6 @@ protected:
 
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;
-	std::unique_ptr<Object2d> Shadow = nullptr;
 
 	int animecount = 0;
 	bool standby = false;
@@ -59,10 +45,5 @@ protected:
 	float vel = 0;
 	float scale = 0.01f;
 	float scaframe = 0;
-	std::unique_ptr<FBXObject3d> fbxObject3d;
-
-	ParticleManager* partMan = nullptr;
-
-	BossLevelLoader::LevelData leveldata_ = {};
 
 };
