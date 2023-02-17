@@ -106,6 +106,9 @@ void MSecondStage::Update(DirectXCommon* dxCommon) {
 bool MSecondStage::IntroUpdate() {
 	//フェードイン機能
 	if (scene_first_change) {
+		ActorManager::GetInstance()->IntroUpdate(0, "", kSecondScene);
+		CameraUpda();
+		FieldUpdate();
 		if (feedin_frame <= 1.0f) {
 			feedin_frame += 1.0f / feedin_frame_max;
 		} else {
@@ -114,9 +117,6 @@ bool MSecondStage::IntroUpdate() {
 		}
 		filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
 		filter_first->SetColor({ 1,1,1,filter_alpha });
-		ActorManager::GetInstance()->IntroUpdate(0,"", kSecondScene);
-		CameraUpda();
-		FieldUpdate();
 		return true;
 	} else {
 		return false;

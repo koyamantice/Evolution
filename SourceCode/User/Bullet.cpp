@@ -281,8 +281,12 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			}
 		}
 		break;
+	case Control:
+		break;
+
 	case Slow:
 		break;
+
 	default:
 		assert(0);
 		break;

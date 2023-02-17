@@ -13,60 +13,19 @@ float4 main(VSOutput input) : SV_TARGET
 	// テクスチャマッピング
 	float4 texcolor = tex.Sample(smp, input.uv);
 
-	//// 光沢度
-	//const float shininess = 4.0f;
-	//// 頂点から視点への方向ベクトル
-	//float3 eyedir = normalize(cameraPos - input.svpos.xyz);
+	float3 P = input.svpos.xyz;
+	float3 N = normalize(input.normal);
+	float Ka = 0.8;
+	float Kd = 0.7;
 
-	//// 環境反射光
-	//float3 ambient = m_ambient;
+	//　Ambient Color
+	float3 ambient = float3(1,1,1) * Ka;
 
-	//// シェーディングによる色
-	//float4 shadecolor = float4(ambientColor * ambient, m_alpha);
+	//　Diffuse Color
+	float3 L = normalize(float3(1, 1, 1) - P);	//　ローカル座標系のでのライトベクトル
+	float diffuseLight = max(dot(L, N), 0) * 0.5 + 0.5;
+	float3 diffuse = Kd * float3(1,1,1) * (diffuseLight * diffuseLight);
 
-	//// 平行光源
-	//for (int i = 0; i < DIRLIGHT_NUM; i++) {
-	//	if (dirLights[i].active) {
-	//		// ライトに向かうベクトルと法線の内積
-	//		float3 dotlightnormal = dot(dirLights[i].lightv, input.normal);
-	//		// 反射光ベクトル
-	//		float3 reflect = normalize(-dirLights[i].lightv + 2 * dotlightnormal * input.normal);
-	//		// 拡散反射光
-	//		float3 diffuse = dotlightnormal * float3(1,1,1);
-	//		// 鏡面反射光
-	//		float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
-
-	//		// 全て加算する
-	//		shadecolor.rgb += (diffuse + specular) * dirLights[i].lightcolor;
-	//	}
-	//}
-
-	//// 点光源
-	//for (i = 0; i < POINTLIGHT_NUM; i++) {
-	//	if (pointLights[i].active) {
-	//		// ライトへの方向ベクトル
-	//		float3 lightv = pointLights[i].lightpos - input.worldpos.xyz;
-	//		float d = length(lightv);
-	//		lightv = normalize(lightv);
-
-	//		// 距離減衰係数
-	//		float atten = 1.0f / (pointLights[i].lightatten.x + pointLights[i].lightatten.y * d + pointLights[i].lightatten.z * d * d);
-
-	//		// ライトに向かうベクトルと法線の内積
-	//		float3 dotlightnormal = dot(lightv, input.normal);
-	//		// 反射光ベクトル
-	//		float3 reflect = normalize(-lightv + 2 * dotlightnormal * input.normal);
-	//		// 拡散反射光
-	//		float3 diffuse = dotlightnormal * m_diffuse;
-	//		// 鏡面反射光
-	//		float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
-
-	//		// 全て加算する
-	//		shadecolor.rgb += atten * (diffuse + specular) * pointLights[i].lightcolor;
-	//	}
-	//}
-
-	// シェーディングによる色で描画
-	return  texcolor;
+	return float4(ambient + diffuse, 1.0f) * texcolor;
 
 }
