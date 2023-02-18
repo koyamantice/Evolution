@@ -277,6 +277,9 @@
     <ClCompile Include="SourceCode\User\Actor\Boss\EnemyAttack.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Common\TimedInvoke.cpp">
+      <Filter>User\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -536,6 +539,9 @@
       <Filter>User\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\Actor\Boss\EnemyAttack.h">
+      <Filter>User\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Common\TimedInvoke.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
