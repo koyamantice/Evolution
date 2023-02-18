@@ -31,7 +31,6 @@ void Honey::OnInit() {
 	slash_->SetRotation({ 0,0,0 });
 	slash.reset(slash_);
 
-
 	command = WAIT;
 
 	//パーティクルの初期化

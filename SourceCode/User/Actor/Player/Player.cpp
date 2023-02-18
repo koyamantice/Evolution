@@ -245,12 +245,9 @@ void Player::Move() {
 
 void Player::OnCollision(const std::string& Tag) {
 	if (Tag == "Enemy") {
+		SetHitBound(old_pos);
 	}
-	if (Tag == "Bullet") {
 
-	}
-	if (Tag == "ClearCrystal") {
-	}
 	if (Tag == "Honey") {
 		if (!onHoney) {
 			speed = vel;
@@ -333,9 +330,9 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 	return pos;
 }
 
-const DirectX::XMFLOAT3& Player::GetCameraPos(const float& angle, const float& str) {
+DirectX::XMFLOAT3 Player::GetCameraPos(const float& angle, const float& str) {
 	XMFLOAT3 pos = obj->GetPosition();
-	cameraPos = MoveVECTOR(XMVECTOR{ 0,0,str,0 }, angle);
-	cameraPos = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
-	return cameraPos;
+	XMFLOAT3 cameraPos = MoveVECTOR(XMVECTOR{ 0,0,str,0 }, angle);
+	XMFLOAT3 itr = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };
+	return itr;
 }

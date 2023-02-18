@@ -16,8 +16,9 @@ BossLevelLoader::~BossLevelLoader() {
 void BossLevelLoader::Unload(LevelData* _LevelData) {
 
 	_LevelData->name = {};
+	_LevelData->hp = 0;
 	_LevelData->vel = 0;
-	_LevelData->firstPhase = {};
+	_LevelData->scale = 0;
 	_LevelData->coolTime = 0;
 }
 
@@ -48,11 +49,14 @@ void BossLevelLoader::LoadData(const std::string& _filename) {
 		//名前タグ
 		_leveldata.name = word.c_str();
 		getline(line_stream, word, ',');
+		//体力
+		_leveldata.hp = (float)std::atof(word.c_str());
+		getline(line_stream, word, ',');
 		//速度
 		_leveldata.vel = (float)std::atof(word.c_str());
 		getline(line_stream, word, ',');
-		//最初のフェーズ
-		_leveldata.firstPhase = word.c_str();
+		//初期スケール
+		_leveldata.scale = (float)std::atof(word.c_str());
 		getline(line_stream, word, ',');
 		//クールタイム
 		_leveldata.coolTime = (float)std::atof(word.c_str());

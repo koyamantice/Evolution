@@ -43,7 +43,7 @@ private:
 	void Move();
 
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
-	const DirectX::XMFLOAT3& GetCameraPos(const float& angle, const float& str = 10) override;
+	DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) override;
 	XMVECTOR move_ = { };
 
 

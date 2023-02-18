@@ -33,19 +33,20 @@ protected:
 	//付与されているタグへのポインタ
 	std::string tag = "None";
 public:
-	//各フェイズ
-	enum Phase {
-		APPROCH = 0,
-		UNGUARD,
-		LEAVE,
-		WAIT,
-		DEAD,
-		ATTACK,
-	};
+	////各フェイズ
+	//enum Phase {
+	//	APPROCH = 0,
+	//	UNGUARD,
+	//	LEAVE,
+	//	WAIT,
+	//	DEAD,
+	//	ATTACK,
+	//};
 	struct HitBound {
+		//あたっているか
 		bool isHit;
+		//あたった座標
 		XMFLOAT3 HitingPos;
-
 	};
 protected:
 	//オブジェクト識別番号
@@ -56,8 +57,10 @@ protected:
 	bool isRemove = false;
 	//objは必要化
 	bool isVisible = true;
-	//参照されているか
-	bool isRefer = false;
+	//動いてもいいか
+	bool canMove = true;
+	//無敵か
+	bool isUnrivaled = false;
 public:
 	virtual ~Actor() = default;
 	//座標の取得
@@ -68,9 +71,7 @@ public:
 	//プレイヤーの残像
 	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return XMFLOAT3{ PlayerX[num + 1],RotY[num + 1],PlayerZ[num + 1] }; }
 	//座標の取得
-	void SetCameraPos(const DirectX::XMFLOAT3& pos) { this->cameraPos = cameraPos; }
-	const DirectX::XMFLOAT3& GetCameraPos() { return cameraPos; }
-	virtual const DirectX::XMFLOAT3& GetCameraPos(const float& angle, const float& str = 10) { return cameraPos; };
+	virtual DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) { return {0,0,0}; };
 	//角度の取得
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
@@ -80,6 +81,10 @@ public:
 	//isAliveセッタ＆ゲッタ
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
+	//isAliveセッタ＆ゲッタ
+	void SetMaxHp(const float& _maxhp) { this->max_hp = _maxhp; };
+	const float& GetMaxHp() { return max_hp; }
+
 	//Player固有の処理
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
 	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true; hitBound.HitingPos = pos; };
@@ -99,11 +104,7 @@ public:
 	//isRemoveセッタ＆ゲッタ
 	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
 	const bool& GetIsRemove() { return isRemove; }
-	
-	//isReferセッタ＆ゲッタ
-	void SetIsRefer(const bool& _isRefer) { isRefer = _isRefer; };
-	const bool& GetIsRefer() { return isRefer; }
-	
+		
 	//canMoveセッタ＆ゲッタ
 	void SetCanMove(const bool& canMove) { this->canMove = canMove; };
 	const bool& GetCanMove() { return canMove; }
@@ -153,13 +154,11 @@ protected:
 	// 残像データの数
 	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
 	HitBound hitBound;
-	XMFLOAT3 cameraPos{};
 
 	float max_hp = 0;
 	float hp = 0;
 	
 	float angle = 0;
-	bool canMove = true;
 	bool pause = false;
 	bool first = false;
 	bool DeadFlag = false;

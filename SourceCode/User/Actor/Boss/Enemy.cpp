@@ -9,21 +9,41 @@
 
 
 void Enemy::OnInit() {
+	LoadData("Mash");
+
 	collide_size = 3.0f;
+	
 	InitCommon(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash), { 0.025f,0.025f, 0.025f });
 	fbxObject_->PlayAnimation();
-	LoadData("Mash");
 
 	compornent = new EnemyUI();
 	compornent->Initialize();
 
-	Attack= std::make_unique <EnemyAttack>(this);
-	Attack->Init();
+	attack_= std::make_unique<EnemyAttack>(this);
+	attack_->Init();
+
+
+	//メンバ関数と呼び出し元をbindをstd::functionに代入
+	std::function<void()> callback = std::bind(&Enemy::CommandChange, this);
+	//時限発動イベントを生成
+	std::unique_ptr<TimedInvoke> timedCall = std::make_unique<TimedInvoke>(callback, (uint16_t)cooltime_);
+	//時限発動イベントリストに追加
+	timedInvokes_.push_back(std::move(timedCall));
+
 }
 
 void Enemy::OnUpda() {
-	//PhaseMove();
+	//関数ポインタで状態管理
 	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
+
+	//終了したタイマーを削除
+	timedInvokes_.remove_if([](std::unique_ptr<TimedInvoke>& _timedInvoke) {
+		return _timedInvoke->GetIsFinish();
+	});
+	//範囲forでリストの全要素について回す
+	for (std::unique_ptr<TimedInvoke>& timedInvoke :timedInvokes_) {
+		timedInvoke->Update();
+	}
 
 	LifeCommon();
 
@@ -32,7 +52,7 @@ void Enemy::OnUpda() {
 
 	obj->SetPosition(fbxObject_->GetPosition());
 	fbxObject_->Update();
-	Attack->Upda();
+	attack_->Upda();
 }
 
 void Enemy::OnFirstDraw(DirectXCommon* dxCommon) {
@@ -41,11 +61,7 @@ void Enemy::OnFirstDraw(DirectXCommon* dxCommon) {
 }
 
 void Enemy::OnDraw(DirectXCommon* dxCommon) {
-	ImGui::Begin("test");
-	ImGui::Text("%f", hp);
-	ImGui::Unindent();
-	ImGui::End();
-	Attack->Draw();
+	attack_->Draw();
 	Object3d::PreDraw();
 	fbxObject_->Draw(dxCommon->GetCmdList());
 }
@@ -54,110 +70,70 @@ void Enemy::OnLastDraw(DirectXCommon* dxCommon) {
 }
 
 void Enemy::OnFinal() {
+	levelData_ = {};
 }
 
 void Enemy::OnCollision(const std::string& Tag) {
-	if (Tag == "Player") {
-		player_->SetHitBound(fbxObject_->GetPosition());
-	}
-}
-void Enemy::PhaseMove() {
-	switch (command) {
-	case Actor::Phase::UNGUARD:
-		UnguardUpda();
-		break;
-	case Actor::Phase::ATTACK:
-		AttackUpda();
-		break;
-	default:
-		break;
+	if (Tag=="Bullet") {
+		int a = 0;
+		a++;
 	}
 }
 
-void Enemy::UnguardUpda() {
-	if (fbxObject_->GetIsFinish()) { animecount++; }
-	if (animecount >= 2) {
+void Enemy::StartAction() {
+	if (fbxObject_->GetIsFinish()) { animation_count_++; }
+	if (animation_count_ >= 2) {
 		fbxObject_->StopAnimation();
-		waitTimer++;
-		Attack->SetPredict(true, waitTimer / kPredictTime);
-		if (waitTimer == kPredictTime) {
-			Attack->SetPredict(false, 0);
-			command = Actor::Phase::ATTACK;
-			waitTimer = 0;
-			scaframe = 0.0f;
-			animecount = 0;
-			return;
-		}
-		if (scaframe < 1.0f) {
-			scaframe += 1.0f / (kPredictTime / kScaleCount);
-		} else {
-			scaframe = 0.0f;
-		}
-		scale = Ease(In, Quad, scaframe, 25.0f, 16.0f);
-		fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+		animation_count_ = 0;
+		phase_ = E_Phase::kAttackPredict;
 	}
+
 }
 
-void Enemy::AttackUpda() {
+void Enemy::AttackPredict() {
+	waittimer_++;
+	attack_->SetPredict(true, waittimer_ / kPredictTime);
+	if (waittimer_ >= kPredictTime) {
+		attack_->SetPredict(false, 0);
+		waittimer_ = 0;
+		scale_frame_ = 0.0f;
+		phase_ = E_Phase::kPressAttack;
+		command = Actor::Phase::ATTACK;
+		return;
+	}
+	//何回縮むか
+	const float kScaleCount = 4.0f;
+	if (scale_frame_ < 1.0f) {
+		scale_frame_ += 1.0f / (kPredictTime / kScaleCount);
+	} else {
+		scale_frame_ = 0.0f;
+	}
+	float scale = Ease(In, Quad, scale_frame_, 25.0f, 15.0f);
+	fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+}
+
+void Enemy::PressAttack() {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
-	waitTimer++;
-	if (waitTimer == kAttackTime) {
+	waittimer_++;
+	if (waittimer_ >= kAttackTime) {
 		pos.y = 0;
+		fbxObject_->SetPosition(pos);
 		fbxObject_->ResetAnimation();
 		fbxObject_->PlayAnimation();
-		command = Actor::Phase::UNGUARD;
-		waitTimer = 0;
-		fbxObject_->SetPosition(pos);
+		phase_ = E_Phase::kStartAction;
+		waittimer_ = 0;
 		return;
 	}
 	if (pos.y >= 0) {
 		pos.y += speed;
 		speed -= accel;
 	} else {
-		Attack->Stamp(pos);
+		attack_->Stamp(pos);
 		pos.y = 0;
 		speed = accel * 30.0f;
 	}
-	fbxObject_->SetRotation({ 0,-180,0 });
+	//fbxObject_->SetRotation({ 0,-180,0 });
 	fbxObject_->SetPosition(pos);
 }
 
-
-void Enemy::LifeCommon() {
-	if (hp < 0.0f) {
-		if (command != DEAD) {
-			pause = true;
-			return;
-		}
-		XMFLOAT3 pos = fbxObject_->GetPosition();
-		XMFLOAT3 rot = fbxObject_->GetRotation();
-		XMFLOAT3 sca = fbxObject_->GetScale();
-		fbxObject_->ResetAnimation();
-		rot.y++;
-		scale = Ease(In, Quad, scaframe, 25.0f, 0.0f);
-		if (scaframe < 1.0f) {
-			scaframe += 0.01f;
-		} else {
-			isActive = false;
-		}
-		fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
-		fbxObject_->SetRotation(rot);
-	}
-}
-
-void Enemy::ChangeCommand(const int& num, const int& command, const int& count) {
-	static bool isFirst = true;
-	static int MotionCount = 0;
-	if (isFirst) {
-		fbxObject_->PlayAnimation(num);
-		isFirst = false;
-	}
-	if (fbxObject_->GetIsFinish()) { MotionCount++; }
-	if (MotionCount == count) {
-		this->command = command;
-		fbxObject_->StopAnimation();
-		isFirst = true;
-		MotionCount = 0;
-	}
-}
 

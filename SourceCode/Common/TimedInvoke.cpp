@@ -1,6 +1,6 @@
 #include "TimedInvoke.h"
 
-TimedInvoke::TimedInvoke(std::function<bool()> _func, uint16_t _time) {
+TimedInvoke::TimedInvoke(std::function<void(void)> _func, uint16_t _time) {
 	//ƒƒ“ƒo•Ï”‚É‚µ‚Ü‚¤
 	callback_ = _func;
 	time_ = _time;

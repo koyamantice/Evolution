@@ -11,10 +11,12 @@ public:
 	struct LevelData {
 		//ボスの名前
 		std::string name;
+		//体力
+		float hp;
 		//移動速度
 		float vel;
-		//最初のフェーズ
-		std::string firstPhase;
+		//初期スケール
+		float scale;
 		//クールタイム
 		float coolTime;
 	

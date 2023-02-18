@@ -2,51 +2,36 @@
 #include <ActorManager.h>
 
 
-void(Boss::*Boss::phaseFuncTable[])() = {
-	&Boss::Func1,//要素0
-	&Boss::Func2 //要素1
+void (Boss::*Boss::phaseFuncTable[])() = {
+	&Boss::StartAction,//要素0
+	&Boss::AttackPredict, //要素1
+	&Boss::PressAttack
 };
 
-void Boss::Func1() {
-	if (fbxObject_->GetIsFinish()) { animation_count_++; }
-	if (animation_count_ >= 2) {
-		fbxObject_->StopAnimation();
-		if (scaframe < 1.0f) {
-			scaframe += 1.0f / (kPredictTime / kScaleCount);
-		} else {
-			scaframe = 0.0f;
-		}
-		scale = Ease(In, Quad, scaframe, 25.0f, 16.0f);
-		fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+void Boss::CommandChange() {
+	if (command == UNGUARD) {
+		command = ATTACK;
+	} else {
+		command = UNGUARD;
 	}
 }
 
-void Boss::Func2() {
-}
+
 
 void Boss::LoadData(const std::string& _bossname) {
 	BossLevelLoader& gFoo = Singleton<BossLevelLoader>::get_instance();
 	//名前からステータスを取得
 	levelData_= gFoo.takeData(_bossname);
 	//体力
-	hp = 40;
+	hp = levelData_.hp;
 	max_hp = hp;
 	//速度
 	vel_ = levelData_.vel;
+	//
+	float scale = levelData_.scale;
+	baseScale_ = { scale,scale,scale };
 	//クールタイム
 	cooltime_ = levelData_.coolTime;
-	//最初のフェーズ
-	std::string phase = levelData_.firstPhase;
-	if (phase.find("Approch") == 0) {
-		command = Actor::Phase::APPROCH;
-	} else if(phase.find("UnGuard") == 0) {
-		command = Actor::Phase::UNGUARD;
-	} else if (phase.find("Leave") == 0) {
-		command = Actor::Phase::LEAVE;
-	} else if (phase.find("Wait") == 0) {
-		command = Actor::Phase::WAIT;
-	}
-
 }
 
 void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
@@ -56,8 +41,6 @@ void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
 	fbxObject_= std::make_unique<FBXObject3d>();
 	fbxObject_->Initialize(_model, _scale, _rotation);
 	fbxObject_->LoadAnimation();
-	//プレイヤーを参照
-	player_ = ActorManager::GetInstance()->SearchActor("Player");
 	//丸影
 	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.7f,0.7f,0.7f }, { 1,1,1,1 });
@@ -67,3 +50,24 @@ void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
 	particle_ = std::make_unique<ParticleEmitter>(ImageManager::nul);
 }
 
+void Boss::LifeCommon() {
+	if (hp <= 0.0f) {
+		if (!pause) {
+			pause = true;
+			return;
+		}
+		XMFLOAT3 pos = fbxObject_->GetPosition();
+		XMFLOAT3 rot = fbxObject_->GetRotation();
+		XMFLOAT3 sca = fbxObject_->GetScale();
+		fbxObject_->ResetAnimation();
+		rot.y++;
+		scale = Ease(In, Quad, scale_frame_, baseScale_.x * 1000.0f, 0.0f);
+		if (scale_frame_ < 1.0f) {
+			scale_frame_ += 0.01f;
+		} else {
+			isActive = false;
+		}
+		fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+		fbxObject_->SetRotation(rot);
+	}
+}
