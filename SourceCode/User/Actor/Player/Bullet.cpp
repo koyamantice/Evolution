@@ -270,15 +270,10 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 
 		}
 		//“G‚Æ‚Ì“–‚½‚è”»’è
-		if (Tag == "Enemy") {
+		if (Tag == "MashGhost") {
 			if (isPlayActive) { return; }
-			switch (enemy->GetCommand()) {
-			case Actor::Phase::UNGUARD:
-				DamageInit();
-				break;
-			default:
-				break;
-			}
+			//if(enemy->Get) {
+			DamageInit();
 		}
 		break;
 	case Control:
@@ -486,7 +481,7 @@ void Bullet::SlowUpda() {
 void Bullet::AttackUpda() {
 
 	if (!knockBacking) {
-		if (enemy->GetCommand() == Actor::Phase::DEAD) { return; }
+		if (enemy->GetHp() == 0) { return; }
 		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Position(enemy->GetPosition(), 2.0f);
 		}

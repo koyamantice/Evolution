@@ -1,7 +1,11 @@
 #pragma once
 #include"Actor.h"
 
-#include"BossLevelLoader.h"
+#include "Player.h"
+#include "EnemyUI.h"
+#include "EnemyAttack.h"
+
+#include "BossLevelLoader.h"
 #include "TimedInvoke.h"
 
 #include "Singleton.h"
@@ -16,9 +20,6 @@
 class Boss :public Actor {
 public:
 	virtual ~Boss() = default;
-
-	//éûå¿î≠ìÆóp
-	void CommandChange();
 protected:
 	/// <summary>
 	/// ã§í èâä˙âª
@@ -48,18 +49,23 @@ protected:
 	virtual void StartAction() {};
 	virtual void AttackPredict() {};
 	virtual void PressAttack() {};
+	virtual void ChasePlayer() {};
+	virtual void FeedHoney() {};
+	void DeadMotion();
 
 	enum class E_Phase : int {
 		kStartAction = 0,
 		kAttackPredict,
 		kPressAttack,
+		kChasePlayer,
+		kFeedHoney,
+		kDeadMotion,
 	};
 	//Ç«ÇÃçsìÆÇéÊÇÈÇ©
 	E_Phase phase_ = E_Phase::kStartAction;
 
 	int animation_count_ = 0;
 
-	float scale = 0.01f;
 	float scale_frame_ = 0.0f;
 
 	float waittimer_ = 0;

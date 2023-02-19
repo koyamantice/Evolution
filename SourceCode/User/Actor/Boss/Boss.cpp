@@ -5,17 +5,11 @@
 void (Boss::*Boss::phaseFuncTable[])() = {
 	&Boss::StartAction,//要素0
 	&Boss::AttackPredict, //要素1
-	&Boss::PressAttack
+	&Boss::PressAttack,
+	&Boss::ChasePlayer,
+	&Boss::FeedHoney,
+	&Boss::DeadMotion
 };
-
-void Boss::CommandChange() {
-	if (command == UNGUARD) {
-		command = ATTACK;
-	} else {
-		command = UNGUARD;
-	}
-}
-
 
 
 void Boss::LoadData(const std::string& _bossname) {
@@ -27,7 +21,7 @@ void Boss::LoadData(const std::string& _bossname) {
 	max_hp = hp;
 	//速度
 	vel_ = levelData_.vel;
-	//
+	//初期スケール
 	float scale = levelData_.scale;
 	baseScale_ = { scale,scale,scale };
 	//クールタイム
@@ -52,22 +46,31 @@ void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
 
 void Boss::LifeCommon() {
 	if (hp <= 0.0f) {
+		if (!canMove) {
+			phase_ = E_Phase::kDeadMotion;
+			return;
+		}
 		if (!pause) {
 			pause = true;
 			return;
 		}
-		XMFLOAT3 pos = fbxObject_->GetPosition();
-		XMFLOAT3 rot = fbxObject_->GetRotation();
-		XMFLOAT3 sca = fbxObject_->GetScale();
-		fbxObject_->ResetAnimation();
-		rot.y++;
-		scale = Ease(In, Quad, scale_frame_, baseScale_.x * 1000.0f, 0.0f);
-		if (scale_frame_ < 1.0f) {
-			scale_frame_ += 0.01f;
-		} else {
-			isActive = false;
-		}
-		fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
-		fbxObject_->SetRotation(rot);
 	}
+}
+
+
+void Boss::DeadMotion() {
+	XMFLOAT3 pos = fbxObject_->GetPosition();
+	XMFLOAT3 rot = fbxObject_->GetRotation();
+	XMFLOAT3 sca = fbxObject_->GetScale();
+	fbxObject_->ResetAnimation();
+	rot.y++;
+	float scale = Ease(In, Linear, scale_frame_, baseScale_.x, 0.0f);
+	if (scale_frame_ < 1.0f) {
+		scale_frame_ += 1.0f / 100.0f;
+	} else {
+		isActive = false;
+	}
+	fbxObject_->SetScale({ scale,scale,scale });
+	fbxObject_->SetRotation(rot);
+
 }

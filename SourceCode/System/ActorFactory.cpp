@@ -1,8 +1,8 @@
 #include"ActorFactory.h"
 #include"ModelManager.h"
 #include"Player.h"
-#include"Enemy.h"
-#include"Enemy_Bee.h"
+#include"MashGhost.h"
+#include"Hornet.h"
 #include"Bullet.h"
 #include"BulletRed.h"
 #include"BulletGreen.h"
@@ -22,13 +22,13 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 		newActor = new Player();
 		newActor->Initialize(nullptr,"Player", newActorCompornent);
 	}
-	if (sceneName == "Enemy") {
-		newActor = new Enemy();
-		newActor->Initialize(nullptr, "Enemy");
+	if (sceneName == "MashGhost") {
+		newActor = new MashGhost();
+		newActor->Initialize(nullptr, "MashGhost");
 	}
-	if (sceneName == "Enemy_Bee") {
-		newActor = new Enemy_Bee();
-		newActor->Initialize(nullptr, "Enemy");
+	if (sceneName == "Hornet") {
+		newActor = new Hornet();
+		newActor->Initialize(nullptr, "MashGhost");
 	}
 	if (sceneName == "ClearCrystal") {
 		newActor = new ClearCrystal();

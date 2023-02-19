@@ -45,10 +45,29 @@ private:
 	void missionUpdate();
 	void questionUpdate();
 
-	void ApprochUpda();
-	void LeaveUpda();
-	void WaitUpda();
-	void DeadUpda();
+
+	//関数ポインタ
+	static void(Honey::* updateFuncTable[])();
+
+	//メンバ関数
+	void WaitDriver();
+	void DispersionDriver();
+	void SetupHoney();
+	void InviteBee();
+	void EatenHoney();
+	void RandSpawn();
+
+	enum class E_Phase : int {
+		kWaitDriver = 0,
+		kDispersionDriver,
+		kSetupHoney,
+		kInviteBee,
+		kEatenHoney,
+		kRandSpawn,
+	};
+	//どの行動を取るか
+	E_Phase phase_ = E_Phase::kWaitDriver;
+
 	void IntroOnUpdate(const float& Timer)override;
 
 	float RandHeight(const float& base);

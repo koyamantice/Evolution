@@ -250,10 +250,10 @@
     <ClCompile Include="SourceCode\User\Actor\Player\PlayerUI.cpp">
       <Filter>User\Player</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\Actor\Boss\Enemy.cpp">
+    <ClCompile Include="SourceCode\User\Actor\Boss\MashGhost.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\Actor\Boss\Enemy_Bee.cpp">
+    <ClCompile Include="SourceCode\User\Actor\Boss\Hornet.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\User\Actor\Boss\EnemyUI.cpp">
@@ -514,10 +514,10 @@
     <ClInclude Include="SourceCode\User\Actor\Player\PlayerUI.h">
       <Filter>User\Player</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\Actor\Boss\Enemy.h">
+    <ClInclude Include="SourceCode\User\Actor\Boss\MashGhost.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\Actor\Boss\Enemy_Bee.h">
+    <ClInclude Include="SourceCode\User\Actor\Boss\Hornet.h">
       <Filter>User\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\User\Actor\Boss\EnemyUI.h">

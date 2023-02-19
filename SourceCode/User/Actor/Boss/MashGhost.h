@@ -1,16 +1,11 @@
 #pragma once
 #include"Boss.h"
 
-#include "Player.h"
-#include"EnemyUI.h"
-#include"EnemyAttack.h"
-
-
 class Bullet;
 
-class Enemy :public Boss {
+class MashGhost :public Boss {
 public:
-	Enemy(){};
+	MashGhost(){};
 
 protected:
 	void OnInit()override;

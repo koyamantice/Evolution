@@ -23,7 +23,7 @@ void EnemyUI::OnInitialize() {
 }
 
 void EnemyUI::OnUpdate() {
-	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Enemy");
+	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("MashGhost");
 	
 	HpGauge->SetSize({ 495 * (AttachActor->GetHp() / AttachActor->GetMaxHp()) ,22 });
 	HpGauge->SetAnchorPoint({ 0,0 });

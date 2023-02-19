@@ -7,7 +7,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
-	ActorManager::GetInstance()->AttachActor("Enemy");
+	ActorManager::GetInstance()->AttachActor("MashGhost");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 
 	for (int i = 0; i < kGnormNum; i++) {
@@ -18,7 +18,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	}
 	//シーン内で必要なアクターを参照します。
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
-	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
+	enemy_shadow = ActorManager::GetInstance()->SearchActor("MashGhost");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);
@@ -210,11 +210,11 @@ bool FirstStage::ClearUpdate() {
 
 		if (finish_time > finish_time_Max) {
 			enemy_shadow->SetPause(false);
-			enemy_shadow->SetCommand(Actor::DEAD);
+			enemy_shadow->SetCanMove(false);
 		}
 		return true;
 	}
-	if (enemy_shadow->GetCommand() == Actor::DEAD) {
+	if (finish_time > finish_time_Max) {
 		goal_shadow->SetIsActive(true);
 		if (goal_shadow->GetPause() || player_shadow->GetPause()) {
 			battle_result = true;

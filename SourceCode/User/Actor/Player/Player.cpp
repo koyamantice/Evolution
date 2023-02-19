@@ -244,7 +244,7 @@ void Player::Move() {
 }
 
 void Player::OnCollision(const std::string& Tag) {
-	if (Tag == "Enemy") {
+	if (Tag == "MashGhost") {
 		SetHitBound(old_pos);
 	}
 

@@ -145,9 +145,9 @@ bool MSecondStage::ClearUpdate() {
 		return true;
 	}
 	if (!goal_shadow->GetIsActive()) {
-		if (honey_[kLeftNest]->GetCommand() == Actor::APPROCH &&
-			honey_[kMiddleNest]->GetCommand() == Actor::APPROCH &&
-			honey_[kRightNest]->GetCommand() == Actor::APPROCH) {
+		if (!honey_[kLeftNest]->GetCanMove()&&
+			!honey_[kMiddleNest]->GetCanMove()&&
+			!honey_[kRightNest]->GetCanMove()) {
 			goal_shadow->SetIsActive(true);
 			return false;
 		}
@@ -163,7 +163,7 @@ bool MSecondStage::ClearUpdate() {
 void MSecondStage::HoneyUpdate() {
 	nowOpenHoney = 0;
 	for (int i = 0; i < kMaxNestNum; i++) {
-		if (honey_[i]->GetCommand() == Actor::APPROCH) {
+		if (!honey_[i]->GetCanMove()) {
 			nowOpenHoney++;
 			const float rnd_vel = 0.2f;
 			const float rnd_height = 0.3f;

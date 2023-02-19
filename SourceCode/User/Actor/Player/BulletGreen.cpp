@@ -15,7 +15,7 @@ void BulletGreen::OnInit() {
 	ID = ActorManager::GetInstance()->SearchNum("BulletGreen");
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
-	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
+	enemy = ActorManager::GetInstance()->SearchActorBack("MashGhost");
 	landing = player->GetLockPos();
 	Color = DeathColor::Green;
 

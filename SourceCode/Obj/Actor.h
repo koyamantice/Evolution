@@ -55,12 +55,16 @@ protected:
 	bool isActive = true;
 	//削除
 	bool isRemove = false;
+	//参照されているか
+	bool isRefer = false;
 	//objは必要化
 	bool isVisible = true;
 	//動いてもいいか
 	bool canMove = true;
 	//無敵か
 	bool isUnrivaled = false;
+
+
 public:
 	virtual ~Actor() = default;
 	//座標の取得
@@ -78,10 +82,11 @@ public:
 	//コマンド取得
 	void SetCommand(const int& command) { this->command = command; };
 	const int& GetCommand() { return command; }
-	//isAliveセッタ＆ゲッタ
+	
+	//hpセッタ＆ゲッタ
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
-	//isAliveセッタ＆ゲッタ
+	//maxHpセッタ＆ゲッタ
 	void SetMaxHp(const float& _maxhp) { this->max_hp = _maxhp; };
 	const float& GetMaxHp() { return max_hp; }
 
@@ -93,7 +98,7 @@ public:
 	const float& GetSize()const { return collide_size; }
 
 	//タグのセット
-	void SetTag(const std::string& Tag) { tag = Tag; };
+	void SetTag(const std::string& Tag) { tag = Tag; }
 	//タグが一致するか
 	const std::string& GetTag() { return tag; }
 
@@ -105,6 +110,10 @@ public:
 	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
 	const bool& GetIsRemove() { return isRemove; }
 		
+	//isReferセッタ＆ゲッタ
+	void SetIsRefer(const bool& isRefer) { this->isRefer = isRefer; };
+	const bool& GetIsRefer() { return isRefer; }
+
 	//canMoveセッタ＆ゲッタ
 	void SetCanMove(const bool& canMove) { this->canMove = canMove; };
 	const bool& GetCanMove() { return canMove; }
@@ -122,10 +131,18 @@ public:
 	void SetCollide(const bool& collide) { this->collide = collide; }
 	const bool& GetCollide() { return collide; }
 
-	//virtualにしようか悩み中//解決済み
+	//各処理
 	void Initialize(Model* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
+	/// <summary>
+	/// 導入アップデート
+	/// </summary>
+	/// <param name="Timer"></param>
 	void IntroUpdate(const float& Timer);
+	/// <summary>
+	/// 終了アップデート
+	/// </summary>
+	/// <param name="Timer"></param>
 	void ResultUpdate(const float& Timer);
 
 	void Demo();		//更新処理
@@ -136,7 +153,7 @@ public:
 
 	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
 	void Finalize();	//終了処理
-
+	//仮想関数
 	virtual void OnInit() {};
 	virtual void OnUpda() {};
 	virtual void OnFirstDraw(DirectXCommon* dxCommon) {};
