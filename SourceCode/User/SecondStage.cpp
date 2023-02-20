@@ -115,7 +115,8 @@ bool SecondStage::IntroUpdate() {
 			return true;
 		}
 
-		if (input->TriggerButton(input->START)) {
+		if (input->TriggerButton(input->START)||
+			input->TriggerKey(DIK_SPACE)) {
 			if (!intro_skip) {
 				intro_skip = true;
 			}

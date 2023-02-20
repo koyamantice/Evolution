@@ -189,30 +189,49 @@ void Player::Move() {
 	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
 		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
 		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
-		input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+		input->TiltPushStick(Input::L_LEFT, 0.0f)||
+		input->PushKey(DIK_W) ||
+		input->PushKey(DIK_S) ||
+		input->PushKey(DIK_D) ||
+		input->PushKey(DIK_A)
+		) {
 
 		float StickX = input->GetLeftControllerX();
 		float StickY = input->GetLeftControllerY();
 		const float STICK_MAX = 32767.0f;
-		
+		if (input->PushKey(DIK_W)) {
+			StickY = STICK_MAX;
+		}else if (input->PushKey(DIK_S) ){
+			StickY = -STICK_MAX;
+
+		}else if (input->PushKey(DIK_D) ){
+			StickX = STICK_MAX;
+		}else if (input->PushKey(DIK_A) ){
+			StickX = -STICK_MAX;
+		}
+
 		//ˆÚ“®ˆ—
 
-		if (input->TiltPushStick(Input::L_UP, 0.0f)) {
+		if (input->TiltPushStick(Input::L_UP, 0.0f)||
+			input->PushKey(DIK_W)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
 			pos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_DOWN, 0.0f)) {
+		if (input->TiltPushStick(Input::L_DOWN, 0.0f)||
+			input->PushKey(DIK_S)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
 			pos.x += vecvel.x * (StickY / STICK_MAX);
 			pos.z += vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)) {
+		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)||
+			input->PushKey(DIK_D)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
 			pos.x -= vecvel.x * (StickX / STICK_MAX);
 			pos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_LEFT, 0.0f)) {
+		if (input->TiltPushStick(Input::L_LEFT, 0.0f)||
+			input->PushKey(DIK_A)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
 			pos.x += vecvel.x * (StickX / STICK_MAX);
 			pos.z += vecvel.z * (StickX / STICK_MAX);

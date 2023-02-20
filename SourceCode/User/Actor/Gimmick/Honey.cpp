@@ -11,9 +11,9 @@ void (Honey::* Honey::updateFuncTable[])() = {
 	&Honey::WaitDriver,//—v‘f0
 	&Honey::DispersionDriver,
 	&Honey::SetupHoney,
-	& Honey::InviteBee,
-	& Honey::EatenHoney,
-	& Honey::RandSpawn,
+	&Honey::InviteBee,
+	&Honey::EatenHoney,
+	&Honey::RandSpawn,
 
 };
 
@@ -66,8 +66,10 @@ void Honey::OnDraw(DirectXCommon* dxCommon) {
 	Object3d::PreDraw();
 	honey_obj_->Draw();
 	Object2d::PreDraw();
-	missions[0][stock]->Draw();
-	missions[1][5]->Draw();
+	if (phase_ == E_Phase::kWaitDriver) {
+		missions[0][stock]->Draw();
+		missions[1][5]->Draw();
+	}
 	slash->Draw();
 	particleEmitter->Draw();
 
@@ -94,8 +96,10 @@ void Honey::missionUpdate() {
 }
 
 void Honey::questionUpdate() {
-	XMFLOAT3 pos = obj->GetPosition();
-	honey_obj_->SetPosition(pos);
+	if (phase_!=E_Phase::kSetupHoney) {
+		XMFLOAT3 pos = obj->GetPosition();
+		honey_obj_->SetPosition(pos);
+	}
 	honey_obj_->Update();
 }
 

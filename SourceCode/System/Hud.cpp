@@ -109,18 +109,24 @@ void Hud::Update() {
 	//“ü—ÍŠÖ˜A
 	if (input->TiltPushStick(Input::R_RIGHT) || 
 		input->TiltPushStick(Input::R_LEFT)  ||
-		input->TriggerButton(Input::LT)) {
+		input->TriggerButton(Input::LT)||
+		input->PushKey(DIK_LEFT) || 
+		input->PushKey(DIK_RIGHT)
+		) {
 		explation_finish = true;
 
 	}
-	if (input->TriggerButton(Input::B)) {
+	if (input->TriggerButton(Input::B)||
+		input->TriggerKey(DIK_SPACE)){
 		button_system[GNOMESHOT].isvisible = true;
 	}
 
-	if (input->TriggerButton(Input::A)) {
+	if (input->TriggerButton(Input::A)||
+		input->PushKey(DIK_Q)) {
 		button_system[GNOMERECOVERY].isvisible = true;
 	}
-	if (input->TriggerButton(Input::Y)) {
+	if (input->TriggerButton(Input::Y)||
+		input->TriggerKey(DIK_E)) {
 		if (!isVisible) { isVisible = true; }
 		else{ isVisible = false; }
 	}

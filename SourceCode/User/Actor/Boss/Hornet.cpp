@@ -16,7 +16,7 @@ void Hornet::OnInit() {
 		{ 0, -DEGREE_QUARTER, 0 }
 	);
 
-	fbxObject_->PlayAnimation(Fly);
+	fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 
 	before_pos = { 0,20,0 };
 
@@ -25,23 +25,25 @@ void Hornet::OnInit() {
 
 	ActorManager::GetInstance()->AttachActor("Honey");
 	ActorManager::GetInstance()->AttachActor("Honey");
-	honey[0] = ActorManager::GetInstance()->SearchActor("Honey");
-	honey[1] = ActorManager::GetInstance()->SearchActorBack("Honey");
+	honey[kLeftHoney] = ActorManager::GetInstance()->SearchActor("Honey");
+	honey[kRightHoney] = ActorManager::GetInstance()->SearchActorBack("Honey");
 
-	honey[0]->SetPosition({ 25,0,25 });
-	honey[1]->SetPosition({ -25,0,-25 });
+	honey[kLeftHoney]->SetPosition({ 25,0,25 });
+	honey[kRightHoney]->SetPosition({ -25,0,-25 });
 
 
-	phase_ = E_Phase::kStartAction;
+	player_ = ActorManager::GetInstance()->SearchActor("Player");
+
 }
 
 
 void Hornet::OnUpda() {
+	//ライフ管理
+	LifeCommon();
+
 	//関数ポインタで状態管理
 	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
 
-
-	LifeCommon();
 
 	fbxObject_->Update();
 	shadow_->Update();
@@ -65,16 +67,16 @@ void Hornet::OnCollision(const std::string& Tag) {
 		switch (phase_) {
 		case E_Phase::kPressAttack:
 			if (motion_ == E_Motion::kPressBee) {
-				if (!OnePunch) {
-					OnePunch = true;
-					player->SetHitBound(fbxObject_->GetPosition());
+				if (!hit_once_) {
+					hit_once_ = true;
+					player_->SetHitBound(fbxObject_->GetPosition());
 				}
 			}
 			break;
 		case E_Phase::kChasePlayer:
-			if (!OnePunch) {
-				OnePunch = true;
-				player->SetHitBound(fbxObject_->GetPosition());
+			if (!hit_once_) {
+				hit_once_ = true;
+				player_->SetHitBound(fbxObject_->GetPosition());
 			}
 			break;
 		default:
@@ -88,15 +90,15 @@ void Hornet::OnCollision(const std::string& Tag) {
 
 
 void Hornet::HoneyControl() {
-	if (honey[0]->GetCanMove()) {
-		honey[1]->SetPause(true);
+	if (honey[kLeftHoney]->GetCanMove()) {
+		honey[kRightHoney]->SetPause(true);
 	} else {
-		honey[1]->SetPause(false);
+		honey[kRightHoney]->SetPause(false);
 	}
-	if (honey[1]->GetCanMove()) {
-		honey[0]->SetPause(true);
+	if (honey[kRightHoney]->GetCanMove()) {
+		honey[kLeftHoney]->SetPause(true);
 	} else {
-		honey[0]->SetPause(false);
+		honey[kLeftHoney]->SetPause(false);
 	}
 }
 
@@ -113,13 +115,13 @@ void Hornet::IntroOnUpdate(const float& Timer) {
 		if ((Timer / 0.2f) < 1.0f) {
 			pos.y = Ease(Out, Quad, Timer / 0.2f, before_pos.y, after_pos.y);
 		} else {
-			fbxObject_->PlayAnimation(Posing);
+			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kPosingAnimiation));
 			before_pos = after_pos;
 		}
 	} else if (Timer <= 0.5f) {
 		if (fbxObject_->GetIsFinish()) {
 			fbxObject_->StopAnimation();
-			fbxObject_->PlayAnimation(Fly);
+			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 		}
 		after_pos = {
 		15,
@@ -143,11 +145,11 @@ void Hornet::StartAction() {
 	fbxObject_->SetPosition({ pos.x,sinf(waittimer_* XM_PI / 180) * 2.0f,pos.z });
 	
 	//蜂蜜がある場合
-	if (honey[0]->GetCanMove()|| 
-		honey[1]->GetCanMove()) {
+	if (!honey[kLeftHoney]->GetCanMove()|| 
+		!honey[kRightHoney]->GetCanMove()) {
 		//どちらに向かうか
 		for (int i = 0; i < 2; i++) {
-			if (honey[i]->GetCanMove()) {
+			if (!honey[i]->GetCanMove()) {
 				honey_approch_ = i;
 			}
 		}
@@ -156,14 +158,13 @@ void Hornet::StartAction() {
 		after_pos = honey[honey_approch_]->GetPosition();
 		//アニメーション変更
 		fbxObject_->StopAnimation();
-		fbxObject_->PlayAnimation(Dawn);
+		fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kDownAnimation));
 
 		waittimer_ = 0.0f;
 		phase_ = E_Phase::kFeedHoney;
 	} else {
-		if (commandTimer > 240) {
-			commandTimer = 0;
-			waittimer_ = 0;
+		if (waittimer_ > 240) {
+			waittimer_ = 0.0f;
 			before_pos = pos;
 			phase_ = E_Phase::kAttackPredict;
 		}
@@ -195,7 +196,7 @@ void Hornet::AttackPredict() {
 }
 
 void Hornet::PressAttack() {
-	XMFLOAT3 player_pos = player->GetPosition();
+	XMFLOAT3 player_pos = player_->GetPosition();
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	XMFLOAT3 rot = fbxObject_->GetRotation();
 	
@@ -204,7 +205,7 @@ void Hornet::PressAttack() {
 	switch (motion_) {
 	case E_Motion::kFollowPlayer:
 
-		if (OnePunch) {OnePunch = false;}
+		if (hit_once_) {hit_once_ = false;}
 
 		after_pos = {
 		player_pos.x,
@@ -234,16 +235,16 @@ void Hornet::PressAttack() {
 			pos.y = Ease(In, Quad, (float)(waittimer_ / 50), before_pos.y, after_pos.y);
 		}
 		if (waittimer_ > 120) {
-			if (countAttack < 3) {
-				countAttack++;
+			if (attack_count_ < 3) {
+				attack_count_++;
 				motion_ = E_Motion::kFollowPlayer;
 			} else {
-				countAttack = 0;
+				attack_count_ = 0;
 				motion_ = E_Motion::kLeaveHome;
 			}
 			before_pos = pos;
 			waittimer_ = 0;
-			fbxObject_->PlayAnimation(Fly);
+			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 			waittimer_ = 0;
 		}
 		rot.y += 5.0f;
@@ -278,13 +279,13 @@ void Hornet::PressAttack() {
 }
 
 void Hornet::ChasePlayer() {
-	XMFLOAT3 player_pos = player->GetPosition();
+	XMFLOAT3 player_pos = player_->GetPosition();
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	XMFLOAT3 rot = fbxObject_->GetRotation();
 	waittimer_++;
 	switch (motion_) {
 	case E_Motion::kFirstMoving:
-		if (OnePunch) {	OnePunch = false;}
+		if (hit_once_) {	hit_once_ = false;}
 		after_pos = {
 		45,
 		0,
@@ -304,7 +305,7 @@ void Hornet::ChasePlayer() {
 		break;
 	case E_Motion::kSecondMoving:
 		waittimer_++;
-		if (OnePunch) { OnePunch = false; }
+		if (hit_once_) { hit_once_ = false; }
 		after_pos = {
 		45,
 		0,
@@ -396,29 +397,28 @@ void Hornet::FeedHoney() {
 	if (honey[honey_approch_]->GetCanMove()) { honey[honey_approch_]->SetCanMove(false); }
 	collide_size = 4.0f;
 
-	if (commandTimer < 1.0f) {
-		commandTimer += 0.01f;
+	if (fade_frame_  < 1.0f) {
+		fade_frame_  += 0.01f;
 		XMFLOAT3 rot{};
 		rot.y = DirRotation(after_pos);
 		fbxObject_->SetRotation(rot);
 	}
 	XMFLOAT3 pos{};
-	pos.x = Ease(In, Quad, commandTimer, before_pos.x, after_pos.x);
-	pos.y = Ease(In, Quad, commandTimer, 0, -3);
-	pos.z = Ease(In, Quad, commandTimer, before_pos.z, after_pos.z);
+	pos.x = Ease(In, Quad, fade_frame_ , before_pos.x, after_pos.x);
+	pos.y = Ease(In, Quad, fade_frame_ , 0, -3);
+	pos.z = Ease(In, Quad, fade_frame_ , before_pos.z, after_pos.z);
 	fbxObject_->SetPosition(pos);
 
-	if ((honey[honey_approch_]->GetStock()==0) ||
-		(!overDamage && pinchLife > hp)) {
+	if ((!overDamage && pinchLife > hp)) {
 		fbxObject_->StopAnimation();
-		fbxObject_->PlayAnimation(Fly);
+		fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 		if (!overDamage) {
 			overDamage = true;
 			collide_size = 2.5f;
 		} else {
 			collide_size = 2.0f;
 		}
-		commandTimer = 0;
+		fade_frame_  = 0;
 		phase_ = E_Phase::kStartAction;
 	}
 }

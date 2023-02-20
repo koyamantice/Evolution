@@ -134,14 +134,17 @@ void BattleScene::CameraUpda() {
 		return;
 	}
 	//カメラ回転入力
-	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)) {
+	if (input->TiltPushStick(Input::R_RIGHT) || input->TiltPushStick(Input::R_LEFT)||
+		input->PushKey(DIK_LEFT)|| input->PushKey(DIK_RIGHT)) {
 		if (!camera_explanation) {camera_explanation = true;}
 		//スティック入力
 		int reverse = pauseUi->GetReverseCamera();
-		if (input->TiltPushStick(Input::R_RIGHT)) {
+		if (input->TiltPushStick(Input::R_RIGHT)||
+			input->PushKey(DIK_RIGHT)) {
 			camera_angle -= camera_vel * reverse;
 		}
-		if (input->TiltPushStick(Input::R_LEFT)) {
+		if (input->TiltPushStick(Input::R_LEFT)||
+			input->PushKey(DIK_LEFT)) {
 			camera_angle += camera_vel * reverse;
 		}
 		//負の整数をなくします
@@ -158,7 +161,8 @@ void BattleScene::CameraUpda() {
 		camera_distance.z = Ease(In, Quad, interpolation, camera_distance.z, e_camera_distance.z);
 	}
 	//カメラリセット入力
-	if (input->TriggerButton(Input::LT)|| player_shadow->GetPause()) {
+	if (input->TriggerButton(Input::LT)|| player_shadow->GetPause()||
+		(input->PushKey(DIK_LEFT) && input->PushKey(DIK_RIGHT))) {
 		if (!reset_camera) {
 			if (!camera_explanation) {camera_explanation = true;}
 

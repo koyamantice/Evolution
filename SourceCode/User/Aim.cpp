@@ -118,7 +118,7 @@ void Aim::Move(float angle) {
 		}
 	}
 
-	if (input->PushButton(Input::A)) {
+	if (input->PushButton(Input::A) || input->PushKey(DIK_Q)) {
 		if (explanation_now_ == RECOVERY) {
 			explanation_now_ = COMMENTMAX;
 		}
@@ -155,6 +155,10 @@ void Aim::Move(float angle) {
 		input->TiltPushStick(Input::L_DOWN ,0.0f) ||
 		input->TiltPushStick(Input::L_RIGHT,0.0f) ||
 		input->TiltPushStick(Input::L_LEFT ,0.0f) ||
+		input->PushKey(DIK_W) ||
+		input->PushKey(DIK_S) ||
+		input->PushKey(DIK_D) ||
+		input->PushKey(DIK_A)||
 		enemy_set) {
 		after_pos = player->GetCameraPos(player->GetRotation().y,10);
 		enemy_set = false;
@@ -182,7 +186,8 @@ void Aim::Move(float angle) {
 }
 
 void Aim::EnemySet() {
-	if (input->TriggerButton(Input::RT)) {
+	if (input->TriggerButton(Input::RT)||
+		input->TriggerKey(DIK_R)) {
 		XMFLOAT3 base = player->GetPosition();
 		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(base);
 		if (enemy->GetTag()=="Player") { return; }
