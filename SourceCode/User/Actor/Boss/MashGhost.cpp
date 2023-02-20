@@ -71,9 +71,6 @@ void MashGhost::OnFinal() {
 	levelData_ = {};
 }
 
-void MashGhost::OnCollision(const std::string& Tag) {
-
-}
 
 void MashGhost::StartAction() {
 	if (fbxObject_->GetIsFinish()) { animation_count_++; }

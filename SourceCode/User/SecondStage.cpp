@@ -17,7 +17,7 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	}
 	//シーン内で必要なアクターを参照します。
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
-	enemy_shadow = ActorManager::GetInstance()->SearchActor("MashGhost");
+	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
 	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
 	goal_shadow->SetPosition(enemy_shadow->GetPosition());
 	goal_shadow->SetIsActive(false);

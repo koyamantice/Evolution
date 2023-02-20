@@ -109,6 +109,7 @@ void ActorManager::CheckActorCollisions() {
 			Actor* actorB = itrB->get();
 			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
 				if (!actorA->GetIsActive() || !actorB->GetIsActive()) { continue; }
+				if (actorA->GetIsUnrivaled() || actorB->GetIsUnrivaled()) { continue; }
 				if (actorA->GetTag() != actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());

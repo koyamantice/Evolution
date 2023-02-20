@@ -49,7 +49,7 @@ void Hornet::OnUpda() {
 	shadow_->Update();
 	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
-	obj->SetPosition(fbxObject_->GetPosition());
+	obj->SetPosition({fbxObject_->GetPosition().x, 0, fbxObject_->GetPosition().z});
 }
 
 void Hornet::OnDraw(DirectXCommon* dxCommon) {
@@ -66,18 +66,16 @@ void Hornet::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
 		switch (phase_) {
 		case E_Phase::kPressAttack:
-			if (motion_ == E_Motion::kPressBee) {
-				if (!hit_once_) {
-					hit_once_ = true;
-					player_->SetHitBound(fbxObject_->GetPosition());
-				}
+			if (motion_ != E_Motion::kFollowPlayer) {
+				player_->SetHitBound(fbxObject_->GetPosition());
 			}
 			break;
 		case E_Phase::kChasePlayer:
-			if (!hit_once_) {
-				hit_once_ = true;
-				player_->SetHitBound(fbxObject_->GetPosition());
-			}
+			player_->SetHitBound(fbxObject_->GetPosition());
+			break;
+		case E_Phase::kFeedHoney:
+
+			player_->SetHitBound(fbxObject_->GetPosition());
 			break;
 		default:
 			break;
@@ -148,7 +146,7 @@ void Hornet::StartAction() {
 	if (!honey[kLeftHoney]->GetCanMove()|| 
 		!honey[kRightHoney]->GetCanMove()) {
 		//‚Ç‚¿‚ç‚ÉŒü‚©‚¤‚©
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < kHoneyMax; i++) {
 			if (!honey[i]->GetCanMove()) {
 				honey_approch_ = i;
 			}
@@ -204,7 +202,7 @@ void Hornet::PressAttack() {
 
 	switch (motion_) {
 	case E_Motion::kFollowPlayer:
-
+		isUnrivaled = true;
 		if (hit_once_) {hit_once_ = false;}
 
 		after_pos = {
@@ -226,6 +224,7 @@ void Hornet::PressAttack() {
 		rot.y = DirRotation(player_pos);
 		break;
 	case  E_Motion::kPressBee:
+		isUnrivaled = false;
 		after_pos = {
 		pos.x,
 		-8,
@@ -268,6 +267,7 @@ void Hornet::PressAttack() {
 			phase_ = E_Phase::kStartAction;
 			waittimer_ = 0;
 			before_pos = pos;
+			isUnrivaled = true;
 		}
 		break;
 	default:
@@ -285,7 +285,7 @@ void Hornet::ChasePlayer() {
 	waittimer_++;
 	switch (motion_) {
 	case E_Motion::kFirstMoving:
-		if (hit_once_) {	hit_once_ = false;}
+		if (hit_once_) {hit_once_ = false;}
 		after_pos = {
 		45,
 		0,
@@ -396,6 +396,7 @@ void Hornet::FeedHoney() {
 
 	if (honey[honey_approch_]->GetCanMove()) { honey[honey_approch_]->SetCanMove(false); }
 	collide_size = 4.0f;
+	isUnrivaled = false;
 
 	if (fade_frame_  < 1.0f) {
 		fade_frame_  += 0.01f;

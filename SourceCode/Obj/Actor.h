@@ -1,7 +1,7 @@
 #pragma once
-#include<vector>
+#include <vector>
 #include <memory>
-#include<string>
+#include <string>
 #include <DirectXMath.h>
 #include <algorithm>
 
@@ -9,7 +9,6 @@
 #include "FBXObject3d.h"
 #include "Object3d.h"
 #include "Object2d.h"
-
 
 #include"ParticleEmitter.h"
 
@@ -32,16 +31,8 @@ protected: // エイリアス
 protected:
 	//付与されているタグへのポインタ
 	std::string tag = "None";
-public:
-	////各フェイズ
-	//enum Phase {
-	//	APPROCH = 0,
-	//	UNGUARD,
-	//	LEAVE,
-	//	WAIT,
-	//	DEAD,
-	//	ATTACK,
-	//};
+	
+	//当たり判定
 	struct HitBound {
 		//あたっているか
 		bool isHit;
@@ -110,6 +101,11 @@ public:
 	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
 	const bool& GetIsRemove() { return isRemove; }
 		
+	//isRemoveセッタ＆ゲッタ
+	void SetIsUnrivaled(const bool& _isUnrivaled) { isUnrivaled = _isUnrivaled; };
+	const bool& GetIsUnrivaled() { return isUnrivaled; }
+
+
 	//isReferセッタ＆ゲッタ
 	void SetIsRefer(const bool& isRefer) { this->isRefer = isRefer; };
 	const bool& GetIsRefer() { return isRefer; }

@@ -24,11 +24,11 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 	}
 	if (sceneName == "MashGhost") {
 		newActor = new MashGhost();
-		newActor->Initialize(nullptr, "MashGhost");
+		newActor->Initialize(nullptr, "Enemy");
 	}
 	if (sceneName == "Hornet") {
 		newActor = new Hornet();
-		newActor->Initialize(nullptr, "MashGhost");
+		newActor->Initialize(nullptr, "Enemy");
 	}
 	if (sceneName == "ClearCrystal") {
 		newActor = new ClearCrystal();

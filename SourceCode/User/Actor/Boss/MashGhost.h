@@ -20,7 +20,6 @@ protected:
 	void AttackPredict() override;
 	void PressAttack() override;
 
-	void OnCollision(const std::string& Tag);
 
 	std::unique_ptr<EnemyAttack> attack_;
 

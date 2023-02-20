@@ -69,8 +69,8 @@ void Honey::OnDraw(DirectXCommon* dxCommon) {
 	if (phase_ == E_Phase::kWaitDriver) {
 		missions[0][stock]->Draw();
 		missions[1][5]->Draw();
+		slash->Draw();
 	}
-	slash->Draw();
 	particleEmitter->Draw();
 
 }

@@ -263,10 +263,10 @@ void Player::Move() {
 }
 
 void Player::OnCollision(const std::string& Tag) {
-	if (Tag == "MashGhost") {
+
+	if (Tag == "Enemy") {
 		SetHitBound(old_pos);
 	}
-
 	if (Tag == "Honey") {
 		if (!onHoney) {
 			speed = vel;

@@ -270,7 +270,7 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 
 		}
 		//“G‚Æ‚Ì“–‚½‚è”»’è
-		if (Tag == "MashGhost") {
+		if (Tag == "Enemy") {
 			if (isPlayActive) { return; }
 			//if(enemy->Get) {
 			DamageInit();
