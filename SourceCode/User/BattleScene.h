@@ -50,7 +50,7 @@ protected:
 	///	導入部分の更新処理
 	/// </summary>
 	/// <returns></returns>
-	virtual bool IntroUpdate() { return false; };
+	virtual bool IntroUpdate() { return false; }
 
 	/// <summary>
 	/// ポーズUIの更新処理
@@ -61,12 +61,12 @@ protected:
 	/// <summary>
 	/// ゲームオーバーの更新処理
 	/// </summary>
-	virtual void GameOverUpdate() {};
+	virtual bool GameOverUpdate() { return false; }
 
 	/// <summary>
 	/// クリア更新処理
 	/// </summary>
-	virtual bool ClearUpdate() { return false; };
+	virtual bool ClearUpdate() { return false; }
 	/// <summary>
 	/// 
 	/// </summary>

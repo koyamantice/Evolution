@@ -226,11 +226,15 @@ bool FirstStage::ClearUpdate() {
 }
 
 
-void FirstStage::GameOverUpdate() {
+bool FirstStage::GameOverUpdate() {
 	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
 		gameover = true;
-		if (input->TriggerButton(Input::A)) {
-			SceneManager::GetInstance()->ChangeScene("TITLE");
-		}
+		player_shadow->SetCanMove(false);
+		scene_changer->ChangeStart();
 	}
+	if (gameover) {
+		scene_changer->ChangeGameOver();
+	}
+	return false;
+
 }

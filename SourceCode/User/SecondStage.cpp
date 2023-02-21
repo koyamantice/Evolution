@@ -186,5 +186,19 @@ bool SecondStage::ClearUpdate() {
 	}
 	return false;
 }
-void SecondStage::GameOverUpdate() {
+
+bool SecondStage::GameOverUpdate() {
+	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
+		if (!gameover) {
+			gameover = true;
+
+		}
+	}
+	if (gameover) {
+
+		if (input->TriggerButton(Input::A)) {
+			SceneManager::GetInstance()->ChangeScene("TITLE");
+		}
+	}
+	return false;
 }

@@ -238,8 +238,6 @@ bool BattleScene::PauseUpdate() {
 	return false;
 }
 
-
-
 float BattleScene::RandHeight(const float& base) {
 	const float& rnd_vel = 0.95f;
 	float Rand = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
@@ -281,9 +279,9 @@ void BattleScene::BattleFrontDraw(blendType _blendType,Sprite* _introword) {
 			hud->Draw();
 		}
 	}
-	if (gameover) {
-		over_comment_->Draw();
-	}
+	//if (gameover) {
+	//	over_comment_->Draw();
+	//}
 	if (battle_intro) {
 		filter_first->Draw();
 	}

@@ -50,7 +50,7 @@ private:
 	/// <summary>
 	/// ゲームオーバーの更新処理
 	/// </summary>
-	void GameOverUpdate()override;
+	bool GameOverUpdate()override;
 
 
 

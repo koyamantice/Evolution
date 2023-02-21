@@ -55,7 +55,7 @@ private:
 	/// <summary>
 	/// ゲームオーバーの更新処理
 	/// </summary>
-	void GameOverUpdate()override;
+	bool GameOverUpdate()override;
 
 	float intro_count = 0;
 	const float intro_count_max = 800;
