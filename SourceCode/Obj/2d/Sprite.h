@@ -61,6 +61,14 @@ public: // 静的メンバ関数
 	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
 
 	/// <summary>
+	/// テクスチャ読み込み
+	/// </summary>
+	/// <param name="texnumber">テクスチャ番号</param>
+	/// <param name="filename">画像ファイル名</param>
+	/// <returns>成否</returns>
+	static bool LoadTextureDDS(UINT texnumber, const wchar_t* filename);
+	
+	/// <summary>
 	/// 描画前処理
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>

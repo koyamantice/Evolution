@@ -42,9 +42,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceCode\User\TitleScene.cpp">
-      <Filter>User\タイトル</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Obj\2d\Sprite.cpp">
       <Filter>Obj\2d</Filter>
     </ClCompile>
@@ -172,9 +169,6 @@
     <ClCompile Include="SourceCode\Obj\ActorComponent.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\FirstStage.cpp">
-      <Filter>User\プレイシーン</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\PauseUI.cpp">
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
@@ -199,11 +193,8 @@
     <ClCompile Include="SourceCode\FrameWork\SceneChanger.cpp">
       <Filter>FrameWork</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\User\SecondStage.cpp">
-      <Filter>User\プレイシーン</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\TitleText.cpp">
-      <Filter>User\タイトル</Filter>
+      <Filter>User\シーン_タイトル</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\LevelLoader.cpp">
       <Filter>System</Filter>
@@ -211,25 +202,10 @@
     <ClCompile Include="SourceCode\Obj\2d\Object2d.cpp">
       <Filter>Obj\2d</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\System\BaseScene.cpp">
-      <Filter>User\プレイシーン</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\User\BattleScene.cpp">
-      <Filter>User\プレイシーン</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\User\MSecondStage.cpp">
-      <Filter>User\導入</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Obj\3d\NullActor.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\Hud.cpp">
-      <Filter>User\ステージに必要</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\User\ClearCrystal.cpp">
-      <Filter>User\ステージに必要</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\User\Crystal.cpp">
       <Filter>User\ステージに必要</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\FrameWork\ParticleEmitter.cpp">
@@ -280,12 +256,36 @@
     <ClCompile Include="SourceCode\Common\TimedInvoke.cpp">
       <Filter>User\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\Actor\Gimmick\ClearCrystal.cpp">
+      <Filter>User\ステージに必要</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\BattleScene.cpp">
+      <Filter>User\シーン_ベース</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\BaseScene.cpp">
+      <Filter>User\シーン_ベース</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\FirstStage.cpp">
+      <Filter>User\シーン_ステージ</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\SecondStage.cpp">
+      <Filter>User\シーン_ステージ</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\MSecondStage.cpp">
+      <Filter>User\シーン_導入</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\TitleScene.cpp">
+      <Filter>User\シーン_タイトル</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\ThirdStage.cpp">
+      <Filter>User\シーン_ステージ</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\User\Stage\MThirdStage.cpp">
+      <Filter>User\シーン_導入</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="SourceCode\User\TitleScene.h">
-      <Filter>User\タイトル</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Obj\2d\Sprite.h">
       <Filter>Obj\2d</Filter>
     </ClInclude>
@@ -436,9 +436,6 @@
     <ClInclude Include="SourceCode\Obj\ActorComponent.h">
       <Filter>Obj\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\FirstStage.h">
-      <Filter>User\プレイシーン</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\PauseUI.h">
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
@@ -463,11 +460,8 @@
     <ClInclude Include="SourceCode\FrameWork\SceneChanger.h">
       <Filter>FrameWork</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\User\SecondStage.h">
-      <Filter>User\プレイシーン</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\User\TitleText.h">
-      <Filter>User\タイトル</Filter>
+      <Filter>User\シーン_タイトル</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\LevelLoader.h">
       <Filter>System</Filter>
@@ -475,25 +469,10 @@
     <ClInclude Include="SourceCode\Obj\2d\Object2d.h">
       <Filter>Obj\2d</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\System\BaseScene.h">
-      <Filter>User\プレイシーン</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\User\BattleScene.h">
-      <Filter>User\プレイシーン</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\User\MSecondStage.h">
-      <Filter>User\導入</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Obj\3d\NullActor.h">
       <Filter>Obj\Actor</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\Hud.h">
-      <Filter>User\ステージに必要</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\User\ClearCrystal.h">
-      <Filter>User\ステージに必要</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\User\Crystal.h">
       <Filter>User\ステージに必要</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\FrameWork\ParticleEmitter.h">
@@ -543,6 +522,33 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Common\TimedInvoke.h">
       <Filter>User\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Actor\Gimmick\ClearCrystal.h">
+      <Filter>User\ステージに必要</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\BattleScene.h">
+      <Filter>User\シーン_ベース</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\BaseScene.h">
+      <Filter>User\シーン_ベース</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\FirstStage.h">
+      <Filter>User\シーン_ステージ</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\SecondStage.h">
+      <Filter>User\シーン_ステージ</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\MSecondStage.h">
+      <Filter>User\シーン_導入</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\TitleScene.h">
+      <Filter>User\シーン_タイトル</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\ThirdStage.h">
+      <Filter>User\シーン_ステージ</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Stage\MThirdStage.h">
+      <Filter>User\シーン_導入</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -596,9 +602,6 @@
     <Filter Include="Obj\3d">
       <UniqueIdentifier>{c9627490-700b-403a-9499-68f903a24f75}</UniqueIdentifier>
     </Filter>
-    <Filter Include="User\タイトル">
-      <UniqueIdentifier>{76303557-d2b1-4671-a130-77e66e2eace3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="シェーダーファイル">
       <UniqueIdentifier>{78a9d76b-31b8-4f30-82fc-5ff98a372aab}</UniqueIdentifier>
     </Filter>
@@ -617,12 +620,6 @@
     <Filter Include="Obj\Actor">
       <UniqueIdentifier>{f7055635-e251-4d2c-865e-88a6b7793e5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="User\プレイシーン">
-      <UniqueIdentifier>{15917c61-7c40-4156-8fc8-aaeb3b6207da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="User\デバック">
-      <UniqueIdentifier>{d6a6130d-88fb-44e9-b239-382c7f4719a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="User\Player">
       <UniqueIdentifier>{d7e0ad70-567d-4790-8c47-3debf3fd1da4}</UniqueIdentifier>
     </Filter>
@@ -632,11 +629,20 @@
     <Filter Include="User\Bullet">
       <UniqueIdentifier>{e9bf7935-8691-4af8-8b2e-f2d10666ff8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="User\導入">
-      <UniqueIdentifier>{6212de8a-f870-441b-81a2-3872f2e15771}</UniqueIdentifier>
-    </Filter>
     <Filter Include="User\ステージに必要">
       <UniqueIdentifier>{0012f487-6006-4812-b40d-62da62a658da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\シーン_タイトル">
+      <UniqueIdentifier>{76303557-d2b1-4671-a130-77e66e2eace3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\シーン_ステージ">
+      <UniqueIdentifier>{15917c61-7c40-4156-8fc8-aaeb3b6207da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\シーン_ベース">
+      <UniqueIdentifier>{d6a6130d-88fb-44e9-b239-382c7f4719a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User\シーン_導入">
+      <UniqueIdentifier>{6212de8a-f870-441b-81a2-3872f2e15771}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

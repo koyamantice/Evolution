@@ -13,7 +13,7 @@ void ImageManager::Load2D() {
 	// テクスチャ読み込み(リソース2dのフォルダーからしか受け取らないようにする)
 	Sprite::LoadTexture(Test, L"Resources/2d/Debug/Test.png");
 	Sprite::LoadTexture(Black, L"Resources/2d/Effect/Blackfilter.png");
-	Sprite::LoadTexture(Title,L"Resources/2d/Title/TitleBack.png");
+	Sprite::LoadTextureDDS(Title,L"Resources/2d/Title/TitleBack.dds");
 	Sprite::LoadTexture(DebugMove, L"Resources/2d/Title/Debug.png");
 	Sprite::LoadTexture(noDebugMove, L"Resources/2d/Title/Debug2.png");
 	Sprite::LoadTexture(TitleMove, L"Resources/2d/Title/Title.png");
@@ -57,8 +57,8 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(ControlY, L"Resources/2d/PlayUI/controlY.png");
 
 	Sprite::LoadTexture(HpCover , L"Resources/2d/PlayUI/HpCover2.png");
-	Sprite::LoadTexture(HpGreen, L"Resources/2d/PlayUI/Hp_Green.png");
-	Sprite::LoadTexture(HpRed, L"Resources/2d/PlayUI/Hp_Red.png");
+	Sprite::LoadTextureDDS(HpGreen, L"Resources/2d/PlayUI/Hp_Green.dds");
+	Sprite::LoadTextureDDS(HpRed, L"Resources/2d/PlayUI/Hp_Red.dds");
 
 	Sprite::LoadTexture(Damage, L"Resources/2d/PlayUI/Damage.png");
 
@@ -66,6 +66,8 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(kMsecondNum, L"Resources/2d/IntroWord/MSecondMissionNum.png");
 
 	Sprite::LoadTexture(kMsecondNum, L"Resources/2d/IntroWord/MSecondMissionNum.png");
+
+
 }
 
 void ImageManager::LoadTex2D() {

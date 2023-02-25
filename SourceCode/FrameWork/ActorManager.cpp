@@ -213,7 +213,7 @@ Bullet* ActorManager::SearchBulletBack() {
 void ActorManager::DamageBullet(XMFLOAT3 pos, float radius) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() == Bullet::command::Wait) { continue; }
+		//if (bullet->GetCommand() == Bullet::command::Wait) { continue; }
 		XMFLOAT3 itrPos = bullet->GetPosition();
 		if (itrPos.y > 0.1f) { continue; }
 		if (Collision::CircleCollision(pos.x, pos.z, radius, itrPos.x, itrPos.z,1.0f)) {

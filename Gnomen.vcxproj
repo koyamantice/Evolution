@@ -46,12 +46,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\User\Actor;$(ProjectDir)SourceCode\User\Actor\Boss;$(ProjectDir)SourceCode\User\Actor\Gimmick;$(ProjectDir)SourceCode\User\Actor\Player;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(ProjectDir)External\DirectXTex\include;$(ProjectDir)External\nlohmann;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\User\Stage;$(ProjectDir)SourceCode\User\Actor;$(ProjectDir)SourceCode\User\Actor\Boss;$(ProjectDir)SourceCode\User\Actor\Gimmick;$(ProjectDir)SourceCode\User\Actor\Player;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(ProjectDir)External\DirectXTex\include;$(ProjectDir)External\nlohmann;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)External\DirectXTex\lib\$(Configuration);$(ProjectDir)External\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\User\Actor;$(ProjectDir)SourceCode\User\Actor\Boss;$(ProjectDir)SourceCode\User\Actor\Gimmick;$(ProjectDir)SourceCode\User\Actor\Player;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(ProjectDir)External\DirectXTex\include;$(ProjectDir)External\nlohmann;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)SourceCode\;$(ProjectDir)SourceCode\Common;$(ProjectDir)SourceCode\User;$(ProjectDir)SourceCode\User\Stage;$(ProjectDir)SourceCode\User\Actor;$(ProjectDir)SourceCode\User\Actor\Boss;$(ProjectDir)SourceCode\User\Actor\Gimmick;$(ProjectDir)SourceCode\User\Actor\Player;$(ProjectDir)SourceCode\System;$(ProjectDir)SourceCode\Obj;$(ProjectDir)SourceCode\Obj\2d;$(ProjectDir)SourceCode\Obj\3d;$(ProjectDir)SourceCode\Obj\camera;$(ProjectDir)SourceCode\Obj\light;$(ProjectDir)SourceCode\FrameWork;$(ProjectDir)SourceCode\FrameWork\Collision;$(ProjectDir)SourceCode\imgui;$(ProjectDir)External\DirectXTex\include;$(ProjectDir)External\nlohmann;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)External\DirectXTex\lib\$(Configuration);$(ProjectDir)External\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,6 +159,7 @@
     <ClCompile Include="SourceCode\User\Actor\Boss\EnemyAttack.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Boss\EnemyUI.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Boss\Hornet.cpp" />
+    <ClCompile Include="SourceCode\User\Actor\Gimmick\ClearCrystal.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Gimmick\Honey.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\Bullet.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\BulletGreen.cpp" />
@@ -166,16 +167,16 @@
     <ClCompile Include="SourceCode\User\Actor\Player\Player.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\PlayerUI.cpp" />
     <ClCompile Include="SourceCode\User\Aim.cpp" />
-    <ClCompile Include="SourceCode\User\BattleScene.cpp" />
-    <ClCompile Include="SourceCode\User\ClearCrystal.cpp" />
-    <ClCompile Include="SourceCode\User\Crystal.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
-    <ClCompile Include="SourceCode\User\MSecondStage.cpp" />
-    <ClCompile Include="SourceCode\User\SecondStage.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
     <ClCompile Include="SourceCode\User\PauseUI.cpp" />
-    <ClCompile Include="SourceCode\User\FirstStage.cpp" />
-    <ClCompile Include="SourceCode\User\TitleScene.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\BattleScene.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\FirstStage.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\MSecondStage.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\MThirdStage.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\SecondStage.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\ThirdStage.cpp" />
+    <ClCompile Include="SourceCode\User\Stage\TitleScene.cpp" />
     <ClCompile Include="SourceCode\User\TitleText.cpp" />
     <ClCompile Include="SourceCode\User\Touch.cpp" />
   </ItemGroup>
@@ -249,6 +250,7 @@
     <ClInclude Include="SourceCode\User\Actor\Boss\EnemyAttack.h" />
     <ClInclude Include="SourceCode\User\Actor\Boss\EnemyUI.h" />
     <ClInclude Include="SourceCode\User\Actor\Boss\Hornet.h" />
+    <ClInclude Include="SourceCode\User\Actor\Gimmick\ClearCrystal.h" />
     <ClInclude Include="SourceCode\User\Actor\Gimmick\Honey.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\Bullet.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\BulletGreen.h" />
@@ -256,16 +258,16 @@
     <ClInclude Include="SourceCode\User\Actor\Player\Player.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\PlayerUI.h" />
     <ClInclude Include="SourceCode\User\Aim.h" />
-    <ClInclude Include="SourceCode\User\BattleScene.h" />
-    <ClInclude Include="SourceCode\User\ClearCrystal.h" />
-    <ClInclude Include="SourceCode\User\Crystal.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
-    <ClInclude Include="SourceCode\User\MSecondStage.h" />
-    <ClInclude Include="SourceCode\User\SecondStage.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />
     <ClInclude Include="SourceCode\User\PauseUI.h" />
-    <ClInclude Include="SourceCode\User\FirstStage.h" />
-    <ClInclude Include="SourceCode\User\TitleScene.h" />
+    <ClInclude Include="SourceCode\User\Stage\BattleScene.h" />
+    <ClInclude Include="SourceCode\User\Stage\FirstStage.h" />
+    <ClInclude Include="SourceCode\User\Stage\MSecondStage.h" />
+    <ClInclude Include="SourceCode\User\Stage\MThirdStage.h" />
+    <ClInclude Include="SourceCode\User\Stage\SecondStage.h" />
+    <ClInclude Include="SourceCode\User\Stage\ThirdStage.h" />
+    <ClInclude Include="SourceCode\User\Stage\TitleScene.h" />
     <ClInclude Include="SourceCode\User\TitleText.h" />
     <ClInclude Include="SourceCode\User\Touch.h" />
   </ItemGroup>

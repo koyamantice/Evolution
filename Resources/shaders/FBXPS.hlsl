@@ -15,16 +15,18 @@ float4 main(VSOutput input) : SV_TARGET
 
 	float3 P = input.svpos.xyz;
 	float3 N = normalize(input.normal);
-	float Ka = 0.8;
-	float Kd = 0.7;
+	float Ka = 0.5;
 
 	//　Ambient Color
 	float3 ambient = float3(1,1,1) * Ka;
 
 	//　Diffuse Color
-	float3 L = normalize(float3(1, 1, 1) - P);	//　ローカル座標系のでのライトベクトル
+	float3 L = normalize(float3(0, 0, 1) - P);	//　ローカル座標系のでのライトベクトル
 	float diffuseLight = max(dot(L, N), 0) * 0.5 + 0.5;
-	float3 diffuse = Kd * float3(1,1,1) * (diffuseLight * diffuseLight);
+	float3 diffuse = float3(1.0,1.0,1.0) * (diffuseLight * diffuseLight);
+
+
+
 
 	return float4(ambient + diffuse, 1.0f) * texcolor;
 

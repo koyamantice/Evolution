@@ -3,6 +3,9 @@
 #include "FirstStage.h"
 #include "SecondStage.h"
 #include "MSecondStage.h"
+#include "ThirdStage.h"
+#include "MThirdStage.h"
+
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	//éüÇÃÉVÅ[ÉìÇÃçÏê¨
@@ -19,5 +22,12 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 	if (sceneName=="SECONDSTAGE") {
 		newScene = new SecondStage();
 	}
+	if (sceneName == "MTHIRD") {
+		newScene = new MThirdStage();
+	}
+	if (sceneName == "THIRDSTAGE") {
+		newScene = new ThirdStage();
+	}
+
 	return newScene;
 }

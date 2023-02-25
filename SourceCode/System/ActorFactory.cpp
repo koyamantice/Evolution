@@ -6,7 +6,6 @@
 #include"Bullet.h"
 #include"BulletRed.h"
 #include"BulletGreen.h"
-#include "Crystal.h"
 #include "ClearCrystal.h"
 #include"PlayerUI.h"
 #include "Honey.h"
@@ -33,11 +32,6 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 	if (sceneName == "ClearCrystal") {
 		newActor = new ClearCrystal();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kGoalcrystal),"ClearCrystal");
-
-	}
-	if (sceneName == "Crystal") {
-		newActor = new Crystal();
-		newActor->Initialize(nullptr, "Crystal");
 
 	}
 	if (sceneName == "Honey") {

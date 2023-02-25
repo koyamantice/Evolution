@@ -14,22 +14,22 @@ void EnemyUI::OnInitialize() {
 	HpCover.reset(_HpCover);
 
 	Sprite* _HpGauge;
-	_HpGauge = Sprite::Create(ImageManager::HpRed, { 730 + 13,20 + 4 });
+	_HpGauge = Sprite::Create(ImageManager::HpRed, { 730,20 });
 	HpGauge.reset(_HpGauge);
-
+	HpGauge->SetSize({});
 	Sprite* _UnderGauge;
-	_UnderGauge = Sprite::Create(ImageManager::HpGreen, { 730 + 13,20 + 4 });
+	_UnderGauge = Sprite::Create(ImageManager::HpGreen, { 730,20 });
 	UnderGauge.reset(_UnderGauge);
 }
 
 void EnemyUI::OnUpdate() {
 	Actor* AttachActor = ActorManager::GetInstance()->SearchActor("Enemy");
 	
-	HpGauge->SetSize({ 495 * (AttachActor->GetHp() / AttachActor->GetMaxHp()) ,22 });
+	HpGauge->SetSize({ HpCover->GetSize().x * (AttachActor->GetHp() / AttachActor->GetMaxHp()) ,HpCover->GetSize().y});
 	HpGauge->SetAnchorPoint({ 0,0 });
 
 	if (AttachActor->GetHp() < 0) {
-		HpGauge->SetSize({ 0 ,32 });
+		HpGauge->SetSize({ 0,HpCover->GetSize().y });
 	}
 
 	XMFLOAT2 after_pos = HpGauge->GetSize();
@@ -44,9 +44,9 @@ void EnemyUI::OnFinalize() {
 
 void EnemyUI::OnDraw() {
 	Sprite::PreDraw();
-	HpCover->Draw();
 	UnderGauge->Draw();
 	HpGauge->Draw();
+	HpCover->Draw();
 }
 
 void EnemyUI::OnAttached() {
