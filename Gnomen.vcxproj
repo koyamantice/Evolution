@@ -155,6 +155,7 @@
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
     <ClCompile Include="SourceCode\TisGame.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Boss\Boss.cpp" />
+    <ClCompile Include="SourceCode\User\Actor\Boss\CowKing.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Boss\MashGhost.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Boss\EnemyAttack.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Boss\EnemyUI.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="SourceCode\System\SceneFactory.h" />
     <ClInclude Include="SourceCode\TisGame.h" />
     <ClInclude Include="SourceCode\User\Actor\Boss\Boss.h" />
+    <ClInclude Include="SourceCode\User\Actor\Boss\CowKing.h" />
     <ClInclude Include="SourceCode\User\Actor\Boss\MashGhost.h" />
     <ClInclude Include="SourceCode\User\Actor\Boss\EnemyAttack.h" />
     <ClInclude Include="SourceCode\User\Actor\Boss\EnemyUI.h" />
