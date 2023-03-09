@@ -39,9 +39,9 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	OnInit();
 	//ID‚²‚Æ‚ÌŒë·‚Ì”ÍˆÍ
 	if ((int)ID / 7 == 0) {
-		margin = -3.0f;
+		margin = -2.5f;
 	} else if ((int)ID / 7 == 1) {
-		margin = 3.0f;
+		margin = 2.5f;
 	} else {
 		margin = 0.0f;
 	}

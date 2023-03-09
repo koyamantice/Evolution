@@ -69,7 +69,10 @@ void Player::IntroMove() {
 
 void Player::ResultOnUpdate(const float& Timer) {
 	fbxObj->Update();
+	LockOn->Upda(angle);
+
 	compornent->SetIsActive(false);
+
 	LockOn->SetIsActive(false);
 }
 

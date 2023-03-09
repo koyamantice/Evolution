@@ -19,7 +19,7 @@ protected:
 	void StartAction() override;
 	void AttackPredict() override;
 	void PressAttack() override;
-
+	void StopMotion() override;
 
 	std::unique_ptr<EnemyAttack> attack_;
 

@@ -21,6 +21,7 @@ class Boss :public Actor {
 public:
 	virtual ~Boss() = default;
 protected:
+	void ResultOnUpdate(const float& Timer)override;
 	/// <summary>
 	/// 共通初期化
 	/// </summary>
@@ -32,7 +33,10 @@ protected:
 	/// ライフ処理
 	/// </summary>
 	void LifeCommon();
-
+	/// <summary>
+	/// 影の更新
+	/// </summary>
+	void ShadowUpdate();
 	/// <summary>
 	/// レベルデータ読み込み
 	/// </summary>
@@ -40,8 +44,11 @@ protected:
 	void LoadData(const std::string& _bossname);
 	//レベルデータ
 	float vel_ = 0;
-	float cooltime_ = 0;
 	XMFLOAT3 baseScale_ = {};
+	float coolTimeMax_ = 0;
+	float predictTimeMax_ = 0;
+	float attackTimeMax_ = 0;
+
 
 	//関数ポインタ
 	static void(Boss::*phaseFuncTable[])();
@@ -52,6 +59,7 @@ protected:
 	virtual void ChasePlayer() {};
 	virtual void FeedHoney() {};
 	void DeadMotion();
+	virtual void StopMotion() {};
 
 	enum class E_Phase : int {
 		kStartAction = 0,
@@ -60,6 +68,7 @@ protected:
 		kChasePlayer,
 		kFeedHoney,
 		kDeadMotion,
+		kStopMotion,
 	};
 	//どの行動を取るか
 	E_Phase phase_ = E_Phase::kStartAction;
@@ -69,8 +78,7 @@ protected:
 	float scale_frame_ = 0.0f;
 
 	float waittimer_ = 0;
-	const float kPredictTime = 240;
-	const float kAttackTime = 150;
+
 
 	//レベルデータ
 	BossLevelLoader::LevelData levelData_ = {};

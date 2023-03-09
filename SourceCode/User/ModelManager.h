@@ -34,6 +34,7 @@ public:
 		kRedkobito,
 		kGreenkobito,
 		kBee,
+		kCow,
 	};
 
 public:

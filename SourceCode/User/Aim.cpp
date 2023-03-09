@@ -100,6 +100,7 @@ void Aim::FirstSet() {
 }
 
 void Aim::Move(float angle) {
+	if (!player->GetCanMove()) { return; }
 	//“®‚«Ž‚½‚¹‚é‚½‚ßƒNƒ‹ƒNƒ‹‚³‚¹‚Ä‚Ü‚·B
 	XMFLOAT3 Lrot = LockOn->GetRotation();
 	Lrot.y += 2.0f;

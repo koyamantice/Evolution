@@ -9,7 +9,7 @@
 #include "ClearCrystal.h"
 #include"PlayerUI.h"
 #include "Honey.h"
-
+#include"CowKing.h"
 
 
 
@@ -38,6 +38,10 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 		newActor = new Honey();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kNest), "Honey");
 
+	}
+	if (sceneName == "CowKing") {
+		newActor = new CowKing();
+		newActor->Initialize(nullptr, "Enemy");
 	}
 	return newActor;
 }

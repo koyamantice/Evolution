@@ -109,6 +109,7 @@ void BulletGreen::ResultOnUpdate(const float& Timer) {
 	fbxObj->SetPosition(pos);
 	fbxObj->SetRotation(rot);
 	fbxObj->Update();
+	Status->Update();
 	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
 	Shadow->Update();
 }

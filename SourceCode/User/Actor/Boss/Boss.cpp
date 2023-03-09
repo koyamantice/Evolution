@@ -8,7 +8,8 @@ void (Boss::*Boss::phaseFuncTable[])() = {
 	&Boss::PressAttack,
 	&Boss::ChasePlayer,
 	&Boss::FeedHoney,
-	&Boss::DeadMotion
+	&Boss::DeadMotion,
+	&Boss::StopMotion
 };
 
 
@@ -25,7 +26,18 @@ void Boss::LoadData(const std::string& _bossname) {
 	float scale = levelData_.scale;
 	baseScale_ = { scale,scale,scale };
 	//ƒN[ƒ‹ƒ^ƒCƒ€
-	cooltime_ = levelData_.coolTime;
+	coolTimeMax_ = levelData_.coolTimeMax;
+	//UŒ‚€”õŽžŠÔ
+	predictTimeMax_ = levelData_.predictTimeMax;
+	//UŒ‚ŽžŠÔ
+	attackTimeMax_ = levelData_.attackTimeMax;
+
+
+}
+
+void Boss::ResultOnUpdate(const float& Timer) {
+	fbxObject_->Update();
+	shadow_->Update();
 }
 
 void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
@@ -52,9 +64,13 @@ void Boss::LifeCommon() {
 		}
 		if (!pause) {
 			pause = true;
+			phase_ = E_Phase::kStopMotion;
 			return;
 		}
 	}
+}
+
+void Boss::ShadowUpdate() {
 }
 
 
@@ -71,6 +87,8 @@ void Boss::DeadMotion() {
 		isActive = false;
 	}
 	fbxObject_->SetScale({ scale,scale,scale });
+	obj->SetScale({ scale,scale,scale });
 	fbxObject_->SetRotation(rot);
 
 }
+

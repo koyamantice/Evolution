@@ -420,6 +420,7 @@ void Hornet::FeedHoney() {
 			collide_size = 2.0f;
 		}
 		fade_frame_  = 0;
+		hp += 5;
 		phase_ = E_Phase::kStartAction;
 	}
 }

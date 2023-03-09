@@ -18,17 +18,21 @@ public:
 		//初期スケール
 		float scale;
 		//クールタイム
-		float coolTime;
-	
+		float coolTimeMax;
+		//攻撃準備時間
+		float predictTimeMax;
+		//攻撃時間
+		float attackTimeMax;
+
 	};
 public:
 	BossLevelLoader() {};
 	~BossLevelLoader();
 	void Unload(LevelData* _LevelData);
 
-	// レベルデータの読み込みと再生
+	// レベルデータの読み込み
 	void LoadData(const std::string& _filename);
-	//
+	//レベルデータの取得
 	LevelData takeData(const std::string& _bossname);
 
 private:

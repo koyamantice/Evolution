@@ -7,7 +7,7 @@ void ThirdStage::Initialize(DirectXCommon* dxCommon) {
 
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
-	ActorManager::GetInstance()->AttachActor("Hornet");
+	ActorManager::GetInstance()->AttachActor("CowKing");
 	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");

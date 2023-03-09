@@ -30,6 +30,7 @@ void ModelManager::Initialize() {
 	LoadFBXModel(kRedkobito, "RedKobito");
 	LoadFBXModel(kGreenkobito, "kobi");
 	LoadFBXModel(kBee, "Bee");
+	LoadFBXModel(kCow, "Player");
 
 }
 

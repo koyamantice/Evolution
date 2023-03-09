@@ -46,10 +46,10 @@ void EnemyAttack::Upda() {
 		acc.y = -(float)vel.y / 10.0f;
 		partMan->Add(30, pos, vel, acc, 1.5, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
 		scale = Ease(In, Linear, effectRate, 2.5f, 5.0f);
-		ActorManager::GetInstance()->DamageBullet(pos, 10);
+		ActorManager::GetInstance()->DamageBullet(pos, 15);
 		Explo->SetScale({ scale,scale,scale });
 		if (effectRate < 1.0f) {
-			effectRate += 0.04f;
+			effectRate += 0.066f;
 		} else {
 			effectRate = 1.0f;
 			Explo->SetScale({ 0,0,0 });

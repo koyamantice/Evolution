@@ -3,9 +3,9 @@
 
 class Bullet;
 
-class MashGhost :public Boss {
+class CowKing :public Boss {
 public:
-	MashGhost(){};
+	CowKing(){};
 
 protected:
 	void OnInit()override;

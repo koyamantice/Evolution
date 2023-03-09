@@ -17,15 +17,6 @@ void MashGhost::OnInit() {
 
 	attack_= std::make_unique<EnemyAttack>(this);
 	attack_->Init();
-
-
-	////メンバ関数と呼び出し元をbindをstd::functionに代入
-	//std::function<void()> callback = std::bind(&MashGhost::CommandChange, this);
-	////時限発動イベントを生成
-	//std::unique_ptr<TimedInvoke> timedCall = std::make_unique<TimedInvoke>(callback, (uint16_t)cooltime_);
-	////時限発動イベントリストに追加
-	//timedInvokes_.push_back(std::move(timedCall));
-
 }
 
 void MashGhost::OnUpda() {
@@ -35,19 +26,8 @@ void MashGhost::OnUpda() {
 	//関数ポインタで状態管理
 	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
 
-	////終了したタイマーを削除
-	//timedInvokes_.remove_if([](std::unique_ptr<TimedInvoke>& _timedInvoke) {
-	//	return _timedInvoke->GetIsFinish();
-	//});
-	////範囲forでリストの全要素について回す
-	//for (std::unique_ptr<TimedInvoke>& timedInvoke :timedInvokes_) {
-	//	timedInvoke->Update();
-	//}
-
-
 	shadow_->Update();
 	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
-
 	obj->SetPosition(fbxObject_->GetPosition());
 	fbxObject_->Update();
 	attack_->Upda();
@@ -75,8 +55,8 @@ void MashGhost::OnFinal() {
 void MashGhost::StartAction() {
 	if (fbxObject_->GetIsFinish()) { animation_count_++; }
 	if (animation_count_ >= 2) {
-		fbxObject_->StopAnimation();
 		animation_count_ = 0;
+		fbxObject_->StopAnimation();
 		phase_ = E_Phase::kAttackPredict;
 	}
 
@@ -84,8 +64,8 @@ void MashGhost::StartAction() {
 
 void MashGhost::AttackPredict() {
 	waittimer_++;
-	attack_->SetPredict(true, waittimer_ / kPredictTime);
-	if (waittimer_ >= kPredictTime) {
+	attack_->SetPredict(true, waittimer_ / predictTimeMax_);
+	if (waittimer_ >= predictTimeMax_) {
 		attack_->SetPredict(false, 0);
 		waittimer_ = 0;
 		scale_frame_ = 0.0f;
@@ -95,7 +75,7 @@ void MashGhost::AttackPredict() {
 	//何回縮むか
 	const float kScaleCount = 4.0f;
 	if (scale_frame_ < 1.0f) {
-		scale_frame_ += 1.0f / (kPredictTime / kScaleCount);
+		scale_frame_ += 1.0f / (predictTimeMax_ / kScaleCount);
 	} else {
 		scale_frame_ = 0.0f;
 	}
@@ -106,7 +86,7 @@ void MashGhost::AttackPredict() {
 void MashGhost::PressAttack() {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	waittimer_++;
-	if (waittimer_ >= kAttackTime) {
+	if (waittimer_ >= attackTimeMax_) {
 		pos.y = 0;
 		fbxObject_->SetPosition(pos);
 		fbxObject_->ResetAnimation();
@@ -125,6 +105,16 @@ void MashGhost::PressAttack() {
 	}
 	//fbxObject_->SetRotation({ 0,-180,0 });
 	fbxObject_->SetPosition(pos);
+}
+
+void MashGhost::StopMotion() {
+
+	shadow_->Update();
+	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
+	fbxObject_->StopAnimation();
+	fbxObject_->Update();
+	attack_->SetPredict(false,0);
+	attack_->Upda();
 }
 
 

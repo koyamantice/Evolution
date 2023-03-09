@@ -36,6 +36,15 @@ private:
 	/// <param name="Timer"></param>
 	void ResultCamera(const float& Timer);
 
+
+	/// <summary>
+	/// Œ‚”jŒãƒJƒƒ‰
+	/// </summary>
+	/// <param name="Timer"></param>
+	void SmashCamera(const float& Timer);
+
+
+
 	/// <summary>
 	///	“±“ü•”•ª‚ÌXVˆ—
 	/// </summary>

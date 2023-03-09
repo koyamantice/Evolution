@@ -19,7 +19,10 @@ void BossLevelLoader::Unload(LevelData* _LevelData) {
 	_LevelData->hp = 0;
 	_LevelData->vel = 0;
 	_LevelData->scale = 0;
-	_LevelData->coolTime = 0;
+	_LevelData->coolTimeMax = 0;
+	_LevelData->predictTimeMax = 0;
+	_LevelData->attackTimeMax = 0;
+
 }
 
 void BossLevelLoader::LoadData(const std::string& _filename) {
@@ -59,7 +62,14 @@ void BossLevelLoader::LoadData(const std::string& _filename) {
 		_leveldata.scale = (float)std::atof(word.c_str());
 		getline(line_stream, word, ',');
 		//クールタイム
-		_leveldata.coolTime = (float)std::atof(word.c_str());
+		_leveldata.coolTimeMax = (float)std::atof(word.c_str());
+		getline(line_stream, word, ',');
+		//攻撃準備時間
+		_leveldata.predictTimeMax = (float)std::atof(word.c_str());
+		getline(line_stream, word, ',');
+		//攻撃時間
+		_leveldata.attackTimeMax = (float)std::atof(word.c_str());
+		getline(line_stream, word, ',');
 
 		//レベルデータを連想配列に格納
 		levelDatas_.insert(std::make_pair(_leveldata.name, _leveldata));

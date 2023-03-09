@@ -160,7 +160,7 @@ bool SecondStage::ClearUpdate() {
 			scene_changer->ChangeStart();
 		}
 		ResultCamera(0);
-		scene_changer->ChangeScene("MSECOND");
+		scene_changer->ChangeScene("THIRDSTAGE");
 		ActorManager::GetInstance()->ResultUpdate(0);
 		FieldUpdate();
 		return true;

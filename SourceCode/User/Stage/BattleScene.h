@@ -121,7 +121,7 @@ protected:
 
 	//killƒNƒŠƒbƒv
 	int finish_time = 0;
-	const int finish_time_Max = 150;
+	const int finish_time_Max = 220;
 	
 	bool battle_intro = true;
 	bool battle_result = false;

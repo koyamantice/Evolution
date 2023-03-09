@@ -63,6 +63,10 @@ public:
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
 	//昔の座標の取得
 	const DirectX::XMFLOAT3& GetOldPosition() { return old_pos; }
+	//昔のスケールの取得
+	const DirectX::XMFLOAT3& GetScale() { return obj->GetScale(); }
+
+
 	//プレイヤーの残像
 	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return XMFLOAT3{ PlayerX[num + 1],RotY[num + 1],PlayerZ[num + 1] }; }
 	//座標の取得

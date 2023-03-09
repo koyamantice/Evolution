@@ -1,16 +1,16 @@
-#include"MashGhost.h"
+#include"CowKing.h"
 #include"ModelManager.h"
 #include"ImageManager.h"
 #include <SourceCode/FrameWork/ActorManager.h>
 
 
-void MashGhost::OnInit() {
-	LoadData("Mash");
+void CowKing::OnInit() {
+	LoadData("Cow");
 
 	collide_size = 3.0f;
 	
-	InitCommon(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash), { 0.025f,0.025f, 0.025f });
-	fbxObject_->PlayAnimation();
+	InitCommon(ModelManager::GetIns()->GetFBXModel(ModelManager::kCow), { 0.025f,0.025f, 0.025f });
+	//fbxObject_->PlayAnimation();
 
 	compornent = new EnemyUI();
 	compornent->Initialize();
@@ -21,7 +21,7 @@ void MashGhost::OnInit() {
 
 }
 
-void MashGhost::OnUpda() {
+void CowKing::OnUpda() {
 	//HPä«óù
 	LifeCommon();
 
@@ -36,26 +36,26 @@ void MashGhost::OnUpda() {
 	attack_->Upda();
 }
 
-void MashGhost::OnFirstDraw(DirectXCommon* dxCommon) {
+void CowKing::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	shadow_->Draw();
 }
 
-void MashGhost::OnDraw(DirectXCommon* dxCommon) {
+void CowKing::OnDraw(DirectXCommon* dxCommon) {
 	attack_->Draw();
 	Object3d::PreDraw();
 	fbxObject_->Draw(dxCommon->GetCmdList());
 }
 
-void MashGhost::OnLastDraw(DirectXCommon* dxCommon) {
+void CowKing::OnLastDraw(DirectXCommon* dxCommon) {
 }
 
-void MashGhost::OnFinal() {
+void CowKing::OnFinal() {
 	levelData_ = {};
 }
 
 
-void MashGhost::StartAction() {
+void CowKing::StartAction() {
 	if (fbxObject_->GetIsFinish()) { animation_count_++; }
 	if (animation_count_ >= 2) {
 		fbxObject_->StopAnimation();
@@ -65,10 +65,10 @@ void MashGhost::StartAction() {
 
 }
 
-void MashGhost::AttackPredict() {
+void CowKing::AttackPredict() {
 	waittimer_++;
-	attack_->SetPredict(true, waittimer_ / kPredictTime);
-	if (waittimer_ >= kPredictTime) {
+	attack_->SetPredict(true, waittimer_ / predictTimeMax_);
+	if (waittimer_ >= predictTimeMax_) {
 		attack_->SetPredict(false, 0);
 		waittimer_ = 0;
 		scale_frame_ = 0.0f;
@@ -78,7 +78,7 @@ void MashGhost::AttackPredict() {
 	//âΩâÒèkÇﬁÇ©
 	const float kScaleCount = 4.0f;
 	if (scale_frame_ < 1.0f) {
-		scale_frame_ += 1.0f / (kPredictTime / kScaleCount);
+		scale_frame_ += 1.0f / (predictTimeMax_ / kScaleCount);
 	} else {
 		scale_frame_ = 0.0f;
 	}
@@ -86,14 +86,14 @@ void MashGhost::AttackPredict() {
 	fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
 }
 
-void MashGhost::PressAttack() {
+void CowKing::PressAttack() {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	waittimer_++;
-	if (waittimer_ >= kAttackTime) {
+	if (waittimer_ >= attackTimeMax_) {
 		pos.y = 0;
 		fbxObject_->SetPosition(pos);
-		fbxObject_->ResetAnimation();
-		fbxObject_->PlayAnimation();
+		//fbxObject_->ResetAnimation();
+		//fbxObject_->PlayAnimation();
 		phase_ = E_Phase::kStartAction;
 		waittimer_ = 0;
 		return;
