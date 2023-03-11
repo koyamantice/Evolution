@@ -87,6 +87,8 @@ void MSecondStage::Update(DirectXCommon* dxCommon) {
 	if (ClearUpdate()) { return; }
 	//ポーズ処理の更新
 	if (PauseUpdate()) { return; }
+	//ミッション情報の更新処理
+	MissionUpdate();
 	//操作説明の更新処理
 	DescriptionUpdate();
 	//アクターすべての更新処理
@@ -121,6 +123,53 @@ bool MSecondStage::IntroUpdate() {
 	} else {
 		return false;
 	}
+}
+
+bool MSecondStage::MissionUpdate() {
+	if (isVisible_) {
+		visible_timer_++;
+		if (visible_timer_>= kVisibleTimerMax) {
+
+			if (mission_ease_timer_<= 1.0f) {
+				mission_ease_timer_ += 1.0f / kMissionEaseTimerMax;
+			} else {
+				isVisible_ = false;
+			}
+			mission_pos_ = mission_->GetPosition();
+			number_pos_= honey_get_[nowOpenHoney]->GetPosition();
+
+			mission_pos_.y = Ease(InOut, Elastic, mission_ease_timer_, 100,-100);
+			number_pos_.y = Ease(InOut, Elastic, mission_ease_timer_, 135, -135);
+
+
+			mission_->SetPosition(mission_pos_);
+			for (int i = 0; i < kHoneyNumMax;i++) {
+				honey_get_[nowOpenHoney]->SetPosition(number_pos_);
+			}
+		}
+	}
+	if (pause) {
+		isVisible_ = true;
+		mission_pos_ = mission_->GetPosition();
+		number_pos_ = honey_get_[nowOpenHoney]->GetPosition();
+		visible_timer_ = 0;
+		mission_ease_timer_ = 0;
+
+		mission_pos_.y = 100;
+		number_pos_.y = 135;
+		mission_->SetPosition(mission_pos_);
+		for (int i = 0; i < kHoneyNumMax; i++) {
+			honey_get_[nowOpenHoney]->SetPosition(number_pos_);
+		}
+
+	}
+
+
+
+
+
+
+	return false;
 }
 
 void MSecondStage::ResultCamera(int Timer) {
@@ -161,6 +210,10 @@ bool MSecondStage::ClearUpdate() {
 }
 
 void MSecondStage::HoneyUpdate() {
+
+
+
+
 	nowOpenHoney = 0;
 	for (int i = 0; i < kMaxNestNum; i++) {
 		if (!honey_[i]->GetCanMove()) {
@@ -174,10 +227,10 @@ void MSecondStage::HoneyUpdate() {
 }
 
 void MSecondStage::DrawLocal() {
-
-	mission_->Draw();
-	honey_get_[nowOpenHoney]->Draw();
-
+	if (!pause) {
+		mission_->Draw();
+		honey_get_[nowOpenHoney]->Draw();
+	}
 }
 
 

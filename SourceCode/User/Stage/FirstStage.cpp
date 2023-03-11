@@ -24,9 +24,9 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	//goal_shadow->SetIsActive(false);
 
 	//“±“ü•”•ª‚ÌŒ¾—t
-	for (int i = 0; i < intro_word_max; i++) {
+	for(int i=0;i<intro_word_max;i++){ 
 		Sprite* IntroWord_ = Sprite::Create(ImageManager::Intro01 + i, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
-		IntroWord[i].reset(IntroWord_);
+		IntroWord[i].reset(IntroWord_);	
 	}
 
 	//ƒJƒƒ‰‚Ì‰Šú‰»
@@ -34,7 +34,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	player_shadow->SetAngle(camera_angle);
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
-	camera->SetEye(XMFLOAT3{
+	camera->SetEye(XMFLOAT3{ 
 		player_shadow->GetPosition().x + camera_distance.x,
 		first_hight,
 		player_shadow->GetPosition().z + camera_distance.z
@@ -82,7 +82,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	BattleBackDraw();
 	//”wŒi—p
 	ActorManager::GetInstance()->Draw(dxCommon);
-	BattleFrontDraw(alphaBle, IntroWord[nowWord].get());
+	BattleFrontDraw(alphaBle,IntroWord[nowWord].get());
 	dxCommon->PostDraw();
 }
 
@@ -121,11 +121,11 @@ bool FirstStage::IntroUpdate() {
 			}
 			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
 			filter_first->SetColor({ 1,1,1,filter_alpha });
-
+			
 			return true;
 		}
 
-		if (input->TriggerButton(input->START) ||
+		if (input->TriggerButton(input->START)||
 			input->TriggerKey(DIK_SPACE)) {
 			if (!intro_skip) {
 				intro_skip = true;
@@ -161,11 +161,11 @@ void FirstStage::IntroCamera(const float& Timer) {
 	const float delay = 0.9f;
 	const float reaching_time = intro_count_max * delay;
 	float hight = camera_hight;
-	if (Timer / reaching_time <= 1.0f) {
+	if (Timer/ reaching_time <= 1.0f) {
 		camera_angle = Ease(In, Linear, Timer / reaching_time, DEGREE_MAX, 0);
 		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
 	}
-	if (Timer / intro_count_max >= 1.0f) {
+	if (Timer/ intro_count_max >= 1.0f) {
 		camera_angle = 0;
 		hight = camera_hight;
 	}
@@ -194,7 +194,7 @@ void FirstStage::SmashCamera(const float& Timer) {
 	XMFLOAT3 ease_eye = e_eye;
 	float ease_time = Timer / (float)60.0f;
 
-	if (ease_time <= 1.0f) {
+	if (ease_time<=1.0f) {
 
 		ease_target = {
 		Ease(In,Linear,ease_time,player_shadow->GetCameraPos(camera_angle, camera_target).x,enemy_shadow->GetPosition().x),
@@ -239,32 +239,19 @@ bool FirstStage::ClearUpdate() {
 		const float rnd_vel = 0.4f;
 		particleEmitter->AddCommon(120, enemy_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
 		particleEmitter->Update();
+		finish_time++;
 
-		if (finish_time >= 100.0f) {
-			enemy_shadow->SetCanMove(false);
-		} else {
-			if (!enemy_shadow->GetCanMove()) {
-				finish_time++;
-			}
-		}
-		if (!enemy_shadow->GetCanMove()) {
-			if (enemy_shadow->GetScale().x <= 0.0f) {
-				finish_time--;
-				if (finish_time == 0) {
-					battle_result = true;
-					stage_clear = true;
-				}
-			}
-		}
 		SmashCamera((float)(finish_time));
 		ActorManager::GetInstance()->Update();
 		FieldUpdate();
 
+		if (finish_time >=100.0f) {
+			enemy_shadow->SetCanMove(false);
+		}
 
-
-
-
-		if (enemy_shadow->GetScale().x <= 0.0f) {
+		if (enemy_shadow->GetScale().x<=0.0f) {
+			battle_result = true;
+			stage_clear = true;
 		}
 		return true;
 	}

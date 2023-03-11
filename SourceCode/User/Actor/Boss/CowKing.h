@@ -19,10 +19,12 @@ protected:
 	void StartAction() override;
 	void AttackPredict() override;
 	void PressAttack() override;
+	void ChasePlayer() override;
 
-
+	float DirRotation(const XMFLOAT3& target);
 	std::unique_ptr<EnemyAttack> attack_;
 
+	Actor* player_ = nullptr;
 	float speed = 0.2f;
 	const float accel = speed / 30.0f;
 };

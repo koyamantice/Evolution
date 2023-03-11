@@ -18,6 +18,7 @@ void CowKing::OnInit() {
 	attack_= std::make_unique<EnemyAttack>(this);
 	attack_->Init();
 
+	player_ = ActorManager::GetInstance()->SearchActor("Player");
 
 }
 
@@ -56,58 +57,85 @@ void CowKing::OnFinal() {
 
 
 void CowKing::StartAction() {
-	if (fbxObject_->GetIsFinish()) { animation_count_++; }
-	if (animation_count_ >= 2) {
-		fbxObject_->StopAnimation();
-		animation_count_ = 0;
+	waittimer_++;
+	XMFLOAT3 rot{};
+	rot.y = DirRotation(player_->GetPosition());
+	fbxObject_->SetRotation(rot);
+
+	if (waittimer_>= 100) {
+		waittimer_ = 0;
 		phase_ = E_Phase::kAttackPredict;
 	}
 
 }
 
 void CowKing::AttackPredict() {
+	predictTimeMax_ = 180;
 	waittimer_++;
-	attack_->SetPredict(true, waittimer_ / predictTimeMax_);
+	XMFLOAT3 rot{};
+	rot.y = DirRotation({ 40.0f ,0,40.0f });
+	fbxObject_->SetRotation(rot);
+
 	if (waittimer_ >= predictTimeMax_) {
-		attack_->SetPredict(false, 0);
 		waittimer_ = 0;
 		scale_frame_ = 0.0f;
 		phase_ = E_Phase::kPressAttack;
 		return;
 	}
-	//âΩâÒèkÇﬁÇ©
-	const float kScaleCount = 4.0f;
-	if (scale_frame_ < 1.0f) {
-		scale_frame_ += 1.0f / (predictTimeMax_ / kScaleCount);
-	} else {
-		scale_frame_ = 0.0f;
-	}
-	float scale = Ease(In, Quad, scale_frame_, 25.0f, 15.0f);
-	fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+	scale_frame_ = waittimer_ / predictTimeMax_;
+	float scale = Ease(InOut, Elastic, scale_frame_, 0.0f, 40.0f);
+	fbxObject_->SetPosition({scale,0,scale});
+
 }
 
 void CowKing::PressAttack() {
-	XMFLOAT3 pos = fbxObject_->GetPosition();
+	predictTimeMax_ = 180;
 	waittimer_++;
-	if (waittimer_ >= attackTimeMax_) {
-		pos.y = 0;
-		fbxObject_->SetPosition(pos);
-		//fbxObject_->ResetAnimation();
-		//fbxObject_->PlayAnimation();
-		phase_ = E_Phase::kStartAction;
+	XMFLOAT3 rot{};
+	rot.y = DirRotation({ -40.0f ,0,-40.0f });
+	fbxObject_->SetRotation(rot);
+
+	if (waittimer_ >= predictTimeMax_) {
 		waittimer_ = 0;
+		scale_frame_ = 0.0f;
+		phase_ = E_Phase::kChasePlayer;
 		return;
 	}
-	if (pos.y >= 0) {
-		pos.y += speed;
-		speed -= accel;
-	} else {
-		attack_->Stamp(pos);
-		pos.y = 0;
-		speed = accel * 30.0f;
+	scale_frame_ = waittimer_ / predictTimeMax_;
+	float scale = Ease(InOut, Elastic, scale_frame_, 40.0f, -40.0f);
+	fbxObject_->SetPosition({ scale,0,scale });
+
+}
+
+void CowKing::ChasePlayer() {
+	predictTimeMax_ = 180;
+	waittimer_++;
+	XMFLOAT3 rot{};
+	rot.y = DirRotation({ 0.0f ,0,0.0f });
+	fbxObject_->SetRotation(rot);
+
+	if (waittimer_ >= predictTimeMax_) {
+		waittimer_ = 0;
+		scale_frame_ = 0.0f;
+		phase_ = E_Phase::kStartAction;
+		return;
 	}
-	//fbxObject_->SetRotation({ 0,-180,0 });
-	fbxObject_->SetPosition(pos);
+	scale_frame_ = waittimer_ / predictTimeMax_;
+	float scale = Ease(InOut, Elastic, scale_frame_, -40.0f, 0.0f);
+	fbxObject_->SetPosition({ scale,0,scale });
+
+
 }
 
 
+float CowKing::DirRotation(const XMFLOAT3& target) {
+	float itr{};
+	XMFLOAT3 pos = fbxObject_->GetPosition();
+	XMFLOAT3 position{};
+
+	position.x = (target.x - pos.x);
+	position.z = (target.z - pos.z);
+	itr = (atan2f(position.x, position.z) * (DEGREE_HALF / XM_PI))+DEGREE_HALF;
+
+	return itr;
+}

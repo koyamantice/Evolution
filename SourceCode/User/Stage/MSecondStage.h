@@ -29,6 +29,10 @@ private:
 	///	導入部分の更新処理
 	/// </summary>
 	bool IntroUpdate()override;
+	/// <summary>
+	///	導入部分の更新処理
+	/// </summary>
+	bool MissionUpdate();
 
 	//クリア後カメラ
 	void ResultCamera(int Timer);
@@ -51,15 +55,27 @@ private:
 	};
 
 	Actor* honey_[kMaxNestNum] = {};
-	
+
 	//ミッション
 	std::unique_ptr<Sprite> mission_{};
 
 
 	enum {
-		kHoneyNumMax=4,
+		kHoneyNumMax = 4,
 	};
 	int nowOpenHoney = 0;
+
+	bool isVisible_ = true;
+	int visible_timer_ = 0;
+	const int kVisibleTimerMax = 180;
+	float mission_ease_timer_ = 0;
+	const float kMissionEaseTimerMax = 80;
+
+
+	XMFLOAT2 mission_pos_ = {};
+	XMFLOAT2 number_pos_ = {};
+
+
 	//蜂蜜ゲット
 	std::unique_ptr<Sprite>	honey_get_[kHoneyNumMax]{};
 
