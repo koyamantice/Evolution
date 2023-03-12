@@ -138,7 +138,7 @@ void BattleScene::CameraUpda() {
 		input->PushKey(DIK_LEFT)|| input->PushKey(DIK_RIGHT)) {
 		if (!camera_explanation) {camera_explanation = true;}
 		//スティック入力
-		int reverse = pauseUi->GetReverseCamera();
+		int reverse = static_cast<int>(pauseUi->GetReverseCamera());
 		if (input->TiltPushStick(Input::R_RIGHT)||
 			input->PushKey(DIK_RIGHT)) {
 			camera_angle -= camera_vel * reverse;

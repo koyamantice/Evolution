@@ -26,16 +26,20 @@ public:
 		UISheet,
 		optionline,
 		TitleBack,
-		Bar,
 		ZBack,
-
 		Option,
+		Bar,
+
+
 		CameraOpt,
 		Normal,
 		Reverse,
 
 		CameraBar,
 		OptionBack,
+
+		kOptionConfig,
+		kTitleOk,
 
 		CharaCover,
 

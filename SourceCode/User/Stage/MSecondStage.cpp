@@ -159,7 +159,7 @@ bool MSecondStage::MissionUpdate() {
 		number_pos_.y = 135;
 		mission_->SetPosition(mission_pos_);
 		for (int i = 0; i < kHoneyNumMax; i++) {
-			honey_get_[nowOpenHoney]->SetPosition(number_pos_);
+			honey_get_[i]->SetPosition(number_pos_);
 		}
 
 	}
