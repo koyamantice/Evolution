@@ -35,11 +35,13 @@ public:
 		Normal,
 		Reverse,
 
-		CameraBar,
 		OptionBack,
+		CameraBar,
 
 		kOptionConfig,
 		kTitleOk,
+		kTitleCancel,
+		ConfigBar,
 
 		CharaCover,
 

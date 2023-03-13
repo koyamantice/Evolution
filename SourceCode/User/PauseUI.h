@@ -27,13 +27,11 @@ public:
 		REVERSE = -1,
 		NOREVERSE = 1
 	};
-
-	
 	const CameraSystem& GetReverseCamera() { return reverse_camera; }
 
 	const bool& GetEndFlag() { return endflag; }
 	void SetEndFlag(const bool& endflag) { this->endflag = endflag; }
-	const int& GetBar() { return static_cast<int>(FrameBar_); }
+	const int& GetBar() { return static_cast<int>(frameBar_); }
 private:
 
 	//ä÷êîÉ|ÉCÉìÉ^
@@ -41,6 +39,7 @@ private:
 
 	void OpenOptionMenu();
 	void SelectOption();
+	void OpenCheck2Title();
 	void FinalCheck2Title();
 	void OpenChangeManual();
 	void ChangeManualSystem();
@@ -49,6 +48,7 @@ private:
 	enum class SystemConfig : int {
 	kOpenOptionMenu=0,
 	kSelectOption,
+	kOpenCheck2Title,
 	kFinalCheck2Title,
 	kOpenChangeManual,
 	kChangeManualSystem,
@@ -70,18 +70,20 @@ private:
 		CameraOpt,
 		Normal,
 		Reverse,
-		CameraBar,
 		OptBack,
+		CameraBar,
 
 		kOptionConfig,
 		kTitleOk,
+		kTitleCancel,
+		ConfigBar,
 
 		Max
 	};
 	std::array<std::unique_ptr<Sprite>,Max> UI;
 	
-	std::array<XMFLOAT2, Max> sizes{  };
-	std::array<XMFLOAT2, Max> basesizes{  };
+	std::array<XMFLOAT2, Max> sizes{};
+	std::array<XMFLOAT2, Max> basesizes{};
 
 	
 	std::unique_ptr<SceneChanger> scene_changer = nullptr;
@@ -94,9 +96,7 @@ private:
 	bool option_system = false;
 
 	XMFLOAT2 bar_pos = {};
-	int cameraNow = 0;		
 	static CameraSystem reverse_camera;
-	bool ease = true;
 
 	float frame = 0;
 	XMFLOAT2 pos={640,400};
@@ -111,9 +111,30 @@ private:
 		CloseOptionMenu,
 		SelectFrameMax,
 	};
-	std::array<float, static_cast<int>(SelectFrame::SelectFrameMax)> bar_pos_ = { 330, 450 ,570 };
+	std::array<float, static_cast<int>(SelectFrame::SelectFrameMax)> bar_pos_ = 
+	{ 330, 450 ,570 };
 
-	SelectFrame FrameBar_ = SelectFrame::Back2Title;
+	SelectFrame frameBar_ = SelectFrame::Back2Title;
 
+	enum class ManualFrame :int {
+		NOREVERSEBUTTON=0,
+		REVERSEBUTTON,
+		BACKSELECT,
+		ManualFrameMax
+	};
+
+	ManualFrame manualBar_ = ManualFrame::NOREVERSEBUTTON;
+	std::array<XMFLOAT2, static_cast<int>(ManualFrame::ManualFrameMax)> manual_pos_ =
+	{ XMFLOAT2(pos.x - 150,pos.y - 80),XMFLOAT2(pos.x + 150,pos.y - 80) , XMFLOAT2(pos.x,pos.y + 180) };
+
+	enum class FinalCheckFrame :int {
+		BACKTITLE=0,
+		CANCELSELECT,
+		FinalCheckFrameMax
+	};
+
+	FinalCheckFrame finalCheckBar_ = FinalCheckFrame::CANCELSELECT;
+	std::array<XMFLOAT2, static_cast<int>(FinalCheckFrame::FinalCheckFrameMax)> final_pos_ =
+	{ XMFLOAT2(pos.x - 150,pos.y +180),XMFLOAT2(pos.x + 150,pos.y +180) };
 
 };

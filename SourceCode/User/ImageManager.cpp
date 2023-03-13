@@ -35,10 +35,12 @@ void ImageManager::Load2D() {
 
 	Sprite::LoadTexture(CameraBar, L"Resources/2d/PauseUi/cameraBar.png");
 	Sprite::LoadTexture(OptionBack, L"Resources/2d/PauseUi/Back.png");
+
 	Sprite::LoadTexture(kOptionConfig, L"Resources/2d/PauseUi/optionConfig.png");
 	Sprite::LoadTexture(kTitleOk, L"Resources/2d/PauseUi/TitleOk.png");
+	Sprite::LoadTexture(kTitleCancel, L"Resources/2d/PauseUi/TitleNo.png");
+	Sprite::LoadTexture(ConfigBar, L"Resources/2d/PauseUi/cameraBar.png");
 
-	
 	Sprite::LoadTexture(CharaCover, L"Resources/2d/PlayUI/CharaCover2.png");
 	Sprite::LoadTexture(Num, L"Resources/2d/PlayUI/Num.png"); 
 	Sprite::LoadTexture(numBack, L"Resources/2d/PlayUI/numBack.png");
