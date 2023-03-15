@@ -37,6 +37,12 @@ private:
 	//クリア後カメラ
 	void ResultCamera(int Timer);
 	/// <summary>
+/// 撃破後カメラ
+/// </summary>
+/// <param name="Timer"></param>
+	void SmashCamera(const float& Timer) override;
+
+	/// <summary>
 	/// クリア更新処理
 	/// </summary>
 	bool ClearUpdate() override;
@@ -78,6 +84,10 @@ private:
 
 	//蜂蜜ゲット
 	std::unique_ptr<Sprite>	honey_get_[kHoneyNumMax]{};
+
+	int smash_honey_ = 0;
+	XMFLOAT3 s_eye = {};
+	XMFLOAT3 s_target = {};
 
 	PostEffect* postEffect = nullptr;
 };

@@ -42,6 +42,12 @@ protected:
 	void ResetCamera();
 
 	/// <summary>
+	/// 撃破後カメラ
+	/// </summary>
+	/// <param name="Timer"></param>
+	virtual void SmashCamera(const float& Timer) {};
+
+	/// <summary>
 	/// 説明表示用の更新
 	/// </summary>
 	virtual void DescriptionUpdate() {};

@@ -249,7 +249,7 @@ bool FirstStage::ClearUpdate() {
 			enemy_shadow->SetCanMove(false);
 		}
 
-		if (enemy_shadow->GetScale().x<=0.0f) {
+		if (finish_time >= 200.0f) {
 			battle_result = true;
 			stage_clear = true;
 		}

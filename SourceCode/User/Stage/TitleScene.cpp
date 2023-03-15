@@ -142,7 +142,7 @@ void TitleScene::InputUpdate() {
 			SceneName = "FIRSTSTAGE";
 			break;
 		case Portal::Debug:
-			SceneName = "THIRDSTAGE";
+			SceneName = "MSECOND";
 			break;
 		default:
 			assert(0);

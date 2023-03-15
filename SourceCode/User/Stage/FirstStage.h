@@ -41,7 +41,7 @@ private:
 	/// Œ‚”jŒãƒJƒƒ‰
 	/// </summary>
 	/// <param name="Timer"></param>
-	void SmashCamera(const float& Timer);
+	void SmashCamera(const float& Timer) override;
 
 
 

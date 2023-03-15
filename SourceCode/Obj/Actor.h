@@ -73,11 +73,7 @@ public:
 	virtual DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) { return {0,0,0}; };
 	//角度の取得
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
-	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
-	//コマンド取得
-	void SetCommand(const int& command) { this->command = command; };
-	const int& GetCommand() { return command; }
-	
+	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }	
 	//hpセッタ＆ゲッタ
 	void SetHp(const float& hp) { this->hp = hp; };
 	const float& GetHp() { return hp; }
@@ -165,7 +161,6 @@ public:
 	virtual void ResultOnUpdate(const float& Timer) {};
 	virtual void OnCollision(const std::string& Tag) {};
 protected:
-	int command = 0;
 	std::unique_ptr<Object3d> obj;
 	float collide_size = 1.0f;
 	// 残像データの数

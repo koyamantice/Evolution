@@ -66,6 +66,9 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 		player_shadow->GetPosition().y + camera_hight,
 		player_shadow->GetPosition().z + camera_distance.z
 		});
+	s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
+
+	s_target = player_shadow->GetCameraPos(camera_angle, camera_target);
 
 	//ポストエフェクトの初期化
 	postEffect = new PostEffect();
@@ -144,7 +147,7 @@ bool MSecondStage::MissionUpdate() {
 
 			mission_->SetPosition(mission_pos_);
 			for (int i = 0; i < kHoneyNumMax;i++) {
-				honey_get_[nowOpenHoney]->SetPosition(number_pos_);
+				honey_get_[i]->SetPosition(number_pos_);
 			}
 		}
 	}
@@ -163,12 +166,6 @@ bool MSecondStage::MissionUpdate() {
 		}
 
 	}
-
-
-
-
-
-
 	return false;
 }
 
@@ -178,11 +175,48 @@ void MSecondStage::ResultCamera(int Timer) {
 	camera->Update();
 }
 
+void MSecondStage::SmashCamera(const float& Timer) {
+	XMFLOAT3  target_honey_ = honey_[smash_honey_]->GetPosition();
+
+	XMFLOAT3 e_eye = { target_honey_.x + camera_distance.x,target_honey_.y + camera_hight,target_honey_.z + camera_distance.z };
+	XMFLOAT3 ease_target = target_honey_;
+	XMFLOAT3 ease_eye = e_eye;
+	float ease_time = Timer / 60.0f;
+
+	if (ease_time <= 1.0f) {
+
+		ease_target = {
+		Ease(In,Linear,ease_time,s_target.x,target_honey_.x),
+		Ease(In,Linear,ease_time,s_target.y,target_honey_.y),
+		Ease(In,Linear,ease_time,s_target.z,target_honey_.z)
+		};
+
+		ease_eye = {
+			Ease(In,Linear,ease_time,s_eye.x,e_eye.x),
+			Ease(In,Linear,ease_time,s_eye.y,e_eye.y),
+			Ease(In,Linear,ease_time,s_eye.z,e_eye.z)
+		};
+	}
+	if(Timer>=90.0f){
+		finish_time = 0;
+		if (smash_honey_< kRightNest) {
+			smash_honey_++;
+		} else {
+			battle_result = true;
+			stage_clear = true;
+		}
+		s_eye = e_eye;
+		s_target = target_honey_;
+	}
+
+	camera->SetTarget(ease_target);
+	camera->SetEye(ease_eye);
+	camera->Update();
+
+}
+
 bool MSecondStage::ClearUpdate() {
 	if (stage_clear) {
-		const float rnd_vel = 0.5f;
-		particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
-		particleEmitter->Update();
 
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			scene_changer->ChangeStart();
@@ -193,26 +227,22 @@ bool MSecondStage::ClearUpdate() {
 		FieldUpdate();
 		return true;
 	}
-	if (!goal_shadow->GetIsActive()) {
 		if (!honey_[kLeftNest]->GetCanMove()&&
 			!honey_[kMiddleNest]->GetCanMove()&&
 			!honey_[kRightNest]->GetCanMove()) {
-			goal_shadow->SetIsActive(true);
-			return false;
+			finish_time++;
+			player_shadow->SetCanMove(false);
+			SmashCamera((float)(finish_time));
+			ActorManager::GetInstance()->Update();
+			FieldUpdate();
+
+			return true;
 		}
-	}
-	if (goal_shadow->GetPause()) {
-		battle_result = true;
-		stage_clear = true;
-	}
 
 	return false;
 }
 
 void MSecondStage::HoneyUpdate() {
-
-
-
 
 	nowOpenHoney = 0;
 	for (int i = 0; i < kMaxNestNum; i++) {

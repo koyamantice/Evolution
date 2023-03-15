@@ -109,7 +109,6 @@ void ActorManager::CheckActorCollisions() {
 			Actor* actorB = itrB->get();
 			if (Collision::SphereCollision2(actorA->GetPosition(), actorA->GetSize(), actorB->GetPosition(), actorB->GetSize())) {
 				if (!actorA->GetIsActive() || !actorB->GetIsActive()) { continue; }
-				if (actorA->GetIsUnrivaled() || actorB->GetIsUnrivaled()) { continue; }
 				if (actorA->GetTag() != actorB->GetTag()) {
 					actorA->OnCollision(actorB->GetTag());
 					actorB->OnCollision(actorA->GetTag());
@@ -125,6 +124,8 @@ void ActorManager::CheckBulletCollisions() {
 			Actor* actor = itrA->get();
 			Bullet* bullet = itrB->get();
 			if (Collision::SphereCollision2(actor->GetPosition(),actor->GetSize(), bullet->GetPosition(), 2.0f)) {
+				if (actor->GetIsUnrivaled()) { continue; }
+
 				actor->OnCollision("Bullet");
 				bullet->OnCollision(actor->GetTag(), actor->GetPosition());
 			}
