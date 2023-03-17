@@ -1,6 +1,5 @@
 #pragma once
 #include "SceneManager.h"
-#include "ShineRain.h"
 
 
 /// <summary>
@@ -78,7 +77,6 @@ private:
 	static const int intro_word_max = 6;
 	int nowWord = 0;
 	std::unique_ptr<Sprite> IntroWord[intro_word_max];
-	ShineRain* shineRain_ = nullptr;
 private:
 
 	PostEffect* postEffect = nullptr;

@@ -4,8 +4,6 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	BattleInit();
 	TorchSetup(Touch::FireColor::f_green);
-	shineRain_ = new ShineRain();
-	shineRain_->Init();
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("MashGhost");
@@ -85,7 +83,6 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
 	BattleFrontDraw(alphaBle,IntroWord[nowWord].get());
-	shineRain_->Draw();
 	dxCommon->PostDraw();
 }
 
@@ -224,7 +221,6 @@ bool FirstStage::ClearUpdate() {
 		//const float rnd_vel = 0.5f;
 		//particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0.0f, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
 		//particleEmitter->Update();
-		shineRain_->Update();
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			scene_changer->ChangeStart();
 		}
