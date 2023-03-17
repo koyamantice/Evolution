@@ -49,12 +49,14 @@ protected:
 	float predictTimeMax_ = 0;
 	float attackTimeMax_ = 0;
 
+	bool isResult = false;
 
 	//関数ポインタ
 	static void(Boss::*phaseFuncTable[])();
 	//メンバ関数
 	virtual void StartAction() {};
 	virtual void AttackPredict() {};
+	virtual void JumpAttack() {};
 	virtual void PressAttack() {};
 	virtual void ChasePlayer() {};
 	virtual void FeedHoney() {};
@@ -64,6 +66,7 @@ protected:
 	enum class E_Phase : int {
 		kStartAction = 0,
 		kAttackPredict,
+		kJumpAttack,
 		kPressAttack,
 		kChasePlayer,
 		kFeedHoney,
@@ -79,7 +82,7 @@ protected:
 
 	float waittimer_ = 0;
 
-
+	float shadow_side_ = 1.5f;
 	//レベルデータ
 	BossLevelLoader::LevelData levelData_ = {};
 	//ユニークポインタ

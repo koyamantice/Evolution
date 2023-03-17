@@ -48,7 +48,7 @@ void BulletGreen::OnFinal() {
 
 void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (collide) { return; }
-	if (command == Dead) { return; }
+	if (command == Dead|| command ==Smash ) { return; }
 	if (isPlayActive) { return; }
 	if (ID < Id) { return; }
 	collide = true;
@@ -72,14 +72,21 @@ void BulletGreen::ResultOnUpdate(const float& Timer) {
 	XMFLOAT3 pos = fbxObj->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();
 	if(clear_ease){
-		if (clear_frame<1.0f) {
-			clear_frame += 0.01f;
+		if (clear_frame < 1.0f) {
+			float seed_ = 0.01f * (ID / 30.0f);
+			clear_frame += 0.01f + seed_;
 		} else {
 			clear_ease = false;
 		}
+		if (pos.y > 0) {
+			float gra = 0.3f;
+			pos.y -= gra;
+		} else {
+			pos.y = max(0, pos.y);
+		}
 		clear_e_pos = {
 			p_pos.x + sinf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
-			0,
+			pos.y,
 			p_pos.z + cosf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
 		};
 		pos.x=Ease(In,Linear,clear_frame,clear_s_pos.x,clear_e_pos.x);
@@ -90,12 +97,12 @@ void BulletGreen::ResultOnUpdate(const float& Timer) {
 		pos.y += vel; //+
 		float rnd_vel = 0.04f;
 		float margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel -= 0.04f + margin;//
-		if (frame < 0.7f) {
-			rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
-		}
-		if (pos.y < 0.0f) {
-			pos.y = 0;
+		vel -= rnd_vel + margin;//
+		pos.y = max(0, pos.y);
+		//‰ñ“]
+		float delay = 0.3f;
+		if (frame + delay <= 1.0f) {
+			rot.x = Ease(In, Quad, frame + delay, 0, -DEGREE_MAX);
 		}
 		if (frame < 1.0f) {
 			frame += 0.02f;
@@ -109,8 +116,5 @@ void BulletGreen::ResultOnUpdate(const float& Timer) {
 	fbxObj->SetPosition(pos);
 	fbxObj->SetRotation(rot);
 	fbxObj->Update();
-	Status->Update();
-	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
-	Shadow->Update();
 }
 

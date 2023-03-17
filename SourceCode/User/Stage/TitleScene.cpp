@@ -136,6 +136,7 @@ void TitleScene::InputUpdate() {
 		input->TriggerButton(input->X) ||
 		input->TriggerButton(input->Y)) {
 		scene_changer->ChangeStart();
+		audioManager->StopWave("BGM/titleBGM.wav");
 		audioManager->PlayWave("SE/pushstart.wav", 0.3f);
 		switch (nextScene) {
 		case Portal::Title:

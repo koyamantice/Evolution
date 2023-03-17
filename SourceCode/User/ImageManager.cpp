@@ -71,7 +71,8 @@ void ImageManager::Load2D() {
 	Sprite::LoadTexture(kMsecondNum, L"Resources/2d/IntroWord/MSecondMissionNum.png");
 
 	Sprite::LoadTexture(kMsecondNum, L"Resources/2d/IntroWord/MSecondMissionNum.png");
-
+	Sprite::LoadTextureDDS(kShine, L"Resources/2d/Effect/shine.dds");
+	
 
 }
 

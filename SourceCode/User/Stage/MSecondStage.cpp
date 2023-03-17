@@ -5,6 +5,13 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 	BattleInit();
 	TorchSetup(Touch::FireColor::f_blue);
 
+	audioManager = std::make_unique<AudioManager>();
+
+	audioManager->LoadWave("BGM/MSecondBattle.wav");
+	audioManager->PlayWave("BGM/MSecondBattle.wav", 0.3f);
+	audioManager->LoadWave("BGM/Clear.wav");
+
+	
 	//導入はボスステージじゃないので不要
 	battle_intro = true;
 
@@ -198,8 +205,13 @@ void MSecondStage::SmashCamera(const float& Timer) {
 		};
 	}
 	if(Timer>=90.0f){
+
 		finish_time = 0;
 		if (smash_honey_< kRightNest) {
+			if (smash_honey_== kLeftNest) {
+				audioManager->StopWave("BGM/MSecondBattle.wav");
+				audioManager->PlayWave("BGM/Clear.wav", 0.3f);
+			}
 			smash_honey_++;
 		} else {
 			battle_result = true;
@@ -227,17 +239,18 @@ bool MSecondStage::ClearUpdate() {
 		FieldUpdate();
 		return true;
 	}
-		if (!honey_[kLeftNest]->GetCanMove()&&
+	if (!honey_[kLeftNest]->GetCanMove()&&
 			!honey_[kMiddleNest]->GetCanMove()&&
 			!honey_[kRightNest]->GetCanMove()) {
 			finish_time++;
 			player_shadow->SetCanMove(false);
+			particleEmitter->Update();
 			SmashCamera((float)(finish_time));
 			ActorManager::GetInstance()->Update();
 			FieldUpdate();
 
 			return true;
-		}
+	}
 
 	return false;
 }

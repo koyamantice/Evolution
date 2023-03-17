@@ -48,6 +48,9 @@ private: // サブクラス
 
 		//バッファのサイズ
 		unsigned int bufferSize;
+
+
+		IXAudio2SourceVoice* pSourceVoice;
 	};
 
 public: // メンバ関数
@@ -60,9 +63,8 @@ public: // メンバ関数
 
 	void PlayWave(const std::string& filename, const float& Volume);
 
+	void StopWave(const std::string& filename);
 	void LoopWave(int texnumber, float Volume) {};
-
-	void StopWave(int texnumber) {};
 private:
 
 	/// <summary>
@@ -89,6 +91,6 @@ private: // メンバ変数
 
 	IXAudio2MasteringVoice* masterVoice;
 	//サウンドデータ格納ディレクトリ
-	const std::string directoryPath_="Resources/Sound/";
+	const std::string directoryPath_ = "Resources/Sound/";
 };
 

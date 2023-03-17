@@ -36,6 +36,9 @@ private:
 	void ResultOnUpdate(const float& Timer)override;
 
 	void OnCollision(const std::string& Tag)override;
+	
+	void ShadowUpda();
+	
 	void HitBoundMotion();
 
 	void LimitArea();
@@ -60,7 +63,10 @@ private:
 
 	bool knockBacking = false;
 
+	float shadow_side_ = 0.2f;
 
+	float y_add = 0.0f;
+	int jump_count = 0;
 
 	bool isFasted = false;
 

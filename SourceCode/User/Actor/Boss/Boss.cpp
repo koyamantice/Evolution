@@ -5,6 +5,7 @@
 void (Boss::*Boss::phaseFuncTable[])() = {
 	&Boss::StartAction,//—v‘f0
 	&Boss::AttackPredict, //—v‘f1
+	&Boss::JumpAttack,
 	&Boss::PressAttack,
 	&Boss::ChasePlayer,
 	&Boss::FeedHoney,
@@ -36,8 +37,9 @@ void Boss::LoadData(const std::string& _bossname) {
 }
 
 void Boss::ResultOnUpdate(const float& Timer) {
+	isResult = true;
 	fbxObject_->Update();
-	shadow_->Update();
+	ShadowUpdate();
 }
 
 void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
@@ -71,6 +73,13 @@ void Boss::LifeCommon() {
 }
 
 void Boss::ShadowUpdate() {
+	XMFLOAT3 pos = fbxObject_->GetPosition();
+	float scale = ((5.0f - pos.y) / 5.0f) * shadow_side_;
+	scale =max(0.5f,scale);
+
+	shadow_->SetScale({scale,scale, scale,});
+	shadow_->Update();
+	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
 }
 
 

@@ -274,7 +274,7 @@ void BattleScene::BattleFrontDraw(blendType _blendType,Sprite* _introword) {
 			skip_ui_->Draw();
 		}
 	} else {
-		if (!stage_clear) {
+		if (!stage_clear|| !battle_result) {
 			DrawLocal();
 			hud->Draw();
 		}

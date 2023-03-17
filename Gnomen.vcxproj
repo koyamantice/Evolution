@@ -98,6 +98,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ShineRain.cpp" />
     <ClCompile Include="SourceCode\Common\Easing.cpp" />
     <ClCompile Include="SourceCode\Common\Singleton.cpp" />
     <ClCompile Include="SourceCode\Common\TimedInvoke.cpp" />
@@ -183,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="ShineRain.h" />
     <ClInclude Include="SourceCode\Common\Easing.h" />
     <ClInclude Include="SourceCode\Common\Singleton.h" />
     <ClInclude Include="SourceCode\Common\TimedInvoke.h" />

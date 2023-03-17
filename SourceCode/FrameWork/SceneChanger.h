@@ -68,5 +68,5 @@ private:
 	bool easing_start = false;
 	float ease_frame = 0.0f;
 	//‰½ƒtƒŒ[ƒ€‚ÅI‚í‚é‚©
-	float end_frame = 80.0f;
+	float end_frame = 100.0f;
 };

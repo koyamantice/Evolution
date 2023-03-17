@@ -26,8 +26,7 @@ void MashGhost::OnUpda() {
 	//ä÷êîÉ|ÉCÉìÉ^Ç≈èÛë‘ä«óù
 	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
 
-	shadow_->Update();
-	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
+	ShadowUpdate();
 	obj->SetPosition(fbxObject_->GetPosition());
 	fbxObject_->Update();
 	attack_->Upda();
@@ -35,7 +34,8 @@ void MashGhost::OnUpda() {
 
 void MashGhost::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	shadow_->Draw();
+
+	if (!isResult) { shadow_->Draw(); }
 }
 
 void MashGhost::OnDraw(DirectXCommon* dxCommon) {
@@ -66,6 +66,7 @@ void MashGhost::AttackPredict() {
 	waittimer_++;
 	attack_->SetPredict(true, waittimer_ / predictTimeMax_);
 	if (waittimer_ >= predictTimeMax_) {
+		odd_ = 1;
 		attack_->SetPredict(false, 0);
 		waittimer_ = 0;
 		scale_frame_ = 0.0f;
@@ -73,28 +74,41 @@ void MashGhost::AttackPredict() {
 		return;
 	}
 	//âΩâÒèkÇﬁÇ©
-	const float kScaleCount = 4.0f;
-	if (scale_frame_ < 1.0f) {
+	const float kScaleCount = 10.0f;
+	if (scale_frame_ <= 1.0f) {
 		scale_frame_ += 1.0f / (predictTimeMax_ / kScaleCount);
 	} else {
 		scale_frame_ = 0.0f;
+		odd_++;
 	}
-	float scale = Ease(In, Quad, scale_frame_, 25.0f, 15.0f);
+	float scale = 0;
+	if ((odd_%2)==1) {
+		scale = Ease(InOut,Linear, scale_frame_, 25.0f, 35.0f);
+		shadow_side_ = Ease(InOut, Linear, scale_frame_, 1.5f, 2.5f);
+	} else {
+		scale = Ease(InOut, Linear, scale_frame_, 35.0f, 25.0f);
+		shadow_side_ = Ease(InOut, Linear, scale_frame_, 2.5f, 1.5f);
+
+	}
 	fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+}
+
+void MashGhost::JumpAttack() {
+	waittimer_++;
+	if (waittimer_ >= (attackTimeMax_/4.0f)) {
+		speed = 0;
+		waittimer_ = 0;
+		phase_ = E_Phase::kPressAttack;
+	}
+	float frame = waittimer_/(attackTimeMax_ / 4.0f);
+	float position_y_= Ease(In, Linear, frame, 0.0f, 3.0f);
+	XMFLOAT3 pos= fbxObject_->GetPosition();
+	fbxObject_->SetPosition({pos.x,position_y_,pos.z});
 }
 
 void MashGhost::PressAttack() {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
-	waittimer_++;
-	if (waittimer_ >= attackTimeMax_) {
-		pos.y = 0;
-		fbxObject_->SetPosition(pos);
-		fbxObject_->ResetAnimation();
-		fbxObject_->PlayAnimation();
-		phase_ = E_Phase::kStartAction;
-		waittimer_ = 0;
-		return;
-	}
+
 	if (pos.y >= 0) {
 		pos.y += speed;
 		speed -= accel;
@@ -102,8 +116,17 @@ void MashGhost::PressAttack() {
 		attack_->Stamp(pos);
 		pos.y = 0;
 		speed = accel * 30.0f;
+		stamp_count_++;
 	}
-	//fbxObject_->SetRotation({ 0,-180,0 });
+	if (stamp_count_ >= 3) {
+		stamp_count_ = 0;
+		pos.y = 0;
+		fbxObject_->SetPosition(pos);
+		fbxObject_->ResetAnimation();
+		fbxObject_->PlayAnimation();
+		phase_ = E_Phase::kStartAction;
+		return;
+	}
 	fbxObject_->SetPosition(pos);
 }
 

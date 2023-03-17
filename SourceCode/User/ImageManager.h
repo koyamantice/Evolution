@@ -69,6 +69,7 @@ public:
 		Damage,
 		kMissionMsecond,
 		kMsecondNum,
+		kShine
 	};
 	enum tex2dName {
 		Lock,

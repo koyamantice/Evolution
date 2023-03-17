@@ -79,7 +79,14 @@ void Bullet::IntroUpdate(const float& Timer, const int& _stage) {
 }
 
 void Bullet::ResultUpdate(const float& Timer) {
+	isFinish = true;
 	ResultOnUpdate(Timer);
+	if (burning) {
+		BurnOut();
+	}
+	Explo->Update();
+	Status->Update();
+	ShadowUpda();
 }
 
 void Bullet::SetAggregation() {
@@ -129,7 +136,7 @@ void Bullet::CommonUpda() {
 	if (isPlayActive) { command = Control; }
 	if (!wait) { follow_frame = 0.0f; }
 	if (enemy != nullptr) {
-		if (enemy->GetHp() < 0) { clear_s_pos = fbxObj->GetPosition(); }
+		if (enemy->GetHp() <= 0) { clear_s_pos = fbxObj->GetPosition(); command = Smash; }
 	}
 	if (burning) {
 		BurnOut();
@@ -140,8 +147,7 @@ void Bullet::CommonUpda() {
 	}
 	fbxObj->Update();
 	Explo->Update();
-	Shadow->Update();
-	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
+	ShadowUpda();
 	Status->Update();
 	Status->SetPosition({ fbxObj->GetPosition().x,fbxObj->GetPosition().y + 2.5f,fbxObj->GetPosition().z });
 }
@@ -165,6 +171,9 @@ void Bullet::CommandUpda() {
 	case Slow:
 		if (wait) { wait = false; follow_frame = 0.0f; }
 		SlowUpda();
+		break;
+	case Smash:
+		SmashUpda();
 		break;
 	default:
 		assert(0);
@@ -200,7 +209,7 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 			if (command == Control) { return; }
 			Object2d::PreDraw();
 			if (!DeadFlag) {
-				if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+				if (!isFinish&&Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 					Status->Draw();
 				}
 				if (burning) { Explo->Draw(); }
@@ -281,7 +290,8 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 
 	case Slow:
 		break;
-
+	case Smash:
+		break;
 	default:
 		assert(0);
 		break;
@@ -391,6 +401,20 @@ void Bullet::BurnOut() {
 	Explo->SetPosition(exploPos);
 }
 
+void Bullet::ShadowUpda() {
+
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	float max_height_ = 12.0f;
+	float scale = ((max_height_ - pos.y) / max_height_) * shadow_side_;
+	scale = max(0.0f, scale);
+
+
+	Shadow->SetScale({ scale,scale, scale, });
+	Shadow->Update();
+	Shadow->SetPosition({ pos.x,0.01f, pos.z });
+
+}
+
 void Bullet::ControlUpda() {
 
 	if (!Follow2Position(ActionActor->GetPosition(), ActionActor->GetSize())) {
@@ -425,6 +449,16 @@ void Bullet::ControlUpda() {
 		pos.z = Ease(In, Linear, navi_frame, before_pos.z, (after_pos.z + margin));
 		fbxObj->SetPosition(pos);
 	}
+}
+
+
+
+void Bullet::SmashUpda() {
+
+	status_alpha_ = Ease(In, Linear, 0.8f, status_alpha_, 0);
+
+
+	Status->SetColor({1,1,1,status_alpha_ });
 }
 
 void Bullet::WaitUpda() {

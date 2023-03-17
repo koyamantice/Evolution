@@ -114,6 +114,27 @@ void AudioManager::LoadWave(const std::string& filename){
 	soundDatas_.insert(std::make_pair(filename,soundData));
 }
 
+void AudioManager::StopWave(const std::string& filename) {
+	//HRESULT result;
+
+	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
+	//読み込んでなければアサート
+	assert(it != soundDatas_.end());
+
+	//サウンドデータの参照
+	SoundData& soundData = it->second;
+
+	
+	// 波形データの再生
+	XAUDIO2_VOICE_STATE xa2state;
+	soundData.pSourceVoice->GetState(&xa2state);
+	if (xa2state.BuffersQueued != 0) {
+		soundData.pSourceVoice->Stop(0);
+		soundData.pSourceVoice->DestroyVoice();
+	}
+
+}
+
 void AudioManager::PlayWave(const std::string& filename, const float& Volume) {
 	HRESULT result;
 
@@ -125,8 +146,7 @@ void AudioManager::PlayWave(const std::string& filename, const float& Volume) {
 	SoundData& soundData = it->second;
 
 	// 波形フォーマットを元にSourceVoiceの生成
-	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	result = xAudio2_->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
 	
 	assert(SUCCEEDED(result));
 
@@ -136,10 +156,10 @@ void AudioManager::PlayWave(const std::string& filename, const float& Volume) {
 	buf.pContext = soundData.pBuffer;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 	buf.AudioBytes = soundData.bufferSize;
-	pSourceVoice->SetVolume(Volume);
+	soundData.pSourceVoice->SetVolume(Volume);
 	// 波形データの再生
-	result = pSourceVoice->SubmitSourceBuffer(&buf);
-	result = pSourceVoice->Start(0);
+	result = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result = soundData.pSourceVoice->Start(0);
 
 
 

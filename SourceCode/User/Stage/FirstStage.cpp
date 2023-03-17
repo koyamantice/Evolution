@@ -4,7 +4,8 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	InitCommon(dxCommon);
 	BattleInit();
 	TorchSetup(Touch::FireColor::f_green);
-
+	shineRain_ = new ShineRain();
+	shineRain_->Init();
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("MashGhost");
@@ -19,9 +20,8 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	//シーン内で必要なアクターを参照します。
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
-	//goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
-	//goal_shadow->SetPosition(enemy_shadow->GetPosition());
-	//goal_shadow->SetIsActive(false);
+
+
 
 	//導入部分の言葉
 	for(int i=0;i<intro_word_max;i++){ 
@@ -49,6 +49,8 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 
 	audioManager->LoadWave("BGM/battle.wav");
 	audioManager->PlayWave("BGM/battle.wav", 0.5f);
+	audioManager->LoadWave("SE/lastHit.wav");
+	audioManager->LoadWave("BGM/Smash.wav");
 
 	//パーティクルの初期化
 	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
@@ -83,6 +85,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
 	BattleFrontDraw(alphaBle,IntroWord[nowWord].get());
+	shineRain_->Draw();
 	dxCommon->PostDraw();
 }
 
@@ -221,7 +224,7 @@ bool FirstStage::ClearUpdate() {
 		//const float rnd_vel = 0.5f;
 		//particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0.0f, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
 		//particleEmitter->Update();
-
+		shineRain_->Update();
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			scene_changer->ChangeStart();
 		}
@@ -234,14 +237,19 @@ bool FirstStage::ClearUpdate() {
 		return true;
 	}
 	if (enemy_shadow->GetPause()) {
-		player_shadow->SetCanMove(false);
-
+		battle_result = true;
+		if (player_shadow->GetCanMove()) {
+			player_shadow->SetCanMove(false);
+			audioManager->PlayWave("SE/lastHit.wav",0.5f);
+			audioManager->StopWave("BGM/battle.wav");
+		}
 		const float rnd_vel = 0.4f;
 		particleEmitter->AddCommon(120, enemy_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
 		particleEmitter->Update();
 		finish_time++;
 
 		SmashCamera((float)(finish_time));
+		//enemy_shadow->Update();
 		ActorManager::GetInstance()->Update();
 		FieldUpdate();
 
@@ -250,8 +258,8 @@ bool FirstStage::ClearUpdate() {
 		}
 
 		if (finish_time >= 200.0f) {
-			battle_result = true;
 			stage_clear = true;
+			audioManager->PlayWave("BGM/Smash.wav", 0.3f);
 		}
 		return true;
 	}

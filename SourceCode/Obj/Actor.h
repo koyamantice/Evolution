@@ -54,8 +54,8 @@ protected:
 	bool canMove = true;
 	//–³“G‚©
 	bool isUnrivaled = false;
-
-
+	//ƒŠƒUƒ‹ƒg’†‚©
+	bool isResult = false;
 public:
 	virtual ~Actor() = default;
 	//À•W‚Ìæ“¾

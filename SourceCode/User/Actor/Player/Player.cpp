@@ -70,9 +70,21 @@ void Player::IntroMove() {
 void Player::ResultOnUpdate(const float& Timer) {
 	fbxObj->Update();
 	LockOn->Upda(angle);
-
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	if (pos.y <= 0.0f) {
+		pos.y = max(0.0f, pos.y);
+		if (jump_count%2==0) {
+			y_add = 0.2f;  // ジャンプするため重力加速度をマイナスにする
+		} else {
+			y_add = 0.3f;  // ジャンプするため重力加速度をマイナスにする
+		}
+		jump_count++;
+	}
+	pos.y += y_add;
+	y_add -= 0.02f;
+	ShadowUpda();
+	fbxObj->SetPosition(pos);
 	compornent->SetIsActive(false);
-
 	LockOn->SetIsActive(false);
 }
 
@@ -129,10 +141,9 @@ void Player::OnUpda() {
 	}
 	HitBoundMotion();
 	LimitArea();
+	ShadowUpda();
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
-	Shadow->Update();
-	Shadow->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
 	fbxObj->SetRotation(obj->GetRotation());
 	LockOn->Upda(angle);
 }
@@ -148,7 +159,9 @@ void Player::OnDraw(DirectXCommon* dxCommon) {
 }
 
 void Player::OnLastDraw(DirectXCommon* dxCommon) {
-	LockOn->Draw();
+	if (canMove) {
+		LockOn->Draw();
+	}
 }
 
 void Player::OnFinal() {
@@ -276,6 +289,16 @@ void Player::OnCollision(const std::string& Tag) {
 			onHoney = true;
 		}
 	}
+}
+
+void Player::ShadowUpda() {
+	XMFLOAT3 pos = fbxObj->GetPosition();
+	float max_height_ = 12.0f;
+	float scale = ((max_height_ - pos.y) / max_height_) * shadow_side_;
+	scale = max(0.0f, scale);
+	Shadow->SetScale({scale,scale,scale});
+	Shadow->Update();
+	Shadow->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
 }
 
 void Player::HitBoundMotion() {

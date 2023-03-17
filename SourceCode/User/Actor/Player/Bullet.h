@@ -40,6 +40,7 @@ public:
 		Control,
 		Slow,
 		Dead,
+		Smash,
 	};
 public:
 	Bullet();
@@ -110,9 +111,14 @@ protected:
 	void CommandUpda();
 
 	void ControlUpda();
+
+	void ShadowUpda();
+
 	void WaitUpda();
 	void SlowUpda();
 	void AttackUpda();
+
+	void SmashUpda();
 	bool Follow2Position(const XMFLOAT3& _pos,const float& _radius = 2.0f);
 	float follow_vel_ = 0.3f;
 	void KnockBack();
@@ -128,6 +134,10 @@ protected:
 	float fall = kFallHeight;
 	const float kDeadFrameMax = 20.0f;
 	float deadframe = 0;
+	
+	bool isFinish = false;
+	float status_alpha_ = 1.0f;
+
 
 	bool isLeft = false;
 	bool throwReady = false;
@@ -147,7 +157,7 @@ protected:
 	bool follow = false;
 	XMFLOAT2 vel_follow{};
 
-
+	float shadow_side_ = 0.2f;
 
 	bool clear_ease =true;
 	float clear_frame = 0;

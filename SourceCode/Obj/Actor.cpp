@@ -37,6 +37,7 @@ void Actor::IntroUpdate(const float& Timer) {
 }
 
 void Actor::ResultUpdate(const float& Timer) {
+	isResult = true;
 	if (isVisible) {
 		obj->Update();
 	}
