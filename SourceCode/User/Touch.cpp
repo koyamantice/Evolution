@@ -54,7 +54,7 @@ void Touch::FireAdd() {
 	const float rnd_vel = 0.05f;
 	XMFLOAT3 vel{};
 	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	vel.y = (float)rand() / RAND_MAX * rnd_vel * 2.0f;// -rnd_vel / 2.0f;
+	vel.y = (float)rand() / RAND_MAX * rnd_vel * 2.0f;
 	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 	fire->Add(20, { pos.x,pos.y + 3.0f,pos.z }, vel, {}, 1.0f, 0.0f, s_color, e_color);

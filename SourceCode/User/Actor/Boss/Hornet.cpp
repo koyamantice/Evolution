@@ -202,6 +202,7 @@ void Hornet::PressAttack() {
 
 	switch (motion_) {
 	case E_Motion::kFollowPlayer:
+		collide_size = 0.0f;
 		isUnrivaled = true;
 		if (hit_once_) {hit_once_ = false;}
 
@@ -216,6 +217,7 @@ void Hornet::PressAttack() {
 
 		if (waittimer_ > 100) {
 			waittimer_ = 0;
+			collide_size = 2.0f;
 			motion_ = E_Motion::kPressBee;
 			before_pos = pos;
 			fbxObject_->ResetAnimation();
@@ -393,8 +395,8 @@ void Hornet::ChasePlayer() {
 }
 
 void Hornet::FeedHoney() {
+	if (!honey[honey_approch_]->GetCanMove()) { honey[honey_approch_]->SetCanMove(true); }
 
-	if (honey[honey_approch_]->GetCanMove()) { honey[honey_approch_]->SetCanMove(false); }
 	collide_size = 4.0f;
 	isUnrivaled = false;
 
@@ -410,7 +412,8 @@ void Hornet::FeedHoney() {
 	pos.z = Ease(In, Quad, fade_frame_ , before_pos.z, after_pos.z);
 	fbxObject_->SetPosition(pos);
 
-	if ((!overDamage && pinchLife > hp)) {
+	if ((!overDamage && pinchLife >= hp)) {
+
 		fbxObject_->StopAnimation();
 		fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 		if (!overDamage) {
@@ -420,7 +423,7 @@ void Hornet::FeedHoney() {
 			collide_size = 2.0f;
 		}
 		fade_frame_  = 0;
-		hp += 5;
+		isUnrivaled = true;
 		phase_ = E_Phase::kStartAction;
 	}
 }

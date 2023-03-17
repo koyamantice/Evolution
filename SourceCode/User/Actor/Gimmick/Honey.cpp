@@ -138,7 +138,7 @@ void Honey::WaitDriver() {
 			particle_draw_num_ = 0;
 		}
 	}
-	if (collide) {
+	if (collide) {//(hp/maxhp)*scale
 		if (stock > 5 || ride_num > 4) { return; }
 		driver[ride_num] = ActorManager::GetInstance()->SetActionBullet(obj->GetPosition(), collide_size);
 		if (driver[ride_num] != nullptr) {
@@ -149,20 +149,6 @@ void Honey::WaitDriver() {
 		collide = false;
 	}
 
-}
-
-void Honey::DispersionDriver() {
-	for (int i = 0; i < ride_num; i++) {
-		if (driver[i] != nullptr) {
-			driver[i]->SetsPlayActive(false);
-			driver[i]->SetCommand(Bullet::command::Wait);
-			driver[i] = nullptr;
-		}
-	}
-	ride_num = 0;
-	stock = 0;
-	canMove = false;
-	phase_ = E_Phase::kInviteBee;
 }
 
 void Honey::SetupHoney() {
@@ -191,8 +177,20 @@ void Honey::SetupHoney() {
 		honey_obj_->SetScale(sca_honey);
 		honey_obj_->SetPosition({ obj->GetPosition().x, height ,obj->GetPosition().z });
 	}
+}
 
-
+void Honey::DispersionDriver() {
+	for (int i = 0; i < ride_num; i++) {
+		if (driver[i] != nullptr) {
+			driver[i]->SetsPlayActive(false);
+			driver[i]->SetCommand(Bullet::command::Wait);
+			driver[i] = nullptr;
+		}
+	}
+	ride_num = 0;
+	stock = 0;
+	canMove = false;
+	phase_ = E_Phase::kInviteBee;
 }
 
 void Honey::InviteBee() {

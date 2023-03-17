@@ -286,7 +286,6 @@
     <ClCompile Include="SourceCode\User\Actor\Boss\CowKing.cpp">
       <Filter>User\ボス\ボス固有</Filter>
     </ClCompile>
-    <ClCompile Include="ShineRain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -557,7 +556,6 @@
     <ClInclude Include="SourceCode\User\Actor\Boss\CowKing.h">
       <Filter>User\ボス\ボス固有</Filter>
     </ClInclude>
-    <ClInclude Include="ShineRain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

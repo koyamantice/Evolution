@@ -166,7 +166,7 @@ void FirstStage::IntroCamera(const float& Timer) {
 		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
 	}
 	if (Timer/ intro_count_max >= 1.0f) {
-		camera_angle = 0;
+		camera_angle = max(0, camera_angle);
 		hight = camera_hight;
 	}
 	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
