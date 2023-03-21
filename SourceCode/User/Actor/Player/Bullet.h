@@ -4,6 +4,7 @@
 #include"Object2d.h"
 #include"ImageManager.h"
 #include <AudioManager.h>
+#include"Trace.h"
 
 using namespace DirectX;
 class Bullet {
@@ -113,7 +114,7 @@ protected:
 	void ControlUpda();
 
 	void ShadowUpda();
-
+	void TraceUpda();
 	void WaitUpda();
 	void SlowUpda();
 	void AttackUpda();
@@ -174,6 +175,10 @@ protected:
 	int command = 0;
 	std::unique_ptr<FBXObject3d> fbxObj;
 	std::unique_ptr<Object2d> Shadow = nullptr;
+
+	std::list<std::unique_ptr<Trace>> traces_;
+	int foot_count_ = 0;
+
 	std::unique_ptr<Object2d> Status = nullptr;
 	std::unique_ptr<Object2d> Explo = nullptr;
 	std::unique_ptr<Object2d> CharaDead = nullptr;
@@ -200,6 +205,7 @@ protected:
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
 	Actor* ActionActor = nullptr;
+
 	XMFLOAT3 landing{};
 
 	bool isPlayActive = false;

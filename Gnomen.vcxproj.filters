@@ -286,6 +286,9 @@
     <ClCompile Include="SourceCode\User\Actor\Boss\CowKing.cpp">
       <Filter>User\ボス\ボス固有</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\User\Actor\Player\Trace.cpp">
+      <Filter>User\自機関連\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -555,6 +558,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\User\Actor\Boss\CowKing.h">
       <Filter>User\ボス\ボス固有</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\User\Actor\Player\Trace.h">
+      <Filter>User\自機関連\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

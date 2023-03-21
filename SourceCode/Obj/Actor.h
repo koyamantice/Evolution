@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <memory>
+#include <cassert>
 #include <string>
 #include <DirectXMath.h>
 #include <algorithm>

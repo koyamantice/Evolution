@@ -83,6 +83,7 @@ void Player::ResultOnUpdate(const float& Timer) {
 	pos.y += y_add;
 	y_add -= 0.02f;
 	ShadowUpda();
+	TraceUpda();
 	fbxObj->SetPosition(pos);
 	compornent->SetIsActive(false);
 	LockOn->SetIsActive(false);
@@ -142,6 +143,7 @@ void Player::OnUpda() {
 	HitBoundMotion();
 	LimitArea();
 	ShadowUpda();
+	TraceUpda();
 	fbxObj->Update();
 	fbxObj->SetPosition(obj->GetPosition());
 	fbxObj->SetRotation(obj->GetRotation());
@@ -151,6 +153,9 @@ void Player::OnUpda() {
 void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
 	Shadow->Draw();
+	for (std::unique_ptr<Trace>& trace : traces_) {
+		trace->Draw();
+	}
 	particleEmitter_->Draw(alphaBle);
 }
 
@@ -211,7 +216,7 @@ void Player::Move() {
 		input->PushKey(DIK_D) ||
 		input->PushKey(DIK_A)
 		) {
-
+		foot_count_--;
 		float StickX = input->GetLeftControllerX();
 		float StickY = input->GetLeftControllerY();
 		const float STICK_MAX = 32767.0f;
@@ -299,6 +304,21 @@ void Player::ShadowUpda() {
 	Shadow->SetScale({scale,scale,scale});
 	Shadow->Update();
 	Shadow->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
+}
+
+void Player::TraceUpda() {
+	if (foot_count_ <= 0) {
+		float foot_rot = fbxObj->GetPosition().y;
+		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(foot_rot, fbxObj->GetPosition());
+		traces_.push_back(std::move(Trace_));
+		foot_count_ = 10;
+	}
+	for (std::unique_ptr<Trace>& trace : traces_) {
+		trace->Update();
+	}
+	traces_.remove_if([](std::unique_ptr<Trace>& trace) {
+		return trace->GetLife() <= 0;
+		});
 }
 
 void Player::HitBoundMotion() {

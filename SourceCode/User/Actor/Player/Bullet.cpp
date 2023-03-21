@@ -20,8 +20,8 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	fbxObj->LoadAnimation();
 	fbxObj->PlayAnimation();
 
-	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
-		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z},
+		{ 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Explo_->SetIsBillboard(true);
 	Explo.reset(Explo_);
 
@@ -30,6 +30,9 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	Shadow_->Object2dCreate();
 	Shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 	Shadow.reset(Shadow_);
+
+
+
 
 
 	audioManager = std::make_unique<AudioManager>();
@@ -53,6 +56,7 @@ void Bullet::Update() {
 		CommandUpda();
 		OnUpda();
 		LimitArea();
+		TraceUpda();
 	}
 }
 
@@ -84,6 +88,7 @@ void Bullet::ResultUpdate(const float& Timer) {
 	if (burning) {
 		BurnOut();
 	}
+	TraceUpda();
 	Explo->Update();
 	Status->Update();
 	ShadowUpda();
@@ -184,6 +189,9 @@ void Bullet::CommandUpda() {
 void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		Object2d::PreDraw();
+		for (std::unique_ptr<Trace>& trace : traces_) {
+			trace->Draw();
+		}
 		Shadow->Draw();
 		OnFirstDraw(dxCommon);
 	}
@@ -413,6 +421,22 @@ void Bullet::ShadowUpda() {
 	Shadow->Update();
 	Shadow->SetPosition({ pos.x,0.01f, pos.z });
 
+}
+
+void Bullet::TraceUpda() {
+	foot_count_--;
+	if (foot_count_ <=0) {
+		float foot_rot = fbxObj->GetPosition().y;
+		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(foot_rot, fbxObj->GetPosition());
+		traces_.push_back(std::move(Trace_));
+		foot_count_ = 30;
+	}
+	for (std::unique_ptr<Trace>& trace : traces_) {
+		trace->Update();
+	}
+	traces_.remove_if([](std::unique_ptr<Trace>& trace) {
+		return trace->GetLife()<=0;
+	});
 }
 
 void Bullet::ControlUpda() {

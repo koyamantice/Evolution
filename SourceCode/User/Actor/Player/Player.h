@@ -38,7 +38,8 @@ private:
 	void OnCollision(const std::string& Tag)override;
 	
 	void ShadowUpda();
-	
+	void TraceUpda();
+
 	void HitBoundMotion();
 
 	void LimitArea();
@@ -83,4 +84,7 @@ private:
 
 	std::unique_ptr<FBXObject3d> fbxObj;
 	std::unique_ptr<ParticleEmitter> particleEmitter_ = nullptr;
+	std::list<std::unique_ptr<Trace>> traces_;
+	int foot_count_ = 0;
+
 };

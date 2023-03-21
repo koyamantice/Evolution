@@ -167,6 +167,7 @@
     <ClCompile Include="SourceCode\User\Actor\Player\BulletRed.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\Player.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\PlayerUI.cpp" />
+    <ClCompile Include="SourceCode\User\Actor\Player\Trace.cpp" />
     <ClCompile Include="SourceCode\User\Aim.cpp" />
     <ClCompile Include="SourceCode\User\ImageManager.cpp" />
     <ClCompile Include="SourceCode\User\ModelManager.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="SourceCode\User\Actor\Player\BulletRed.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\Player.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\PlayerUI.h" />
+    <ClInclude Include="SourceCode\User\Actor\Player\Trace.h" />
     <ClInclude Include="SourceCode\User\Aim.h" />
     <ClInclude Include="SourceCode\User\ImageManager.h" />
     <ClInclude Include="SourceCode\User\ModelManager.h" />
