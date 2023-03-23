@@ -12,28 +12,26 @@ Bullet::Bullet() {
 }
 
 void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent* compornent) {
-	FBXObject3d* fbxObj_ = new FBXObject3d();
-	fbxObj_->Initialize();
-	fbxObj_->SetModel(model);
-	fbxObj_->SetScale({ 0.003f,0.003f, 0.003f });
-	fbxObj.reset(fbxObj_);
+	
+	fbxObj= std::make_unique<FBXObject3d>();
+	fbxObj->Initialize();
+	fbxObj->SetModel(model);
+	fbxObj->SetScale({ 0.003f,0.003f, 0.003f });
 	fbxObj->LoadAnimation();
 	fbxObj->PlayAnimation();
 
-	Object2d* Explo_ = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z},
+	Explo = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z },
 		{ 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-	Explo_->SetIsBillboard(true);
-	Explo.reset(Explo_);
+	Explo->SetIsBillboard(true);
 
-	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
+	Shadow = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	Shadow_->Object2dCreate();
-	Shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
-	Shadow.reset(Shadow_);
+	Shadow->SetRotation({ DEGREE_QUARTER,0,0 });
 
-
-
-
+	Status = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
+		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+	Status->SetIsBillboard(true);
+	Status->SetRotation({ 0,0,0 });
 
 	audioManager = std::make_unique<AudioManager>();
 	audioManager->LoadWave("SE/attack.wav");
@@ -427,9 +425,16 @@ void Bullet::TraceUpda() {
 	foot_count_--;
 	if (foot_count_ <=0) {
 		float foot_rot = fbxObj->GetPosition().y;
-		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(foot_rot, fbxObj->GetPosition());
+		Trace::ImageFoot imagefoot_;
+		if (odd_count_%2==0) {
+			imagefoot_ = Trace::ImageFoot::LeftFoot;
+		} else {
+			imagefoot_ = Trace::ImageFoot::RightFoot;
+		}
+		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_,foot_rot, fbxObj->GetPosition());
 		traces_.push_back(std::move(Trace_));
 		foot_count_ = 30;
+		odd_count_++;
 	}
 	for (std::unique_ptr<Trace>& trace : traces_) {
 		trace->Update();

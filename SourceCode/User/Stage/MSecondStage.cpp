@@ -231,9 +231,9 @@ bool MSecondStage::ClearUpdate() {
 	if (stage_clear) {
 
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
-			scene_changer->ChangeStart();
+			sceneChanger_->ChangeStart();
 		}
-		scene_changer->ChangeScene("SECONDSTAGE");
+		sceneChanger_->ChangeScene("SECONDSTAGE");
 		ActorManager::GetInstance()->ResultUpdate(0);
 		ResultCamera(0);
 		FieldUpdate();

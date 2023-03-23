@@ -22,9 +22,9 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 
 
 	//導入部分の言葉
-	for(int i=0;i<intro_word_max;i++){ 
+	for (int i = 0; i < intro_word_max; i++) {
 		Sprite* IntroWord_ = Sprite::Create(ImageManager::Intro01 + i, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
-		IntroWord[i].reset(IntroWord_);	
+		IntroWord[i].reset(IntroWord_);
 	}
 
 	//カメラの初期化
@@ -32,7 +32,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	camera_distance.z = cosf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
 	player_shadow->SetAngle(camera_angle);
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
-	camera->SetEye(XMFLOAT3{ 
+	camera->SetEye(XMFLOAT3{
 		player_shadow->GetPosition().x + camera_distance.x,
 		first_hight,
 		player_shadow->GetPosition().z + camera_distance.z
@@ -82,7 +82,7 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 	BattleBackDraw();
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
-	BattleFrontDraw(alphaBle,IntroWord[nowWord].get());
+	BattleFrontDraw(alphaBle, IntroWord[nowWord].get());
 	dxCommon->PostDraw();
 }
 
@@ -93,67 +93,65 @@ void FirstStage::Finalize() {
 }
 
 bool FirstStage::IntroUpdate() {
-	if (battle_intro) {
-		//フェードイン機能
-		if (scene_first_change) {
-			if (feedin_frame <= 1.0f) {
-				feedin_frame += 1.0f / feedin_frame_max;
-			} else {
-				scene_first_change = false;
-			}
-			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
-			filter_first->SetColor({ 1,1,1,filter_alpha });
-			ActorManager::GetInstance()->IntroUpdate(intro_count);
-			FieldUpdate();
-			return true;
+	if (!battle_intro) { return false; }
+	//フェードイン機能
+	if (scene_first_change) {
+		if (feedin_frame <= 1.0f) {
+			feedin_frame += 1.0f / feedin_frame_max;
+		} else {
+			scene_first_change = false;
 		}
-
-		//スキップ
-		if (intro_skip) {
-			if (feedin_frame > 0.0f) {
-				feedin_frame -= 1.0f / feedin_frame_max;
-			} else {
-				intro_skip = false;
-				intro_count = intro_count_max;
-				IntroCamera(intro_count_max);
-				ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max, "", kSecondScene);
-				FieldUpdate();
-			}
-			filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
-			filter_first->SetColor({ 1,1,1,filter_alpha });
-			
-			return true;
-		}
-
-		if (input->TriggerButton(input->START)||
-			input->TriggerKey(DIK_SPACE)) {
-			if (!intro_skip) {
-				intro_skip = true;
-			}
-		}
-
-		intro_count += intro_speed;
-
-		//導入部分終了処理
-		if (intro_count >= intro_count_max) {
-			intro_count = 0;
-			battle_intro = false;
-			return true;
-		}
-
-		//導入の語りを分割しています.
-		if ((int)intro_count % ((int)(intro_count_max / intro_speed) / intro_word_max) == 0) {
-			if (nowWord != intro_word_max - 1) {
-				nowWord++;
-			}
-		}
-
-		IntroCamera(intro_count);
-		ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max);
+		filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+		filter_first->SetColor({ 1,1,1,filter_alpha });
+		ActorManager::GetInstance()->IntroUpdate(intro_count);
 		FieldUpdate();
 		return true;
 	}
-	return false;
+
+	//スキップ
+	if (intro_skip) {
+		if (feedin_frame > 0.0f) {
+			feedin_frame -= 1.0f / feedin_frame_max;
+		} else {
+			intro_skip = false;
+			intro_count = intro_count_max;
+			IntroCamera(intro_count_max);
+			ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max, "", kSecondScene);
+			FieldUpdate();
+		}
+		filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+		filter_first->SetColor({ 1,1,1,filter_alpha });
+
+		return true;
+	}
+
+	if (input->TriggerButton(input->START) ||
+		input->TriggerKey(DIK_SPACE)) {
+		if (!intro_skip) {
+			intro_skip = true;
+		}
+	}
+
+	intro_count += intro_speed;
+
+	//導入部分終了処理
+	if (intro_count >= intro_count_max) {
+		intro_count = 0;
+		battle_intro = false;
+		return true;
+	}
+
+	//導入の語りを分割しています.
+	if ((int)intro_count % ((int)(intro_count_max / intro_speed) / intro_word_max) == 0) {
+		if (nowWord != intro_word_max - 1) {
+			nowWord++;
+		}
+	}
+
+	IntroCamera(intro_count);
+	ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max);
+	FieldUpdate();
+	return true;
 }
 
 void FirstStage::IntroCamera(const float& Timer) {
@@ -161,11 +159,11 @@ void FirstStage::IntroCamera(const float& Timer) {
 	const float delay = 0.9f;
 	const float reaching_time = intro_count_max * delay;
 	float hight = camera_hight;
-	if (Timer/ reaching_time <= 1.0f) {
+	if (Timer / reaching_time <= 1.0f) {
 		camera_angle = Ease(In, Linear, Timer / reaching_time, DEGREE_MAX, 0);
 		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
 	}
-	if (Timer/ intro_count_max >= 1.0f) {
+	if (Timer / intro_count_max >= 1.0f) {
 		camera_angle = max(0, camera_angle);
 		hight = camera_hight;
 	}
@@ -194,7 +192,7 @@ void FirstStage::SmashCamera(const float& Timer) {
 	XMFLOAT3 ease_eye = e_eye;
 	float ease_time = Timer / (float)60.0f;
 
-	if (ease_time<=1.0f) {
+	if (ease_time <= 1.0f) {
 
 		ease_target = {
 		Ease(In,Linear,ease_time,player_shadow->GetCameraPos(camera_angle, camera_target).x,enemy_shadow->GetPosition().x),
@@ -222,10 +220,10 @@ bool FirstStage::ClearUpdate() {
 		//particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0.0f, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
 		//particleEmitter->Update();
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
-			scene_changer->ChangeStart();
+			sceneChanger_->ChangeStart();
 		}
 		ResultCamera(0);
-		scene_changer->ChangeScene("MSECOND");
+		sceneChanger_->ChangeScene("MSECOND");
 		ActorManager::GetInstance()->ResultUpdate(0);
 		//パーティクルの更新処理
 		particleEmitter->Update();
@@ -236,7 +234,7 @@ bool FirstStage::ClearUpdate() {
 		battle_result = true;
 		if (player_shadow->GetCanMove()) {
 			player_shadow->SetCanMove(false);
-			audioManager->PlayWave("SE/lastHit.wav",0.5f);
+			audioManager->PlayWave("SE/lastHit.wav", 0.5f);
 			audioManager->StopWave("BGM/battle.wav");
 		}
 		const float rnd_vel = 0.4f;
@@ -249,7 +247,7 @@ bool FirstStage::ClearUpdate() {
 		ActorManager::GetInstance()->Update();
 		FieldUpdate();
 
-		if (finish_time >=100.0f) {
+		if (finish_time >= 100.0f) {
 			enemy_shadow->SetCanMove(false);
 		}
 
@@ -273,10 +271,10 @@ bool FirstStage::GameOverUpdate() {
 	if (ActorManager::GetInstance()->SearchNum("Bullet") <= 0) {
 		gameover = true;
 		player_shadow->SetCanMove(false);
-		scene_changer->ChangeStart();
+		sceneChanger_->ChangeStart();
 	}
 	if (gameover) {
-		scene_changer->ChangeGameOver();
+		sceneChanger_->ChangeGameOver();
 	}
 	return false;
 

@@ -36,7 +36,7 @@ PauseUI::PauseUI() {
 
 	SceneChanger* scene_changer_ = new SceneChanger();
 	scene_changer_->Init();
-	scene_changer.reset(scene_changer_);
+	sceneChanger_.reset(scene_changer_);
 
 }
 
@@ -71,7 +71,7 @@ void PauseUI::Initialize() {
 }
 
 void PauseUI::Update() {
-	if (scene_changer->GetEasingStart()) { scene_changer->ChangeScene("TITLE", SceneChanger::Reverse); return; }
+	if (sceneChanger_->GetEasingStart()) { sceneChanger_->ChangeScene("TITLE", SceneChanger::Reverse); return; }
 
 	if (input->TriggerButton(input->START)) {
 		Reset();
@@ -130,7 +130,7 @@ void PauseUI::Draw() {
 	default:
 		break;
 	}
-	scene_changer->Draw();
+	sceneChanger_->Draw();
 }
 
 
@@ -241,7 +241,7 @@ void PauseUI::FinalCheck2Title() {
 		Reset();
 		switch (finalCheckBar_) {
 		case FinalCheckFrame::BACKTITLE:
-			scene_changer->ChangeStart();
+			sceneChanger_->ChangeStart();
 			break;
 		case FinalCheckFrame::CANCELSELECT:
 			state_ = SystemConfig::kOpenOptionMenu;

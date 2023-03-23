@@ -91,7 +91,9 @@ public:
 		kMission_5,
 		kMission_s,
 		kpredicted,
-		kFoot,
+		kLeftFoot,
+		kRightFoot,
+
 	};
 	enum particleName {
 		nul = 0,

@@ -133,9 +133,10 @@ void ActorManager::CheckBulletCollisions() {
 	}
 	for (auto itrA = Bullets.begin(); itrA != Bullets.end(); ++itrA) {
 		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
-			if (itrA == itrB) { continue; }
 			Bullet* bullet_a = itrA->get();
 			Bullet* bullet_b = itrB->get();
+			if (itrA == itrB) { continue; }
+			if(bullet_a->GetDeadFlag()|| bullet_b->GetDeadFlag()) { continue; }
 			if (Collision::SphereCollision2(bullet_a->GetPosition(), 1.0f, bullet_b->GetPosition(), 1.0f)) {
 				bullet_a->BulletCollision(bullet_b->GetPosition(),bullet_b->GetID());
 				bullet_b->BulletCollision(bullet_a->GetPosition(),bullet_a->GetID());

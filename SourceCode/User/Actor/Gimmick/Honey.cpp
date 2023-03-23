@@ -30,22 +30,19 @@ void Honey::OnInit() {
 	
 	collide_size = 6.0f;
 
-
-
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 6; j++) {
-			Object2d* mission_ = Object2d::Create(ImageManager::kMission_0 + j, { 0,0,0 },
+			missions[i][j] = Object2d::Create(ImageManager::kMission_0 + j, { 0,0,0 },
 				{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-			mission_->SetIsBillboard(true);
-			mission_->SetRotation({ 0,0,0 });
-			missions[i][j].reset(mission_);
+			missions[i][j]->SetIsBillboard(true);
+			missions[i][j]->SetRotation({ 0,0,0 });
 		}
 	}
-	Object2d* slash_ = Object2d::Create(ImageManager::kMission_s, { 0,0,0 },
+
+	slash = Object2d::Create(ImageManager::kMission_s, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	slash_->SetIsBillboard(true);
-	slash_->SetRotation({ 0,0,0 });
-	slash.reset(slash_);
+	slash->SetIsBillboard(true);
+	slash->SetRotation({ 0,0,0 });
 
 	//パーティクルの初期化
 	particleEmitter = std::make_unique<ParticleEmitter>(ImageManager::smoke);

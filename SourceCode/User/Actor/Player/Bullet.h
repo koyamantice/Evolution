@@ -76,6 +76,7 @@ public:
 	const int& GetCommand() { return command; }
 	//
 	void SetDeadFlag(const bool& DeadFlag) { this->DeadFlag = DeadFlag; }
+	const bool& GetDeadFlag() { return DeadFlag; }
 	//Šî–{ˆ—
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//‰Šú‰»ˆ—
 	void Update();		//XVˆ—
@@ -178,7 +179,7 @@ protected:
 
 	std::list<std::unique_ptr<Trace>> traces_;
 	int foot_count_ = 0;
-
+	int odd_count_ = 0;
 	std::unique_ptr<Object2d> Status = nullptr;
 	std::unique_ptr<Object2d> Explo = nullptr;
 	std::unique_ptr<Object2d> CharaDead = nullptr;

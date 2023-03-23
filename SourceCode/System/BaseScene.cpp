@@ -24,9 +24,9 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 	ImageManager::GetIns()->LoadParticle();
 
 	//ƒV[ƒ“Ø‚è‘Ö‚¦‚Ì‰Šú‰»
-	scene_changer = std::make_unique <SceneChanger>();
-	scene_changer->Init();
-	scene_changer->InitOver();
+	sceneChanger_ = std::make_unique <SceneChanger>();
+	sceneChanger_->Init();
+	sceneChanger_->InitOver();
 
 }
 

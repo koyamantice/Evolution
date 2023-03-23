@@ -6,35 +6,27 @@
 using namespace DirectX;
 
 void Aim::Init() {
-	Object2d* Lock_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Lock_->SetRotation({ 90,0,0 });
-	Lock_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
-	LockOn.reset(Lock_);
+	LockOn = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	LockOn->SetRotation({ 90,0,0 });
+	LockOn->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 
-	Object2d* Whistle_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	Whistle_->SetRotation({ 90,0,0 });
-	Whistle_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
-	Whistle.reset(Whistle_);
-
+	Whistle = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	Whistle->SetRotation({ 90,0,0 });
+	Whistle->SetColor(HALF_ALPHA);
 
 	for (int i = 0; i < COMMENTMAX;i++) {
-		Object2d* UI_ = Object2d::Create(ImageManager::SlowUI + i, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-		UI_->SetRotation({ 0,0,0 });
-		UI_->SetIsBillboard(true);
-		comment_ui_[i].reset(UI_);
-		comment_ui_[i]->SetPosition({100,-50,0});
-
+		comment_ui_[i] = Object2d::Create(ImageManager::SlowUI + i, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
+		comment_ui_[i]->SetIsBillboard(true);
+		comment_ui_[i]->SetPosition({100,100,100});
 	}
-
 
 	for (int i = 0; i < GuidNum; i++) {
-		Object2d* Guid_ = Object2d::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-		Guid_->SetRotation({ DEGREE_QUARTER,0,0 });
-		Guid_->SetColor({ 1.0f,1.0f,1.0f ,0.5f });
-		Guid[i].reset(Guid_);
+		Guid[i] = Object2d::Create(ImageManager::Guid, { 0,0,0 }, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+		Guid[i]->SetRotation({ DEGREE_QUARTER,0,0 });
+		Guid[i]->SetColor(HALF_ALPHA);
 	}
 
-	partMan = new ParticleManager();
+	partMan = std::make_unique <ParticleManager>();
 	partMan->Initialize(ImageManager::nul);
 
 	audioManager = std::make_unique<AudioManager>();

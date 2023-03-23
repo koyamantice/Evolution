@@ -19,20 +19,16 @@ void BulletGreen::OnInit() {
 	landing = player->GetLockPos();
 	Color = DeathColor::Green;
 
-	Object2d* Lock_ = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
+	Status = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-	Lock_->SetIsBillboard(true);
-	Lock_->Object2dCreate();
-	Lock_->SetRotation({ 0,0,0 });
-	Status.reset(Lock_);
+	Status->SetIsBillboard(true);
+	Status->SetRotation({ 0,0,0 });
 
 
-	Object2d* CharaDead_ = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z },
+	CharaDead = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	CharaDead_->SetIsBillboard(true);
-	CharaDead_->Object2dCreate();
-	CharaDead_->SetRotation({ 0,0,0 });
-	CharaDead.reset(CharaDead_);
+	CharaDead->SetIsBillboard(true);
+	CharaDead->SetRotation({ 0,0,0 });
 }
 
 void BulletGreen::OnUpda() {
@@ -48,7 +44,7 @@ void BulletGreen::OnFinal() {
 
 void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (collide) { return; }
-	if (command == Dead|| command ==Smash ) { return; }
+	if (command == Dead|| command == Smash ) { return; }
 	if (isPlayActive) { return; }
 	if (ID < Id) { return; }
 	collide = true;

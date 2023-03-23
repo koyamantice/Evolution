@@ -5,9 +5,13 @@ class Trace{
 private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 public:
-	Trace(const float& rot_ = 0.0f, const XMFLOAT3& pos_ = {});
+	enum ImageFoot{
+		LeftFoot=0,
+		RightFoot
+	};
+	Trace(const ImageFoot& imagefoot_=LeftFoot,const float& rot_ = 0.0f, const XMFLOAT3& pos_ = {});
 	~Trace() {};
-	void Initialize(const float& rot_, const XMFLOAT3& pos_);
+	void Initialize(const ImageFoot& imagefoot_, const float& rot_, const XMFLOAT3& pos_);
 	void Update();
 	void Draw();
 	const int& GetLife() { return life_; }

@@ -3,11 +3,11 @@
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
-#include <DirectXMath.h>
 #include <d3dx12.h>
+#include <memory>
+#include <DirectXMath.h>
+
 #include "Camera.h"
-
-
 
 #define DEFALUT_ALPHA {1,1,1,1}
 #define HALF_ALPHA {1,1,1,0.5f}
@@ -58,7 +58,7 @@ public: // 静的メンバ関数
 	/// 描画後処理
 	static void PostDraw();
 	//テクスチャ生成
-	static Object2d* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size={1.0f,1.0f,1.0f}, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
+	static std::unique_ptr<Object2d> Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size={1.0f,1.0f,1.0f}, XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f });
 
 	/// <summary>
 	/// カメラセット

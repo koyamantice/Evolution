@@ -2,6 +2,11 @@
 
 
 void BattleScene::BattleInit() {
+
+	lightGroup->SetDirLightActive(0, true);
+	lightGroup->SetDirLightActive(1, true);
+	lightGroup->SetDirLightActive(2, true);
+
 	//“±“ü˜g
 	Sprite* _Screen = nullptr;
 	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
@@ -290,6 +295,6 @@ void BattleScene::BattleFrontDraw(blendType _blendType,Sprite* _introword) {
 		return;
 	}
 
-	scene_changer->Draw();
+	sceneChanger_->Draw();
 }
 

@@ -86,5 +86,6 @@ private:
 	std::unique_ptr<ParticleEmitter> particleEmitter_ = nullptr;
 	std::list<std::unique_ptr<Trace>> traces_;
 	int foot_count_ = 0;
-
+	int odd_count_ = 0;
+	float foot_rot_ = 0.0f;
 };

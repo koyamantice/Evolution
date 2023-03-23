@@ -50,10 +50,9 @@ void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
 	fbxObject_->Initialize(_model, _scale, _rotation);
 	fbxObject_->LoadAnimation();
 	//丸影
-	Object2d* Shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
+	shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
 		{ 0.7f,0.7f,0.7f }, { 1,1,1,1 });
-	Shadow_->SetRotation({ 90,0,0 });
-	shadow_.reset(Shadow_);
+	shadow_->SetRotation({ 90,0,0 });
 	//パーティクル
 	particle_ = std::make_unique<ParticleEmitter>(ImageManager::nul);
 }

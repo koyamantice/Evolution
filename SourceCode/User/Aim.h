@@ -11,7 +11,7 @@ class Player;
 class Aim {
 private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
-
+	Input* input = Input::GetInstance();
 public:
 	void Init();
 	void Upda(float angle);
@@ -33,11 +33,10 @@ private:
 
 	std::unique_ptr<Object2d> comment_ui_[COMMENTMAX]{};
 	std::unique_ptr<AudioManager> audioManager = nullptr;
+	std::unique_ptr <ParticleManager> partMan = nullptr;
 
 
 	XMFLOAT3 GuidPos[GuidNum];
-	Input* input = Input::GetInstance();
-	ParticleManager* partMan = nullptr;
 	XMFLOAT3 MoveVector(DirectX::XMVECTOR v, float angle);
 	XMFLOAT3 after_pos{};
 

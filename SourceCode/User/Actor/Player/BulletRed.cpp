@@ -18,20 +18,9 @@ void BulletRed::OnInit() {
 	landing = player->GetLockPos();
 	Color = DeathColor::Red;
 
-	Object2d* CharaDead_ = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z},
+	CharaDead = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	CharaDead_->SetIsBillboard(true);
-	CharaDead_->Object2dCreate();
-	CharaDead_->SetRotation({ 0,0,0 });
-	CharaDead.reset(CharaDead_);
-
-
-	Object2d* Lock_ = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
-		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-	Lock_->SetIsBillboard(true);
-	Lock_->Object2dCreate();
-	Lock_->SetRotation({ 0,0,0 });
-	Status.reset(Lock_);
+	CharaDead->SetIsBillboard(true);
 
 }
 

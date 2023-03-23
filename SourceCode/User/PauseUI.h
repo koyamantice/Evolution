@@ -86,7 +86,7 @@ private:
 	std::array<XMFLOAT2, Max> basesizes{};
 
 	
-	std::unique_ptr<SceneChanger> scene_changer = nullptr;
+	std::unique_ptr<SceneChanger> sceneChanger_ = nullptr;
 
 	XMFLOAT2 move{};
 

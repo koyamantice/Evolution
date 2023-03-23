@@ -157,10 +157,10 @@ bool SecondStage::ClearUpdate() {
 		particleEmitter->Update();
 
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
-			scene_changer->ChangeStart();
+			sceneChanger_->ChangeStart();
 		}
 		ResultCamera(0);
-		scene_changer->ChangeScene("THIRDSTAGE");
+		sceneChanger_->ChangeScene("THIRDSTAGE");
 		ActorManager::GetInstance()->ResultUpdate(0);
 		FieldUpdate();
 		return true;

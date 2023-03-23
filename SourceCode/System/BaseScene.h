@@ -33,7 +33,6 @@ enum SceneNum{
 	kFirstScene=0,
 	kMSecondScene,
 	kSecondScene,
-
 };
 
 
@@ -52,12 +51,12 @@ protected:
 	std::unique_ptr<DebugCamera> camera =  nullptr ;
 	std::unique_ptr<LightGroup> lightGroup = nullptr;
 
-	std::unique_ptr<SceneChanger> scene_changer = nullptr;
+	std::unique_ptr<SceneChanger> sceneChanger_ = nullptr;
 	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
 	std::unique_ptr<AudioManager> audioManager = nullptr;
 
+	bool isDebug = false;
 	bool pause = false;
-
 	bool scene_first_change = true;
 	bool intro_skip = false;
 public:
@@ -74,16 +73,19 @@ public:
 	/// 描画
 	/// </summary>
 	virtual void Draw(DirectXCommon* dxCommon) = 0;
-
+	/// <summary>
+	/// デバック描画
+	/// </summary>
+	/// <returns>可否</returns>
+	virtual bool DebugDraw() { return false; };
+	/// <summary>
+	/// 終了
+	/// </summary>
+	virtual void Finalize() = 0;
 	/// <summary>
 	/// 共通の初期化
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void InitCommon(DirectXCommon* dxCommon);
-
-	/// <summary>
-	/// 終了
-	/// </summary>
-	virtual void Finalize()=0;
 };
 

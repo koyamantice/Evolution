@@ -13,7 +13,7 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	lightGroup->SetDirLightActive(0,true);
 	lightGroup->SetDirLightActive(1,true);
 	lightGroup->SetDirLightActive(2,true);
-
+	lightGroup->DefaultLightSetting();
 	lightGroup->SetPointLightActive(0,true);
 	pointLightPos[0]=0.5f;
 	pointLightPos[1]=5.0f;
@@ -69,7 +69,7 @@ void TitleScene::Update(DirectXCommon* dxCommon) {
 	
 	text->Upda();
 
-	if (scene_changer->GetEasingStart()) { scene_changer->ChangeScene(SceneName); return; }
+	if (sceneChanger_->GetEasingStart()) { sceneChanger_->ChangeScene(SceneName); return; }
 	InputUpdate();
 	SelectTextUpdate();
 }
@@ -85,7 +85,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon) {
 	for (int i = moveDebug; i < SpriteMax; i++) {
 		UI[i]->Draw();
 	}
-	scene_changer->Draw();
+	sceneChanger_->Draw();
 
 	dxCommon->PostDraw();
 }
@@ -135,7 +135,7 @@ void TitleScene::InputUpdate() {
 		input->TriggerButton(input->B) ||
 		input->TriggerButton(input->X) ||
 		input->TriggerButton(input->Y)) {
-		scene_changer->ChangeStart();
+		sceneChanger_->ChangeStart();
 		audioManager->StopWave("BGM/titleBGM.wav");
 		audioManager->PlayWave("SE/pushstart.wav", 0.3f);
 		switch (nextScene) {

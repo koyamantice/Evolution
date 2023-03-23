@@ -83,7 +83,7 @@ void Object2d::PostDraw()
 	Object2d::cmdList = nullptr;
 }
 
-Object2d* Object2d::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color)
+std::unique_ptr<Object2d> Object2d::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color)
 {
 
 	if (texbuff[texNumber])
@@ -95,14 +95,13 @@ Object2d* Object2d::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMF
 	}
 
 	// Spriteのインスタンスを生成
-	Object2d* texture = new Object2d(texNumber, position, size, color);
+	std::unique_ptr<Object2d> texture =std::make_unique<Object2d>(texNumber, position, size, color);
 	if (texture == nullptr) {
 		return nullptr;
 	}
 
 	// 初期化
 	if (!texture->Initialize()) {
-		delete texture;
 		assert(0);
 		return nullptr;
 	}

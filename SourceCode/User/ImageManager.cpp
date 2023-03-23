@@ -97,7 +97,8 @@ void ImageManager::LoadTex2D() {
 	Object2d::LoadTexture(kMission_5, L"Resources/2d/PlayUI/Number/mission_5.png");
 	Object2d::LoadTexture(kMission_s, L"Resources/2d/PlayUI/Number/mission_slash.png");
 	Object2d::LoadTexture(kpredicted, L"Resources/2d//Effect/predicted.png");
-	Object2d::LoadTexture(kFoot, L"Resources/2d//PlayUI/foot.png");
+	Object2d::LoadTexture(kLeftFoot, L"Resources/2d//PlayUI/L_foot.png");
+	Object2d::LoadTexture(kRightFoot, L"Resources/2d//PlayUI/R_foot.png");
 
 }
 

@@ -1,16 +1,16 @@
 #include "Trace.h"
 #include "ImageManager.h"
 
-Trace::Trace(const float& rot_, const XMFLOAT3& pos_) {
-	Initialize(rot_, pos_);
+Trace::Trace(const ImageFoot& imagefoot_, const float& rot_, const XMFLOAT3& pos_) {
+	Initialize(imagefoot_,rot_, pos_);
 }
 
-void Trace::Initialize(const float& rot_,const XMFLOAT3& pos_) {
-	Object2d* Trace_ = Object2d::Create(ImageManager::kFoot, 
+void Trace::Initialize(const ImageFoot& imagefoot_, const float& rot_,const XMFLOAT3& pos_) {
+	
+	trace_ = Object2d::Create(ImageManager::kLeftFoot + imagefoot_,
 		{ pos_.x, 0.02f,pos_.z },
-		{ 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-	Trace_->SetRotation({ 90.0f,rot_,0 });
-	trace_.reset(Trace_);
+		{ 0.05f,0.05f,0.05f }, { 1,1,1,1 });
+	trace_->SetRotation({ 90.0f,rot_,0 });
 }
 
 void Trace::Update() {
