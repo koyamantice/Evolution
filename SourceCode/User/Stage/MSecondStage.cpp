@@ -40,16 +40,12 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 
 	const XMFLOAT2 kBasicAnchor = { 0.5f,0.5f };
 
-	Sprite* _mission{};
-	_mission = Sprite::Create(ImageManager::kMissionMsecond, { 640,100 });
-	_mission->SetAnchorPoint(kBasicAnchor);
-	mission_.reset(_mission);
+	mission_ = Sprite::Create(ImageManager::kMissionMsecond, { 640,100 });
+	mission_->SetAnchorPoint(kBasicAnchor);
 	
 	const XMFLOAT2 kBasicSize = { 64,64 };
 	for (int i = 0; i < kHoneyNumMax; i++) {
-		Sprite* _honey_get[kHoneyNumMax]{};
-		_honey_get[i] = Sprite::Create(ImageManager::kMsecondNum, { 640-64,135 });
-		honey_get_[i].reset(_honey_get[i]);
+		honey_get_[i] = Sprite::Create(ImageManager::kMsecondNum, { 640-64,135 });
 		int number_index_y = i / kHoneyNumMax;
 		int number_index_x = i % kHoneyNumMax;
 		honey_get_[i]->SetTextureRect(
@@ -73,9 +69,10 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 		player_shadow->GetPosition().y + camera_hight,
 		player_shadow->GetPosition().z + camera_distance.z
 		});
-	s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
 
+	s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
 	s_target = player_shadow->GetCameraPos(camera_angle, camera_target);
+	camera->Update();
 
 	//ポストエフェクトの初期化
 	postEffect = new PostEffect();

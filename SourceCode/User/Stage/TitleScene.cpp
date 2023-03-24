@@ -25,16 +25,15 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 
 
 	for (int i = 0; i < SpriteMax; i++) {
-		Sprite* sprite_ = Sprite::Create(ImageManager::Title + i, { 0.0f,0.0f });
+		UI[i] = Sprite::Create(ImageManager::Title + i, { 0.0f,0.0f });
 		if (i != BackScene) {
-			sprite_->SetScale(0.5f);
+			UI[i]->SetScale(0.5f);
 			if (i <= nomoveDebug) {
-				sprite_->SetPosition(kWord2DebugPos);
+				UI[i]->SetPosition(kWord2DebugPos);
 			} else {
-				sprite_->SetPosition(kWord2TitlegPos);
+				UI[i]->SetPosition(kWord2TitlegPos);
 			}
 		}
-		UI[i].reset(sprite_);
 	}
 
 	text = std::make_unique<TitleText>();

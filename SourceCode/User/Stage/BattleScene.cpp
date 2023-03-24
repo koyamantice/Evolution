@@ -8,57 +8,38 @@ void BattleScene::BattleInit() {
 	lightGroup->SetDirLightActive(2, true);
 
 	//導入枠
-	Sprite* _Screen = nullptr;
-	_Screen = Sprite::Create(ImageManager::SceneCover, { 0,0 });
-	screens[0].reset(_Screen);
-	Sprite* _Screen2 = nullptr;
-	_Screen2 = Sprite::Create(ImageManager::SceneCover, { 0,600 });
-	screens[1].reset(_Screen2);
+	screens[0] = Sprite::Create(ImageManager::SceneCover, { 0,0 });
+	screens[1] = Sprite::Create(ImageManager::SceneCover, { 0,600 });
 
-	Sprite* skip = nullptr;
-	skip = Sprite::Create(ImageManager::Skip, { 20,20 });
-	skip_ui_.reset(skip);
+	skip_ui_ = Sprite::Create(ImageManager::Skip, { 20,20 });
 
 
 	//ポーズUIを生成
-	PauseUI* pause_ui = new PauseUI();
-	pauseUi.reset(pause_ui);
-
+	pauseUi = std::make_unique<PauseUI>();
 	//くりあ生成
-	Sprite* _clear = nullptr;
-	_clear = Sprite::Create(ImageManager::Clear, { 0,0 });
-	clear_comment_.reset(_clear);
+	clear_comment_ = Sprite::Create(ImageManager::Clear, { 0,0 });
 	//ゲームオーバー生成
-	Sprite* _Over = nullptr;
-	_Over = Sprite::Create(ImageManager::Over, { 0,0 });
-	over_comment_.reset(_Over);
+	over_comment_ = Sprite::Create(ImageManager::Over, { 0,0 });
 
 
 	//暗転画面生成
-	Sprite* first_ = Sprite::Create(ImageManager::Black, { 0.0f,0.0f });
-	filter_first.reset(first_);
-	filter_first->SetColor({ 1,1,1,filter_alpha });
+	filter_first = Sprite::Create(ImageManager::Black, { 0.0f,0.0f }, { 1,1,1,filter_alpha });
 
 	//カメラの操作説明
 	hud = std::make_unique<Hud>();
 
 	//ステージの生成します
-	Object3d* skydome_{};
-	skydome_ = new Object3d();
-	skydome_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
-	skydome_->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
-	skydome_->SetColor({ 0.3f,0.3f,0.3f,1.0f });
-	skydome_->Initialize();
-	skydome.reset(skydome_);
+	skydome = std::make_unique<Object3d>();
+	skydome->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
+	skydome->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+	skydome->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+	skydome->Initialize();
 
-	Object3d* ground_{};
-	ground_ = new Object3d();
-	ground_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDungeon));
-	ground_->SetPosition(XMFLOAT3(-50, -0.5f, 50));
-	ground_->SetScale(XMFLOAT3(5, 5, 5));
-	ground_->Initialize();
-	ground.reset(ground_);
-
+	ground = std::make_unique<Object3d>();
+	ground->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDungeon));
+	ground->SetPosition(XMFLOAT3(-50, -0.5f, 50));
+	ground->SetScale(XMFLOAT3(5, 5, 5));
+	ground->Initialize();
 }
 
 void BattleScene::FieldUpdate() {

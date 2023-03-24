@@ -19,9 +19,7 @@ void Hud::Initialize() {
 	const XMFLOAT2 kBasicSize = { 256,256 };
 	const XMFLOAT2 kBasicAnchor = { 0.5f,0.5f } ;
 	for (int i = 0; i < CAMERACONTROLMAX; i++) {
-		Sprite* camera_hud_[CAMERACONTROLMAX]{};
-		camera_hud_[i] = Sprite::Create(ImageManager::CameCon, {0,0});
-		camera_hud[i].reset(camera_hud_[i]);
+		camera_hud[i] = Sprite::Create(ImageManager::CameCon, {0,0});
 		int number_index_y = i / CAMERACONTROLMAX;
 		int number_index_x = i % CAMERACONTROLMAX;
 		camera_hud[i]->SetTextureRect(
@@ -48,9 +46,7 @@ void Hud::Initialize() {
 	const XMFLOAT2 kBasicButtonSize = { 512,256 };
 	const XMFLOAT2 kVisibleButtonSize = { 128,64 };
 	for (int i = 0; i < BUTTONCONTROLMAX; i++) {
-		Sprite* con_vis_[BUTTONCONTROLMAX]{};
-		con_vis_[i] = Sprite::Create(ImageManager::Con_vis, {0,0});
-		button_hud[i].reset(con_vis_[i]);
+		button_hud[i] = Sprite::Create(ImageManager::Con_vis, {0,0});
 		int num_index_y = i / BUTTONCONTROLMAX;
 		int num_index_x = i % BUTTONCONTROLMAX;
 		button_hud[i]->SetTextureRect(
@@ -62,26 +58,17 @@ void Hud::Initialize() {
 	}
 
 
+	button_option = Sprite::Create(ImageManager::kStartOption, { 10,10 });
 
-
-
-	Sprite* button_option_{};
-	button_option_ = Sprite::Create(ImageManager::kStartOption, { 10,10 });
-	button_option.reset(button_option_);
-
-	Sprite* button_target_{};
-	button_target_ = Sprite::Create(ImageManager::ControlRT, { -64,440 });
-	button_target_->SetSize(kVisibleButtonSize);
 	//中心座標にします。
-	button_target_->SetAnchorPoint(kBasicAnchor);
-	button_target.reset(button_target_);
+	button_target = Sprite::Create(ImageManager::ControlRT, { -64,440 });
+	button_target->SetSize(kVisibleButtonSize);
+	button_target->SetAnchorPoint(kBasicAnchor);
 
-	Sprite* button_visible_{};
-	button_visible_ = Sprite::Create(ImageManager::ControlY, { 600,680 });
-	button_visible_->SetSize(kVisibleButtonSize);
+	button_visible = Sprite::Create(ImageManager::ControlY, { 600,680 });
+	button_visible->SetSize(kVisibleButtonSize);
 	//中心座標にします。
-	button_visible_->SetAnchorPoint(kBasicAnchor);
-	button_visible.reset(button_visible_);
+	button_visible->SetAnchorPoint(kBasicAnchor);
 
 	//構造体の初期化
 	button_system[GNOMESHOT].isvisible = false;

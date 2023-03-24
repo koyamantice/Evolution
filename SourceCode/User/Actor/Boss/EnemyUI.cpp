@@ -9,17 +9,12 @@ EnemyUI::~EnemyUI() {
 }
 
 void EnemyUI::OnInitialize() {
-	Sprite* _HpCover;
-	_HpCover = Sprite::Create(ImageManager::HpCover, { 730,20 });
-	HpCover.reset(_HpCover);
+	HpCover = Sprite::Create(ImageManager::HpCover, { 730,20 });
 
-	Sprite* _HpGauge;
-	_HpGauge = Sprite::Create(ImageManager::HpRed, { 730,20 });
-	HpGauge.reset(_HpGauge);
-	HpGauge->SetSize({});
-	Sprite* _UnderGauge;
-	_UnderGauge = Sprite::Create(ImageManager::HpGreen, { 730,20 });
-	UnderGauge.reset(_UnderGauge);
+	HpGauge = Sprite::Create(ImageManager::HpRed, { 730,20 });
+	HpGauge->SetSize({0,0});
+
+	UnderGauge = Sprite::Create(ImageManager::HpGreen, { 730,20 });
 }
 
 void EnemyUI::OnUpdate() {

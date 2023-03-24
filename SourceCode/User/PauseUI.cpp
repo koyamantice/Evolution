@@ -23,13 +23,10 @@ PauseUI::PauseUI() {
 	const XMFLOAT2 baseAnchor = { 0.5f,0.5f };
 
 	for (int i = 0; i < Max; i++) {
-		Sprite* UI_{};
-
-		UI_ = Sprite::Create(ImageManager::UISheet + i, basePos);
-		UI_->SetAnchorPoint(baseAnchor);
-		basesizes[i] = UI_->GetSize();
-		UI_->SetSize({ 0,0 });
-		UI[i].reset(UI_);
+		UI[i] = Sprite::Create(ImageManager::UISheet + i, basePos);
+		UI[i]->SetAnchorPoint(baseAnchor);
+		basesizes[i] = UI[i]->GetSize();
+		UI[i]->SetSize({ 0,0 });
 	}
 
 	Initialize();

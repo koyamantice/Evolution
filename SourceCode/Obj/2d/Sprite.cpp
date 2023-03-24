@@ -381,7 +381,7 @@ void Sprite::PostDraw() {
 	//Sprite::cmdList = nullptr;
 }
 
-Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY) {
+std::unique_ptr<Sprite> Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY) {
 	// 仮サイズ
 	XMFLOAT2 size = { 100.0f, 100.0f };
 
@@ -393,14 +393,13 @@ Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOA
 	}
 
 	// Spriteのインスタンスを生成
-	Sprite* sprite = new Sprite(texNumber, position, size, color, anchorpoint, isFlipX, isFlipY);
+	std::unique_ptr<Sprite> sprite =std::make_unique<Sprite>(texNumber, position, size, color, anchorpoint, isFlipX, isFlipY);
 	if (sprite == nullptr) {
 		return nullptr;
 	}
 
 	// 初期化
 	if (!sprite->Initialize()) {
-		delete sprite;
 		assert(0);
 		return nullptr;
 	}

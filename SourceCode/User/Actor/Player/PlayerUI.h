@@ -17,9 +17,9 @@ private:
 	std::unique_ptr<Sprite> Hp;
 	std::unique_ptr<Sprite> Slash;
 	std::unique_ptr<Sprite> Damage;
-	Sprite* num[2][10]{};
+	std::unique_ptr <Sprite> num[2][10]{};
 	std::unique_ptr<Sprite> numBack[2];
-	Sprite* numBullet[2][10]{};
+	std::unique_ptr <Sprite> numBullet[2][10]{};
 
 	int Stock = 0;
 	int OldStock = Stock;

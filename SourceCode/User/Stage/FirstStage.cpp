@@ -23,8 +23,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 
 	//“±“ü•”•ª‚ÌŒ¾—t
 	for (int i = 0; i < intro_word_max; i++) {
-		Sprite* IntroWord_ = Sprite::Create(ImageManager::Intro01 + i, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
-		IntroWord[i].reset(IntroWord_);
+		IntroWord[i] = Sprite::Create(ImageManager::Intro01 + i, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
 	}
 
 	//ƒJƒƒ‰‚Ì‰Šú‰»

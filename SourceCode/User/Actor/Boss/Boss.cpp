@@ -88,7 +88,7 @@ void Boss::DeadMotion() {
 	XMFLOAT3 sca = fbxObject_->GetScale();
 	fbxObject_->ResetAnimation();
 	rot.y++;
-	float scale = Ease(In, Linear, scale_frame_, baseScale_.x, 0.0f);
+	float scale = Ease(In, Linear, scale_frame_, sca.x * 1000.0f, 0.0f) * 0.001f;
 	if (scale_frame_ < 1.0f) {
 		scale_frame_ += 1.0f / 100.0f;
 	} else {

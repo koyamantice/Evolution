@@ -17,15 +17,13 @@ SceneChanger::~SceneChanger() {
 void SceneChanger::Init() {
 	for (int i = 0; i < width_num; i++) {
 		for (int j = 0; j < height_num; j++) {
-			Sprite* itr = nullptr;
-			itr = Sprite::Create(ImageManager::Test, { 0,0 });
-			itr->SetAnchorPoint({ 0.5f,0.5f });
-			itr->SetPosition({ (float)(i * base_size) + base_size / 2,(float)(j * base_size) + base_size / 2 });
-			itr->SetSize({ 0,0 });
-			DirectX::XMFLOAT4 col = {0,0,0,1};
-			itr->SetColor(col);
 			std::unique_ptr<Sprite> newSprite;
-			newSprite.reset(itr);
+			newSprite = Sprite::Create(ImageManager::Test, { 0,0 });
+			newSprite->SetAnchorPoint({ 0.5f,0.5f });
+			newSprite->SetPosition({ (float)(i * base_size) + base_size / 2,(float)(j * base_size) + base_size / 2 });
+			newSprite->SetSize({ 0,0 });
+			DirectX::XMFLOAT4 col = {0,0,0,1};
+			newSprite->SetColor(col);
 
 			sprites.push_back(std::move(newSprite));
 		}
@@ -34,14 +32,12 @@ void SceneChanger::Init() {
 void SceneChanger::InitOver() {
 	for (int i = 0; i < width_num; i++) {
 		for (int j = 0; j < height_num; j++) {
-			Sprite* itr = nullptr;
-			itr = Sprite::Create(ImageManager::Test, { 0,0 });
-			itr->SetPosition({ (float)(i * base_size),(float)(j * base_size)});
-			itr->SetSize({ 0,0 });
-			DirectX::XMFLOAT4 col = { 0,0,0,1 };
-			itr->SetColor(col);
 			std::unique_ptr<Sprite> newSprite;
-			newSprite.reset(itr);
+			newSprite = Sprite::Create(ImageManager::Test, { 0,0 });
+			newSprite->SetPosition({ (float)(i * base_size),(float)(j * base_size)});
+			newSprite->SetSize({ 0,0 });
+			DirectX::XMFLOAT4 col = { 0,0,0,1 };
+			newSprite->SetColor(col);
 
 			over_sprites.push_back(std::move(newSprite));
 		}

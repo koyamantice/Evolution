@@ -9,29 +9,21 @@ PlayerUI::~PlayerUI() {
 }
 
 void PlayerUI::OnInitialize() {
-	Sprite* _Damage;
-	_Damage = Sprite::Create(ImageManager::Damage, { 480,50 });
-	Damage.reset(_Damage);
-	Damage->SetColor({ 1,1,1,0 });
+	Damage = Sprite::Create(ImageManager::Damage, { 480,50 });
+	Damage->SetColor(INVISIBLE_ALPHA);
 	Dmapos = Damage->GetPosition();
 
-	Sprite* _Bullet;
-	_Bullet = Sprite::Create(ImageManager::CharaCover, { 700,612 });
-	_Bullet->SetScale(0.8f);
-	Bullet.reset(_Bullet);
+	Bullet = Sprite::Create(ImageManager::CharaCover, { 700,612 });
+	Bullet->SetScale(0.8f);
 	
 
-	Sprite* _slash;
-	_slash = Sprite::Create(ImageManager::slash, { 1030,620 });
-	_slash->SetScale(0.8f);
-	Slash.reset(_slash);
+	Slash = Sprite::Create(ImageManager::slash, { 1030,620 });
+	Slash->SetScale(0.8f);
 
 	Sprite* _numBack[2]{};
 	const DirectX::XMFLOAT2 numPos[2] = { {1070,610},{830,610} };
 	for (int i = 0; i < 2;i++) {
-		_numBack[i] = Sprite::Create(ImageManager::numBack, numPos[i]);
-	//	_numBack[i]->SetScale(0.8f);
-		numBack[i].reset(_numBack[i]);
+		numBack[i] = Sprite::Create(ImageManager::numBack, numPos[i]);
 	}
 
 	const int w = 54;

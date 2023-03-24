@@ -4,6 +4,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include <DirectXMath.h>
+#include <memory>
 
 
 
@@ -89,7 +90,7 @@ public: // 静的メンバ関数
 	/// <param name="isFlipX">左右反転</param>
 	/// <param name="isFlipY">上下反転</param>
 	/// <returns>生成されたスプライト</returns>
-	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
+	static std::unique_ptr<Sprite> Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
 	
 	/// <summary>
 	/// 終了処理
