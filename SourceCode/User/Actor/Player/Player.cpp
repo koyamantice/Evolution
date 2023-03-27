@@ -1,17 +1,10 @@
 #include"Player.h"
 #include"ModelManager.h"
 #include"ImageManager.h"
-#include"Collision.h"
-#include <SourceCode/FrameWork/collision/CollisionManager.h>
-#include <SourceCode/FrameWork/collision/SphereCollider.h>
-#include "CollisionAttribute.h"
 #include<fstream>
 #include <SourceCode/FrameWork/ActorManager.h>
 #include"PlayerUI.h"
-#include "ParticleManager.h"
 #include <Easing.h>
-
-
 
 
 

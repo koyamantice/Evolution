@@ -77,6 +77,7 @@ protected:
 	E_Phase phase_ = E_Phase::kStartAction;
 
 	int animation_count_ = 0;
+	float smash_scale_ = 0.0f;
 
 	float scale_frame_ = 0.0f;
 

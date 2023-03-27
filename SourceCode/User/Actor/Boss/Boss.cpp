@@ -59,7 +59,8 @@ void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
 
 void Boss::LifeCommon() {
 	if (hp <= 0.0f) {
-		if (!canMove) {
+		if (!canMove && phase_!= E_Phase::kDeadMotion) {
+			smash_scale_= fbxObject_->GetScale().x * 1000.0f;
 			phase_ = E_Phase::kDeadMotion;
 			return;
 		}
@@ -88,14 +89,14 @@ void Boss::DeadMotion() {
 	XMFLOAT3 sca = fbxObject_->GetScale();
 	fbxObject_->ResetAnimation();
 	rot.y++;
-	float scale = Ease(In, Linear, scale_frame_, sca.x * 1000.0f, 0.0f) * 0.001f;
+	float scale = Ease(In, Linear, scale_frame_, smash_scale_ , 0.0f);
 	if (scale_frame_ < 1.0f) {
 		scale_frame_ += 1.0f / 100.0f;
 	} else {
 		isActive = false;
 	}
-	fbxObject_->SetScale({ scale,scale,scale });
-	obj->SetScale({ scale,scale,scale });
+	fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
+	obj->SetScale(fbxObject_->GetScale());
 	fbxObject_->SetRotation(rot);
 
 }

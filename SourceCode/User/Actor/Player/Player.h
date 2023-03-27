@@ -1,13 +1,14 @@
 #pragma once
 #include"Actor.h"
-#include"Input.h"
-#include<list>
-#include"Bullet.h"
-#include <sstream>
-#include <SourceCode/Obj/2d/Object2d.h>
-#include<DirectXMath.h>
 #include"Aim.h"
+#include"Bullet.h"
+#include "Object2d.h"
+#include"Input.h"
 #include <ParticleEmitter.h>
+
+#include<list>
+#include <sstream>
+#include<DirectXMath.h>
 
 class Player :public Actor {
 public:

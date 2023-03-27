@@ -19,8 +19,6 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
 
-
-
 	//導入部分の言葉
 	for (int i = 0; i < intro_word_max; i++) {
 		IntroWord[i] = Sprite::Create(ImageManager::Intro01 + i, { 1230.0f,600.0f }, { 1,1,1,1 }, { 1.0f, 0 });
@@ -41,7 +39,7 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	//ポストエフェクトの初期化
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-	//
+	//オーディオ
 	audioManager = std::make_unique<AudioManager>();
 
 	audioManager->LoadWave("BGM/battle.wav");
@@ -77,7 +75,7 @@ void FirstStage::Update(DirectXCommon* dxCommon) {
 //描画
 void FirstStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	DebugDraw();
 	BattleBackDraw();
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
@@ -89,6 +87,26 @@ void FirstStage::Draw(DirectXCommon* dxCommon) {
 void FirstStage::Finalize() {
 	//３ｄのモデルのデリート
 	ActorManager::GetInstance()->Finalize();
+}
+
+bool FirstStage::DebugDraw() {
+	if (!isDebug) { return false; }
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 1.0f));
+	ImGui::SetNextWindowPos(ImVec2(1100, 0));
+	ImGui::SetNextWindowSize(ImVec2(180, 240));
+
+	ImGui::Begin("scene");
+	ImGui::Text("distance.x:%f", camera_distance.x);
+	ImGui::Text("distance.z:%f", camera_distance.z);
+
+
+
+	ImGui::End();
+
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	return true;
 }
 
 bool FirstStage::IntroUpdate() {
@@ -118,9 +136,8 @@ bool FirstStage::IntroUpdate() {
 			ActorManager::GetInstance()->IntroUpdate(intro_count / intro_count_max, "", kSecondScene);
 			FieldUpdate();
 		}
-		filter_alpha = Ease(Out, Cubic, feedin_frame, 1, 0);
+		filter_alpha = Ease(Out, Cubic, feedin_frame, 1.0f, 0.0f);
 		filter_first->SetColor({ 1,1,1,filter_alpha });
-
 		return true;
 	}
 
@@ -163,7 +180,7 @@ void FirstStage::IntroCamera(const float& Timer) {
 		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
 	}
 	if (Timer / intro_count_max >= 1.0f) {
-		camera_angle = max(0, camera_angle);
+		camera_angle = min(0, camera_angle);
 		hight = camera_hight;
 	}
 	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
@@ -215,9 +232,6 @@ void FirstStage::SmashCamera(const float& Timer) {
 
 bool FirstStage::ClearUpdate() {
 	if (stage_clear) {
-		//const float rnd_vel = 0.5f;
-		//particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0.0f, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
-		//particleEmitter->Update();
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			sceneChanger_->ChangeStart();
 		}

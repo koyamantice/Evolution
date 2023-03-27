@@ -23,6 +23,9 @@ private:
 	/// /// I—¹
 	/// </summary>
 	void Finalize() override;
+
+
+	bool DebugDraw();
 private:
 	/// <summary>
 	/// “±“üƒJƒƒ‰
