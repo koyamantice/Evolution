@@ -8,6 +8,15 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("MashGhost");
 	//ActorManager::GetInstance()->AttachActor("ClearCrystal");
+	lightGroup->SetPointLightActive(0, true);
+	lightGroup->SetPointLightActive(1, true);
+	lightGroup->SetPointLightActive(2, true);
+	lightGroup->DefaultLightSetting();
+
+	for (int i = 0; i < 3; i++) {
+		lightGroup->SetPointLightPos(i, pointLightPos[i]);
+	}
+
 
 	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
@@ -52,6 +61,9 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 }
 //更新
 void FirstStage::Update(DirectXCommon* dxCommon) {
+	for (int i = 0; i < 3; i++) {
+		lightGroup->SetPointLightPos(i, pointLightPos[i]);
+	}
 	//導入部分の処理
 	if (IntroUpdate()) { return; }
 	//クリア後の処理
@@ -99,9 +111,17 @@ bool FirstStage::DebugDraw() {
 	ImGui::Begin("scene");
 	ImGui::Text("distance.x:%f", camera_distance.x);
 	ImGui::Text("distance.z:%f", camera_distance.z);
+	ImGui::SliderFloat("pointLightPos[0].x", &pointLightPos[0].x, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[0].y", &pointLightPos[0].y, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[0].z", &pointLightPos[0].z, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[1].x", &pointLightPos[1].x, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[1].y", &pointLightPos[1].y, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[1].z", &pointLightPos[1].z, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[2].x", &pointLightPos[2].x, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[2].y", &pointLightPos[2].y, -50.0f,50.0f);
+	ImGui::SliderFloat("pointLightPos[2].z", &pointLightPos[2].z, -50.0f,50.0f);
 
-
-
+	
 	ImGui::End();
 
 	ImGui::PopStyleColor();

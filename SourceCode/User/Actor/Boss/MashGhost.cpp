@@ -33,15 +33,15 @@ void MashGhost::OnUpda() {
 }
 
 void MashGhost::OnFirstDraw(DirectXCommon* dxCommon) {
-	Object2d::PreDraw();
-	ImGui::SetNextWindowPos(ImVec2(1100, 240));
-	ImGui::SetNextWindowSize(ImVec2(180, 250));
+	//Object2d::PreDraw();
+	//ImGui::SetNextWindowPos(ImVec2(1100, 240));
+	//ImGui::SetNextWindowSize(ImVec2(180, 250));
 
-	ImGui::Begin("enemy");
-	ImGui::Text("nowscale:%f", fbxObject_->GetScale().x);
-	ImGui::Text("smashscale:%f", smash_scale_);
+	//ImGui::Begin("enemy");
+	//ImGui::Text("nowscale:%f", fbxObject_->GetScale().x);
+	//ImGui::Text("smashscale:%f", smash_scale_);
 
-	ImGui::End();
+	//ImGui::End();
 
 	if (!isResult) { shadow_->Draw(); }
 }

@@ -221,6 +221,9 @@ bool BattleScene::PauseUpdate() {
 			pauseUi->SetEndFlag(false);
 		}
 	}
+	if (input->TriggerKey(DIK_F1)) {
+		isDebug=(isDebug == true) ? false:true;
+	}
 	return false;
 }
 

@@ -78,6 +78,8 @@ protected:
 
 	int animation_count_ = 0;
 	float smash_scale_ = 0.0f;
+	float smash_shadow_ = 0.0f;
+	float smash_rot_ = 0.0f;
 
 	float scale_frame_ = 0.0f;
 

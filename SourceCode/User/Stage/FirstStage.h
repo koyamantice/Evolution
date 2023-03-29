@@ -72,6 +72,12 @@ private:
 	float intro_count = 0;
 	const float intro_count_max = 800;
 
+	XMFLOAT3 pointLightPos[3] = { {},{},{} };
+	XMFLOAT3 dirLightLight[3] = { {1,0,0},{0,1,0},{0,0,1} };
+
+	float dirLightColor[3] = { 1,1,1 };
+	float dirLightAtten[3] = { 0.3f,0.1f,0.1f };
+
 	float intro_speed = 1;
 	float intro_speed_max = 2;
 

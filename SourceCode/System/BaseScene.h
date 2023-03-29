@@ -55,7 +55,7 @@ protected:
 	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
 	std::unique_ptr<AudioManager> audioManager = nullptr;
 
-	bool isDebug = true;
+	bool isDebug = false;
 	bool pause = false;
 	bool scene_first_change = true;
 	bool intro_skip = false;

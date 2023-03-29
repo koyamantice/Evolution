@@ -61,6 +61,8 @@ void Boss::LifeCommon() {
 	if (hp <= 0.0f) {
 		if (!canMove && phase_!= E_Phase::kDeadMotion) {
 			smash_scale_= fbxObject_->GetScale().x * 1000.0f;
+			smash_shadow_ = shadow_side_;
+			smash_rot_ = fbxObject_->GetRotation().y;
 			phase_ = E_Phase::kDeadMotion;
 			return;
 		}
@@ -88,8 +90,9 @@ void Boss::DeadMotion() {
 	XMFLOAT3 rot = fbxObject_->GetRotation();
 	XMFLOAT3 sca = fbxObject_->GetScale();
 	fbxObject_->ResetAnimation();
-	rot.y++;
+	rot.y = Ease(In, Linear, scale_frame_, smash_rot_, smash_rot_+(DEGREE_MAX * 5.0f));
 	float scale = Ease(In, Linear, scale_frame_, smash_scale_ , 0.0f);
+	shadow_side_ = Ease(In, Linear, scale_frame_, smash_shadow_, 0.0f);
 	if (scale_frame_ < 1.0f) {
 		scale_frame_ += 1.0f / 100.0f;
 	} else {
@@ -98,6 +101,6 @@ void Boss::DeadMotion() {
 	fbxObject_->SetScale({ scale * 0.001f,scale * 0.001f,scale * 0.001f });
 	obj->SetScale(fbxObject_->GetScale());
 	fbxObject_->SetRotation(rot);
-
+	ShadowUpdate();
 }
 

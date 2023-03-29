@@ -10,15 +10,6 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	BossLevelLoader& gFoo = Singleton<BossLevelLoader>::get_instance();
 	gFoo.LoadData("BossLevel");
 	
-	lightGroup->SetDirLightActive(0,true);
-	lightGroup->SetDirLightActive(1,true);
-	lightGroup->SetDirLightActive(2,true);
-	lightGroup->DefaultLightSetting();
-	lightGroup->SetPointLightActive(0,true);
-	pointLightPos[0]=0.5f;
-	pointLightPos[1]=5.0f;
-	pointLightPos[2]=0.0f;
-
 	c_x = sinf(rad * (XM_PI / DEGREE_HALF)) * circ_x;
 	c_z = cosf(rad * (XM_PI / DEGREE_HALF)) * circ_z;
 	camera->SetEye({ c_x,c_y,c_z });
