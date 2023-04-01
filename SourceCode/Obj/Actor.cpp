@@ -14,7 +14,7 @@ void Actor::Initialize(Model* model, const std::string& tag, ActorComponent* com
 		obj_->SetModel(model);
 		obj_->Initialize();
 		obj.reset(obj_);
-		OnInit();
+		OnInitialize();
 	}
 }
 
@@ -25,7 +25,7 @@ void Actor::Update() {
 		if (isVisible) {
 			obj->Update();
 		}
-		OnUpda();
+		OnUpdate();
 	}
 }
 
@@ -85,5 +85,5 @@ void Actor::DemoDraw(DirectXCommon* dxCommon) {
 }
 
 void Actor::Finalize() {
-	OnFinal();
+	OnFinalize();
 }

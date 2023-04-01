@@ -173,19 +173,19 @@ bool MSecondStage::MissionUpdate() {
 	return false;
 }
 
-void MSecondStage::ResultCamera(int Timer) {
+void MSecondStage::ResultCamera(int timer) {
 	camera->SetTarget(player_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();
 }
 
-void MSecondStage::SmashCamera(const float& Timer) {
+void MSecondStage::SmashCamera(const float& timer) {
 	XMFLOAT3  target_honey_ = honey_[smash_honey_]->GetPosition();
 
 	XMFLOAT3 e_eye = { target_honey_.x + camera_distance.x,target_honey_.y + camera_hight,target_honey_.z + camera_distance.z };
 	XMFLOAT3 ease_target = target_honey_;
 	XMFLOAT3 ease_eye = e_eye;
-	float ease_time = Timer / 60.0f;
+	float ease_time = timer / 60.0f;
 
 	if (ease_time <= 1.0f) {
 
@@ -201,7 +201,7 @@ void MSecondStage::SmashCamera(const float& Timer) {
 			Ease(In,Linear,ease_time,s_eye.z,e_eye.z)
 		};
 	}
-	if(Timer>=90.0f){
+	if(timer>=90.0f){
 
 		finish_time = 0;
 		if (smash_honey_< kRightNest) {

@@ -4,7 +4,7 @@
 #include "ImageManager.h"
 #include <SourceCode/Common/Easing.h>
 
-void ClearCrystal::OnInit() {
+void ClearCrystal::OnInitialize() {
 	obj->SetColor({1,1,1,1});
 	obj->SetScale({ 0,0,0 });
 	//“–‚½‚è”»’è
@@ -14,7 +14,7 @@ void ClearCrystal::OnInit() {
 	partcleEmitter_ = std::make_unique <ParticleEmitter>(ImageManager::fire);
 }
 
-void ClearCrystal::OnUpda() {
+void ClearCrystal::OnUpdate() {
 	/// <summary>
 	/// oŒ»ˆ—
 	/// </summary>
@@ -68,9 +68,9 @@ void ClearCrystal::OnDraw(DirectXCommon* dxCommon) {
 	partcleEmitter_->Draw(addBle);
 }
 
-void ClearCrystal::OnFinal() {
+void ClearCrystal::OnFinalize() {
 }
 
-void ClearCrystal::ResultOnUpdate(const float& Timer) {
+void ClearCrystal::ResultOnUpdate(const float& timer) {
 	partcleEmitter_->Update();
 }

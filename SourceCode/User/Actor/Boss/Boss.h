@@ -9,7 +9,6 @@
 #include "TimedInvoke.h"
 
 #include "Singleton.h"
-
 #include <SourceCode/Common/Easing.h>
 
 #include<fstream>
@@ -21,14 +20,14 @@ class Boss :public Actor {
 public:
 	virtual ~Boss() = default;
 protected:
-	void ResultOnUpdate(const float& Timer)override;
+	void ResultOnUpdate(const float& timer)override;
 	/// <summary>
 	/// 共通初期化
 	/// </summary>
-	/// <param name="_model">モデル</param>
-	/// <param name="_scale">スケール</param>
-	/// <param name="_rotation">ローテーション</param>
-	void InitCommon(FBXModel* _model = nullptr, XMFLOAT3 _scale = { 1,1,1 }, XMFLOAT3 _rotation = { 0,0,0 });
+	/// <param name="model">モデル</param>
+	/// <param name="scale">スケール</param>
+	/// <param name="rotation">ローテーション</param>
+	void InitCommon(FBXModel* model = nullptr, XMFLOAT3 scale = { 1,1,1 }, XMFLOAT3 rotation = { 0,0,0 });
 	/// <summary>
 	/// ライフ処理
 	/// </summary>
@@ -40,8 +39,11 @@ protected:
 	/// <summary>
 	/// レベルデータ読み込み
 	/// </summary>
-	/// <param name="_bossname">ボスネーム</param>
-	void LoadData(const std::string& _bossname);
+	/// <param name="bossname">ボスネーム</param>
+	void LoadData(const std::string& bossname);
+
+protected:
+
 	//レベルデータ
 	float vel_ = 0;
 	XMFLOAT3 baseScale_ = {};
@@ -49,7 +51,7 @@ protected:
 	float predictTimeMax_ = 0;
 	float attackTimeMax_ = 0;
 
-	bool isResult = false;
+	bool isResult_ = false;
 
 	//関数ポインタ
 	static void(Boss::*phaseFuncTable[])();

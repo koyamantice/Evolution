@@ -77,7 +77,7 @@ public:
 		Fire,
 		InOut,
 		Guid,
-		Shadow,
+		shadow_,
 		RedDead,
 		GreenDead,
 		SlowUI,

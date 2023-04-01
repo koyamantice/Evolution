@@ -5,7 +5,7 @@
 #include <SourceCode/Common/Easing.h>
 
 
-void Hornet::OnInit() {
+void Hornet::OnInitialize() {
 	LoadData("Bee");
 
 	collide_size = 2.0f;
@@ -37,7 +37,7 @@ void Hornet::OnInit() {
 }
 
 
-void Hornet::OnUpda() {
+void Hornet::OnUpdate() {
 	//ƒ‰ƒCƒtŠÇ—
 	LifeCommon();
 
@@ -59,7 +59,7 @@ void Hornet::OnDraw(DirectXCommon* dxCommon) {
 	fbxObject_->Draw(dxCommon->GetCmdList());
 }
 
-void Hornet::OnFinal() {
+void Hornet::OnFinalize() {
 }
 
 void Hornet::OnCollision(const std::string& Tag) {
@@ -100,23 +100,23 @@ void Hornet::HoneyControl() {
 	}
 }
 
-void Hornet::IntroOnUpdate(const float& Timer) {
+void Hornet::IntroOnUpdate(const float& timer) {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	XMFLOAT3 rot = fbxObject_->GetRotation();
 
-	if (Timer <= 0.2f) {
+	if (timer <= 0.2f) {
 		after_pos = {
 			0,
 			0,
 			0
 		};
-		if ((Timer / 0.2f) < 1.0f) {
-			pos.y = Ease(Out, Quad, Timer / 0.2f, before_pos.y, after_pos.y);
+		if ((timer / 0.2f) < 1.0f) {
+			pos.y = Ease(Out, Quad, timer / 0.2f, before_pos.y, after_pos.y);
 		} else {
 			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kPosingAnimiation));
 			before_pos = after_pos;
 		}
-	} else if (Timer <= 0.5f) {
+	} else if (timer <= 0.5f) {
 		if (fbxObject_->GetIsFinish()) {
 			fbxObject_->StopAnimation();
 			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));

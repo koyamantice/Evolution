@@ -31,7 +31,7 @@ private:
 	bool IntroUpdate()override;
 
 	//クリア後カメラ
-	void ResultCamera(int Timer);
+	void ResultCamera(int timer);
 	/// <summary>
 	/// クリア更新処理
 	/// </summary>

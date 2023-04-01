@@ -19,7 +19,7 @@ public:
 	void FirstSet();
 	void  SetIsActive(const bool& _isActive) { isActive = _isActive; }
 private:
-	std::unique_ptr<Object2d> LockOn{};
+	std::unique_ptr<Object2d> aim_{};
 	std::unique_ptr<Object2d> Whistle{};
 	static const int GuidNum = 8;
 	std::unique_ptr<Object2d> Guid[GuidNum]{};

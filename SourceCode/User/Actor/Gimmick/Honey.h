@@ -35,10 +35,10 @@ private:
 	std::unique_ptr<Object2d> missions[2][6]{};
 	std::unique_ptr<Object2d> slash{};
 private:
-	void OnInit()override;
-	void OnUpda()override;
+	void OnInitialize()override;
+	void OnUpdate()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
-	void OnFinal()override;
+	void OnFinalize()override;
 
 	void OnCollision(const std::string& Tag) override;
 
@@ -68,7 +68,7 @@ private:
 	//Ç«ÇÃçsìÆÇéÊÇÈÇ©
 	E_Phase phase_ = E_Phase::kWaitDriver;
 
-	void IntroOnUpdate(const float& Timer)override;
+	void IntroOnUpdate(const float& timer)override;
 
 	float RandHeight(const float& base);
 };

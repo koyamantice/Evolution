@@ -11,7 +11,7 @@ using namespace DirectX;
 BulletGreen::BulletGreen() {
 }
 
-void BulletGreen::OnInit() {
+void BulletGreen::OnInitialize() {
 	ID = ActorManager::GetInstance()->SearchNum("BulletGreen");
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
@@ -19,26 +19,26 @@ void BulletGreen::OnInit() {
 	landing = player->GetLockPos();
 	Color = DeathColor::Green;
 
-	Status = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
+	Status = Object2d::Create(ImageManager::Battle, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Status->SetIsBillboard(true);
 	Status->SetRotation({ 0,0,0 });
 
 
-	CharaDead = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z },
+	CharaDead = Object2d::Create(Color, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y,fbxobj_->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
 	CharaDead->SetIsBillboard(true);
 	CharaDead->SetRotation({ 0,0,0 });
 }
 
-void BulletGreen::OnUpda() {
+void BulletGreen::OnUpdate() {
 
 }
 
 void BulletGreen::OnDraw(DirectXCommon* dxCommon) {
 
 }
-void BulletGreen::OnFinal() {
+void BulletGreen::OnFinalize() {
 }
 
 
@@ -48,7 +48,7 @@ void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (isPlayActive) { return; }
 	if (ID < Id) { return; }
 	collide = true;
-	XMFLOAT3 pos2 = fbxObj->GetPosition();
+	XMFLOAT3 pos2 = fbxobj_->GetPosition();
 
 	float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
 
@@ -60,12 +60,12 @@ void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 		pos2.z -= cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
 
 	}
-	fbxObj->SetPosition(pos2);
+	fbxobj_->SetPosition(pos2);
 }
 
-void BulletGreen::ResultOnUpdate(const float& Timer) {
-	XMFLOAT3 rot = fbxObj->GetRotation();
-	XMFLOAT3 pos = fbxObj->GetPosition();
+void BulletGreen::ResultOnUpdate(const float& timer) {
+	XMFLOAT3 rot = fbxobj_->GetRotation();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();
 	if(clear_ease){
 		if (clear_frame < 1.0f) {
@@ -90,10 +90,10 @@ void BulletGreen::ResultOnUpdate(const float& Timer) {
 		rot.y = DirRotation(clear_e_pos);
 
 	}else {
-		pos.y += vel; //+
+		pos.y += vel_; //+
 		float rnd_vel = 0.04f;
 		float margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel -= rnd_vel + margin;//
+		vel_ -= rnd_vel + margin;//
 		pos.y = max(0, pos.y);
 		//‰ñ“]
 		float delay = 0.3f;
@@ -104,13 +104,13 @@ void BulletGreen::ResultOnUpdate(const float& Timer) {
 			frame += 0.02f;
 		} else {
 			frame = 0.0f;
-			vel = 0.8f;
+			vel_ = 0.8f;
 			rot.x = 0.0f;
 			pos.y = 0.0f;
 		}
 	}
-	fbxObj->SetPosition(pos);
-	fbxObj->SetRotation(rot);
-	fbxObj->Update();
+	fbxobj_->SetPosition(pos);
+	fbxobj_->SetRotation(rot);
+	fbxobj_->Update();
 }
 

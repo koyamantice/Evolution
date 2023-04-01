@@ -4,7 +4,7 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 
 
-void MashGhost::OnInit() {
+void MashGhost::OnInitialize() {
 	LoadData("Mash");
 
 	collide_size = 3.0f;
@@ -19,7 +19,7 @@ void MashGhost::OnInit() {
 	attack_->Init();
 }
 
-void MashGhost::OnUpda() {
+void MashGhost::OnUpdate() {
 	//HPŠÇ—
 	LifeCommon();
 
@@ -43,7 +43,7 @@ void MashGhost::OnFirstDraw(DirectXCommon* dxCommon) {
 
 	//ImGui::End();
 
-	if (!isResult) { shadow_->Draw(); }
+	if (!isResult_) { shadow_->Draw(); }
 }
 
 void MashGhost::OnDraw(DirectXCommon* dxCommon) {
@@ -55,7 +55,7 @@ void MashGhost::OnDraw(DirectXCommon* dxCommon) {
 void MashGhost::OnLastDraw(DirectXCommon* dxCommon) {
 }
 
-void MashGhost::OnFinal() {
+void MashGhost::OnFinalize() {
 	levelData_ = {};
 }
 

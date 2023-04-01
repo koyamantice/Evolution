@@ -13,22 +13,22 @@ Bullet::Bullet() {
 
 void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent* compornent) {
 	
-	fbxObj= std::make_unique<FBXObject3d>();
-	fbxObj->Initialize();
-	fbxObj->SetModel(model);
-	fbxObj->SetScale({ 0.003f,0.003f, 0.003f });
-	fbxObj->LoadAnimation();
-	fbxObj->PlayAnimation();
+	fbxobj_= std::make_unique<FBXObject3d>();
+	fbxobj_->Initialize();
+	fbxobj_->SetModel(model);
+	fbxobj_->SetScale({ 0.003f,0.003f, 0.003f });
+	fbxobj_->LoadAnimation();
+	fbxobj_->PlayAnimation();
 
-	Explo = Object2d::Create(ImageManager::Fire, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z },
+	Explo = Object2d::Create(ImageManager::Fire, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z },
 		{ 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Explo->SetIsBillboard(true);
 
-	Shadow = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
+	shadow_ = Object2d::Create(ImageManager::shadow_, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	Shadow->SetRotation({ DEGREE_QUARTER,0,0 });
+	shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 
-	Status = Object2d::Create(ImageManager::Battle, { fbxObj->GetPosition().x,fbxObj->GetPosition().y + 1.0f,fbxObj->GetPosition().z
+	Status = Object2d::Create(ImageManager::Battle, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z
 		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
 	Status->SetIsBillboard(true);
 	Status->SetRotation({ 0,0,0 });
@@ -37,7 +37,7 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	audioManager->LoadWave("SE/attack.wav");
 	audioManager->LoadWave("SE/gnormDead.wav");
 
-	OnInit();
+	OnInitialize();
 	//ID‚²‚Æ‚ÌŒë·‚Ì”ÍˆÍ
 	if ((int)ID / 7 == 0) {
 		margin = -2.5f;
@@ -52,37 +52,37 @@ void Bullet::Update() {
 	if (isActive) {
 		CommonUpda();
 		CommandUpda();
-		OnUpda();
+		OnUpdate();
 		LimitArea();
 		TraceUpda();
 	}
 }
 
-void Bullet::IntroUpdate(const float& Timer, const int& _stage) {
+void Bullet::IntroUpdate(const float& timer, const int& _stage) {
 	if (!isActive) { return; }
 	const float delay = 0.5f;
 	const float first_hight = 100;
 	XMFLOAT3 player_pos = player->GetPosition();
-	if (Timer + delay <= 1.0f) {
-		hight = Ease(In, Linear, Timer + delay, first_hight, 0);
+	if (timer + delay <= 1.0f) {
+		hight = Ease(In, Linear, timer + delay, first_hight, 0);
 	}
-	fbxObj->Update();
-	fbxObj->SetRotation({ 0,DirRotation(player_pos),0 });
+	fbxobj_->Update();
+	fbxobj_->SetRotation({ 0,DirRotation(player_pos),0 });
 	const float angle = DEGREE_HALF / 10;
 	const float radius = 7.0f;
-	fbxObj->SetPosition({ player_pos.x + sinf(((int)ID)* angle * (XM_PI/DEGREE_HALF)) * radius, hight,  player_pos.z + cos(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius });
-	IntroOnUpdate(Timer);
+	fbxobj_->SetPosition({ player_pos.x + sinf(((int)ID)* angle * (XM_PI/DEGREE_HALF)) * radius, hight,  player_pos.z + cos(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius });
+	IntroOnUpdate(timer);
 
 	if (_stage == SceneNum::kSecondScene) {
-		fbxObj->SetRotation({ 0,180,0 });
-		fbxObj->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, 0, ((int)ID / 10) * 5.0f });
-		fbxObj->Update();
+		fbxobj_->SetRotation({ 0,180,0 });
+		fbxobj_->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, 0, ((int)ID / 10) * 5.0f });
+		fbxobj_->Update();
 	}
 }
 
-void Bullet::ResultUpdate(const float& Timer) {
+void Bullet::ResultUpdate(const float& timer) {
 	isFinish = true;
-	ResultOnUpdate(Timer);
+	ResultOnUpdate(timer);
 	if (burning) {
 		BurnOut();
 	}
@@ -94,7 +94,7 @@ void Bullet::ResultUpdate(const float& Timer) {
 
 void Bullet::SetAggregation() {
 	XMFLOAT3 pos = player->GetAFTIMAGE(ID % 7);
-	XMFLOAT3 BulletPos = fbxObj->GetPosition();
+	XMFLOAT3 BulletPos = fbxobj_->GetPosition();
 	XMFLOAT3 position{};
 
 	position.x = (BulletPos.x - (pos.x + margin));
@@ -106,17 +106,17 @@ void Bullet::SetAggregation() {
 		BulletPos.z -= vel_follow.y;
 	}
 	float rotation = 0;
-	if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
-		rotation = Ease(In, Quad, 0.5f, fbxObj->GetRotation().y, pos.y);
+	if (Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 3.0f, player->GetPosition().x, player->GetPosition().z, 3.0f)) {
+		rotation = Ease(In, Quad, 0.5f, fbxobj_->GetRotation().y, pos.y);
 	} else {
 		rotation = (atan2f(position.x, position.z) * (DEGREE_HALF / XM_PI)); //- 90;// *(XM_PI / 180.0f);
 	}
-	fbxObj->SetPosition(BulletPos);
-	fbxObj->SetRotation({ 0,rotation,0 });
+	fbxobj_->SetPosition(BulletPos);
+	fbxobj_->SetRotation({ 0,rotation,0 });
 }
 
 void Bullet::LimitArea() {
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	if (pos.x > 48.0f) {
 		pos.x = 48.0f;
 	}
@@ -129,17 +129,17 @@ void Bullet::LimitArea() {
 	if (pos.z < -48.0f) {
 		pos.z = -48.0f;
 	}
-	fbxObj->SetPosition(pos);
+	fbxobj_->SetPosition(pos);
 }
 
 void Bullet::CommonUpda() {
-	old_pos = fbxObj->GetPosition();
+	old_pos = fbxobj_->GetPosition();
 	if (collide) { collide = false; }
 	if (knockBacking) {	KnockBack();}
 	if (isPlayActive) { command = Control; }
 	if (!wait) { follow_frame = 0.0f; }
 	if (enemy != nullptr) {
-		if (enemy->GetHp() <= 0) { clear_s_pos = fbxObj->GetPosition(); command = Smash; }
+		if (enemy->GetHp() <= 0) { clear_s_pos = fbxobj_->GetPosition(); command = Smash; }
 	}
 	if (burning) {
 		BurnOut();
@@ -148,11 +148,11 @@ void Bullet::CommonUpda() {
 		DeadEnd();
 		return;
 	}
-	fbxObj->Update();
+	fbxobj_->Update();
 	Explo->Update();
 	ShadowUpda();
 	Status->Update();
-	Status->SetPosition({ fbxObj->GetPosition().x,fbxObj->GetPosition().y + 2.5f,fbxObj->GetPosition().z });
+	Status->SetPosition({ fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 2.5f,fbxobj_->GetPosition().z });
 }
 
 void Bullet::CommandUpda() {
@@ -190,7 +190,7 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 		for (std::unique_ptr<Trace>& trace : traces_) {
 			trace->Draw();
 		}
-		Shadow->Draw();
+		shadow_->Draw();
 		OnFirstDraw(dxCommon);
 	}
 }
@@ -198,7 +198,7 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 void Bullet::Draw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		Object3d::PreDraw();
-		fbxObj->Draw(dxCommon->GetCmdList());
+		fbxobj_->Draw(dxCommon->GetCmdList());
 		OnDraw(dxCommon);
 	}
 }
@@ -215,7 +215,7 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 			if (command == Control) { return; }
 			Object2d::PreDraw();
 			if (!DeadFlag) {
-				if (!isFinish&&Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+				if (!isFinish&&Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 					Status->Draw();
 				}
 				if (burning) { Explo->Draw(); }
@@ -231,7 +231,7 @@ void Bullet::DemoDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
 		DebugUpdate();
 		Object3d::PreDraw();
-		fbxObj->Draw(dxCommon->GetCmdList());
+		fbxobj_->Draw(dxCommon->GetCmdList());
 		OnDraw(dxCommon);
 	}
 }
@@ -241,7 +241,7 @@ void Bullet::Finalize() {
 
 float Bullet::DirRotation(const XMFLOAT3& target) {
 	float itr{};
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 position{};
 	position.x = (target.x - pos.x);
 	position.z = (target.z - pos.z);
@@ -257,7 +257,7 @@ float Bullet::DirRotation(const XMFLOAT3& target) {
 
 void Bullet::Navigation(const XMFLOAT3& target) {
 	navi = true;
-	before_pos = fbxObj->GetPosition();
+	before_pos = fbxobj_->GetPosition();
 	after_pos = target;
 }
 
@@ -278,7 +278,7 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			if (isPlayActive) { 
 				return; 
 			}
-			ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxObj->GetPosition(), "Honey");
+			ActionActor = ActorManager::GetInstance()->GetAreaActor(fbxobj_->GetPosition(), "Honey");
 			if (!ActionActor->GetCollide()) {
 				ActionActor->SetCollide(true);
 			}
@@ -309,7 +309,7 @@ void Bullet::SetCommand(const int& command, XMFLOAT3 pos) {
 }
 
 bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float& _radius) {
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 position{};
 	position.x = (_pos.x - pos.x);
 	position.z = (_pos.z - pos.z);
@@ -318,8 +318,8 @@ bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float& _radius) {
 	if (powf(position.x, 2) + powf(position.z, 2) > powf(_radius, 2)) {
 		pos.x -= vel_follow.x;
 		pos.z += vel_follow.y;
-		fbxObj->SetPosition(pos);
-		fbxObj->SetRotation({ 0 ,DirRotation(_pos),0 });
+		fbxobj_->SetPosition(pos);
+		fbxobj_->SetRotation({ 0 ,DirRotation(_pos),0 });
 		return true;
 	} else {
 		return false;
@@ -328,13 +328,13 @@ bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float& _radius) {
 
 
 void Bullet::KnockBack() {
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 
 	if (damageframe >= 1.0f) {
 		damageframe = 0.0f;
 		knockBacking = false;
 		pos.y = 0.0f;
-		fbxObj->SetPosition(pos);
+		fbxobj_->SetPosition(pos);
 		return;
 	} else {
 		damageframe += 1.0f / kDeadFrameMax;
@@ -346,7 +346,7 @@ void Bullet::KnockBack() {
 	if (pos.y < 0.0f) { pos.y = 0; }
 
 	pos.z = Ease(In, Quad, damageframe, s_rebound_.z, e_rebound_.z);
-	fbxObj->SetPosition(pos);
+	fbxobj_->SetPosition(pos);
 }
 
 void Bullet::DamageInit() {
@@ -355,7 +355,7 @@ void Bullet::DamageInit() {
 		enemy->SetHp(enemy->GetHp() - 1);
 		burning = true;
 
-		XMFLOAT3 pos = fbxObj->GetPosition();
+		XMFLOAT3 pos = fbxobj_->GetPosition();
 		fall = kFallHeight;
 		exploPos = old_pos;
 		XMFLOAT3 distance = { pos.x - old_pos.x,0,pos.z - old_pos.z };
@@ -385,11 +385,11 @@ void Bullet::DeadEnd() {
 	vanishHight = Ease(Out, Quad, deadframe, 0.1f, 4.5f);
 	vanishAlpha = Ease(In, Quad, deadframe, 1.0f, 0.5f);
 	//XVˆ—
-	fbxObj->SetScale({ 0.003f,0.0001f, 0.003f });
-	fbxObj->Update();
-	Shadow->Update();
-	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
-	CharaDead->SetPosition({ fbxObj->GetPosition().x,vanishHight, fbxObj->GetPosition().z });
+	fbxobj_->SetScale({ 0.003f,0.0001f, 0.003f });
+	fbxobj_->Update();
+	shadow_->Update();
+	shadow_->SetPosition({ fbxobj_->GetPosition().x,0.01f, fbxobj_->GetPosition().z });
+	CharaDead->SetPosition({ fbxobj_->GetPosition().x,vanishHight, fbxobj_->GetPosition().z });
 	CharaDead->SetColor({ 1,1,1,vanishAlpha });
 }
 
@@ -409,29 +409,29 @@ void Bullet::BurnOut() {
 
 void Bullet::ShadowUpda() {
 
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	float max_height_ = 12.0f;
 	float scale = ((max_height_ - pos.y) / max_height_) * shadow_side_;
 	scale = max(0.0f, scale);
 
 
-	Shadow->SetScale({ scale,scale, scale, });
-	Shadow->Update();
-	Shadow->SetPosition({ pos.x,0.01f, pos.z });
+	shadow_->SetScale({ scale,scale, scale, });
+	shadow_->Update();
+	shadow_->SetPosition({ pos.x,0.01f, pos.z });
 
 }
 
 void Bullet::TraceUpda() {
 	foot_count_--;
 	if (foot_count_ <=0) {
-		float foot_rot = fbxObj->GetPosition().y;
+		float foot_rot = fbxobj_->GetPosition().y;
 		Trace::ImageFoot imagefoot_;
 		if (odd_count_%2==0) {
 			imagefoot_ = Trace::ImageFoot::LeftFoot;
 		} else {
 			imagefoot_ = Trace::ImageFoot::RightFoot;
 		}
-		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_,foot_rot, fbxObj->GetPosition());
+		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_,foot_rot, fbxobj_->GetPosition());
 		traces_.push_back(std::move(Trace_));
 		foot_count_ = 30;
 		odd_count_++;
@@ -450,7 +450,7 @@ void Bullet::ControlUpda() {
 		if (!knockBacking) {
 			audioManager->PlayWave("SE/attack.wav", 0.5f);
 			burning = true;
-			XMFLOAT3 pos = fbxObj->GetPosition();
+			XMFLOAT3 pos = fbxobj_->GetPosition();
 			fall = kFallHeight;
 			exploPos = ActionActor->GetPosition();
 			XMFLOAT3 distance = { pos.x - ActionActor->GetPosition().x,0,pos.z - ActionActor->GetPosition().z };
@@ -476,7 +476,7 @@ void Bullet::ControlUpda() {
 		pos.x = Ease(In, Linear, navi_frame, before_pos.x, (after_pos.x + margin));
 		pos.y = Ease(In, Linear, navi_frame, before_pos.y, after_pos.y);
 		pos.z = Ease(In, Linear, navi_frame, before_pos.z, (after_pos.z + margin));
-		fbxObj->SetPosition(pos);
+		fbxobj_->SetPosition(pos);
 	}
 }
 
@@ -492,26 +492,26 @@ void Bullet::SmashUpda() {
 
 void Bullet::WaitUpda() {
 	throwReady = true;
-	vel = 0.8f;
+	vel_ = 0.8f;
 	frame = 0.0f;
 	//“Š‚°‚Ä‚éÅ’†‚Ì‰ñŽûŽž‚Ì–µ‚‰ðÁ
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	if (pos.y > 0) {
 		pos.y -= 0.3f;
 	} else {
 		pos.y = 0;
 	}
-	fbxObj->SetPosition(pos);
+	fbxobj_->SetPosition(pos);
 	SetAggregation();
 }
 
 void Bullet::SlowUpda() {
 	if (throwReady) {
-		XMFLOAT3 pos = fbxObj->GetPosition();
-		XMFLOAT3 rot = fbxObj->GetRotation();
+		XMFLOAT3 pos = fbxobj_->GetPosition();
+		XMFLOAT3 rot = fbxobj_->GetRotation();
 		pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
-		pos.y += vel; //+
-		vel -= kSlowHight / (kSlowFrameMax / 2.5f);//
+		pos.y += vel_; //+
+		vel_ -= kSlowHight / (kSlowFrameMax / 2.5f);//
 		if (pos.y < 0.0f) {
 			pos.y = 0;
 		}
@@ -528,14 +528,14 @@ void Bullet::SlowUpda() {
 			frame = 1.0f;
 			pos.y = 0.0f;
 			rot.x = 0;
-			vel = kSlowHight;
+			vel_ = kSlowHight;
 			throwReady = false;
 		}
-		fbxObj->SetPosition(pos);
-		fbxObj->SetRotation(rot);
+		fbxobj_->SetPosition(pos);
+		fbxobj_->SetRotation(rot);
 
 	} else {
-		fbxObj->SetRotation({ 0,fbxObj->GetRotation().y,0 });
+		fbxobj_->SetRotation({ 0,fbxobj_->GetRotation().y,0 });
 		command = Attack;
 	}
 
@@ -545,7 +545,7 @@ void Bullet::AttackUpda() {
 
 	if (!knockBacking) {
 		if (enemy->GetHp() == 0) { return; }
-		if (Collision::CircleCollision(fbxObj->GetPosition().x, fbxObj->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+		if (Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Position(enemy->GetPosition(), 2.0f);
 		}
 	}

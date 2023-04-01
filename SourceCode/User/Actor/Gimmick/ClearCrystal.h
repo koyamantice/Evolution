@@ -19,11 +19,11 @@ private:
 	Input* input = Input::GetInstance();
 	std::stringstream parameterCommands;
 
-	void OnInit()override;
-	void OnUpda()override;
+	void OnInitialize()override;
+	void OnUpdate()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
-	void OnFinal()override;
-	void ResultOnUpdate(const float& Timer)override;
+	void OnFinalize()override;
+	void ResultOnUpdate(const float& timer)override;
 	void OnCollision(const std::string& Tag)override;
 	Actor* player=nullptr;
 

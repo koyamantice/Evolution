@@ -39,7 +39,7 @@ void Player::UpdateCommand() {
 			hp = (float)std::atof(word.c_str());
 		} else if (word.find("VEL") == 0) {
 			getline(line_stream, word, ',');
-			vel = (float)std::atof(word.c_str());
+			vel_ = (float)std::atof(word.c_str());
 		} else if (word.find("STOCK") == 0) {
 			getline(line_stream, word, ',');
 			stock = (int)std::atof(word.c_str());
@@ -49,21 +49,21 @@ void Player::UpdateCommand() {
 	}
 }
 
-void Player::IntroOnUpdate(const float& Timer) {
-	fbxObj->Update();
+void Player::IntroOnUpdate(const float& timer) {
+	fbxobj_->Update();
 	IntroMove();
 	compornent->SetIsActive(false);
 }
 
 void Player::IntroMove() {
-	fbxObj->SetPosition(obj->GetPosition());
-	fbxObj->SetRotation(obj->GetRotation());
+	fbxobj_->SetPosition(obj->GetPosition());
+	fbxobj_->SetRotation(obj->GetRotation());
 }
 
-void Player::ResultOnUpdate(const float& Timer) {
-	fbxObj->Update();
-	LockOn->Upda(angle);
-	XMFLOAT3 pos = fbxObj->GetPosition();
+void Player::ResultOnUpdate(const float& timer) {
+	fbxobj_->Update();
+	aim_->Upda(angle);
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	if (pos.y <= 0.0f) {
 		pos.y = max(0.0f, pos.y);
 		if (jump_count%2==0) {
@@ -77,12 +77,12 @@ void Player::ResultOnUpdate(const float& Timer) {
 	y_add -= 0.02f;
 	ShadowUpda();
 	TraceUpda();
-	fbxObj->SetPosition(pos);
+	fbxobj_->SetPosition(pos);
 	compornent->SetIsActive(false);
-	LockOn->SetIsActive(false);
+	aim_->SetIsActive(false);
 }
 
-void Player::OnInit() {
+void Player::OnInitialize() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
 	obj->SetPosition({ 0,0,20 });
 	
@@ -91,41 +91,39 @@ void Player::OnInit() {
 	LoadData();
 	UpdateCommand();
 
-	vel /= 5.0f;
 
-	FBXObject3d* fbxObj_ = new FBXObject3d();
-	fbxObj_->Initialize();
-	fbxObj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kSeed));
-	fbxObj_->SetScale({ 0.005f,0.005f, 0.005f });
-	fbxObj.reset(fbxObj_);
-	fbxObj->LoadAnimation();
-	fbxObj->PlayAnimation();
+	fbxobj_ = std::make_unique<FBXObject3d>();
+	fbxobj_->Initialize();
+	fbxobj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kSeed));
+	fbxobj_->SetScale({ 0.005f,0.005f, 0.005f });
+	fbxobj_->LoadAnimation();
+	fbxobj_->PlayAnimation();
 
 	// キャラクターの初期位置をセット
 	for (int i = 0; i < AFTIMAGENUM; i++) {
-		PlayerX[i] = 0;
-		PlayerZ[i] = 18.0f + 10.0f * ((float)(AFTIMAGENUM - i) / AFTIMAGENUM);
-	}
+		imagin_[i].x = 0;
+		imagin_[i].z = 18.0f + 10.0f * ((float)(AFTIMAGENUM - i) / AFTIMAGENUM);
+	}	
 	
 	//足元のパーティクル
 	particleEmitter_ = std::make_unique <ParticleEmitter>(ImageManager::smoke);
 
-	LockOn = std::make_unique<Aim>();
-	LockOn->Init();
+	aim_ = std::make_unique<Aim>();
+	aim_->Init();
 
 	compornent = new PlayerUI();
 	compornent->Initialize();
 
-	Shadow = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
+	shadow_ = Object2d::Create(ImageManager::shadow_, { 0,0,0 },
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
-	Shadow->SetRotation({ DEGREE_QUARTER,0,0 });
+	shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 }
 
-void Player::OnUpda() {
+void Player::OnUpdate() {
 	particleEmitter_->Update();
 	compornent->SetIsActive(true);
 	if (!first) {
-		LockOn->FirstSet();
+		aim_->FirstSet();
 		first = true;
 	}
 	if (canMove) {
@@ -135,15 +133,15 @@ void Player::OnUpda() {
 	LimitArea();
 	ShadowUpda();
 	TraceUpda();
-	fbxObj->Update();
-	fbxObj->SetPosition(obj->GetPosition());
-	fbxObj->SetRotation(obj->GetRotation());
-	LockOn->Upda(angle);
+	fbxobj_->Update();
+	fbxobj_->SetPosition(obj->GetPosition());
+	fbxobj_->SetRotation(obj->GetRotation());
+	aim_->Upda(angle);
 }
 
 void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	Shadow->Draw();
+	shadow_->Draw();
 	for (std::unique_ptr<Trace>& trace : traces_) {
 		trace->Draw();
 	}
@@ -151,16 +149,16 @@ void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 }
 
 void Player::OnDraw(DirectXCommon* dxCommon) {
-	fbxObj->Draw(dxCommon->GetCmdList());
+	fbxobj_->Draw(dxCommon->GetCmdList());
 }
 
 void Player::OnLastDraw(DirectXCommon* dxCommon) {
 	if (canMove) {
-		LockOn->Draw();
+		aim_->Draw();
 	}
 }
 
-void Player::OnFinal() {
+void Player::OnFinalize() {
 }
 
 void Player::Move() {
@@ -168,34 +166,35 @@ void Player::Move() {
 	XMFLOAT3 rot = obj->GetRotation();
 	aftImage_count_++;
 	if (aftImage_count_ >= kAftLocateCountMax) {
-		if (((int)pos.x != (int)PlayerX[0] || (int)pos.z != (int)PlayerZ[0]) || !isFasted) {
+		if (((int)pos.x != (int)imagin_[0].x || (int)pos.z != (int)imagin_[0].x) || !isFasted) {
 			// 残像データを一つづつずらす
 			for (int i = AFTIMAGENUM - 1; i > 0; i--) {
-				PlayerX[i] = PlayerX[i - 1];
-				RotY[i] = RotY[i - 1];
-				PlayerZ[i] = PlayerZ[i - 1];
+				imagin_[i].x = imagin_[i-1].x;
+				imagin_[i].y = imagin_[i - 1].y;
+				imagin_[i].z = imagin_[i-1].z;
 			}
 		}
-		PlayerX[0] = pos.x;
-		RotY[0] = rot.y;
-		PlayerZ[0] = pos.z;
+		imagin_[0].x = pos.x;
+		imagin_[0].y = rot.y;
+		imagin_[0].z = pos.z;
 		aftImage_count_ = 0;
 		isFasted = true;
 	}
 	if (onHoney) {
-		vel = 0.2f;
+		honeyCount++;
+
+		vel_ =  0.2f;
 		const int life = 30;
 		const float rnd_pos = 2.0f;
 		const float rnd_vel = -0.05f;
 		particleEmitter_->AddInNest(life, pos, rnd_pos, rnd_vel);
 
-		honeyCount++;
-		if (honeyCount >= 60) {
+		if (honeyCount >= kHoneyCountMax) {
 			onHoney = false;
 			honeyCount = 0;
 		}
 	} else {
-		vel = 0.5f;
+		vel_ = 0.5f;
 	}
 
 	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
@@ -226,25 +225,25 @@ void Player::Move() {
 
 		if (input->TiltPushStick(Input::L_UP, 0.0f)||
 			input->PushKey(DIK_W)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel,0 }, angle);
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel_,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
 			pos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
 		if (input->TiltPushStick(Input::L_DOWN, 0.0f)||
 			input->PushKey(DIK_S)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel,0 }, angle);
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel_,0 }, angle);
 			pos.x += vecvel.x * (StickY / STICK_MAX);
 			pos.z += vecvel.z * (StickY / STICK_MAX);
 		}
 		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)||
 			input->PushKey(DIK_D)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel,0,0,0 }, angle);
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel_,0,0,0 }, angle);
 			pos.x -= vecvel.x * (StickX / STICK_MAX);
 			pos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
 		if (input->TiltPushStick(Input::L_LEFT, 0.0f)||
 			input->PushKey(DIK_A)) {
-			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel,0,0,0 }, angle);
+			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel_,0,0,0 }, angle);
 			pos.x += vecvel.x * (StickX / STICK_MAX);
 			pos.z += vecvel.z * (StickX / STICK_MAX);
 		}
@@ -282,20 +281,19 @@ void Player::OnCollision(const std::string& Tag) {
 	}
 	if (Tag == "Honey") {
 		if (!onHoney) {
-			speed = vel;
 			onHoney = true;
 		}
 	}
 }
 
 void Player::ShadowUpda() {
-	XMFLOAT3 pos = fbxObj->GetPosition();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	float max_height_ = 12.0f;
 	float scale = ((max_height_ - pos.y) / max_height_) * shadow_side_;
 	scale = max(0.0f, scale);
-	Shadow->SetScale({scale,scale,scale});
-	Shadow->Update();
-	Shadow->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
+	shadow_->SetScale({scale,scale,scale});
+	shadow_->Update();
+	shadow_->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
 }
 
 void Player::TraceUpda() {
@@ -306,7 +304,7 @@ void Player::TraceUpda() {
 		} else {
 			imagefoot_ = Trace::ImageFoot::RightFoot;
 		}
-		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_, foot_rot_, fbxObj->GetPosition());
+		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_, foot_rot_, fbxobj_->GetPosition());
 		traces_.push_back(std::move(Trace_));
 		foot_count_ = 10;
 		odd_count_++;

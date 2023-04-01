@@ -10,7 +10,7 @@ using namespace DirectX;
 BulletRed::BulletRed() {
 }
 
-void BulletRed::OnInit() {
+void BulletRed::OnInitialize() {
 	ID = ActorManager::GetInstance()->SearchNum("BulletRed");
 	command = Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
@@ -18,16 +18,16 @@ void BulletRed::OnInit() {
 	landing = player->GetLockPos();
 	Color = DeathColor::Red;
 
-	CharaDead = Object2d::Create(Color, { fbxObj->GetPosition().x,fbxObj->GetPosition().y,fbxObj->GetPosition().z },
+	CharaDead = Object2d::Create(Color, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y,fbxobj_->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
 	CharaDead->SetIsBillboard(true);
 
 }
 
 
-void BulletRed::ResultOnUpdate(const float& Timer) {
-	XMFLOAT3 rot = fbxObj->GetRotation();
-	XMFLOAT3 pos = fbxObj->GetPosition();
+void BulletRed::ResultOnUpdate(const float& timer) {
+	XMFLOAT3 rot = fbxobj_->GetRotation();
+	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();
 	if (clear_ease) {
 		if (clear_frame < 1.0f) {
@@ -44,10 +44,10 @@ void BulletRed::ResultOnUpdate(const float& Timer) {
 		pos.z = Ease(In, Linear, clear_frame, clear_s_pos.z, clear_e_pos.z);
 		rot.y= DirRotation(clear_e_pos);
 	} else {
-		pos.y += vel; //+
+		pos.y += vel_; //+
 		float rnd_vel = 0.04f;
 		float margin= (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel -= 0.04f+ margin;//
+		vel_ -= 0.04f+ margin;//
 		if (frame < 0.7f) {
 			rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
 		}
@@ -58,16 +58,16 @@ void BulletRed::ResultOnUpdate(const float& Timer) {
 			frame += 0.02f;
 		} else {
 			frame = 0.0f;
-			vel = 0.8f;
+			vel_ = 0.8f;
 			rot.x = 0.0f;
 			pos.y = 0.0f;
 		}
 	}
-	fbxObj->SetPosition(pos);
-	fbxObj->SetRotation(rot);
-	fbxObj->Update();
-	Shadow->SetPosition({ fbxObj->GetPosition().x,0.01f, fbxObj->GetPosition().z });
-	Shadow->Update();
+	fbxobj_->SetPosition(pos);
+	fbxobj_->SetRotation(rot);
+	fbxobj_->Update();
+	shadow_->SetPosition({ fbxobj_->GetPosition().x,0.01f, fbxobj_->GetPosition().z });
+	shadow_->Update();
 }
 
 void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
@@ -75,7 +75,7 @@ void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (command == Dead) { return; }
 	if (isPlayActive) { return; }
 	if (ID > Id) { return; }
-	XMFLOAT3 pos2 = fbxObj->GetPosition();
+	XMFLOAT3 pos2 = fbxobj_->GetPosition();
 	if (!collide) {
 	}
 	collide = true;
@@ -91,7 +91,7 @@ void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 		pos2.z -= cos(rad +randRad) * 0.1f;
 
 	}
-	fbxObj->SetPosition(pos2);
+	fbxobj_->SetPosition(pos2);
 }
 
 

@@ -44,8 +44,8 @@ protected:
 	/// <summary>
 	/// 撃破後カメラ
 	/// </summary>
-	/// <param name="Timer"></param>
-	virtual void SmashCamera(const float& Timer) {};
+	/// <param name="timer"></param>
+	virtual void SmashCamera(const float& timer) {};
 
 	/// <summary>
 	/// 説明表示用の更新

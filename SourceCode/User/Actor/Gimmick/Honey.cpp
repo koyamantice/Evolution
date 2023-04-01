@@ -17,7 +17,7 @@ void (Honey::* Honey::updateFuncTable[])() = {
 
 };
 
-void Honey::OnInit() {
+void Honey::OnInitialize() {
 
 	obj->SetScale(base_sca);
 
@@ -50,7 +50,7 @@ void Honey::OnInit() {
 }
 
 
-void Honey::OnUpda() {
+void Honey::OnUpdate() {
 	missionUpdate();
 	questionUpdate();
 	particleEmitter->Update();
@@ -72,7 +72,7 @@ void Honey::OnDraw(DirectXCommon* dxCommon) {
 
 }
 
-void Honey::OnFinal() {
+void Honey::OnFinalize() {
 }
 
 void Honey::OnCollision(const std::string& Tag) {
@@ -230,13 +230,13 @@ void Honey::RandSpawn() {
 	}
 }
 
-void Honey::IntroOnUpdate(const float& Timer) {
+void Honey::IntroOnUpdate(const float& timer) {
 	//ŠÖ”‚ª“n‚·Å‰‚Ì’l
 	const float start_timer = 0.5f;
 	//
 	XMFLOAT3 pos = obj->GetPosition();
 	//
-	float time = Timer - start_timer;
+	float time = timer - start_timer;
 	if (time <= 0.1f) {
 		pos.x = Ease(In, Linear, time / 0.1f, 15, 15);
 		pos.y = Ease(In, Linear, time / 0.1f, 15, 0);

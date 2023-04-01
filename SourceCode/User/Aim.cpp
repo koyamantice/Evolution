@@ -6,9 +6,9 @@
 using namespace DirectX;
 
 void Aim::Init() {
-	LockOn = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
-	LockOn->SetRotation({ 90,0,0 });
-	LockOn->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
+	aim_ = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
+	aim_->SetRotation({ 90,0,0 });
+	aim_->SetColor({ 1.0f,0.2f,0.2f ,0.6f });
 
 	Whistle = Object2d::Create(ImageManager::Lock, { 0,0,0 }, { 0.5f,0.5f,0.5f }, { 1,1,1,1 });
 	Whistle->SetRotation({ 90,0,0 });
@@ -37,7 +37,7 @@ void Aim::Init() {
 }
 
 void Aim::Upda(float angle) {
-	LockOn->Update();
+	aim_->Update();
 	Whistle->Update();
 	partMan->Update();
 	for (int i = 0; i < COMMENTMAX; i++) {
@@ -70,7 +70,7 @@ void Aim::Upda(float angle) {
 void Aim::Draw() {
 	if (!isActive) { return; }
 	Object2d::PreDraw();
-	LockOn->Draw();
+	aim_->Draw();
 	Whistle->Draw();
 	comment_ui_[SHOT]->Draw();
 	if (explanation_now_ == RECOVERY) {
@@ -87,16 +87,16 @@ void Aim::Draw() {
 void Aim::FirstSet() {
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	XMFLOAT3 pos = player->GetPosition();
-	LockOn->SetPosition({ pos.x,pos.y + 0.1f,pos.z });
+	aim_->SetPosition({ pos.x,pos.y + 0.1f,pos.z });
 
 }
 
 void Aim::Move(float angle) {
 	if (!player->GetCanMove()) { return; }
 	//“®‚«Ž‚½‚¹‚é‚½‚ßƒNƒ‹ƒNƒ‹‚³‚¹‚Ä‚Ü‚·B
-	XMFLOAT3 Lrot = LockOn->GetRotation();
+	XMFLOAT3 Lrot = aim_->GetRotation();
 	Lrot.y += 2.0f;
-	LockOn->SetRotation(Lrot);
+	aim_->SetRotation(Lrot);
 
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
 		if (explanation_now_== SHOT) {
@@ -107,7 +107,7 @@ void Aim::Move(float angle) {
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
 		if (bullet != nullptr) {
 			audioManager->PlayWave("SE/slow.wav", 0.5f);
-			bullet->SetCommand(Bullet::command::Slow, LockOn->GetPosition());
+			bullet->SetCommand(Bullet::command::Slow, aim_->GetPosition());
 		}
 	}
 
@@ -118,7 +118,7 @@ void Aim::Move(float angle) {
 		if (Area < 10.0f) {
 			Area += 0.20f;
 		}
-		XMFLOAT3 base = LockOn->GetPosition();
+		XMFLOAT3 base = aim_->GetPosition();
 		for (int i = 0; i < 1; i++) {
 			const float rnd_rad = DEGREE_MAX;
 			XMFLOAT3 pos{};
@@ -142,7 +142,7 @@ void Aim::Move(float angle) {
 		Whistle->SetScale({ Area,Area,Area });
 	} 
 
-	XMFLOAT3 Lpos = LockOn->GetPosition();
+	XMFLOAT3 Lpos = aim_->GetPosition();
 
 	if (input->TiltPushStick(Input::L_UP   ,0.0f) ||
 		input->TiltPushStick(Input::L_DOWN ,0.0f) ||
@@ -163,7 +163,7 @@ void Aim::Move(float angle) {
 	if (Lpos.x < -48.0f) { Lpos.x = -48.0f; }
 	if (Lpos.z > 48.0f) { Lpos.z = 48.0f; }
 	if (Lpos.z < -48.0f) { Lpos.z = -48.0f; }
-	LockOn->SetPosition({ Lpos.x,0.01f,Lpos.z });
+	aim_->SetPosition({ Lpos.x,0.01f,Lpos.z });
 
 	for (int i = 0; i < COMMENTMAX; i++) {
 		comment_ui_[i]->SetPosition({ Lpos.x,1.0f * sinf((Lrot.y + 2) * XM_PI / DEGREE_HALF) + 3.5f ,Lpos.z });

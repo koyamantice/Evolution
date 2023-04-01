@@ -45,8 +45,8 @@ void BattleScene::BattleInit() {
 void BattleScene::FieldUpdate() {
 	//オブジェクトを改定して空を動かします
 	float rot = skydome->GetRotation().y;
-	const float vel = 0.1f;
-	rot += vel;
+	const float vel_ = 0.1f;
+	rot += vel_;
 	skydome->SetRotation({ 0,rot,0 });
 	skydome->Update();
 	//松明の更新処理

@@ -29,32 +29,32 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::IntroUpdate(const float& Timer, const std::string& voidname,const int& _stage) {
+void ActorManager::IntroUpdate(const float& timer, const std::string& voidname,const int& _stage) {
 	if (voidname =="Bullet") {
 		for (std::unique_ptr<Actor>& actor : Actors) {
-			actor->IntroUpdate(Timer);
+			actor->IntroUpdate(timer);
 		}
 		return;
 	} else if(voidname == "Actor"){
 		for (std::unique_ptr<Bullet>& bullet : Bullets) {
-			bullet->IntroUpdate(Timer, _stage);
+			bullet->IntroUpdate(timer, _stage);
 		}
 		return;
 	} else {
 		for (std::unique_ptr<Actor>& actor : Actors) {
-			actor->IntroUpdate(Timer);
+			actor->IntroUpdate(timer);
 		}
 		for (std::unique_ptr<Bullet>& bullet : Bullets) {
-			bullet->IntroUpdate(Timer, _stage);
+			bullet->IntroUpdate(timer, _stage);
 		}
 	}
 }
-void ActorManager::ResultUpdate(const float& Timer) {
+void ActorManager::ResultUpdate(const float& timer) {
 	for (std::unique_ptr<Actor>& actor : Actors) {
-		actor->ResultUpdate(Timer);
+		actor->ResultUpdate(timer);
 	}
 	for (std::unique_ptr<Bullet>& bullet : Bullets) {
-		bullet->ResultUpdate(Timer);
+		bullet->ResultUpdate(timer);
 	}
 	RemoveActor();
 }

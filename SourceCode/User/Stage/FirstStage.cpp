@@ -106,9 +106,10 @@ bool FirstStage::DebugDraw() {
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 1.0f));
 	ImGui::SetNextWindowPos(ImVec2(1100, 0));
-	ImGui::SetNextWindowSize(ImVec2(180, 240));
+	//ImGui::SetNextWindowSize(ImVec2(180, 240));
 
 	ImGui::Begin("scene");
+	ImGui::Text("fps:%f", FPSManager::GetInstance()->GetFps());
 	ImGui::Text("distance.x:%f", camera_distance.x);
 	ImGui::Text("distance.z:%f", camera_distance.z);
 	ImGui::SliderFloat("pointLightPos[0].x", &pointLightPos[0].x, -50.0f,50.0f);
@@ -190,16 +191,16 @@ bool FirstStage::IntroUpdate() {
 	return true;
 }
 
-void FirstStage::IntroCamera(const float& Timer) {
+void FirstStage::IntroCamera(const float& timer) {
 	//’…’n‚µ‚Ä‚©‚ç‚Ì—P—\
 	const float delay = 0.9f;
 	const float reaching_time = intro_count_max * delay;
 	float hight = camera_hight;
-	if (Timer / reaching_time <= 1.0f) {
-		camera_angle = Ease(In, Linear, Timer / reaching_time, DEGREE_MAX, 0);
-		hight = Ease(In, Linear, Timer / reaching_time, first_hight, camera_hight);
+	if (timer / reaching_time <= 1.0f) {
+		camera_angle = Ease(In, Linear, timer / reaching_time, DEGREE_MAX, 0);
+		hight = Ease(In, Linear, timer / reaching_time, first_hight, camera_hight);
 	}
-	if (Timer / intro_count_max >= 1.0f) {
+	if (timer / intro_count_max >= 1.0f) {
 		camera_angle = min(0, camera_angle);
 		hight = camera_hight;
 	}
@@ -215,18 +216,18 @@ void FirstStage::IntroCamera(const float& Timer) {
 void FirstStage::DescriptionUpdate() {
 }
 
-void FirstStage::ResultCamera(const float& Timer) {
+void FirstStage::ResultCamera(const float& timer) {
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();
 }
 
-void FirstStage::SmashCamera(const float& Timer) {
+void FirstStage::SmashCamera(const float& timer) {
 	XMFLOAT3 s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
 	XMFLOAT3 e_eye = { enemy_shadow->GetPosition().x + camera_distance.x,enemy_shadow->GetPosition().y + 25,enemy_shadow->GetPosition().z + camera_distance.z };
 	XMFLOAT3 ease_target = enemy_shadow->GetPosition();
 	XMFLOAT3 ease_eye = e_eye;
-	float ease_time = Timer / (float)60.0f;
+	float ease_time = timer / (float)60.0f;
 
 	if (ease_time <= 1.0f) {
 

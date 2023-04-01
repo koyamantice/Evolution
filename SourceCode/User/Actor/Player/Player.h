@@ -12,80 +12,74 @@
 
 class Player :public Actor {
 public:
-	Player(){};
+	Player() {};
 	void LoadData();
 	void UpdateCommand();
-	const XMFLOAT3& GetLockPos()override { return rockpos;}
+	const XMFLOAT3& GetLockPos()override { return aim_pos_; }
 private:
-	Input* input =Input::GetInstance();
+	Input* input = Input::GetInstance();
+	//パラメーターコマンド
 	std::stringstream parameterCommands;
-
-	std::unique_ptr<Aim> LockOn{};
-	std::unique_ptr<Object2d> Shadow = nullptr;
-
-	XMFLOAT3 rockpos = {0.0f,0.5f,0.0f};
-
-	void OnInit()override;
-	void OnUpda()override;
+	//仮想オーバーロード関数
+	void OnInitialize()override;
+	void OnUpdate()override;
 	void OnFirstDraw(DirectXCommon* dxCommon)override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnLastDraw(DirectXCommon* dxCommon)override;
-	void OnFinal()override;
+	void OnFinalize()override;
 
-	void IntroOnUpdate(const float& Timer)override;
+	void IntroOnUpdate(const float& timer)override;
 	void IntroMove();
-	void ResultOnUpdate(const float& Timer)override;
+	void ResultOnUpdate(const float& timer)override;
 
 	void OnCollision(const std::string& Tag)override;
-	
+	//固有関数
 	void ShadowUpda();
 	void TraceUpda();
-
 	void HitBoundMotion();
-
 	void LimitArea();
-
 	void Move();
 
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
-	DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) override;
-	XMVECTOR move_ = { };
+	XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) override;
 
+private:
+	std::unique_ptr<FBXObject3d> fbxobj_ = nullptr;
+	std::unique_ptr<ParticleEmitter> particleEmitter_ = nullptr;
+	std::unique_ptr<Aim> aim_ = nullptr;
+	std::unique_ptr<Object2d> shadow_ = nullptr;
+	std::list<std::unique_ptr<Trace>> traces_ = {};
 
-	XMFLOAT3 s_rebound_pos_{};
-	XMFLOAT3 e_rebound_pos_{};
-	const float kKnockBackRange = 15.5f;
+	XMFLOAT3 s_rebound_pos_={};
+	XMFLOAT3 e_rebound_pos_={};
+	XMFLOAT3 aim_pos_ = {};
+	XMVECTOR move_ = {};
 
-	int  aftImage_count_ = 0;
-	const int kAftLocateCountMax = 4;
-
-	float knock_back_frame_ = 0.0f;
-	const float kKnockBackFrameMax = 50.0f;
-	float collided_rot_ = 0.0f;
-
+	//速度関連
+	float vel_ = 0;
+	bool isFasted = false;
+	//ノックバック関連
 	bool knockBacking = false;
-
-	float shadow_side_ = 0.2f;
+	const float kKnockBackRange = 15.5f;
+	const float kKnockBackFrameMax = 50.0f;
+	float knock_back_frame_ = 0.0f;
+	float collided_rot_ = 0.0f;
 
 	float y_add = 0.0f;
 	int jump_count = 0;
+	float shadow_side_ = 0.2f;
 
-	bool isFasted = false;
+	//残像処理
+	const int kAftLocateCountMax = 4;
+	int  aftImage_count_ = 0;
 
+	//蜂蜜の遅延
 	bool onHoney = false;
+	const int kHoneyCountMax = 60;
 	int honeyCount = 0;
-
-	float speed = 0.0f;
-	float vel = 0;
-
-	int charge = 0;
-	
-	int particle_pop_time_ = 0;
+	//足跡パーティクルポップ
 	const int kPopTimeMax = 5;
-
-	std::unique_ptr<FBXObject3d> fbxObj;
-	std::unique_ptr<ParticleEmitter> particleEmitter_ = nullptr;
-	std::list<std::unique_ptr<Trace>> traces_;
+	int particle_pop_time_ = 0;
 	int foot_count_ = 0;
 	int odd_count_ = 0;
 	float foot_rot_ = 0.0f;

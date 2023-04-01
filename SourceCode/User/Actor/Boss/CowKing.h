@@ -8,12 +8,12 @@ public:
 	CowKing(){};
 
 protected:
-	void OnInit()override;
-	void OnUpda()override;
+	void OnInitialize()override;
+	void OnUpdate()override;
 	void OnFirstDraw(DirectXCommon* dxCommon)override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnLastDraw(DirectXCommon* dxCommon)override;
-	void OnFinal()override;
+	void OnFinalize()override;
 
 	//オーバーライドメンバ関数
 	void StartAction() override;

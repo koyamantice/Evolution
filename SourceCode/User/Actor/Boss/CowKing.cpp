@@ -4,7 +4,7 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 
 
-void CowKing::OnInit() {
+void CowKing::OnInitialize() {
 	LoadData("Cow");
 
 	collide_size = 3.0f;
@@ -22,7 +22,7 @@ void CowKing::OnInit() {
 
 }
 
-void CowKing::OnUpda() {
+void CowKing::OnUpdate() {
 	//HPä«óù
 	LifeCommon();
 
@@ -51,7 +51,7 @@ void CowKing::OnDraw(DirectXCommon* dxCommon) {
 void CowKing::OnLastDraw(DirectXCommon* dxCommon) {
 }
 
-void CowKing::OnFinal() {
+void CowKing::OnFinalize() {
 	levelData_ = {};
 }
 

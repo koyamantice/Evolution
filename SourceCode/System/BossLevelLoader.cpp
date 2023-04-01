@@ -77,8 +77,8 @@ void BossLevelLoader::LoadData(const std::string& _filename) {
 	}
 }
 
-BossLevelLoader::LevelData BossLevelLoader::takeData(const std::string& _bossname) {
-	std::map<std::string, LevelData>::iterator it = levelDatas_.find(_bossname);
+BossLevelLoader::LevelData BossLevelLoader::takeData(const std::string& bossname) {
+	std::map<std::string, LevelData>::iterator it = levelDatas_.find(bossname);
 	//読み込んでなければアサート
 	assert(it != levelDatas_.end());
 

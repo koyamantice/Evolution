@@ -118,7 +118,7 @@ bool MThirdStage::IntroUpdate() {
 	}
 }
 
-void MThirdStage::ResultCamera(int Timer) {
+void MThirdStage::ResultCamera(int timer) {
 	camera->SetTarget(player_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();

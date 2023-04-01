@@ -33,7 +33,7 @@ public:
 	// レベルデータの読み込み
 	void LoadData(const std::string& _filename);
 	//レベルデータの取得
-	LevelData takeData(const std::string& _bossname);
+	LevelData takeData(const std::string& bossname);
 
 private:
 	//レベルデータの連想配列

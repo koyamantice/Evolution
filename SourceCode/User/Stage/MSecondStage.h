@@ -35,12 +35,12 @@ private:
 	bool MissionUpdate();
 
 	//クリア後カメラ
-	void ResultCamera(int Timer);
+	void ResultCamera(int timer);
 	/// <summary>
 /// 撃破後カメラ
 /// </summary>
-/// <param name="Timer"></param>
-	void SmashCamera(const float& Timer) override;
+/// <param name="timer"></param>
+	void SmashCamera(const float& timer) override;
 
 	/// <summary>
 	/// クリア更新処理

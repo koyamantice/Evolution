@@ -137,13 +137,13 @@ bool ThirdStage::IntroUpdate() {
 	}
 	return false;
 }
-void ThirdStage::IntroCamera(const float& Timer) {
+void ThirdStage::IntroCamera(const float& timer) {
 
 
 
 
 }
-void ThirdStage::ResultCamera(const float& Timer) {
+void ThirdStage::ResultCamera(const float& timer) {
 	camera->SetTarget(goal_shadow->GetPosition());
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();

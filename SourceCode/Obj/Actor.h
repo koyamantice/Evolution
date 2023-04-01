@@ -5,8 +5,8 @@
 #include <cassert>
 #include <string>
 #include <DirectXMath.h>
+#include <array>
 #include <algorithm>
-
 #include "DirectXCommon.h"
 #include "FBXObject3d.h"
 #include "Object3d.h"
@@ -70,7 +70,7 @@ public:
 
 
 	//プレイヤーの残像
-	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return XMFLOAT3{ PlayerX[num + 1],RotY[num + 1],PlayerZ[num + 1] }; }
+	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return imagin_[num + 1]; }
 	//座標の取得
 	virtual DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) { return {0,0,0}; };
 	//角度の取得
@@ -152,12 +152,12 @@ public:
 	void DemoDraw(DirectXCommon* dxCommon);	//描画処理
 	void Finalize();	//終了処理
 	//仮想関数
-	virtual void OnInit() {};
-	virtual void OnUpda() {};
+	virtual void OnInitialize() {};
+	virtual void OnUpdate() {};
 	virtual void OnFirstDraw(DirectXCommon* dxCommon) {};
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
 	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
-	virtual void OnFinal() {};
+	virtual void OnFinalize() {};
 	virtual void DebugUpdate() {};
 	virtual void IntroOnUpdate(const float& Timer) {};
 	virtual void ResultOnUpdate(const float& Timer) {};
@@ -166,7 +166,7 @@ protected:
 	std::unique_ptr<Object3d> obj;
 	float collide_size = 1.0f;
 	// 残像データの数
-	float PlayerX[AFTIMAGENUM], RotY[AFTIMAGENUM],PlayerZ[AFTIMAGENUM];
+	std::array<XMFLOAT3, AFTIMAGENUM> imagin_ = {};
 	HitBound hitBound;
 
 	float max_hp = 0;

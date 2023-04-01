@@ -29,11 +29,11 @@ public:
 	/// <summary>
 	/// 最初の弾と役者更新
 	/// </summary>
-	void IntroUpdate(const float& Timer, const std::string& voidname = "null", const int& _stage=0);
+	void IntroUpdate(const float& timer, const std::string& voidname = "null", const int& _stage=0);
 	/// <summary>
 	/// 最初の更新
 	/// </summary>
-	void ResultUpdate(const float& Timer);
+	void ResultUpdate(const float& timer);
 	/// <summary>
 	/// 描画
 	/// </summary>

@@ -14,10 +14,10 @@ void (Boss::*Boss::phaseFuncTable[])() = {
 };
 
 
-void Boss::LoadData(const std::string& _bossname) {
+void Boss::LoadData(const std::string& bossname) {
 	BossLevelLoader& gFoo = Singleton<BossLevelLoader>::get_instance();
 	//名前からステータスを取得
-	levelData_= gFoo.takeData(_bossname);
+	levelData_= gFoo.takeData(bossname);
 	//体力
 	hp = levelData_.hp;
 	max_hp = hp;
@@ -36,21 +36,21 @@ void Boss::LoadData(const std::string& _bossname) {
 
 }
 
-void Boss::ResultOnUpdate(const float& Timer) {
-	isResult = true;
+void Boss::ResultOnUpdate(const float& timer) {
+	isResult_ = true;
 	fbxObject_->Update();
 	ShadowUpdate();
 }
 
-void Boss::InitCommon(FBXModel* _model,XMFLOAT3 _scale, XMFLOAT3 _rotation) {
+void Boss::InitCommon(FBXModel* model,XMFLOAT3 scale, XMFLOAT3 rotation) {
 	//アクターのobjの非表示
 	isVisible = false;
 	//fbxモデル生成
 	fbxObject_= std::make_unique<FBXObject3d>();
-	fbxObject_->Initialize(_model, _scale, _rotation);
+	fbxObject_->Initialize(model, scale, rotation);
 	fbxObject_->LoadAnimation();
 	//丸影
-	shadow_ = Object2d::Create(ImageManager::Shadow, { 0,0,0 },
+	shadow_ = Object2d::Create(ImageManager::shadow_, { 0,0,0 },
 		{ 0.7f,0.7f,0.7f }, { 1,1,1,1 });
 	shadow_->SetRotation({ 90,0,0 });
 	//パーティクル

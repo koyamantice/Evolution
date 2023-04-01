@@ -26,7 +26,7 @@ protected: // エイリアス
 		float ctrDirY;
 		float contX;
 		float contY;
-		XMFLOAT2 vel;
+		XMFLOAT2 vel_;
 		float weight;
 		float aveAngle;
 		float disvel=(float)(rand()%5);
@@ -48,11 +48,11 @@ public:
 	virtual ~Bullet() = default;
 
 	//座標の取得
-	void SetPosition(const DirectX::XMFLOAT3& pos) { fbxObj->SetPosition(pos); }
-	const DirectX::XMFLOAT3& GetPosition() { return fbxObj->GetPosition(); }
+	void SetPosition(const DirectX::XMFLOAT3& pos) { fbxobj_->SetPosition(pos); }
+	const DirectX::XMFLOAT3& GetPosition() { return fbxobj_->GetPosition(); }
 	//角度の取得
-	void SetRotation(const DirectX::XMFLOAT3& rot) { fbxObj->SetRotation(rot); }
-	const DirectX::XMFLOAT3& GetRotation() { return fbxObj->GetRotation(); }
+	void SetRotation(const DirectX::XMFLOAT3& rot) { fbxobj_->SetRotation(rot); }
+	const DirectX::XMFLOAT3& GetRotation() { return fbxobj_->GetRotation(); }
 
 	//ID取得
 	const int& GetID()const { return ID; }
@@ -81,8 +81,8 @@ public:
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
 	void Demo();		//更新処理
-	void IntroUpdate(const float& Timer, const int& _stage);
-	void ResultUpdate(const float& Timer);
+	void IntroUpdate(const float& timer, const int& _stage);
+	void ResultUpdate(const float& timer);
 	void FirstDraw(DirectXCommon* dxCommon);
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 	void LastDraw(DirectXCommon* dxCommon);
@@ -97,15 +97,15 @@ public:
 	void OnCollision(const std::string& Tag,const XMFLOAT3& pos);
 	virtual void BulletCollision(const XMFLOAT3& pos, const int& Id) {};
 protected:
-	virtual void OnInit() {};
-	virtual void OnUpda() {};
+	virtual void OnInitialize() {};
+	virtual void OnUpdate() {};
 	virtual void OnFirstDraw(DirectXCommon* dxCommon) {};
 	virtual void OnDraw(DirectXCommon* dxCommon) {};
 	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
-	virtual void OnFinal() {};
+	virtual void OnFinalize() {};
 	virtual void DebugUpdate() {};
-	virtual void IntroOnUpdate(const float& Timer) {};
-	virtual void ResultOnUpdate(const float& Timer) {};
+	virtual void IntroOnUpdate(const float& timer) {};
+	virtual void ResultOnUpdate(const float& timer) {};
 	void SetAggregation();
 	void LimitArea();
 	void CommonUpda();
@@ -146,7 +146,7 @@ protected:
 	float frame = 0.0f;
 	const float kSlowFrameMax = 50.0f;
 	const float kSlowHight = 1.0f;
-	float vel = kSlowHight;
+	float vel_ = kSlowHight;
 	void DeadEnd();
 	float vanishHight = 0.1f;
 	float vanishAlpha = 1.0f;
@@ -174,8 +174,8 @@ protected:
 	bool isRemove = false;
 	//コマンド
 	int command = 0;
-	std::unique_ptr<FBXObject3d> fbxObj;
-	std::unique_ptr<Object2d> Shadow = nullptr;
+	std::unique_ptr<FBXObject3d> fbxobj_;
+	std::unique_ptr<Object2d> shadow_ = nullptr;
 
 	std::list<std::unique_ptr<Trace>> traces_;
 	int foot_count_ = 0;
