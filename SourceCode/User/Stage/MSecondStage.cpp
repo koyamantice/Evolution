@@ -137,33 +137,41 @@ bool MSecondStage::MissionUpdate() {
 			if (mission_ease_timer_<= 1.0f) {
 				mission_ease_timer_ += 1.0f / kMissionEaseTimerMax;
 			} else {
+				mission_ease_timer_ = 1.0f;
 				isVisible_ = false;
 			}
 			mission_pos_ = mission_->GetPosition();
 			number_pos_= honey_get_[nowOpenHoney]->GetPosition();
 
-			mission_pos_.y = Ease(InOut, Elastic, mission_ease_timer_, 100,-100);
-			number_pos_.y = Ease(InOut, Elastic, mission_ease_timer_, 135, -135);
+			float mission_size_x= Ease(In, Quad, mission_ease_timer_, 576, 0);
+			float mission_size_y = Ease(In, Quad, mission_ease_timer_, 192, 0); 
+			float number_size_x = Ease(In, Quad, mission_ease_timer_, 64, 0);
+			float number_size_y = Ease(In, Quad, mission_ease_timer_, 64, 0);
 
+			mission_pos_.x = Ease(In, Quint, mission_ease_timer_, 640, 50);
+			number_pos_.x  = Ease(In, Quint, mission_ease_timer_, 576, 50);
+			mission_pos_.y = Ease(In, Quint, mission_ease_timer_, 100, 50);
+			number_pos_.y  = Ease(In, Quint, mission_ease_timer_, 135, 50);
 
+			mission_->SetSize({ mission_size_x ,mission_size_y});
 			mission_->SetPosition(mission_pos_);
 			for (int i = 0; i < kHoneyNumMax;i++) {
 				honey_get_[i]->SetPosition(number_pos_);
+				honey_get_[i]->SetSize({ number_size_x ,number_size_y});
 			}
 		}
 	}
 	if (pause) {
 		isVisible_ = true;
-		mission_pos_ = mission_->GetPosition();
-		number_pos_ = honey_get_[nowOpenHoney]->GetPosition();
 		visible_timer_ = 0;
 		mission_ease_timer_ = 0;
-
-		mission_pos_.y = 100;
-		number_pos_.y = 135;
+		mission_pos_ = { 640,100 };
+		number_pos_ = { 576,135 };
+		mission_->SetSize({ 576 ,192 });
 		mission_->SetPosition(mission_pos_);
 		for (int i = 0; i < kHoneyNumMax; i++) {
 			honey_get_[i]->SetPosition(number_pos_);
+			honey_get_[i]->SetSize({ 64 ,64 });
 		}
 
 	}
@@ -265,8 +273,10 @@ void MSecondStage::HoneyUpdate() {
 
 void MSecondStage::DrawLocal() {
 	if (!pause) {
-		mission_->Draw();
-		honey_get_[nowOpenHoney]->Draw();
+		if (isVisible_) {
+			mission_->Draw();
+			honey_get_[nowOpenHoney]->Draw();
+		}
 	}
 }
 
