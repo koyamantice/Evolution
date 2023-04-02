@@ -10,7 +10,8 @@ void (Boss::*Boss::phaseFuncTable[])() = {
 	&Boss::ChasePlayer,
 	&Boss::FeedHoney,
 	&Boss::DeadMotion,
-	&Boss::StopMotion
+	&Boss::StopMotion,
+	&Boss::PinchMotion,
 };
 
 
@@ -21,6 +22,7 @@ void Boss::LoadData(const std::string& bossname) {
 	//体力
 	hp = levelData_.hp;
 	max_hp = hp;
+	pinchLife = max_hp - 10.0f;
 	//速度
 	vel_ = levelData_.vel;
 	//初期スケール
@@ -58,6 +60,20 @@ void Boss::InitCommon(FBXModel* model,XMFLOAT3 scale, XMFLOAT3 rotation) {
 }
 
 void Boss::LifeCommon() {
+	for (; damage > 0; damage--) {
+		if (hp <= pinchLife) { 
+			hp = pinchLife;
+			pinchLife -= 10.0f;
+			damage = 0;
+			smash_rot_= fbxObject_->GetRotation().y;
+			old_phase_ = phase_;
+			phase_=E_Phase::kPinchMotion;
+		} else {
+			hp--;
+		}
+	}
+
+
 	if (hp <= 0.0f) {
 		if (!canMove && phase_!= E_Phase::kDeadMotion) {
 			smash_scale_= fbxObject_->GetScale().x * 1000.0f;
@@ -102,5 +118,19 @@ void Boss::DeadMotion() {
 	obj->SetScale(fbxObject_->GetScale());
 	fbxObject_->SetRotation(rot);
 	ShadowUpdate();
+}
+
+void Boss::PinchMotion() {
+	if (scale_frame_ < 1.0f) {
+		scale_frame_ += 1.0f / 50.0f;
+	} else {
+		scale_frame_ = 0.0f;
+		phase_ = old_phase_;
+	}
+	XMFLOAT3 rot = fbxObject_->GetRotation();
+	rot.y = Ease(In, Linear, scale_frame_, smash_rot_, smash_rot_ + (DEGREE_MAX * 3.0f));
+	fbxObject_->SetRotation(rot);
+	SpecialPinch();
+	ActorManager::GetInstance()->ChangeStatus(Bullet::BulletStatus::Attack, Bullet::BulletStatus::Vanish);
 }
 

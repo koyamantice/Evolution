@@ -83,6 +83,9 @@ public:
 	//maxHpセッタ＆ゲッタ
 	void SetMaxHp(const float& _maxhp) { this->max_hp = _maxhp; };
 	const float& GetMaxHp() { return max_hp; }
+	//damageセッタ＆ゲッタ
+	void SetDamage(const int& damage) { this->damage = damage; };
+	const int& GetDamage() { return damage; }
 
 	//Player固有の処理
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
@@ -171,7 +174,7 @@ protected:
 
 	float max_hp = 0;
 	float hp = 0;
-	
+	int damage = 0;
 	float angle = 0;
 	bool pause = false;
 	bool first = false;

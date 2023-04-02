@@ -67,9 +67,9 @@ public:
 	Bullet* SearchBulletBack();
 	Bullet* SetActionBullet(const XMFLOAT3& pos,const float& _collide_size=5.0f);
 	Bullet* SearchID(int ID);
+	void ChangeStatus(const Bullet::BulletStatus& old_status, const Bullet::BulletStatus& status);
 
 	void DamageBullet(XMFLOAT3 pos, float radius = 1.0f);
-
 
 	void ChangeBulletCommand(XMFLOAT3 pos,float scale);
 

@@ -14,6 +14,8 @@ void (Bullet::* Bullet::statusFuncTable[])() = {
 	&Bullet::SlowUpdate,
 	&Bullet::DeadUpdate,
 	&Bullet::SmashUpdate,
+	&Bullet::DitchUpdate,
+	&Bullet::VanishUpdate
 };
 
 Bullet::Bullet() {
@@ -142,6 +144,7 @@ void Bullet::CommonUpdate() {
 	if (collide) { collide = false; }
 	if (knockBacking) { KnockBack(); }
 	if (isPlayActive) { command_ = BulletStatus::Control; }
+	if (DeadFlag){ command_ = BulletStatus::Dead; }
 	if (!wait) { follow_frame = 0.0f; }
 	if (enemy != nullptr) {
 		if (enemy->GetHp() <= 0) {
@@ -273,6 +276,12 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 		break;
 	case BulletStatus::Smash:
 		break;
+	case BulletStatus::Dead:
+		break;
+	case BulletStatus::Ditch:
+		break;
+	case BulletStatus::Vanish:
+		break;
 	default:
 		assert(0);
 		break;
@@ -304,6 +313,7 @@ void Bullet::KnockBack() {
 
 	if (damageframe >= 1.0f) {
 		damageframe = 0.0f;
+
 		knockBacking = false;
 		pos.y = 0.0f;
 		fbxobj_->SetPosition(pos);
@@ -322,7 +332,7 @@ void Bullet::KnockBack() {
 void Bullet::DamageInit() {
 	if (!knockBacking) {
 		audio_->PlayWave("SE/attack.wav", 0.5f);
-		enemy->SetHp(enemy->GetHp() - 1);
+		enemy->SetDamage(enemy->GetDamage() + 1);
 		burning = true;
 
 		XMFLOAT3 pos = fbxobj_->GetPosition();
@@ -437,6 +447,10 @@ void Bullet::SmashUpdate() {
 void Bullet::DitchUpdate() {
 }
 
+void Bullet::VanishUpdate() {
+	command_ = BulletStatus::Wait;
+}
+
 void Bullet::WaitUpdate() {
 	throwReady = true;
 	vel_ = 0.8f;
@@ -471,7 +485,7 @@ void Bullet::SlowUpdate() {
 			frame += 1.0f / kSlowFrameMax;
 		} else {
 			frame = max(1.0f, frame);
-			pos.y = max(0.0f, frame);
+			pos.y = 0.0f;
 			rot.x = 0;
 			vel_ = kSlowHight;
 			throwReady = false;

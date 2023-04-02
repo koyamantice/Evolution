@@ -29,13 +29,13 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::IntroUpdate(const float& timer, const std::string& voidname,const int& _stage) {
-	if (voidname =="Bullet") {
+void ActorManager::IntroUpdate(const float& timer, const std::string& voidname, const int& _stage) {
+	if (voidname == "Bullet") {
 		for (std::unique_ptr<Actor>& actor : Actors) {
 			actor->IntroUpdate(timer);
 		}
 		return;
-	} else if(voidname == "Actor"){
+	} else if (voidname == "Actor") {
 		for (std::unique_ptr<Bullet>& bullet : Bullets) {
 			bullet->IntroUpdate(timer, _stage);
 		}
@@ -123,7 +123,7 @@ void ActorManager::CheckBulletCollisions() {
 		for (auto itrB = Bullets.begin(); itrB != Bullets.end(); ++itrB) {
 			Actor* actor = itrA->get();
 			Bullet* bullet = itrB->get();
-			if (Collision::SphereCollision2(actor->GetPosition(),actor->GetSize(), bullet->GetPosition(), 2.0f)) {
+			if (Collision::SphereCollision2(actor->GetPosition(), actor->GetSize(), bullet->GetPosition(), 2.0f)) {
 				if (actor->GetIsUnrivaled()) { continue; }
 
 				actor->OnCollision("Bullet");
@@ -136,10 +136,10 @@ void ActorManager::CheckBulletCollisions() {
 			Bullet* bullet_a = itrA->get();
 			Bullet* bullet_b = itrB->get();
 			if (itrA == itrB) { continue; }
-			if(bullet_a->GetDeadFlag()|| bullet_b->GetDeadFlag()) { continue; }
+			if (bullet_a->GetDeadFlag() || bullet_b->GetDeadFlag()) { continue; }
 			if (Collision::SphereCollision2(bullet_a->GetPosition(), 1.0f, bullet_b->GetPosition(), 1.0f)) {
-				bullet_a->BulletCollision(bullet_b->GetPosition(),bullet_b->GetID());
-				bullet_b->BulletCollision(bullet_a->GetPosition(),bullet_a->GetID());
+				bullet_a->BulletCollision(bullet_b->GetPosition(), bullet_b->GetID());
+				bullet_b->BulletCollision(bullet_a->GetPosition(), bullet_a->GetID());
 			}
 		}
 	}
@@ -179,7 +179,7 @@ int ActorManager::SerchWaitBul() {
 	int Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() == Bullet::BulletStatus::Wait) {Bulletnum++;}
+		if (bullet->GetCommand() == Bullet::BulletStatus::Wait) { Bulletnum++; }
 	}
 	return Bulletnum;
 }
@@ -218,7 +218,7 @@ void ActorManager::DamageBullet(XMFLOAT3 pos, float radius) {
 		//if (bullet->GetCommand() == Bullet::command::Wait) { continue; }
 		XMFLOAT3 itrPos = bullet->GetPosition();
 		if (itrPos.y > 0.1f) { continue; }
-		if (Collision::CircleCollision(pos.x, pos.z, radius, itrPos.x, itrPos.z,1.0f)) {
+		if (Collision::CircleCollision(pos.x, pos.z, radius, itrPos.x, itrPos.z, 1.0f)) {
 			bullet->SetDeadFlag(true);
 		}
 	}
@@ -233,7 +233,7 @@ XMFLOAT3 ActorManager::Dist(XMFLOAT3 pos, XMFLOAT3 pos2) {
 }
 
 float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
-	float itr;
+	float itr = 0.0f;
 
 	itr = sqrtf(powf((pos2.x - pos.x), 2) + powf((pos2.y - pos.y), 2) + powf((pos2.z - pos.z), 2));
 
@@ -337,5 +337,14 @@ Bullet* ActorManager::SearchID(int ID) {
 		}
 	}
 	return nullptr;
+}
+
+void ActorManager::ChangeStatus(const Bullet::BulletStatus& old_status, const Bullet::BulletStatus& status) {
+	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
+		Bullet* actor = itr->get();
+		if (actor->GetCommand() == old_status) {
+			actor->SetCommand(status);
+		}
+	}
 }
 

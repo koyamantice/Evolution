@@ -42,7 +42,8 @@ public:
 		Slow,
 		Dead,
 		Smash,
-		Ditch
+		Ditch,
+		Vanish,
 	};
 public:
 	Bullet();
@@ -129,6 +130,7 @@ protected:
 	void DeadUpdate();
 	void SmashUpdate();
 	void DitchUpdate();
+	void VanishUpdate();
 	//ä÷êîÉ|ÉCÉìÉ^
 	static void(Bullet::* statusFuncTable[])();
 

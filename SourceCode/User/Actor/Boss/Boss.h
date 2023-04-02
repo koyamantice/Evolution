@@ -43,7 +43,7 @@ protected:
 	void LoadData(const std::string& bossname);
 
 protected:
-
+	float pinchLife = 20;
 	//レベルデータ
 	float vel_ = 0;
 	XMFLOAT3 baseScale_ = {};
@@ -64,7 +64,8 @@ protected:
 	virtual void FeedHoney() {};
 	void DeadMotion();
 	virtual void StopMotion() {};
-
+	void PinchMotion();
+	virtual void SpecialPinch() {};
 	enum class E_Phase : int {
 		kStartAction = 0,
 		kAttackPredict,
@@ -74,9 +75,11 @@ protected:
 		kFeedHoney,
 		kDeadMotion,
 		kStopMotion,
+		kPinchMotion,
 	};
 	//どの行動を取るか
 	E_Phase phase_ = E_Phase::kStartAction;
+	E_Phase old_phase_ = phase_;
 
 	int animation_count_ = 0;
 	float smash_scale_ = 0.0f;

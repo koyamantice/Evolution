@@ -15,8 +15,9 @@ void BulletRed::OnInitialize() {
 	command_ = BulletStatus::Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
+	
 	landing = player->GetLockPos();
-	Color = DeathColor::Green;
+	Color = DeathColor::Red;
 
 	chara_dead_ = Object2d::Create(Color, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y,fbxobj_->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
@@ -52,10 +53,8 @@ void BulletRed::ResultOnUpdate(const float& timer) {
 		if (frame < 0.7f) {
 			rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
 		}
-		if (pos.y < 0.0f) {
-			pos.y = 0;
-		}
-		if (frame < 1.0f) {
+		pos.y = max(0,pos.y);
+		if (frame <= 1.0f) {
 			frame += 0.02f;
 		} else {
 			frame = 0.0f;

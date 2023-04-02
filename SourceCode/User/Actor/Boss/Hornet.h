@@ -24,10 +24,8 @@ private:
 	void ChasePlayer() override;
 	void FeedHoney() override;
 
-
 	//
 	bool overDamage = false;
-	float pinchLife = 20;
 	//Ç©Ç‘ÇÁÇ»Ç¢ÇÊÇ§Ç…í≤êÆ
 	void HoneyControl();
 
