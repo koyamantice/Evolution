@@ -14,6 +14,7 @@ protected:
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnLastDraw(DirectXCommon* dxCommon)override;
 	void OnFinalize()override;
+	void OnCollision(const std::string& Tag)override;
 
 	//オーバーライドメンバ関数
 	void StartAction() override;

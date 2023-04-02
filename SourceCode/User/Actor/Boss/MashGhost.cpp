@@ -17,6 +17,8 @@ void MashGhost::OnInitialize() {
 
 	attack_= std::make_unique<EnemyAttack>(this);
 	attack_->Init();
+
+	player_ = ActorManager::GetInstance()->SearchActor("Player");
 }
 
 void MashGhost::OnUpdate() {
@@ -34,14 +36,16 @@ void MashGhost::OnUpdate() {
 
 void MashGhost::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	ImGui::SetNextWindowPos(ImVec2(1100, 240));
-	ImGui::SetNextWindowSize(ImVec2(180, 250));
+	//ImGui::SetNextWindowPos(ImVec2(1100, 240));
+	//ImGui::SetNextWindowSize(ImVec2(180, 250));
 
-	ImGui::Begin("enemy");
-	ImGui::Text("nowscale:%f", fbxObject_->GetScale().x);
-	ImGui::Text("smashscale:%f", smash_scale_);
-
-	ImGui::End();
+	//ImGui::Begin("enemy");
+	//ImGui::Text("nowscale:%f", fbxObject_->GetScale().x);
+	//ImGui::Text("smashscale:%f", smash_scale_);
+	//ImGui::Text("smashscale:%f", shadow_side_);
+	//ImGui::Text("smashscale:%f", smash_shadow_);
+	//
+	//ImGui::End();
 
 	if (!isResult_) { shadow_->Draw(); }
 }
@@ -57,6 +61,13 @@ void MashGhost::OnLastDraw(DirectXCommon* dxCommon) {
 
 void MashGhost::OnFinalize() {
 	levelData_ = {};
+}
+
+void MashGhost::OnCollision(const std::string& Tag) {
+	if (Tag == "Player") {
+		player_->SetHitBound(fbxObject_->GetPosition());
+
+	}
 }
 
 

@@ -85,7 +85,7 @@ private:
 	const int kSwitchFrameMax = 30;
 
 	//ê‡ñæÇ™èIÇÌÇÈÇ∆í[Ç‹Ç≈äÒÇπÇÈ
-	bool explation_finish = false;
+	static bool explation_finish;
 	const XMFLOAT2 kCameraHudPos2Edge = { 90,680 };
 	const XMFLOAT2 kCameraHudSize2Edge = { 64,64 };
 	float edge_frame = 0.0f;

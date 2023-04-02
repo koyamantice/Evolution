@@ -8,7 +8,6 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("Hornet");
-	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
@@ -18,9 +17,6 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	//シーン内で必要なアクターを参照します。
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
 	enemy_shadow = ActorManager::GetInstance()->SearchActor("Enemy");
-	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
-	goal_shadow->SetPosition(enemy_shadow->GetPosition());
-	goal_shadow->SetIsActive(false);
 
 	//カメラの初期化
 	camera_distance.x = sinf(camera_angle * (XM_PI / DEGREE_HALF)) * camera_radius;
@@ -37,6 +33,14 @@ void SecondStage::Initialize(DirectXCommon* dxCommon) {
 	//ポストエフェクトの初期化
 	postEffect = new PostEffect();
 	postEffect->Initialize();
+	//オーディオ
+	audioManager = std::make_unique<AudioManager>();
+
+	audioManager->LoadWave("BGM/SecondBattle.wav");
+	audioManager->PlayWave("BGM/SecondBattle.wav", 0.5f);
+	audioManager->LoadWave("SE/lastHit.wav");
+	audioManager->LoadWave("BGM/Smash.wav");
+
 
 	//パーティクルの初期化
 	particleEmitter = std::make_unique <ParticleEmitter>(ImageManager::charge);
@@ -70,7 +74,6 @@ void SecondStage::Update(DirectXCommon* dxCommon) {
 //描画
 void SecondStage::Draw(DirectXCommon* dxCommon) {
 	dxCommon->PreDraw();
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
 	BattleBackDraw();
 	//背景用
 	ActorManager::GetInstance()->Draw(dxCommon);
@@ -144,45 +147,78 @@ void SecondStage::IntroCamera(const float& timer) {
 
 }
 void SecondStage::ResultCamera(const float& timer) {
-	camera->SetTarget(goal_shadow->GetPosition());
+	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();
+}
+void SecondStage::SmashCamera(const float& timer) {
+	XMFLOAT3 s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
+	XMFLOAT3 e_eye = { enemy_shadow->GetPosition().x + camera_distance.x,enemy_shadow->GetPosition().y + 25,enemy_shadow->GetPosition().z + camera_distance.z };
+	XMFLOAT3 ease_target = enemy_shadow->GetPosition();
+	XMFLOAT3 ease_eye = e_eye;
+	float ease_time = timer / (float)60.0f;
+
+	if (ease_time <= 1.0f) {
+
+		ease_target = {
+		Ease(In,Linear,ease_time,player_shadow->GetCameraPos(camera_angle, camera_target).x,enemy_shadow->GetPosition().x),
+		Ease(In,Linear,ease_time,player_shadow->GetCameraPos(camera_angle, camera_target).y,enemy_shadow->GetPosition().y),
+		Ease(In,Linear,ease_time,player_shadow->GetCameraPos(camera_angle, camera_target).z,enemy_shadow->GetPosition().z)
+		};
+
+		ease_eye = {
+			Ease(In,Linear,ease_time,s_eye.x,e_eye.x),
+			Ease(In,Linear,ease_time,s_eye.y,e_eye.y),
+			Ease(In,Linear,ease_time,s_eye.z,e_eye.z)
+		};
+	}
+
+	camera->SetTarget(ease_target);
+	camera->SetEye(ease_eye);
+	camera->Update();
+
 }
 
 
 bool SecondStage::ClearUpdate() {
 	if (stage_clear) {
-		const float rnd_vel = 0.5f;
-		particleEmitter->AddCommon(100, goal_shadow->GetPosition(), rnd_vel, 0.0f, 1.2f, 0.0f, { 1,1,0.5f,1 }, { 1,1,1,0.3f });
-		particleEmitter->Update();
-
 		if (input->TriggerButton(Input::A) || input->TriggerButton(Input::B)) {
 			sceneChanger_->ChangeStart();
 		}
 		ResultCamera(0);
-		sceneChanger_->ChangeScene("THIRDSTAGE");
+		sceneChanger_->ChangeScene("TITLE");
 		ActorManager::GetInstance()->ResultUpdate(0);
+		//パーティクルの更新処理
+		particleEmitter->Update();
 		FieldUpdate();
 		return true;
 	}
 	if (enemy_shadow->GetPause()) {
+		battle_result = true;
+		if (player_shadow->GetCanMove()) {
+			player_shadow->SetCanMove(false);
+			audioManager->PlayWave("SE/lastHit.wav", 0.5f);
+			audioManager->StopWave("BGM/SecondBattle.wav");
+		}
 		const float rnd_vel = 0.4f;
-		particleEmitter->AddCommon(120, enemy_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,0,1 }, { 1,1,0,0 });
+		particleEmitter->AddCommon(120, enemy_shadow->GetPosition(), rnd_vel, 0, 1.2f, 0.0f, { 1,1,1,1 }, { 1,1,1,0 });
 		particleEmitter->Update();
 		finish_time++;
 
-		if (finish_time > finish_time_Max) {
-			enemy_shadow->SetPause(false);
+		SmashCamera((float)(finish_time));
+		//enemy_shadow->Update();
+		ActorManager::GetInstance()->Update();
+		FieldUpdate();
+
+		if (finish_time >= 100.0f) {
 			enemy_shadow->SetCanMove(false);
 		}
-		return true;
-	}
-	if (finish_time > finish_time_Max) {
-		goal_shadow->SetIsActive(true);
-		if (goal_shadow->GetPause() || player_shadow->GetPause()) {
-			battle_result = true;
+
+		if (finish_time >= 200.0f) {
 			stage_clear = true;
+			audioManager->PlayWave("BGM/Smash.wav", 0.3f);
 		}
+		return true;
 	}
 	return false;
 }

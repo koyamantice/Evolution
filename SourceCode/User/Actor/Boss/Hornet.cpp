@@ -46,14 +46,26 @@ void Hornet::OnUpdate() {
 
 
 	fbxObject_->Update();
-	shadow_->Update();
-	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
+	ShadowUpdate();
 	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
 	obj->SetPosition({fbxObject_->GetPosition().x, 0, fbxObject_->GetPosition().z});
 }
 
 void Hornet::OnDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
+	//ImGui::SetNextWindowPos(ImVec2(1100, 240));
+	//ImGui::SetNextWindowSize(ImVec2(180, 250));
+
+	//ImGui::Begin("enemy");
+	//ImGui::Text("nowscale:%f", fbxObject_->GetScale().x);
+	//ImGui::Text("collide_size:%f", collide_size);
+	//ImGui::Text("smash_scale_:%f", smash_scale_);
+	//ImGui::Text("shadow_side_:%f", shadow_side_);
+	//ImGui::Text("smash_shadow_:%f", smash_shadow_);
+	//ImGui::Text("waittimer_:%f", waittimer_);
+
+	//ImGui::End();
+
 	shadow_->Draw();
 	Object3d::PreDraw();
 	fbxObject_->Draw(dxCommon->GetCmdList());
@@ -64,6 +76,7 @@ void Hornet::OnFinalize() {
 
 void Hornet::OnCollision(const std::string& Tag) {
 	if (Tag == "Player") {
+		hit_once_ = true;
 		switch (phase_) {
 		case E_Phase::kPressAttack:
 			if (motion_ != E_Motion::kFollowPlayer) {
@@ -82,9 +95,6 @@ void Hornet::OnCollision(const std::string& Tag) {
 		}
 	}
 }
-
-
-
 
 
 void Hornet::HoneyControl() {
@@ -189,7 +199,7 @@ void Hornet::AttackPredict() {
 			phase_ = E_Phase::kPressAttack;
 			motion_ = E_Motion::kFollowPlayer;
 		}
-		collide_size = 3.0f;
+		collide_size = 2.0f;
 	}
 }
 
@@ -412,20 +422,13 @@ void Hornet::FeedHoney() {
 	pos.z = Ease(In, Quad, fade_frame_ , before_pos.z, after_pos.z);
 	fbxObject_->SetPosition(pos);
 
-	if ((!overDamage && pinchLife >= hp)) {
+}
 
-		fbxObject_->StopAnimation();
-		fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
-		if (!overDamage) {
-			overDamage = true;
-			collide_size = 2.5f;
-		} else {
-			collide_size = 2.0f;
-		}
-		fade_frame_  = 0;
-		isUnrivaled = true;
-		phase_ = E_Phase::kStartAction;
-	}
+void Hornet::SpecialPinch() {
+	fbxObject_->StopAnimation();
+	fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
+	phase_ = E_Phase::kStartAction;
+
 }
 
 

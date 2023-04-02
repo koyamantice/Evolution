@@ -37,6 +37,12 @@ private:
 	void ResultCamera(const float& timer);
 
 	/// <summary>
+	/// Œ‚”jŒãƒJƒƒ‰
+	/// </summary>
+	/// <param name="timer"></param>
+	void SmashCamera(const float& timer) override;
+
+	/// <summary>
 	///	“±“ü•”•ª‚ÌXVˆ—
 	/// </summary>
 	/// <returns></returns>

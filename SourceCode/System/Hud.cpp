@@ -4,7 +4,7 @@
 
 
 bool Hud::isVisible = true;
-
+bool Hud::explation_finish = false;
 Hud::Hud() {
 	Initialize();
 }

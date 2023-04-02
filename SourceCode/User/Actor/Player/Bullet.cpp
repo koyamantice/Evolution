@@ -526,7 +526,7 @@ void Bullet::DeadUpdate() {
 
 void Bullet::AttackUpdate() {
 	if (!knockBacking) {
-		if (enemy->GetHp() == 0) { return; }
+		if (noBoss) { return; }
 		if (Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 			Follow2Position(enemy->GetPosition(), 2.0f);
 		}

@@ -145,6 +145,8 @@ protected:
 	XMFLOAT3 e_rebound_{};
 
 	XMFLOAT3 exploPos{};
+
+	bool noBoss = false;
 	float damageframe = 0.0f;
 	const float kFallHeight = 1.0f;
 	float fall = kFallHeight;

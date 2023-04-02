@@ -91,6 +91,8 @@ protected:
 	float waittimer_ = 0;
 
 	float shadow_side_ = 1.5f;
+	//player
+	Actor* player_;
 	//レベルデータ
 	BossLevelLoader::LevelData levelData_ = {};
 	//ユニークポインタ

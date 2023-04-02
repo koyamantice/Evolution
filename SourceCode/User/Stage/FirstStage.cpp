@@ -7,7 +7,6 @@ void FirstStage::Initialize(DirectXCommon* dxCommon) {
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
 	ActorManager::GetInstance()->AttachActor("MashGhost");
-	//ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	lightGroup->SetPointLightActive(0, true);
 	lightGroup->SetPointLightActive(1, true);
 	lightGroup->SetPointLightActive(2, true);
@@ -291,12 +290,6 @@ bool FirstStage::ClearUpdate() {
 		}
 		return true;
 	}
-	//if (finish_time > finish_time_Max) {
-	//	if (goal_shadow->GetPause() || player_shadow->GetPause()) {
-	//		battle_result = true;
-	//		stage_clear = true;
-	//	}
-	//}
 	return false;
 }
 

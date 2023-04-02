@@ -14,8 +14,9 @@ void BulletRed::OnInitialize() {
 	ID = ActorManager::GetInstance()->SearchNum("BulletRed");
 	command_ = BulletStatus::Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
-	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
-	
+	enemy = ActorManager::GetInstance()->SearchActor("Enemy");
+	if (enemy == nullptr) { noBoss = true; };
+
 	landing = player->GetLockPos();
 	Color = DeathColor::Red;
 

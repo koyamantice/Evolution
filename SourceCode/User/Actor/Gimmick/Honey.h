@@ -39,6 +39,7 @@ private:
 	void OnUpdate()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinalize()override;
+	void ResultOnUpdate(const float& Timer) override;
 
 	void OnCollision(const std::string& Tag) override;
 

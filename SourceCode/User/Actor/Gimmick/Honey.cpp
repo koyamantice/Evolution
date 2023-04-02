@@ -75,6 +75,14 @@ void Honey::OnDraw(DirectXCommon* dxCommon) {
 void Honey::OnFinalize() {
 }
 
+void Honey::ResultOnUpdate(const float& Timer) {
+
+	obj->Update();
+
+	honey_obj_->Update();
+
+}
+
 void Honey::OnCollision(const std::string& Tag) {
 
 

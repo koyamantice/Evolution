@@ -17,7 +17,6 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 
 	//ゲームアクターの生成をします。
 	ActorManager::GetInstance()->AttachActor("Player");
-	ActorManager::GetInstance()->AttachActor("ClearCrystal");
 	for (int i = 0; i < kGnormNum; i++) {
 		ActorManager::GetInstance()->AttachBullet("Red");
 	}
@@ -27,8 +26,6 @@ void MSecondStage::Initialize(DirectXCommon* dxCommon) {
 
 	//シーン内で必要なアクターを参照します。
 	player_shadow = ActorManager::GetInstance()->SearchActor("Player");
-	goal_shadow = ActorManager::GetInstance()->SearchActor("ClearCrystal");
-	goal_shadow->SetIsActive(false);
 	for (int i = 0; i < kMaxNestNum; i++) {
 		ActorManager::GetInstance()->AttachActor("Honey");
 		honey_[i] = ActorManager::GetInstance()->SearchActor("Honey");

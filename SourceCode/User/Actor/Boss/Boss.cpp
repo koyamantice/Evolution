@@ -93,7 +93,8 @@ void Boss::LifeCommon() {
 void Boss::ShadowUpdate() {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	float scale = ((5.0f - pos.y) / 5.0f) * shadow_side_;
-	scale =max(0.5f,scale);
+	scale = max(0.5f,scale);
+	scale = min(1.5f, scale);
 
 	shadow_->SetScale({scale,scale, scale,});
 	shadow_->Update();

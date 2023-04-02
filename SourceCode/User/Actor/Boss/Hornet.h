@@ -7,7 +7,6 @@ class Bullet;
 class Hornet :public Boss {
 public:
 	Hornet() {};
-	Actor* player_;
 private:
 	void OnInitialize()override;
 	void OnUpdate()override;
@@ -23,7 +22,7 @@ private:
 	void PressAttack() override;
 	void ChasePlayer() override;
 	void FeedHoney() override;
-
+	void SpecialPinch();
 	//
 	bool overDamage = false;
 	//Ç©Ç‘ÇÁÇ»Ç¢ÇÊÇ§Ç…í≤êÆ
