@@ -12,15 +12,16 @@ BulletRed::BulletRed() {
 
 void BulletRed::OnInitialize() {
 	ID = ActorManager::GetInstance()->SearchNum("BulletRed");
-	command = Wait;
+	command_ = BulletStatus::Wait;
 	player = ActorManager::GetInstance()->SearchActor("Player");
 	enemy = ActorManager::GetInstance()->SearchActorBack("Enemy");
 	landing = player->GetLockPos();
-	Color = DeathColor::Red;
+	Color = DeathColor::Green;
 
-	CharaDead = Object2d::Create(Color, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y,fbxobj_->GetPosition().z },
+	chara_dead_ = Object2d::Create(Color, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y,fbxobj_->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
-	CharaDead->SetIsBillboard(true);
+	chara_dead_->SetIsBillboard(true);
+	chara_dead_->SetRotation({ 0,0,0 });
 
 }
 
@@ -72,23 +73,20 @@ void BulletRed::ResultOnUpdate(const float& timer) {
 
 void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	if (collide) { return; }
-	if (command == Dead) { return; }
+	if (command_ == BulletStatus::Dead || command_ == BulletStatus::Smash) { return; }
 	if (isPlayActive) { return; }
-	if (ID > Id) { return; }
-	XMFLOAT3 pos2 = fbxobj_->GetPosition();
-	if (!collide) {
-	}
+	if (ID < Id) { return; }
 	collide = true;
+	XMFLOAT3 pos2 = fbxobj_->GetPosition();
 
-	rad = atan2f((pos2.x - pos.x), (pos2.z - pos.z));
 	float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
 
 	if (dir <= 0) {
-		pos2.x += sin(rad+randRad) * 0.1f;
-		pos2.z += cos(rad +randRad) * 0.1f;
+		pos2.x += sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+		pos2.z += cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
 	} else {
-		pos2.x -= sin(rad+randRad) * 0.1f;
-		pos2.z -= cos(rad +randRad) * 0.1f;
+		pos2.x -= sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
+		pos2.z -= cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.1f;
 
 	}
 	fbxobj_->SetPosition(pos2);

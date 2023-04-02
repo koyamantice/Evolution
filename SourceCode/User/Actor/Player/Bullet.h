@@ -9,7 +9,7 @@
 using namespace DirectX;
 class Bullet {
 protected: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -21,7 +21,7 @@ protected: // エイリアス
 		XMFLOAT3 average{};
 		//分離
 		float isolateRadius = 2.0f;
-	
+
 		float ctrDirX;
 		float ctrDirY;
 		float contX;
@@ -29,19 +29,20 @@ protected: // エイリアス
 		XMFLOAT2 vel_;
 		float weight;
 		float aveAngle;
-		float disvel=(float)(rand()%5);
-		float dx = disvel* cosf(aveAngle * (XM_PI / 180));
-		float dy = disvel* sinf(aveAngle * (XM_PI / 180));
+		float disvel = (float)(rand() % 5);
+		float dx = disvel * cosf(aveAngle * (XM_PI / 180));
+		float dy = disvel * sinf(aveAngle * (XM_PI / 180));
 
 	};
 public:
-	enum command {
+	enum class BulletStatus : int{
 		Wait = 0,
 		Attack,
 		Control,
 		Slow,
 		Dead,
 		Smash,
+		Ditch
 	};
 public:
 	Bullet();
@@ -68,19 +69,18 @@ public:
 	//カメラ角度のセッタ＆ゲッタ
 	void SetAngle(const float& angle) { this->angle = angle; }
 	const float& GetAngle() { return angle; }
-	//
+	//プレイアクティブ
 	void SetsPlayActive(const bool& Play) { isPlayActive = Play; };
 	const bool& GetIsPlayActive() { return isPlayActive; }
 	//
-	void SetCommand(const int& command, XMFLOAT3 pos = { 0,0,0 });
-	const int& GetCommand() { return command; }
+	void SetCommand(const BulletStatus& command, XMFLOAT3 pos = { 0,0,0 });
+	const BulletStatus& GetCommand() { return command_; }
 	//
 	void SetDeadFlag(const bool& DeadFlag) { this->DeadFlag = DeadFlag; }
 	const bool& GetDeadFlag() { return DeadFlag; }
 	//基本処理
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
-	void Demo();		//更新処理
 	void IntroUpdate(const float& timer, const int& _stage);
 	void ResultUpdate(const float& timer);
 	void FirstDraw(DirectXCommon* dxCommon);
@@ -91,10 +91,10 @@ public:
 	void Finalize();	//終了処理
 
 	float DirRotation(const XMFLOAT3& target);
-	
+
 	void Navigation(const XMFLOAT3& target);
 
-	void OnCollision(const std::string& Tag,const XMFLOAT3& pos);
+	void OnCollision(const std::string& Tag, const XMFLOAT3& pos);
 	virtual void BulletCollision(const XMFLOAT3& pos, const int& Id) {};
 protected:
 	virtual void OnInitialize() {};
@@ -108,20 +108,32 @@ protected:
 	virtual void ResultOnUpdate(const float& timer) {};
 	void SetAggregation();
 	void LimitArea();
-	void CommonUpda();
+	void CommonUpdate();
 
-	void CommandUpda();
+	void ShadowUpdate();
+	void TraceUpdate();
 
-	void ControlUpda();
+	//enum class BulletStatus : int {
+	//	Wait = 0,
+	//	Attack,
+	//	Control,
+	//	Slow,
+	//	Dead,
+	//	Smash,
+	//  Ditch,
+	//};
+	void WaitUpdate();
+	void AttackUpdate();
+	void ControlUpdate();
+	void SlowUpdate();
+	void DeadUpdate();
+	void SmashUpdate();
+	void DitchUpdate();
+	//関数ポインタ
+	static void(Bullet::* statusFuncTable[])();
 
-	void ShadowUpda();
-	void TraceUpda();
-	void WaitUpda();
-	void SlowUpda();
-	void AttackUpda();
 
-	void SmashUpda();
-	bool Follow2Position(const XMFLOAT3& _pos,const float& _radius = 2.0f);
+	bool Follow2Position(const XMFLOAT3& _pos, const float& _radius = 2.0f);
 	float follow_vel_ = 0.3f;
 	void KnockBack();
 	bool knockBacking = false;
@@ -136,7 +148,7 @@ protected:
 	float fall = kFallHeight;
 	const float kDeadFrameMax = 20.0f;
 	float deadframe = 0;
-	
+
 	bool isFinish = false;
 	float status_alpha_ = 1.0f;
 
@@ -147,7 +159,6 @@ protected:
 	const float kSlowFrameMax = 50.0f;
 	const float kSlowHight = 1.0f;
 	float vel_ = kSlowHight;
-	void DeadEnd();
 	float vanishHight = 0.1f;
 	float vanishAlpha = 1.0f;
 	int CoolTime = 0;
@@ -161,7 +172,7 @@ protected:
 
 	float shadow_side_ = 0.2f;
 
-	bool clear_ease =true;
+	bool clear_ease = true;
 	float clear_frame = 0;
 	XMFLOAT3 clear_s_pos{};
 	XMFLOAT3 clear_e_pos{};
@@ -173,20 +184,20 @@ protected:
 	//削除
 	bool isRemove = false;
 	//コマンド
-	int command = 0;
-	std::unique_ptr<FBXObject3d> fbxobj_;
+	BulletStatus command_ = BulletStatus::Wait;
+	std::unique_ptr<FBXObject3d> fbxobj_ = nullptr;
 	std::unique_ptr<Object2d> shadow_ = nullptr;
+	std::list<std::unique_ptr<Trace>> traces_ = {};
+	std::unique_ptr<Object2d> status_ = nullptr;
+	std::unique_ptr<Object2d> explo_ = nullptr;
+	std::unique_ptr<Object2d> chara_dead_ = nullptr;
+	std::unique_ptr<AudioManager> audio_ = nullptr;
 
-	std::list<std::unique_ptr<Trace>> traces_;
 	int foot_count_ = 0;
 	int odd_count_ = 0;
-	std::unique_ptr<Object2d> Status = nullptr;
-	std::unique_ptr<Object2d> Explo = nullptr;
-	std::unique_ptr<Object2d> CharaDead = nullptr;
-	std::unique_ptr<AudioManager> audioManager = nullptr;
 
-	enum DeathColor{
-		Red=ImageManager::RedDead,
+	enum DeathColor {
+		Red = ImageManager::RedDead,
 		Green,
 	};
 	int Color = 0;

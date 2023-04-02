@@ -1,17 +1,17 @@
 #pragma once
-#include <vector>
-#include <list>
-#include <memory>
-#include <cassert>
-#include <string>
-#include <DirectXMath.h>
 #include <array>
 #include <algorithm>
+#include <cassert>
+#include <DirectXMath.h>
+#include <list>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "DirectXCommon.h"
 #include "FBXObject3d.h"
 #include "Object3d.h"
 #include "Object2d.h"
-
 #include"ParticleEmitter.h"
 
 class ActorComponent;
@@ -65,12 +65,13 @@ public:
 	const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
 	//昔の座標の取得
 	const DirectX::XMFLOAT3& GetOldPosition() { return old_pos; }
+	
 	//昔のスケールの取得
 	const DirectX::XMFLOAT3& GetScale() { return obj->GetScale(); }
 
-
 	//プレイヤーの残像
 	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return imagin_[num + 1]; }
+	
 	//座標の取得
 	virtual DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) { return {0,0,0}; };
 	//角度の取得
@@ -106,7 +107,6 @@ public:
 	//isRemoveセッタ＆ゲッタ
 	void SetIsUnrivaled(const bool& _isUnrivaled) { isUnrivaled = _isUnrivaled; };
 	const bool& GetIsUnrivaled() { return isUnrivaled; }
-
 
 	//isReferセッタ＆ゲッタ
 	void SetIsRefer(const bool& isRefer) { this->isRefer = isRefer; };

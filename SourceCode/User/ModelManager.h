@@ -16,7 +16,7 @@ public:
 	enum ModelName {
 		kSkydome = 0,
 		kDungeon,
-		kGoalcrystal,
+		kSmallMash,
 		kTextG,
 		kTextN,
 		kTextO,

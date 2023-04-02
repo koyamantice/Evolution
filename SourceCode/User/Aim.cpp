@@ -107,7 +107,7 @@ void Aim::Move(float angle) {
 		bullet = ActorManager::GetInstance()->SearchWaitBullet();
 		if (bullet != nullptr) {
 			audioManager->PlayWave("SE/slow.wav", 0.5f);
-			bullet->SetCommand(Bullet::command::Slow, aim_->GetPosition());
+			bullet->SetCommand(Bullet::BulletStatus::Slow, aim_->GetPosition());
 		}
 	}
 

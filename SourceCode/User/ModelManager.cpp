@@ -13,7 +13,7 @@ void ModelManager::Initialize() {
 	//OBJフォルダを読み込みます。
 	LoadModel(kSkydome, "Skydome");
 	LoadModel(kDungeon, "DemoDungeon");
-	LoadModel(kGoalcrystal, "MonolithCrystal");
+	LoadModel(kSmallMash, "SmallMash");
 	LoadModel(kTextG, "text01G");
 	LoadModel(kTextN, "text02N");
 	LoadModel(kTextO, "text03O");

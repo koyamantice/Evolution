@@ -179,7 +179,7 @@ int ActorManager::SerchWaitBul() {
 	int Bulletnum = 0;
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() == Bullet::command::Wait) {Bulletnum++;}
+		if (bullet->GetCommand() == Bullet::BulletStatus::Wait) {Bulletnum++;}
 	}
 	return Bulletnum;
 }
@@ -197,7 +197,7 @@ Bullet* ActorManager::CommandBullet(const int& ID) {
 Bullet* ActorManager::SearchWaitBullet() {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() != Bullet::command::Wait) { continue; }
+		if (bullet->GetCommand() != Bullet::BulletStatus::Wait) { continue; }
 		return bullet;
 	}
 	return nullptr;
@@ -206,7 +206,7 @@ Bullet* ActorManager::SearchWaitBullet() {
 Bullet* ActorManager::SearchBulletBack() {
 	for (auto itr = Bullets.rbegin(); itr != Bullets.rend(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() != Bullet::command::Wait) { continue; }
+		if (bullet->GetCommand() != Bullet::BulletStatus::Wait) { continue; }
 		return bullet;
 	}
 	return nullptr;
@@ -243,10 +243,10 @@ float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() != Bullet::command::Attack) { continue; }
+		if (bullet->GetCommand() != Bullet::BulletStatus::Attack) { continue; }
 		if (bullet->GetIsPlayActive()) { continue; }
 		if (Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
-			bullet->SetCommand(Bullet::command::Wait);
+			bullet->SetCommand(Bullet::BulletStatus::Wait);
 		}
 	}
 }
@@ -254,7 +254,7 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos, const float& _collide_size) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() != Bullet::command::Attack) { continue; }
+		if (bullet->GetCommand() != Bullet::BulletStatus::Attack) { continue; }
 		if (Collision::CircleCollision(pos.x, pos.z, _collide_size, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
 			if (!bullet->GetIsPlayActive()) {
 				return bullet;

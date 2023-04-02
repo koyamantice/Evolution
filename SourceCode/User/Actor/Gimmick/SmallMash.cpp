@@ -1,4 +1,4 @@
-#include "Honey.h"
+#include "SmallMash.h"
 #include <ActorManager.h>
 #include <Easing.h>
 #include <ModelManager.h>
@@ -7,24 +7,20 @@
 
 
 
-void (Honey::* Honey::updateFuncTable[])() = {
-	&Honey::WaitDriver,//—v‘f0
-	&Honey::DispersionDriver,
-	&Honey::SetupHoney,
-	&Honey::InviteBee,
-	&Honey::EatenHoney,
-	&Honey::RandSpawn,
+void (SmallMash::* SmallMash::updateFuncTable[])() = {
+	&SmallMash::WaitDriver,//—v‘f0
+	&SmallMash::DispersionDriver,
+	&SmallMash::SetupSmallMash,
+	&SmallMash::InviteBee,
+	&SmallMash::EatenSmallMash,
+	&SmallMash::RandSpawn,
 
 };
 
-void Honey::OnInitialize() {
+void SmallMash::OnInitialize() {
 
 	obj->SetScale(base_sca);
 
-	honey_obj_ = std::make_unique<Object3d>();
-	honey_obj_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kHoney));
-	honey_obj_->SetScale({});
-	honey_obj_->Initialize();
 
 	phase_ = E_Phase::kWaitDriver;
 	
@@ -50,7 +46,7 @@ void Honey::OnInitialize() {
 }
 
 
-void Honey::OnUpdate() {
+void SmallMash::OnUpdate() {
 	missionUpdate();
 	questionUpdate();
 	particleEmitter->Update();
@@ -59,28 +55,21 @@ void Honey::OnUpdate() {
 	(this->*updateFuncTable[static_cast<size_t>(phase_)])();
 }
 
-void Honey::OnDraw(DirectXCommon* dxCommon) {
-	Object3d::PreDraw();
-	honey_obj_->Draw();
+void SmallMash::OnDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	if (phase_ == E_Phase::kWaitDriver) {
-		missions[0][stock]->Draw();
-		missions[1][5]->Draw();
-		slash->Draw();
-	}
 	particleEmitter->Draw();
 
 }
 
-void Honey::OnFinalize() {
+void SmallMash::OnFinalize() {
 }
 
-void Honey::OnCollision(const std::string& Tag) {
+void SmallMash::OnCollision(const std::string& Tag) {
 
 
 }
 
-void Honey::missionUpdate() {
+void SmallMash::missionUpdate() {
 	XMFLOAT3 pos = obj->GetPosition();
 	for (int i = 0; i < 6; i++) {
 		missions[0][i]->Update();
@@ -92,21 +81,16 @@ void Honey::missionUpdate() {
 	slash->SetPosition({ pos.x,pos.y + 5.0f,pos.z });
 }
 
-void Honey::questionUpdate() {
-	if (phase_!=E_Phase::kSetupHoney) {
-		XMFLOAT3 pos = obj->GetPosition();
-		honey_obj_->SetPosition(pos);
-	}
-	honey_obj_->Update();
+void SmallMash::questionUpdate() {
 }
 
-void Honey::WaitDriver() {
+void SmallMash::WaitDriver() {
 	XMFLOAT3 pos = obj->GetPosition();
 	if (scale_damaged_frame_ >= 1.0f) {
 		first_pos = pos;
 		before_pos = pos;
 		collide_size = 6.0f;
-		phase_ = E_Phase::kSetupHoney;
+		phase_ = E_Phase::kSetupSmallMash;
 	}
 	if (driver[0] != nullptr) {
 		if (stock < 5) {
@@ -148,7 +132,7 @@ void Honey::WaitDriver() {
 
 }
 
-void Honey::SetupHoney() {
+void SmallMash::SetupSmallMash() {
 	leave_timer_++;
 	if (leave_timer_ > kLeaveTimeMax) {
 		if (frame > 1.0f) {
@@ -166,17 +150,10 @@ void Honey::SetupHoney() {
 		} else {
 			height = Ease(Out, Quad, frame, 10.0, 0.0f);
 		}
-
-		XMFLOAT3 sca_honey = honey_obj_->GetScale();
-		sca_honey.x = Ease(Out, Quad, frame, 0, base_sca.x);
-		sca_honey.y = Ease(Out, Quad, frame, 0, base_sca.y);
-		sca_honey.z = Ease(Out, Quad, frame, 0, base_sca.z);
-		honey_obj_->SetScale(sca_honey);
-		honey_obj_->SetPosition({ obj->GetPosition().x, height ,obj->GetPosition().z });
 	}
 }
 
-void Honey::DispersionDriver() {
+void SmallMash::DispersionDriver() {
 	for (int i = 0; i < ride_num; i++) {
 		if (driver[i] != nullptr) {
 			driver[i]->SetsPlayActive(false);
@@ -190,26 +167,24 @@ void Honey::DispersionDriver() {
 	phase_ = E_Phase::kInviteBee;
 }
 
-void Honey::InviteBee() {
+void SmallMash::InviteBee() {
 	if (canMove) {
-		phase_ = E_Phase::kEatenHoney;
+		phase_ = E_Phase::kEatenSmallMash;
 	}
 }
 
-void Honey::EatenHoney() {
+void SmallMash::EatenSmallMash() {
 	if (frame > 1.0f) {
 		frame = 0.0f;
 		leave_timer_ = 0;
 		stock = 0;
 		ride_num = 0;
 		scale_damaged_frame_ = 0.0f;
-		honey_obj_->SetScale({ 0,0,0 });
 		obj->SetScale(base_sca);
 		const float rnd_area = 80.0f;
 		float posX = (float)rand() / RAND_MAX * rnd_area - rnd_area / 2.0f;
 		float posZ = (float)rand() / RAND_MAX * rnd_area - rnd_area / 2.0f;
 		obj->SetPosition({ posX,0.0f,posZ });
-		honey_obj_->SetPosition(obj->GetPosition());
 		phase_ = E_Phase::kRandSpawn;
 		return;
 	} else {
@@ -217,10 +192,9 @@ void Honey::EatenHoney() {
 	}
 
 	float scale = Ease(In, Quad, frame, base_sca.x, 0);
-	honey_obj_->SetScale({ scale ,scale ,scale });
 }
 
-void Honey::RandSpawn() {
+void SmallMash::RandSpawn() {
 	XMFLOAT3 pos = obj->GetPosition();
 	if (pos.y < 0.0f) {
 		pos.y += 0.1f;
@@ -230,25 +204,8 @@ void Honey::RandSpawn() {
 	}
 }
 
-void Honey::IntroOnUpdate(const float& timer) {
-	//ŠÖ”‚ª“n‚·Å‰‚Ì’l
-	const float start_timer = 0.5f;
-	//
-	XMFLOAT3 pos = obj->GetPosition();
-	//
-	float time = timer - start_timer;
-	if (time <= 0.1f) {
-		pos.x = Ease(In, Linear, time / 0.1f, 15, 15);
-		pos.y = Ease(In, Linear, time / 0.1f, 15, 0);
-		pos.z = Ease(In, Linear, time / 0.1f, 10, 10);
-	} else {
-		int a = 0;
-		a++;
 
-	}
-}
-
-float Honey::RandHeight(const float& base) {
+float SmallMash::RandHeight(const float& base) {
 	const float rnd_vel = 0.05f * (stock + 1);
 	float Rand = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 	float itr = 0;

@@ -162,6 +162,7 @@
     <ClCompile Include="SourceCode\User\Actor\Boss\Hornet.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Gimmick\ClearCrystal.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Gimmick\Honey.cpp" />
+    <ClCompile Include="SourceCode\User\Actor\Gimmick\SmallMash.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\Bullet.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\BulletGreen.cpp" />
     <ClCompile Include="SourceCode\User\Actor\Player\BulletRed.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="SourceCode\User\Actor\Boss\Hornet.h" />
     <ClInclude Include="SourceCode\User\Actor\Gimmick\ClearCrystal.h" />
     <ClInclude Include="SourceCode\User\Actor\Gimmick\Honey.h" />
+    <ClInclude Include="SourceCode\User\Actor\Gimmick\SmallMash.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\Bullet.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\BulletGreen.h" />
     <ClInclude Include="SourceCode\User\Actor\Player\BulletRed.h" />

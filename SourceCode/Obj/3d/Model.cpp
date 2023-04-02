@@ -8,7 +8,7 @@ using namespace std;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-const std::string Model::baseDirectory = "Resources/3d/";
+const std::string Model::baseDirectory = "Resources/3d/OBJ/";
 ID3D12Device* Model::device = nullptr;
 UINT Model::descriptorHandleIncrementSize = 0;
 
