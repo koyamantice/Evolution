@@ -70,12 +70,10 @@ void BulletGreen::ResultOnUpdate(const float& timer) {
 		} else {
 			clear_ease = false;
 		}
-		if (pos.y > 0) {
-			float gra = 0.3f;
-			pos.y -= gra;
-		} else {
-			pos.y = max(0, pos.y);
-		}
+
+		float gra = 0.3f;
+		pos.y -= gra;
+		pos.y = max(0, pos.y);
 		clear_e_pos = {
 			p_pos.x + sinf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
 			pos.y,

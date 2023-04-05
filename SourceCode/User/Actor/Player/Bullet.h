@@ -247,7 +247,7 @@ protected:
 	XMFLOAT3 after_pos{};
 	float follow_frame = 0.0f;
 	XMFLOAT3 follow_pos{};
-
+	bool dig_action = false;
 	Actor* enemy = nullptr;
 	Actor* player = nullptr;
 	Actor* ActionActor = nullptr;

@@ -115,8 +115,8 @@ void Aim::Move(float angle) {
 		if (explanation_now_ == RECOVERY) {
 			explanation_now_ = COMMENTMAX;
 		}
-		if (Area < 10.0f) {
-			Area += 0.20f;
+		if (Area < AreaMax) {
+			Area += 0.35f;
 		}
 		XMFLOAT3 base = aim_->GetPosition();
 		for (int i = 0; i < 1; i++) {
@@ -135,7 +135,7 @@ void Aim::Move(float angle) {
 		Whistle->SetPosition({ base.x, base.y+(Area/4), base.z });
 		Whistle->SetScale({ Area * 0.3f,Area * 0.3f,Area * 0.3f });
 		Whistle->SetRotation({90 ,Lrot.y * 2.0f ,Lrot.z * 2.0f });
-		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f-(Area/10.0f) });
+		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f-(Area/ AreaMax) });
 
 	} else {
 		Area = 0.0f;

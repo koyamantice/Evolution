@@ -44,7 +44,7 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 
 	for (int i = 0; i < StateMax;i++) {
 		status_[i] = Object2d::Create(ImageManager::Battle+i, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z
-			}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+			}, { 0.15f,0.15f,0.15f }, { 1,1,1,1 });
 		status_[i]->SetIsBillboard(true);
 		status_[i]->SetRotation({ 0,0,0 });
 	}
@@ -151,7 +151,7 @@ void Bullet::CommonUpdate() {
 	if (isPlayActive) { command_ = BulletStatus::Control; }
 	if (DeadFlag){ command_ = BulletStatus::Dead; }
 	if (!wait) { follow_frame = 0.0f; }
-	if (enemy != nullptr) {
+	if (!noBoss) {
 		if (enemy->GetHp() <= 0) {
 			clear_s_pos = fbxobj_->GetPosition();
 			command_ = BulletStatus::Smash;
@@ -199,7 +199,13 @@ void Bullet::Draw(DirectXCommon* dxCommon) {
 
 void Bullet::LastDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
-		if (enemy == nullptr) { return; }
+		if (noBoss) { 
+			if (command_ == BulletStatus::Control) {
+				Object2d::PreDraw();
+				status_[ControlState]->Draw();
+			}
+			return;
+		}
 		if (command_ == BulletStatus::Dead) {
 			Object2d::PreDraw();
 			chara_dead_->Draw();
@@ -209,9 +215,13 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 			if (isFinish) { return; }
 			if (command_ == BulletStatus::Wait) { return; }
 			Object2d::PreDraw();
-				if (command_== BulletStatus::Battle|| command_ == BulletStatus::Attack) {
+				if (command_ == BulletStatus::Attack) {
 					status_[BattleState]->Draw();
-				} else if (command_ == BulletStatus::Scary) {
+				} else  if (command_ == BulletStatus::Battle) {
+					if (next_command_ == BulletStatus::Attack) {
+						status_[BattleState]->Draw();
+					}
+				}else if(command_ == BulletStatus::Scary) {
 					status_[ScaryState]->Draw();
 				} else if (command_ == BulletStatus::Vanish) {
 					status_[VanishState]->Draw();
@@ -444,21 +454,44 @@ void Bullet::TraceUpdate() {
 }
 
 void Bullet::ControlUpdate() {
-
-	if (!Follow2Position(ActionActor->GetPosition(), ActionActor->GetSize())) {
-		audio_->PlayWave("SE/attack.wav", 0.5f);
-		burning = true;
+	if (!dig_action) {
+		if (!Follow2Position(ActionActor->GetPosition(), ActionActor->GetSize())) {
+			audio_->PlayWave("SE/attack.wav", 0.5f);
+			burning = true;
+			XMFLOAT3 pos = fbxobj_->GetPosition();
+			fall = kFallHeight;
+			exploPos = ActionActor->GetPosition();
+			XMFLOAT3 distance = { pos.x - ActionActor->GetPosition().x,0,pos.z - ActionActor->GetPosition().z };
+			s_rebound_ = pos;
+			e_rebound_ = {
+			pos.x + sinf(atan2f(distance.x, distance.z)) * 5.0f,
+			0,
+			pos.z + cosf(atan2f(distance.x, distance.z)) * 5.0f
+			};
+			dig_action = true;
+		}
+	} else {
 		XMFLOAT3 pos = fbxobj_->GetPosition();
-		fall = kFallHeight;
-		exploPos = ActionActor->GetPosition();
-		XMFLOAT3 distance = { pos.x - ActionActor->GetPosition().x,0,pos.z - ActionActor->GetPosition().z };
-		s_rebound_ = pos;
-		e_rebound_ = {
-		pos.x + sinf(atan2f(distance.x, distance.z)) * 5.0f,
-		0,
-		pos.z + cosf(atan2f(distance.x, distance.z)) * 5.0f
-		};
+
+		if (damageframe >= 1.0f) {
+			damageframe = 0.0f;
+			dig_action = false;
+			pos.y = 0.0f;
+			fbxobj_->SetPosition(pos);
+			return;
+		} else {
+			damageframe += 1.0f / kDeadFrameMax;
+		}
+		pos.x = Ease(In, Quad, damageframe, s_rebound_.x, e_rebound_.x);
+		pos.y += fall; //+
+		fall -= kFallHeight / (kDeadFrameMax / 2.0f);//
+		pos.y = max(0.0f, pos.y);
+		pos.z = Ease(In, Quad, damageframe, s_rebound_.z, e_rebound_.z);
+		fbxobj_->SetPosition(pos);
+
 	}
+
+
 	if (navi) {
 		if (navi_frame > 1.0f) {
 			command_ = BulletStatus::Attack;
@@ -496,7 +529,7 @@ void Bullet::VanishUpdate() {
 		pos.y = max(0, pos.y);
 		pos.z = Ease(InOut, Quad, frame, pos.z, after_pos.z);
 
-		rot.y = Ease(In, Quad, frame, 0, -DEGREE_MAX*3.0f);
+		rot.y = Ease(In, Quad, frame, 0, -DEGREE_MAX * 3.0f);
 
 		if (frame < 1.0f) {
 			frame += 1.0f / kVanishFrameMax;
@@ -519,17 +552,15 @@ void Bullet::ScaryUpdate() {
 	pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
 	pos.z = Ease(InOut, Quad, frame, pos.z, after_pos.z);
 
-	rot.y = Ease(In, Quad, frame, 0, -DEGREE_MAX * 3.0f);
-
 	if (frame < 1.0f) {
 		frame += 1.0f / kScaryFrameMax;
+		rot.y = DirRotation(after_pos);
 	} else {
 		frame = 1.0f;
-
+		rot.y = DirRotation(player->GetPosition());
 	}
 	fbxobj_->SetPosition(pos);
 	fbxobj_->SetRotation(rot);
-
 }
 
 void Bullet::WaitUpdate() {

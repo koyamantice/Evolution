@@ -55,6 +55,8 @@ private:
 	void Move(float angle);
 	void EnemySet();
 	float Area = 0.3f;
+	const float AreaMax = 15.0f;
+
 	float distance = 5.0f;
 	float whiframe = 0.0f;
 	float alpha= 0.3f;

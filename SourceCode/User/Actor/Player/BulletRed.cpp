@@ -34,28 +34,38 @@ void BulletRed::ResultOnUpdate(const float& timer) {
 	XMFLOAT3 p_pos = player->GetPosition();
 	if (clear_ease) {
 		if (clear_frame < 1.0f) {
-			clear_frame += 0.01f;
+			float seed_ = 0.01f * (ID / 30.0f);
+			clear_frame += 0.01f + seed_;
 		} else {
 			clear_ease = false;
 		}
+
+		float gra = 0.3f;
+		pos.y -= gra;
+		pos.y = max(0, pos.y);
 		clear_e_pos = {
-			p_pos.x + sinf(((int)ID * 40) * (XM_PI / 180)) * 8.0f,
-			0,
-			p_pos.z + cosf(((int)ID * 40) * (XM_PI / 180)) * 8.0f,
+			p_pos.x + sinf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
+			pos.y,
+			p_pos.z + cosf(((int)ID * 40) * (XM_PI / 180)) * 5.0f,
 		};
 		pos.x = Ease(In, Linear, clear_frame, clear_s_pos.x, clear_e_pos.x);
 		pos.z = Ease(In, Linear, clear_frame, clear_s_pos.z, clear_e_pos.z);
-		rot.y= DirRotation(clear_e_pos);
+		rot.x = 0.0f;
+		rot.y = DirRotation(clear_e_pos);
+		rot.z =0.0f;
+
 	} else {
 		pos.y += vel_; //+
 		float rnd_vel = 0.04f;
-		float margin= (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel_ -= 0.04f+ margin;//
-		if (frame < 0.7f) {
-			rot.x = Ease(In, Quad, frame + 0.3f, 0, -360);
+		float margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel_ -= rnd_vel + margin;//
+		pos.y = max(0, pos.y);
+		//‰ñ“]
+		float delay = 0.3f;
+		if (frame + delay <= 1.0f) {
+			rot.x = Ease(In, Quad, frame + delay, 0, -DEGREE_MAX);
 		}
-		pos.y = max(0,pos.y);
-		if (frame <= 1.0f) {
+		if (frame < 1.0f) {
 			frame += 0.02f;
 		} else {
 			frame = 0.0f;
@@ -67,8 +77,6 @@ void BulletRed::ResultOnUpdate(const float& timer) {
 	fbxobj_->SetPosition(pos);
 	fbxobj_->SetRotation(rot);
 	fbxobj_->Update();
-	shadow_->SetPosition({ fbxobj_->GetPosition().x,0.01f, fbxobj_->GetPosition().z });
-	shadow_->Update();
 }
 
 void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
