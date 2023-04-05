@@ -244,7 +244,7 @@ float ActorManager::Length(XMFLOAT3 pos, XMFLOAT3 pos2) {
 void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
-		if (bullet->GetCommand() != Bullet::BulletStatus::Attack) { continue; }
+		if (bullet->GetCommand() != Bullet::BulletStatus::Attack&& bullet->GetCommand() != Bullet::BulletStatus::Ditch) { continue; }
 		if (bullet->GetIsPlayActive()) { continue; }
 		if (Collision::CircleCollision(pos.x, pos.z, scale, bullet->GetPosition().x, bullet->GetPosition().z, 1.0f)) {
 			bullet->SetCommand(Bullet::BulletStatus::Wait);

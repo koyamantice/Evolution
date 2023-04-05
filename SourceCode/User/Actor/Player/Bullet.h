@@ -36,8 +36,9 @@ protected: // エイリアス
 
 	};
 public:
-	enum class BulletStatus : int{
+	enum class BulletStatus : int {
 		Wait = 0,
+		WakeUp,
 		Attack,
 		Battle,
 		Control,
@@ -131,6 +132,7 @@ protected:
 	//  Ditch,
 	//};
 	void WaitUpdate();
+	void WakeUpUpdata();
 	void AttackUpdate();
 	void BattleUpdata();
 	void ControlUpdate();
@@ -139,6 +141,10 @@ protected:
 	void SmashUpdate();
 	void DitchUpdate();
 	void VanishUpdate();
+	virtual bool DitchInit() { return false; };
+	int ditch_count = 0;
+	const int DitchCountMax = 180;
+	virtual void VanishCommand() { command_ = BulletStatus::Wait; }
 	void ScaryUpdate();
 	//関数ポインタ
 	static void(Bullet::* statusFuncTable[])();
@@ -151,7 +157,7 @@ protected:
 	std::random_device seed_gen;
 
 	void DamageInit(BulletStatus status= BulletStatus::Attack);
-	void ScaryInit();
+	void ScaryInit(const int& proba=5);
 	XMFLOAT3 s_rebound_{};
 	XMFLOAT3 e_rebound_{};
 
@@ -218,6 +224,7 @@ protected:
 		ScaryState,
 		VanishState,
 		ControlState,
+		DitchState,
 		StateMax
 	};
 	

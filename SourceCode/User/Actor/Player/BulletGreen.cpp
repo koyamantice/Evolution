@@ -18,9 +18,8 @@ void BulletGreen::OnInitialize() {
 	enemy = ActorManager::GetInstance()->SearchActor("Enemy");
 	if (enemy == nullptr) { noBoss = true; };
 	landing = player->GetLockPos();
+
 	Color = DeathColor::Green;
-
-
 	chara_dead_ = Object2d::Create(Color, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y,fbxobj_->GetPosition().z },
 		{ 0.3f,0.3f,0.3f }, { 1,1,1,1 });
 	chara_dead_->SetIsBillboard(true);
@@ -57,6 +56,10 @@ void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 
 	}
 	fbxobj_->SetPosition(pos2);
+}
+
+void BulletGreen::VanishCommand() {
+	ScaryInit(50);
 }
 
 void BulletGreen::ResultOnUpdate(const float& timer) {

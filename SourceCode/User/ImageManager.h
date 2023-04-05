@@ -77,6 +77,7 @@ public:
 		Scary,
 		Vanish,
 		Control,
+		Ditch,
 		Fire,
 		InOut,
 		Guid,

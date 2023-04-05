@@ -100,5 +100,26 @@ void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
 	fbxobj_->SetPosition(pos2);
 }
 
+void BulletRed::VanishCommand() {
+	command_ = BulletStatus::Wait;
+}
+
+bool BulletRed::DitchInit() {
+	if (command_ == BulletStatus::Ditch) { return false; }
+	std::mt19937 mt{ std::random_device{}() };
+	std::uniform_int_distribution<int> dist(1, 100);
+	int rand = dist(mt);
+	if (rand > 3) {
+		return false;
+	}
+	frame = 0.0f;
+
+
+
+
+	command_ = BulletStatus::Ditch;
+	return true;
+}
+
 
 

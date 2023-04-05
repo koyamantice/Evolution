@@ -12,7 +12,8 @@ private:
 	//void OnFinalize()override;
 	void ResultOnUpdate(const float& timer) override;
 	void BulletCollision(const XMFLOAT3& pos, const int& Id) override;
-
+	void VanishCommand() override;
+	bool DitchInit()override;
 	float rad = 0.0f;
 	float randRad = 0.0f;
 };

@@ -11,6 +11,7 @@ private:
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinalize()override;
 	void BulletCollision(const XMFLOAT3& pos,const int& Id) override;
+	void VanishCommand() override;
 
 	
 	void ResultOnUpdate(const float& timer) override;

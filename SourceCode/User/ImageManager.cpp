@@ -83,6 +83,7 @@ void ImageManager::LoadTex2D() {
 	Object2d::LoadTexture(Scary, L"Resources/2d/PlayUI/Scary.png");
 	Object2d::LoadTexture(Vanish, L"Resources/2d/PlayUI/Vanish.png");
 	Object2d::LoadTexture(Control, L"Resources/2d/PlayUI/controlState.png");
+	Object2d::LoadTexture(Ditch, L"Resources/2d/PlayUI/Ditch.png");
 	Object2d::LoadTexture(Fire, L"Resources/2d/Effect/Fire.png");
 	Object2d::LoadTexture(InOut, L"Resources/2d/Effect/Base.png");
 	Object2d::LoadTexture(Guid, L"Resources/2d/Effect/Diamond.png");

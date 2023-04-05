@@ -10,6 +10,7 @@
 
 void (Bullet::* Bullet::statusFuncTable[])() = {
 	&Bullet::WaitUpdate,//—v‘f0
+	&Bullet::WakeUpUpdata,
 	&Bullet::AttackUpdate, //—v‘f1
 	&Bullet::BattleUpdata,
 	&Bullet::ControlUpdate,
@@ -203,6 +204,10 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 			if (command_ == BulletStatus::Control) {
 				Object2d::PreDraw();
 				status_[ControlState]->Draw();
+			} else if (command_ == BulletStatus::Ditch) {
+				Object2d::PreDraw();
+				status_[DitchState]->Draw();
+
 			}
 			return;
 		}
@@ -227,6 +232,9 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 					status_[VanishState]->Draw();
 				} else if (command_ == BulletStatus::Control){
 					status_[ControlState]->Draw();
+				} else if (command_ == BulletStatus::Ditch) {
+					status_[DitchState]->Draw();
+
 				}
  			if (burning) { explo_->Draw(); }
 		}
@@ -316,6 +324,16 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 	case BulletStatus::Dead:
 		break;
 	case BulletStatus::Ditch:
+		if (Tag == "Player") {
+			XMFLOAT3 pos = player->GetPosition();
+			XMFLOAT3 pos2 = fbxobj_->GetPosition();
+
+			float dir = ((pos.x * pos2.z) - (pos2.x * pos.z));
+
+			pos2.x += sin(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.2f;
+			pos2.z += cos(atan2f((pos2.x - pos.x), (pos2.z - pos.z))) * 0.2f;
+			fbxobj_->SetPosition(pos2);
+		}
 		break;
 	case BulletStatus::Vanish:
 		break;
@@ -379,23 +397,30 @@ void Bullet::DamageInit(BulletStatus status) {
 	}
 }
 
-void Bullet::ScaryInit() {
+void Bullet::ScaryInit(const int& proba) {
 	if (command_ == BulletStatus::Scary) { return; }
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_int_distribution<int> dist(1, 100);
 	int rand = dist(mt);
-	if(rand > 5) {
-		DamageInit(BulletStatus::Wait);
+	if(rand > proba) {
+		//‰Šú’l‚Ìê‡‰½‚©‚É‚ ‚½‚Á‚Ä‚¢‚é
+		if (proba == 5) {
+			DamageInit(BulletStatus::Wait);
+		} else {
+			command_ = BulletStatus::Wait;
+		}
 		return;
 	}
 
 	frame = 0.0f;
 	XMFLOAT3 pos = fbxobj_->GetPosition();
+	std::uniform_real_distribution<float> rad(0,1.0f);
+	float rand_rad = rad(mt);
 	XMFLOAT3 distance = { pos.x - old_pos.x,0,pos.z - old_pos.z };
 	after_pos = {
-	pos.x - sinf(atan2f(distance.x, distance.z)) * 47.0f,
+	pos.x - sinf(atan2f(distance.x, distance.z)+ rand_rad) * 47.0f,
 	0,
-	pos.z - cosf(atan2f(distance.x, distance.z)) * 47.0f
+	pos.z - cosf(atan2f(distance.x, distance.z)+rand_rad) * 47.0f
 	};
 	command_ = BulletStatus::Scary;
 }
@@ -537,7 +562,7 @@ void Bullet::VanishUpdate() {
 			frame = 0.0f;
 			pos.y = 0.0f;
 			rot.y = 0;
-			command_ = BulletStatus::Wait;
+			VanishCommand();
 
 			vanish_vel_ = kVanishHight;
 			throwReady = false;
@@ -565,6 +590,11 @@ void Bullet::ScaryUpdate() {
 
 void Bullet::WaitUpdate() {
 	throwReady = true;
+	ditch_count++;
+	if (ditch_count>=DitchCountMax) {
+		DitchInit();
+		ditch_count = 0;
+	}
 	vel_ = 0.8f;
 	frame = 0.0f;
 	//“Š‚°‚Ä‚éÅ’†‚Ì‰ñŽûŽž‚Ì–µ‚‰ðÁ
@@ -575,6 +605,9 @@ void Bullet::WaitUpdate() {
 	pos.y = max(0, pos.y);
 	fbxobj_->SetPosition(pos);
 	SetAggregation();
+}
+
+void Bullet::WakeUpUpdata() {
 }
 
 void Bullet::SlowUpdate() {
