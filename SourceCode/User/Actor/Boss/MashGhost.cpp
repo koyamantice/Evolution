@@ -9,14 +9,18 @@ void MashGhost::OnInitialize() {
 
 	collide_size = 3.0f;
 	
-	InitCommon(ModelManager::GetIns()->GetFBXModel(ModelManager::kMash), { 0.025f,0.025f, 0.025f });
+	InitCommon(
+		ModelManager::GetIns()->GetFBXModel(ModelManager::kMash),
+		baseScale_
+	);
+
 	fbxObject_->PlayAnimation();
 
 	compornent = new EnemyUI();
 	compornent->Initialize();
 
 	attack_= std::make_unique<EnemyAttack>(this);
-	attack_->Init();
+	attack_->Initialize();
 
 	player_ = ActorManager::GetInstance()->SearchActor("Player");
 }
@@ -31,7 +35,7 @@ void MashGhost::OnUpdate() {
 	ShadowUpdate();
 	obj->SetPosition(fbxObject_->GetPosition());
 	fbxObject_->Update();
-	attack_->Upda();
+	attack_->Updata();
 }
 
 void MashGhost::OnFirstDraw(DirectXCommon* dxCommon) {
@@ -156,7 +160,7 @@ void MashGhost::StopMotion() {
 	fbxObject_->StopAnimation();
 	fbxObject_->Update();
 	attack_->SetPredict(false,0);
-	attack_->Upda();
+	attack_->Updata();
 }
 
 void MashGhost::SpecialPinch() {

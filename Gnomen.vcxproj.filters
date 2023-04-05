@@ -292,6 +292,7 @@
     <ClCompile Include="SourceCode\User\Actor\Gimmick\SmallMash.cpp">
       <Filter>User\ボス\ボス周り</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Common\Helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\resource.h" />
@@ -568,6 +569,7 @@
     <ClInclude Include="SourceCode\User\Actor\Gimmick\SmallMash.h">
       <Filter>User\ボス\ボス周り</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Common\Helper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

@@ -9,7 +9,7 @@ EnemyAttack::EnemyAttack(Actor* _enemy) {
 EnemyAttack::~EnemyAttack() {
 }
 
-void EnemyAttack::Init() {
+void EnemyAttack::Initialize() {
 	Explo = Object2d::Create(ImageManager::Fire, { 0,0,0 },
 		{ 1,1,1 }, { 1,1,1,1 });
 	Explo->SetPosition({ 0,0.02f,0 });
@@ -28,7 +28,7 @@ void EnemyAttack::Init() {
 
 }
 
-void EnemyAttack::Upda() {
+void EnemyAttack::Updata() {
 	Explo->Update();
 	for (int i = 0; i < PREDICTMAX; i++) {
 		Predicted[i]->Update();

@@ -17,8 +17,8 @@ public:
 	EnemyAttack(Actor* _enemy);
 	~EnemyAttack();
 
-	void Init();
-	void Upda();
+	void Initialize();
+	void Updata();
 	void Draw();
 
 	void Stamp(const XMFLOAT3& pos);

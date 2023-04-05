@@ -52,6 +52,9 @@ public:
 	//À•W‚ÌŽæ“¾
 	void SetPosition(const DirectX::XMFLOAT3& pos) { fbxobj_->SetPosition(pos); }
 	const DirectX::XMFLOAT3& GetPosition() { return fbxobj_->GetPosition(); }
+	//À•W‚ÌŽæ“¾
+	const DirectX::XMFLOAT3& GetOldPosition() { return old_pos; }
+
 	//Šp“x‚ÌŽæ“¾
 	void SetRotation(const DirectX::XMFLOAT3& rot) { fbxobj_->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return fbxobj_->GetRotation(); }
@@ -197,6 +200,7 @@ protected:
 	std::unique_ptr<Object2d> chara_dead_ = nullptr;
 	std::unique_ptr<AudioManager> audio_ = nullptr;
 
+	const int kFootCountMax = 30;
 	int foot_count_ = 0;
 	int odd_count_ = 0;
 

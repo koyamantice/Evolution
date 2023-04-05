@@ -66,7 +66,7 @@ void Player::ResultOnUpdate(const float& timer) {
 	XMFLOAT3 pos = fbxobj_->GetPosition();
 	if (pos.y <= 0.0f) {
 		pos.y = max(0.0f, pos.y);
-		if (jump_count%2==0) {
+		if (jump_count % 2 == 0) {
 			y_add = 0.2f;  // ジャンプするため重力加速度をマイナスにする
 		} else {
 			y_add = 0.3f;  // ジャンプするため重力加速度をマイナスにする
@@ -85,7 +85,7 @@ void Player::ResultOnUpdate(const float& timer) {
 void Player::OnInitialize() {
 	obj->SetRotation(XMFLOAT3{ 0,0,0 });
 	obj->SetPosition({ 0,0,20 });
-	
+
 	isVisible = false;
 
 	LoadData();
@@ -103,8 +103,8 @@ void Player::OnInitialize() {
 	for (int i = 0; i < AFTIMAGENUM; i++) {
 		imagin_[i].x = 0;
 		imagin_[i].z = 18.0f + 10.0f * ((float)(AFTIMAGENUM - i) / AFTIMAGENUM);
-	}	
-	
+	}
+
 	//足元のパーティクル
 	particleEmitter_ = std::make_unique <ParticleEmitter>(ImageManager::smoke);
 
@@ -141,6 +141,17 @@ void Player::OnUpdate() {
 
 void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::SetNextWindowSize(ImVec2(180, 250));
+
+	ImGui::Begin("enemy");
+	ImGui::Text("imagin_[0].x:%f", imagin_[0].x);
+	ImGui::Text("imagin_[1].x:%f", imagin_[1].x);
+	ImGui::Text("imagin_[2].x:%f", imagin_[2].x);
+	ImGui::Text("imagin_[3].x:%f", imagin_[3].x);
+
+	ImGui::End();
+
 	shadow_->Draw();
 	for (std::unique_ptr<Trace>& trace : traces_) {
 		trace->Draw();
@@ -166,12 +177,12 @@ void Player::Move() {
 	XMFLOAT3 rot = obj->GetRotation();
 	aftImage_count_++;
 	if (aftImage_count_ >= kAftLocateCountMax) {
-		if (((int)pos.x != (int)imagin_[0].x || (int)pos.z != (int)imagin_[0].x) || !isFasted) {
+		if (((int)pos.x != (int)imagin_[0].x || (int)pos.z != (int)imagin_[0].z) || !isFasted) {
 			// 残像データを一つづつずらす
 			for (int i = AFTIMAGENUM - 1; i > 0; i--) {
-				imagin_[i].x = imagin_[i-1].x;
+				imagin_[i].x = imagin_[i - 1].x;
 				imagin_[i].y = imagin_[i - 1].y;
-				imagin_[i].z = imagin_[i-1].z;
+				imagin_[i].z = imagin_[i - 1].z;
 			}
 		}
 		imagin_[0].x = pos.x;
@@ -183,7 +194,7 @@ void Player::Move() {
 	if (onHoney) {
 		honeyCount++;
 
-		vel_ =  0.2f;
+		vel_ = 0.2f;
 		const int life = 30;
 		const float rnd_pos = 2.0f;
 		const float rnd_vel = -0.05f;
@@ -200,7 +211,7 @@ void Player::Move() {
 	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
 		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
 		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
-		input->TiltPushStick(Input::L_LEFT, 0.0f)||
+		input->TiltPushStick(Input::L_LEFT, 0.0f) ||
 		input->PushKey(DIK_W) ||
 		input->PushKey(DIK_S) ||
 		input->PushKey(DIK_D) ||
@@ -212,36 +223,36 @@ void Player::Move() {
 		const float STICK_MAX = 32767.0f;
 		if (input->PushKey(DIK_W)) {
 			StickY = STICK_MAX;
-		}else if (input->PushKey(DIK_S) ){
+		} else if (input->PushKey(DIK_S)) {
 			StickY = -STICK_MAX;
 
-		}else if (input->PushKey(DIK_D) ){
+		} else if (input->PushKey(DIK_D)) {
 			StickX = STICK_MAX;
-		}else if (input->PushKey(DIK_A) ){
+		} else if (input->PushKey(DIK_A)) {
 			StickX = -STICK_MAX;
 		}
 
 		//移動処理
 
-		if (input->TiltPushStick(Input::L_UP, 0.0f)||
+		if (input->TiltPushStick(Input::L_UP, 0.0f) ||
 			input->PushKey(DIK_W)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,vel_,0 }, angle);
 			pos.x -= vecvel.x * (StickY / STICK_MAX);
 			pos.z -= vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_DOWN, 0.0f)||
+		if (input->TiltPushStick(Input::L_DOWN, 0.0f) ||
 			input->PushKey(DIK_S)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ 0,0,-vel_,0 }, angle);
 			pos.x += vecvel.x * (StickY / STICK_MAX);
 			pos.z += vecvel.z * (StickY / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_RIGHT, 0.0f)||
+		if (input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
 			input->PushKey(DIK_D)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ vel_,0,0,0 }, angle);
 			pos.x -= vecvel.x * (StickX / STICK_MAX);
 			pos.z -= vecvel.z * (StickX / STICK_MAX);
 		}
-		if (input->TiltPushStick(Input::L_LEFT, 0.0f)||
+		if (input->TiltPushStick(Input::L_LEFT, 0.0f) ||
 			input->PushKey(DIK_A)) {
 			XMFLOAT3 vecvel = MoveVECTOR(XMVECTOR{ -vel_,0,0,0 }, angle);
 			pos.x += vecvel.x * (StickX / STICK_MAX);
@@ -256,7 +267,7 @@ void Player::Move() {
 			const float rnd_vel = 0.1f;
 			const int life = 60;
 			const float s_sce = 0.5f;
-			particleEmitter_->AddCommon(life, pos, rnd_vel, 0.0f, s_sce, 0.0f);	
+			particleEmitter_->AddCommon(life, pos, rnd_vel, 0.0f, s_sce, 0.0f);
 			particle_pop_time_ = 0;
 		}
 		//向き
@@ -265,7 +276,7 @@ void Player::Move() {
 			rot.y = (float)((int)rot.y % (int)DEGREE_MAX);
 		} else {
 			rot.y += DEGREE_MAX;
-			rot.y = (float)((int)rot.y %(int)DEGREE_MAX);
+			rot.y = (float)((int)rot.y % (int)DEGREE_MAX);
 		}
 		foot_rot_ = rot.y - DEGREE_HALF;
 		obj->SetPosition(pos);
@@ -291,7 +302,7 @@ void Player::ShadowUpda() {
 	float max_height_ = 12.0f;
 	float scale = ((max_height_ - pos.y) / max_height_) * shadow_side_;
 	scale = max(0.0f, scale);
-	shadow_->SetScale({scale,scale,scale});
+	shadow_->SetScale({ scale,scale,scale });
 	shadow_->Update();
 	shadow_->SetPosition({ obj->GetPosition().x,0.01f, obj->GetPosition().z });
 }
@@ -351,7 +362,7 @@ void Player::HitBoundMotion() {
 				obj->SetPosition(pos);
 				return;
 			} else {
-				knock_back_frame_ += 1.0f/ kKnockBackFrameMax;
+				knock_back_frame_ += 1.0f / kKnockBackFrameMax;
 			}
 
 			pos = {
@@ -360,7 +371,7 @@ void Player::HitBoundMotion() {
 			Ease(InOut,Quad,knock_back_frame_,s_rebound_pos_.z,e_rebound_pos_.z)
 			};
 			//何回回るか
-			float spinning = collided_rot_+ (DEGREE_MAX * 3);
+			float spinning = collided_rot_ + (DEGREE_MAX * 3);
 			rot = Ease(InOut, Quad, knock_back_frame_, collided_rot_, spinning);
 
 			obj->SetRotation({ 0,rot,0 });
@@ -375,11 +386,11 @@ void Player::LimitArea() {
 
 	const float limit_ = 48.0f;
 
-	pos.x= min(pos.x, limit_);
+	pos.x = min(pos.x, limit_);
 	pos.x = max(pos.x, -limit_);
 
 	pos.z = min(pos.z, limit_);
-	pos.z =max(pos.z, -limit_);
+	pos.z = max(pos.z, -limit_);
 
 	obj->SetPosition(pos);
 }

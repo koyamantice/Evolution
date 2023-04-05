@@ -390,7 +390,7 @@ void Bullet::TraceUpdate() {
 		}
 		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_, foot_rot, fbxobj_->GetPosition());
 		traces_.push_back(std::move(Trace_));
-		foot_count_ = 30;
+		foot_count_ = kFootCountMax;
 		odd_count_++;
 	}
 	//‘«Õ‚ÌXV‚Æíœˆ—
@@ -448,7 +448,29 @@ void Bullet::DitchUpdate() {
 }
 
 void Bullet::VanishUpdate() {
-	command_ = BulletStatus::Wait;
+		XMFLOAT3 pos = fbxobj_->GetPosition();
+		XMFLOAT3 rot = fbxobj_->GetRotation();
+		pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
+		pos.y += vel_; //+
+		vel_ -= kSlowHight / (kSlowFrameMax / 2.5f);//
+		pos.y = max(0, pos.y);
+		pos.z = Ease(InOut, Quad, frame, pos.z, after_pos.z);
+
+		rot.y = Ease(In, Quad, frame, 0, -DEGREE_MAX*3.0f);
+
+		if (frame < 1.0f) {
+			frame += 1.0f / kSlowFrameMax;
+		} else {
+			frame = max(1.0f, frame);
+			pos.y = 0.0f;
+			rot.y = 0;
+			command_ = BulletStatus::Wait;
+
+			vel_ = kSlowHight;
+			throwReady = false;
+		}
+		fbxobj_->SetPosition(pos);
+		fbxobj_->SetRotation(rot);
 }
 
 void Bullet::WaitUpdate() {
@@ -484,7 +506,7 @@ void Bullet::SlowUpdate() {
 		if (frame < 1.0f) {
 			frame += 1.0f / kSlowFrameMax;
 		} else {
-			frame = max(1.0f, frame);
+			frame = 0.0f;
 			pos.y = 0.0f;
 			rot.x = 0;
 			vel_ = kSlowHight;

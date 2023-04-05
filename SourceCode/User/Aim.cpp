@@ -153,7 +153,7 @@ void Aim::Move(float angle) {
 		input->PushKey(DIK_D) ||
 		input->PushKey(DIK_A)||
 		enemy_set) {
-		after_pos = player->GetCameraPos(player->GetRotation().y,10);
+		after_pos = player->GetCameraPos(player->GetRotation().y,17);
 		enemy_set = false;
 	}
 	Lpos.x = Ease(In, Quad, 0.5f, Lpos.x, after_pos.x);

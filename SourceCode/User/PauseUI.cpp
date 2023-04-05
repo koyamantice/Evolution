@@ -32,7 +32,7 @@ PauseUI::PauseUI() {
 	Initialize();
 
 	SceneChanger* scene_changer_ = new SceneChanger();
-	scene_changer_->Init();
+	scene_changer_->Initialize();
 	sceneChanger_.reset(scene_changer_);
 
 }

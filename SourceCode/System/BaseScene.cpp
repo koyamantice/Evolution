@@ -25,8 +25,8 @@ void BaseScene::InitCommon(DirectXCommon* dxCommon) {
 
 	//ƒV[ƒ“Ø‚è‘Ö‚¦‚Ì‰Šú‰»
 	sceneChanger_ = std::make_unique <SceneChanger>();
-	sceneChanger_->Init();
-	sceneChanger_->InitOver();
+	sceneChanger_->Initialize();
+	sceneChanger_->InitializeOver();
 
 }
 

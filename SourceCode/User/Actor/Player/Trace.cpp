@@ -14,7 +14,7 @@ void Trace::Initialize(const ImageFoot& imagefoot_, const float& rot_,const XMFL
 }
 
 void Trace::Update() {
-	life_--;
+	//life_--;
 
 	alpha_ = (float)(life_) / kLifeMax;
 	trace_->SetColor({1,1,1,alpha_});

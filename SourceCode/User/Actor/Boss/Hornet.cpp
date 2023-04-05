@@ -31,7 +31,6 @@ void Hornet::OnInitialize() {
 	honey[kLeftHoney]->SetPosition({ 25,0,25 });
 	honey[kRightHoney]->SetPosition({ -25,0,-25 });
 
-
 	player_ = ActorManager::GetInstance()->SearchActor("Player");
 
 }
@@ -44,27 +43,25 @@ void Hornet::OnUpdate() {
 	//ŠÖ”ƒ|ƒCƒ“ƒ^‚Åó‘ÔŠÇ—
 	(this->*phaseFuncTable[static_cast<size_t>(phase_)])();
 
-
-	fbxObject_->Update();
 	ShadowUpdate();
-	obj->SetRotation(XMFLOAT3{ 0,obj->GetRotation().y - 1,0 });
-	obj->SetPosition({fbxObject_->GetPosition().x, 0, fbxObject_->GetPosition().z});
+	obj->SetPosition(fbxObject_->GetPosition());
+	fbxObject_->Update();
 }
 
 void Hornet::OnDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	//ImGui::SetNextWindowPos(ImVec2(1100, 240));
-	//ImGui::SetNextWindowSize(ImVec2(180, 250));
+	ImGui::SetNextWindowPos(ImVec2(1100, 240));
+	ImGui::SetNextWindowSize(ImVec2(180, 250));
 
-	//ImGui::Begin("enemy");
-	//ImGui::Text("nowscale:%f", fbxObject_->GetScale().x);
-	//ImGui::Text("collide_size:%f", collide_size);
-	//ImGui::Text("smash_scale_:%f", smash_scale_);
-	//ImGui::Text("shadow_side_:%f", shadow_side_);
-	//ImGui::Text("smash_shadow_:%f", smash_shadow_);
-	//ImGui::Text("waittimer_:%f", waittimer_);
+	ImGui::Begin("enemy");
+	ImGui::Text("phase_:%d",(int)phase_);
+	ImGui::Text("waittimer_:%f", waittimer_);
+	ImGui::Text("hit_once_:%d", hit_once_);
+	ImGui::Text("GetRotation.x:%f", fbxObject_->GetRotation().x);
+	ImGui::Text("GetRotation.y:%f", fbxObject_->GetRotation().y);
+	ImGui::Text("GetRotation.z:%f", fbxObject_->GetRotation().z);
 
-	//ImGui::End();
+	ImGui::End();
 
 	shadow_->Draw();
 	Object3d::PreDraw();
@@ -169,6 +166,7 @@ void Hornet::StartAction() {
 		fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kDownAnimation));
 
 		waittimer_ = 0.0f;
+		fade_frame_ = 0.f;
 		phase_ = E_Phase::kFeedHoney;
 	} else {
 		if (waittimer_ > 240) {
@@ -425,9 +423,10 @@ void Hornet::FeedHoney() {
 }
 
 void Hornet::SpecialPinch() {
+	isUnrivaled = true;
 	fbxObject_->StopAnimation();
 	fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
-	phase_ = E_Phase::kStartAction;
+	old_phase_ = E_Phase::kStartAction;
 
 }
 

@@ -16,7 +16,7 @@ void CowKing::OnInitialize() {
 	compornent->Initialize();
 
 	attack_= std::make_unique<EnemyAttack>(this);
-	attack_->Init();
+	attack_->Initialize();
 
 	player_ = ActorManager::GetInstance()->SearchActor("Player");
 
@@ -34,7 +34,7 @@ void CowKing::OnUpdate() {
 
 	obj->SetPosition(fbxObject_->GetPosition());
 	fbxObject_->Update();
-	attack_->Upda();
+	attack_->Updata();
 }
 
 void CowKing::OnFirstDraw(DirectXCommon* dxCommon) {

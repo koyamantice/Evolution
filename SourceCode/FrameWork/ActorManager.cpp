@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <SourceCode/FrameWork/collision/Collision.h>
 #include "NullActor.h"
+#include "Helper.h"
 
 ActorManager* ActorManager::GetInstance() {
 	static ActorManager instance;
@@ -343,7 +344,7 @@ void ActorManager::ChangeStatus(const Bullet::BulletStatus& old_status, const Bu
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* actor = itr->get();
 		if (actor->GetCommand() == old_status) {
-			actor->SetCommand(status);
+			actor->SetCommand(status, Bound(actor->GetPosition(),actor->GetOldPosition(), 10.0f));
 		}
 	}
 }

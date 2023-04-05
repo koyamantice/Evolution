@@ -14,7 +14,7 @@ SceneChanger::~SceneChanger() {
 }
 
 
-void SceneChanger::Init() {
+void SceneChanger::Initialize() {
 	for (int i = 0; i < width_num; i++) {
 		for (int j = 0; j < height_num; j++) {
 			std::unique_ptr<Sprite> newSprite;
@@ -29,7 +29,7 @@ void SceneChanger::Init() {
 		}
 	}
 }
-void SceneChanger::InitOver() {
+void SceneChanger::InitializeOver() {
 	for (int i = 0; i < width_num; i++) {
 		for (int j = 0; j < height_num; j++) {
 			std::unique_ptr<Sprite> newSprite;

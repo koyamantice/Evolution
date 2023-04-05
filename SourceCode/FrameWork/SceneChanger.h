@@ -17,11 +17,11 @@ public:
 	/// <summary>
 	/// ‰Šúkˆ—
 	/// </summary>
-	void Init();
+	void Initialize();
 	/// <summary>
 	/// ‰Šúkˆ—
 	/// </summary>
-	void InitOver();
+	void InitializeOver();
 
 	/// <summary>
 	/// •`‰æ
