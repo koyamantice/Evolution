@@ -340,11 +340,11 @@ Bullet* ActorManager::SearchID(int ID) {
 	return nullptr;
 }
 
-void ActorManager::ChangeStatus(const Bullet::BulletStatus& old_status, const Bullet::BulletStatus& status) {
+void ActorManager::ChangeStatus(const Bullet::BulletStatus& old_status, const Bullet::BulletStatus& status, const XMFLOAT3& pos) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* actor = itr->get();
-		if (actor->GetCommand() == old_status) {
-			actor->SetCommand(status, Bound(actor->GetPosition(),actor->GetOldPosition(), 10.0f));
+		if (actor->GetCommand() == old_status|| actor->GetCommand() == Bullet::BulletStatus::Battle) {
+			actor->SetCommand(status, Bound( actor->GetPosition(), actor->GetOldPosition(), 20.0f));
 		}
 	}
 }

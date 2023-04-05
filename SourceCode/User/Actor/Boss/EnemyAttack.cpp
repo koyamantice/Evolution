@@ -80,6 +80,7 @@ void EnemyAttack::Stamp(const XMFLOAT3& pos) {
 	}
 }
 
+
 void EnemyAttack::SetPredict(const bool& _predict, const float& _timer) {
 	 this->predict = _predict;
 	 

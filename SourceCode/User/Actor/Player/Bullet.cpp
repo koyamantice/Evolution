@@ -5,11 +5,13 @@
 #include <SourceCode/Common/Easing.h>
 #include <SourceCode/FrameWork/collision/Collision.h>
 #include <BaseScene.h>
+#include <Helper.h>
 
 
 void (Bullet::* Bullet::statusFuncTable[])() = {
 	&Bullet::WaitUpdate,//要素0
 	&Bullet::AttackUpdate, //要素1
+	&Bullet::BattleUpdata,
 	&Bullet::ControlUpdate,
 	&Bullet::SlowUpdate,
 	&Bullet::DeadUpdate,
@@ -142,7 +144,6 @@ void Bullet::LimitArea() {
 void Bullet::CommonUpdate() {
 	old_pos = fbxobj_->GetPosition();
 	if (collide) { collide = false; }
-	if (knockBacking) { KnockBack(); }
 	if (isPlayActive) { command_ = BulletStatus::Control; }
 	if (DeadFlag){ command_ = BulletStatus::Dead; }
 	if (!wait) { follow_frame = 0.0f; }
@@ -175,6 +176,14 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 }
 
 void Bullet::Draw(DirectXCommon* dxCommon) {
+	if (ID==0) {
+		ImGui::SetNextWindowPos(ImVec2(0, 500));
+		ImGui::Begin("bullet");
+		ImGui::Text("pos.y:%f", fbxobj_->GetPosition().y);
+		ImGui::Text("frame:%f", frame);
+
+		ImGui::End();
+	}
 	if (isActive) {
 		Object3d::PreDraw();
 		fbxobj_->Draw(dxCommon->GetCmdList());
@@ -245,7 +254,10 @@ void Bullet::SetCommand(const BulletStatus& command, XMFLOAT3 pos) {
 void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 	switch (command_) {
 	case BulletStatus::Wait:
-
+		//if (Tag == "Enemy") {
+		//	if (isPlayActive) { return; }
+		//	DamageInit();
+		//}
 		break;
 	case BulletStatus::Attack:
 		//プレイヤーとの当たり判定
@@ -273,6 +285,10 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 		break;
 
 	case BulletStatus::Slow:
+		if (Tag == "Enemy") {
+			if (isPlayActive) { return; }
+			DamageInit();
+		}
 		break;
 	case BulletStatus::Smash:
 		break;
@@ -308,33 +324,13 @@ bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float& _radius) {
 }
 
 
-void Bullet::KnockBack() {
-	XMFLOAT3 pos = fbxobj_->GetPosition();
-
-	if (damageframe >= 1.0f) {
-		damageframe = 0.0f;
-
-		knockBacking = false;
-		pos.y = 0.0f;
-		fbxobj_->SetPosition(pos);
-		return;
-	} else {
-		damageframe += 1.0f / kDeadFrameMax;
-	}
-	pos.x = Ease(In, Quad, damageframe, s_rebound_.x, e_rebound_.x);
-	pos.y += fall; //+
-	fall -= kFallHeight / (kDeadFrameMax / 2.0f);//
-	pos.y = max(0.0f, pos.y);
-	pos.z = Ease(In, Quad, damageframe, s_rebound_.z, e_rebound_.z);
-	fbxobj_->SetPosition(pos);
-}
 
 void Bullet::DamageInit() {
-	if (!knockBacking) {
+	if (command_ != BulletStatus::Battle) {
 		audio_->PlayWave("SE/attack.wav", 0.5f);
 		enemy->SetDamage(enemy->GetDamage() + 1);
 		burning = true;
-
+		frame = 0.0f;
 		XMFLOAT3 pos = fbxobj_->GetPosition();
 		fall = kFallHeight;
 		exploPos = old_pos;
@@ -345,7 +341,7 @@ void Bullet::DamageInit() {
 		0,
 		pos.z - cosf(atan2f(distance.x, distance.z)) * 10.0f
 		};
-		knockBacking = true;
+		command_ = BulletStatus::Battle;
 	}
 }
 
@@ -405,21 +401,18 @@ void Bullet::TraceUpdate() {
 void Bullet::ControlUpdate() {
 
 	if (!Follow2Position(ActionActor->GetPosition(), ActionActor->GetSize())) {
-		if (!knockBacking) {
-			audio_->PlayWave("SE/attack.wav", 0.5f);
-			burning = true;
-			XMFLOAT3 pos = fbxobj_->GetPosition();
-			fall = kFallHeight;
-			exploPos = ActionActor->GetPosition();
-			XMFLOAT3 distance = { pos.x - ActionActor->GetPosition().x,0,pos.z - ActionActor->GetPosition().z };
-			s_rebound_ = pos;
-			e_rebound_ = {
-			pos.x + sinf(atan2f(distance.x, distance.z)) * 5.0f,
-			0,
-			pos.z + cosf(atan2f(distance.x, distance.z)) * 5.0f
-			};
-			knockBacking = true;
-		}
+		audio_->PlayWave("SE/attack.wav", 0.5f);
+		burning = true;
+		XMFLOAT3 pos = fbxobj_->GetPosition();
+		fall = kFallHeight;
+		exploPos = ActionActor->GetPosition();
+		XMFLOAT3 distance = { pos.x - ActionActor->GetPosition().x,0,pos.z - ActionActor->GetPosition().z };
+		s_rebound_ = pos;
+		e_rebound_ = {
+		pos.x + sinf(atan2f(distance.x, distance.z)) * 5.0f,
+		0,
+		pos.z + cosf(atan2f(distance.x, distance.z)) * 5.0f
+		};
 	}
 	if (navi) {
 		if (navi_frame > 1.0f) {
@@ -451,22 +444,22 @@ void Bullet::VanishUpdate() {
 		XMFLOAT3 pos = fbxobj_->GetPosition();
 		XMFLOAT3 rot = fbxobj_->GetRotation();
 		pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
-		pos.y += vel_; //+
-		vel_ -= kSlowHight / (kSlowFrameMax / 2.5f);//
+		pos.y += vanish_vel_; //+
+		vanish_vel_ -= kVanishHight / (kVanishFrameMax / 2.5f);//
 		pos.y = max(0, pos.y);
 		pos.z = Ease(InOut, Quad, frame, pos.z, after_pos.z);
 
 		rot.y = Ease(In, Quad, frame, 0, -DEGREE_MAX*3.0f);
 
 		if (frame < 1.0f) {
-			frame += 1.0f / kSlowFrameMax;
+			frame += 1.0f / kVanishFrameMax;
 		} else {
-			frame = max(1.0f, frame);
+			frame = 0.0f;
 			pos.y = 0.0f;
 			rot.y = 0;
 			command_ = BulletStatus::Wait;
 
-			vel_ = kSlowHight;
+			vanish_vel_ = kVanishHight;
 			throwReady = false;
 		}
 		fbxobj_->SetPosition(pos);
@@ -547,10 +540,29 @@ void Bullet::DeadUpdate() {
 }
 
 void Bullet::AttackUpdate() {
-	if (!knockBacking) {
-		if (noBoss) { return; }
-		if (Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-			Follow2Position(enemy->GetPosition(), 2.0f);
-		}
+	if (noBoss) { return; }
+	if (Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
+		Follow2Position(enemy->GetPosition(), 2.0f);
 	}
+}
+
+void Bullet::BattleUpdata() {
+	XMFLOAT3 pos = fbxobj_->GetPosition();
+
+	if (damageframe >= 1.0f) {
+		damageframe = 0.0f;
+		command_ = BulletStatus::Attack;
+		pos.y = 0.0f;
+		fbxobj_->SetPosition(pos);
+		return;
+	} else {
+		damageframe += 1.0f / kDeadFrameMax;
+	}
+	pos.x = Ease(In, Quad, damageframe, s_rebound_.x, e_rebound_.x);
+	pos.y += fall; //+
+	fall -= kFallHeight / (kDeadFrameMax / 2.0f);//
+	pos.y = max(0.0f, pos.y);
+	pos.z = Ease(In, Quad, damageframe, s_rebound_.z, e_rebound_.z);
+	fbxobj_->SetPosition(pos);
+
 }

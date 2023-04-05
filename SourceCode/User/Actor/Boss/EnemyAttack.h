@@ -2,7 +2,7 @@
 #include"Object2d.h"
 #include <ParticleEmitter.h>
 #include "Actor.h"
-
+class MashGhost;
 
 class EnemyAttack {
 private: // エイリアス

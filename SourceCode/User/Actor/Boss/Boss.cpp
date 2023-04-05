@@ -132,6 +132,6 @@ void Boss::PinchMotion() {
 	rot.y = Ease(In, Linear, scale_frame_, smash_rot_, smash_rot_ + (DEGREE_MAX * 3.0f));
 	fbxObject_->SetRotation(rot);
 	SpecialPinch();
-	ActorManager::GetInstance()->ChangeStatus(Bullet::BulletStatus::Attack, Bullet::BulletStatus::Vanish);
+	ActorManager::GetInstance()->ChangeStatus(Bullet::BulletStatus::Attack, Bullet::BulletStatus::Vanish, fbxObject_->GetPosition());
 }
 

@@ -9,7 +9,6 @@
 #include "ClearCrystal.h"
 #include"PlayerUI.h"
 #include "Honey.h"
-#include "SmallMash.h"
 #include"CowKing.h"
 
 
@@ -30,11 +29,7 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 		newActor = new Hornet();
 		newActor->Initialize(nullptr, "Enemy");
 	}
-	if (sceneName == "SmallMash") {
-		newActor = new SmallMash();
-		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kSmallMash),"SmallMash");
-
-	}
+	
 	if (sceneName == "Honey") {
 		newActor = new Honey();
 		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kNest), "Honey");

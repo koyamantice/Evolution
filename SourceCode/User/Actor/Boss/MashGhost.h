@@ -24,6 +24,7 @@ protected:
 	void StopMotion() override;
 	void SpecialPinch() override;
 	std::unique_ptr<EnemyAttack> attack_;
+
 	int odd_ = 1;
 	int stamp_count_ = 0;
 	float speed = 0.2f;

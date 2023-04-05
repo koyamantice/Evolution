@@ -38,6 +38,7 @@ public:
 	enum class BulletStatus : int{
 		Wait = 0,
 		Attack,
+		Battle,
 		Control,
 		Slow,
 		Dead,
@@ -120,6 +121,7 @@ protected:
 	//enum class BulletStatus : int {
 	//	Wait = 0,
 	//	Attack,
+	//  Battle,
 	//	Control,
 	//	Slow,
 	//	Dead,
@@ -128,6 +130,7 @@ protected:
 	//};
 	void WaitUpdate();
 	void AttackUpdate();
+	void BattleUpdata();
 	void ControlUpdate();
 	void SlowUpdate();
 	void DeadUpdate();
@@ -140,8 +143,6 @@ protected:
 
 	bool Follow2Position(const XMFLOAT3& _pos, const float& _radius = 2.0f);
 	float follow_vel_ = 0.3f;
-	void KnockBack();
-	bool knockBacking = false;
 
 	void DamageInit();
 	XMFLOAT3 s_rebound_{};
@@ -158,6 +159,13 @@ protected:
 
 	bool isFinish = false;
 	float status_alpha_ = 1.0f;
+
+
+
+	const float kVanishFrameMax = 50.0f;
+	const float kVanishHight = 1.0f;
+	float vanish_vel_ = kVanishHight;
+
 
 
 	bool isLeft = false;
