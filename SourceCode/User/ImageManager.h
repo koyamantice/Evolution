@@ -74,6 +74,9 @@ public:
 	enum tex2dName {
 		Lock,
 		Battle,
+		Scary,
+		Vanish,
+		Control,
 		Fire,
 		InOut,
 		Guid,

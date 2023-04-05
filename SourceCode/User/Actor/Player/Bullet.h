@@ -5,6 +5,7 @@
 #include"ImageManager.h"
 #include <AudioManager.h>
 #include"Trace.h"
+#include <random>
 
 using namespace DirectX;
 class Bullet {
@@ -45,6 +46,7 @@ public:
 		Smash,
 		Ditch,
 		Vanish,
+		Scary,
 	};
 public:
 	Bullet();
@@ -137,6 +139,7 @@ protected:
 	void SmashUpdate();
 	void DitchUpdate();
 	void VanishUpdate();
+	void ScaryUpdate();
 	//関数ポインタ
 	static void(Bullet::* statusFuncTable[])();
 
@@ -144,7 +147,11 @@ protected:
 	bool Follow2Position(const XMFLOAT3& _pos, const float& _radius = 2.0f);
 	float follow_vel_ = 0.3f;
 
-	void DamageInit();
+
+	std::random_device seed_gen;
+
+	void DamageInit(BulletStatus status= BulletStatus::Attack);
+	void ScaryInit();
 	XMFLOAT3 s_rebound_{};
 	XMFLOAT3 e_rebound_{};
 
@@ -160,6 +167,7 @@ protected:
 	bool isFinish = false;
 	float status_alpha_ = 1.0f;
 
+	const float kScaryFrameMax = 50.0f;
 
 
 	const float kVanishFrameMax = 50.0f;
@@ -200,10 +208,20 @@ protected:
 	bool isRemove = false;
 	//コマンド
 	BulletStatus command_ = BulletStatus::Wait;
+	BulletStatus next_command_ = command_;
+
 	std::unique_ptr<FBXObject3d> fbxobj_ = nullptr;
 	std::unique_ptr<Object2d> shadow_ = nullptr;
 	std::list<std::unique_ptr<Trace>> traces_ = {};
-	std::unique_ptr<Object2d> status_ = nullptr;
+	enum {
+		BattleState=0,
+		ScaryState,
+		VanishState,
+		ControlState,
+		StateMax
+	};
+	
+	std::array<std::unique_ptr<Object2d>, StateMax> status_;
 	std::unique_ptr<Object2d> explo_ = nullptr;
 	std::unique_ptr<Object2d> chara_dead_ = nullptr;
 	std::unique_ptr<AudioManager> audio_ = nullptr;

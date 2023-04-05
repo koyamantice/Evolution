@@ -17,7 +17,8 @@ void (Bullet::* Bullet::statusFuncTable[])() = {
 	&Bullet::DeadUpdate,
 	&Bullet::SmashUpdate,
 	&Bullet::DitchUpdate,
-	&Bullet::VanishUpdate
+	&Bullet::VanishUpdate,
+	&Bullet::ScaryUpdate,
 };
 
 Bullet::Bullet() {
@@ -41,11 +42,12 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
 	shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 
-	status_ = Object2d::Create(ImageManager::Battle, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z
-		}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
-	status_->SetIsBillboard(true);
-	status_->SetRotation({ 0,0,0 });
-
+	for (int i = 0; i < StateMax;i++) {
+		status_[i] = Object2d::Create(ImageManager::Battle+i, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z
+			}, { 0.1f,0.1f,0.1f }, { 1,1,1,1 });
+		status_[i]->SetIsBillboard(true);
+		status_[i]->SetRotation({ 0,0,0 });
+	}
 	audio_ = std::make_unique<AudioManager>();
 	audio_->LoadWave("SE/attack.wav");
 	audio_->LoadWave("SE/gnormDead.wav");
@@ -102,7 +104,9 @@ void Bullet::ResultUpdate(const float& timer) {
 	}
 	TraceUpdate();
 	explo_->Update();
-	status_->Update();
+	for (std::unique_ptr<Object2d>& state : status_) {
+		state->Update();
+	}
 	ShadowUpdate();
 }
 
@@ -159,8 +163,10 @@ void Bullet::CommonUpdate() {
 	fbxobj_->Update();
 	explo_->Update();
 	ShadowUpdate();
-	status_->Update();
-	status_->SetPosition({ fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 2.5f,fbxobj_->GetPosition().z });
+	for (std::unique_ptr<Object2d>& state : status_) {
+		state->Update();
+		state->SetPosition({ fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 2.5f,fbxobj_->GetPosition().z });
+	}
 }
 
 
@@ -197,19 +203,22 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 		if (command_ == BulletStatus::Dead) {
 			Object2d::PreDraw();
 			chara_dead_->Draw();
+			return;
 		}
 		if (enemy->GetIsActive()) {
-			if (command_ == (BulletStatus::Wait)) { return; }
-			if (command_ == BulletStatus::Control) { return; }
+			if (isFinish) { return; }
+			if (command_ == BulletStatus::Wait) { return; }
 			Object2d::PreDraw();
-			if (command_ != BulletStatus::Dead) {
-				if (!isFinish && Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
-					status_->Draw();
+				if (command_== BulletStatus::Battle|| command_ == BulletStatus::Attack) {
+					status_[BattleState]->Draw();
+				} else if (command_ == BulletStatus::Scary) {
+					status_[ScaryState]->Draw();
+				} else if (command_ == BulletStatus::Vanish) {
+					status_[VanishState]->Draw();
+				} else if (command_ == BulletStatus::Control){
+					status_[ControlState]->Draw();
 				}
- 				if (burning) { explo_->Draw(); }
-			} else {
-				chara_dead_->Draw();
-			}
+ 			if (burning) { explo_->Draw(); }
 		}
 		OnLastDraw(dxCommon);
 	}
@@ -254,10 +263,10 @@ void Bullet::SetCommand(const BulletStatus& command, XMFLOAT3 pos) {
 void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 	switch (command_) {
 	case BulletStatus::Wait:
-		//if (Tag == "Enemy") {
-		//	if (isPlayActive) { return; }
-		//	DamageInit();
-		//}
+		if (Tag == "Enemy") {
+			if (isPlayActive) { return; }
+			ScaryInit();
+		}
 		break;
 	case BulletStatus::Attack:
 		//プレイヤーとの当たり判定
@@ -281,6 +290,8 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 			DamageInit();
 		}
 		break;
+	case BulletStatus::Battle:
+		break;
 	case BulletStatus::Control:
 		break;
 
@@ -298,6 +309,16 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 		break;
 	case BulletStatus::Vanish:
 		break;
+	case BulletStatus::Scary:
+		//プレイヤーとの当たり判定
+		if (Tag == "Player") {
+			if (isPlayActive) { return; }
+			player->SetStock(player->GetStock() + 1);
+			command_ = BulletStatus::Wait;
+		}
+
+		break;
+
 	default:
 		assert(0);
 		break;
@@ -325,10 +346,12 @@ bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float& _radius) {
 
 
 
-void Bullet::DamageInit() {
+void Bullet::DamageInit(BulletStatus status) {
 	if (command_ != BulletStatus::Battle) {
 		audio_->PlayWave("SE/attack.wav", 0.5f);
-		enemy->SetDamage(enemy->GetDamage() + 1);
+		if (next_command_ == BulletStatus::Attack) {
+			enemy->SetDamage(enemy->GetDamage() + 1);
+		}
 		burning = true;
 		frame = 0.0f;
 		XMFLOAT3 pos = fbxobj_->GetPosition();
@@ -341,8 +364,30 @@ void Bullet::DamageInit() {
 		0,
 		pos.z - cosf(atan2f(distance.x, distance.z)) * 10.0f
 		};
+		next_command_ = status;
 		command_ = BulletStatus::Battle;
 	}
+}
+
+void Bullet::ScaryInit() {
+	if (command_ == BulletStatus::Scary) { return; }
+	std::mt19937 mt{ std::random_device{}() };
+	std::uniform_int_distribution<int> dist(1, 100);
+	int rand = dist(mt);
+	if(rand > 5) {
+		DamageInit(BulletStatus::Wait);
+		return;
+	}
+
+	frame = 0.0f;
+	XMFLOAT3 pos = fbxobj_->GetPosition();
+	XMFLOAT3 distance = { pos.x - old_pos.x,0,pos.z - old_pos.z };
+	after_pos = {
+	pos.x - sinf(atan2f(distance.x, distance.z)) * 47.0f,
+	0,
+	pos.z - cosf(atan2f(distance.x, distance.z)) * 47.0f
+	};
+	command_ = BulletStatus::Scary;
 }
 
 
@@ -434,7 +479,9 @@ void Bullet::ControlUpdate() {
 void Bullet::SmashUpdate() {
 	//ステータスの非表示
 	status_alpha_ = Ease(In, Linear, 0.8f, status_alpha_, 0);
-	status_->SetColor({ 1,1,1,status_alpha_ });
+	for (std::unique_ptr<Object2d>& state: status_) {
+		state->SetColor({ 1,1,1,status_alpha_ });
+	}
 }
 
 void Bullet::DitchUpdate() {
@@ -464,6 +511,25 @@ void Bullet::VanishUpdate() {
 		}
 		fbxobj_->SetPosition(pos);
 		fbxobj_->SetRotation(rot);
+}
+
+void Bullet::ScaryUpdate() {
+	XMFLOAT3 pos = fbxobj_->GetPosition();
+	XMFLOAT3 rot = fbxobj_->GetRotation();
+	pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
+	pos.z = Ease(InOut, Quad, frame, pos.z, after_pos.z);
+
+	rot.y = Ease(In, Quad, frame, 0, -DEGREE_MAX * 3.0f);
+
+	if (frame < 1.0f) {
+		frame += 1.0f / kScaryFrameMax;
+	} else {
+		frame = 1.0f;
+
+	}
+	fbxobj_->SetPosition(pos);
+	fbxobj_->SetRotation(rot);
+
 }
 
 void Bullet::WaitUpdate() {
@@ -551,7 +617,7 @@ void Bullet::BattleUpdata() {
 
 	if (damageframe >= 1.0f) {
 		damageframe = 0.0f;
-		command_ = BulletStatus::Attack;
+		command_ = next_command_;
 		pos.y = 0.0f;
 		fbxobj_->SetPosition(pos);
 		return;
