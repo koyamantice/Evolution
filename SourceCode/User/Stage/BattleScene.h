@@ -147,6 +147,8 @@ protected:
 
 	const float kCameraHight = 18.0f;
 	float camera_hight = kCameraHight;
+	const float hight_vel = 0.4f;
+
 	const float camera_radius = 15.0f;
 
 	float camera_angle = 0.0f;

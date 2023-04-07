@@ -1,4 +1,5 @@
 #include "BattleScene.h"
+#include <Helper.h>
 
 
 void BattleScene::BattleInit() {
@@ -31,8 +32,8 @@ void BattleScene::BattleInit() {
 	//ステージの生成します
 	skydome = std::make_unique<Object3d>();
 	skydome->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
-	skydome->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
-	skydome->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+	skydome->SetScale(XMFLOAT3(0.75f, 0.75f, 0.75f));
+	skydome->SetColor({ 1.0f ,1.0f ,1.0f ,1.0f });
 	skydome->Initialize();
 
 	ground = std::make_unique<Object3d>();
@@ -170,13 +171,29 @@ void BattleScene::CameraUpda() {
 	}
 	player_shadow->SetAngle(camera_angle);
 	if (player_shadow->GetHitBound()) { camera_hight = RandHeight(camera_hight); }
-	else { camera_hight = kCameraHight; }
+	else {
+		if (input->TiltPushStick(Input::R_UP) ||
+			input->PushKey(DIK_UP)) {
+			camera_hight += hight_vel;
+
+		}
+		if (input->TiltPushStick(Input::R_DOWN) ||
+			input->PushKey(DIK_DOWN)) {
+			camera_hight -= hight_vel;
+
+		}
+
+		camera_hight = clamp(camera_hight, kCameraHight + 7.0f, kCameraHight - 7.0f);
+	}
 	//ターゲットをプレイヤーの正面ベクトルに合わせます
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
-	camera->SetEye({ 
+	XMFLOAT3 eye = {
 		player_shadow->GetPosition().x + camera_distance.x,
 		player_shadow->GetPosition().y + camera_hight,
-		player_shadow->GetPosition().z + camera_distance.z });
+		player_shadow->GetPosition().z + camera_distance.z };
+	eye.x= clamp(eye.x, 46.5f, - 46.5f);
+	eye.z= clamp(eye.z, 46.5f, - 46.5f);;
+	camera->SetEye(eye);
 	camera->Update();
 }
 

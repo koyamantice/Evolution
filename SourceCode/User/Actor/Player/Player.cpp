@@ -141,16 +141,16 @@ void Player::OnUpdate() {
 
 void Player::OnFirstDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	ImGui::SetNextWindowPos(ImVec2(0, 0));
-	ImGui::SetNextWindowSize(ImVec2(180, 250));
+	//ImGui::SetNextWindowPos(ImVec2(0, 0));
+	//ImGui::SetNextWindowSize(ImVec2(180, 250));
 
-	ImGui::Begin("enemy");
-	ImGui::Text("imagin_[0].x:%f", imagin_[0].x);
-	ImGui::Text("imagin_[1].x:%f", imagin_[1].x);
-	ImGui::Text("imagin_[2].x:%f", imagin_[2].x);
-	ImGui::Text("imagin_[3].x:%f", imagin_[3].x);
+	//ImGui::Begin("enemy");
+	//ImGui::Text("imagin_[0].x:%f", imagin_[0].x);
+	//ImGui::Text("imagin_[1].x:%f", imagin_[1].x);
+	//ImGui::Text("imagin_[2].x:%f", imagin_[2].x);
+	//ImGui::Text("imagin_[3].x:%f", imagin_[3].x);
 
-	ImGui::End();
+	//ImGui::End();
 
 	shadow_->Draw();
 	for (std::unique_ptr<Trace>& trace : traces_) {

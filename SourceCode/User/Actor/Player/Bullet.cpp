@@ -183,14 +183,14 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 }
 
 void Bullet::Draw(DirectXCommon* dxCommon) {
-	if (ID==0) {
-		ImGui::SetNextWindowPos(ImVec2(0, 500));
-		ImGui::Begin("bullet");
-		ImGui::Text("pos.y:%f", fbxobj_->GetPosition().y);
-		ImGui::Text("frame:%f", frame);
+	//if (ID==0) {
+	//	ImGui::SetNextWindowPos(ImVec2(0, 500));
+	//	ImGui::Begin("bullet");
+	//	ImGui::Text("pos.y:%f", fbxobj_->GetPosition().y);
+	//	ImGui::Text("frame:%f", frame);
 
-		ImGui::End();
-	}
+	//	ImGui::End();
+	//}
 	if (isActive) {
 		Object3d::PreDraw();
 		fbxobj_->Draw(dxCommon->GetCmdList());
