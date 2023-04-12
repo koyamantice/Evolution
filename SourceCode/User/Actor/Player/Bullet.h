@@ -218,6 +218,8 @@ protected:
 
 	std::unique_ptr<FBXObject3d> fbxobj_ = nullptr;
 	std::unique_ptr<Object2d> shadow_ = nullptr;
+	std::unique_ptr<Object2d> under_status_ = nullptr;
+
 	std::list<std::unique_ptr<Trace>> traces_ = {};
 	enum {
 		BattleState=0,

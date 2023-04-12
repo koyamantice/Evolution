@@ -3,6 +3,7 @@
 #include "ActorManager.h"
 #include <DirectXMath.h>
 #include <SourceCode/Common/Easing.h>
+#include <Helper.h>
 using namespace DirectX;
 
 void Aim::Init() {
@@ -159,10 +160,9 @@ void Aim::Move(float angle) {
 	Lpos.x = Ease(In, Quad, 0.5f, Lpos.x, after_pos.x);
 	Lpos.y = Ease(In, Quad, 0.5f, Lpos.y, after_pos.y);
 	Lpos.z = Ease(In, Quad, 0.5f, Lpos.z, after_pos.z);
-	if (Lpos.x > 48.0f) { Lpos.x = 48.0f; }
-	if (Lpos.x < -48.0f) { Lpos.x = -48.0f; }
-	if (Lpos.z > 48.0f) { Lpos.z = 48.0f; }
-	if (Lpos.z < -48.0f) { Lpos.z = -48.0f; }
+	Lpos.x = clamp(Lpos.x, 48.0f, -48.0f);
+	Lpos.z = clamp(Lpos.z, 48.0f, -48.0f);
+
 	aim_->SetPosition({ Lpos.x,0.01f,Lpos.z });
 
 	for (int i = 0; i < COMMENTMAX; i++) {

@@ -5,6 +5,7 @@
 #include <SourceCode/FrameWork/ActorManager.h>
 #include"PlayerUI.h"
 #include <Easing.h>
+#include <Helper.h>
 
 
 
@@ -208,15 +209,7 @@ void Player::Move() {
 		vel_ = 0.5f;
 	}
 
-	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
-		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
-		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
-		input->TiltPushStick(Input::L_LEFT, 0.0f) ||
-		input->PushKey(DIK_W) ||
-		input->PushKey(DIK_S) ||
-		input->PushKey(DIK_D) ||
-		input->PushKey(DIK_A)
-		) {
+	if (PushMoveButton()) {
 		foot_count_--;
 		float StickX = input->GetLeftControllerX();
 		float StickY = input->GetLeftControllerY();
@@ -285,6 +278,21 @@ void Player::Move() {
 
 }
 
+bool Player::PushMoveButton() {
+	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
+		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
+		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
+		input->TiltPushStick(Input::L_LEFT, 0.0f) ||
+		input->PushKey(DIK_W) ||
+		input->PushKey(DIK_S) ||
+		input->PushKey(DIK_D) ||
+		input->PushKey(DIK_A)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 void Player::OnCollision(const std::string& Tag) {
 
 	if (Tag == "Enemy") {
@@ -317,7 +325,7 @@ void Player::TraceUpda() {
 		}
 		std::unique_ptr<Trace> Trace_ = std::make_unique<Trace>(imagefoot_, foot_rot_, fbxobj_->GetPosition());
 		traces_.push_back(std::move(Trace_));
-		foot_count_ = 10;
+		foot_count_ = kFootCountMax;
 		odd_count_++;
 	}
 	for (std::unique_ptr<Trace>& trace : traces_) {
@@ -384,13 +392,11 @@ void Player::HitBoundMotion() {
 void Player::LimitArea() {
 	XMFLOAT3 pos = obj->GetPosition();
 
-	const float limit_ = 48.0f;
+	const float limit_Max = 48.0f;
+	const float limit_Min = -48.0f;
+	pos.x = clamp(pos.x, limit_Max, limit_Min);
 
-	pos.x = min(pos.x, limit_);
-	pos.x = max(pos.x, -limit_);
-
-	pos.z = min(pos.z, limit_);
-	pos.z = max(pos.z, -limit_);
+	pos.z = clamp(pos.z, limit_Max, limit_Min);
 
 	obj->SetPosition(pos);
 }

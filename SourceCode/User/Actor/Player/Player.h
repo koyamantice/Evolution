@@ -40,6 +40,8 @@ private:
 	void LimitArea();
 	void Move();
 
+	bool PushMoveButton();
+
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
 	XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) override;
 
@@ -81,6 +83,7 @@ private:
 	const int kPopTimeMax = 5;
 	int particle_pop_time_ = 0;
 	int foot_count_ = 0;
+	const int kFootCountMax = 10;
 	int odd_count_ = 0;
 	float foot_rot_ = 0.0f;
 };

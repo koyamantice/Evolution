@@ -52,6 +52,9 @@ public: // 静的メンバ関数
 	/// テクスチャ読み込み
 	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
 
+	/// テクスチャ読み込みDDS（後に改善）
+	static bool LoadTextureDDS(UINT texnumber, const wchar_t* filename);
+
 	/// 描画前処理
 	static void PreDraw(blendtype type = AlphaBlend);
 

@@ -191,8 +191,8 @@ void BattleScene::CameraUpda() {
 		player_shadow->GetPosition().x + camera_distance.x,
 		player_shadow->GetPosition().y + camera_hight,
 		player_shadow->GetPosition().z + camera_distance.z };
-	eye.x= clamp(eye.x, 46.5f, - 46.5f);
-	eye.z= clamp(eye.z, 46.5f, - 46.5f);;
+	eye.x= clamp(eye.x, 48.5f, - 48.5f);
+	eye.z= clamp(eye.z, 48.5f, - 48.5f);
 	camera->SetEye(eye);
 	camera->Update();
 }

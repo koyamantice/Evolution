@@ -104,6 +104,7 @@ void ImageManager::LoadTex2D() {
 	Object2d::LoadTexture(kLeftFoot, L"Resources/2d//PlayUI/L_foot.png");
 	Object2d::LoadTexture(kRightFoot, L"Resources/2d//PlayUI/R_foot.png");
 
+	Object2d::LoadTexture(kUnderStatus, L"Resources/2d//Effect/UnderStatus.dds");
 }
 
 void ImageManager::LoadParticle() {

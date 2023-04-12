@@ -43,6 +43,11 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 		{ 0.2f,0.2f,0.2f }, { 1,1,1,1 });
 	shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 
+	under_status_ = Object2d::Create(ImageManager::kUnderStatus, { 0,0,0 },
+		{ 0.4f,0.4f,0.4f }, { 1,1,1,1 });
+	under_status_->SetRotation({ DEGREE_QUARTER,0,0 });
+
+
 	for (int i = 0; i < StateMax;i++) {
 		status_[i] = Object2d::Create(ImageManager::Battle+i, { fbxobj_->GetPosition().x,fbxobj_->GetPosition().y + 1.0f,fbxobj_->GetPosition().z
 			}, { 0.15f,0.15f,0.15f }, { 1,1,1,1 });
@@ -91,8 +96,8 @@ void Bullet::IntroUpdate(const float& timer, const int& _stage) {
 	IntroOnUpdate(timer);
 
 	if (_stage == SceneNum::kSecondScene) {
-		fbxobj_->SetRotation({ 0,180,0 });
-		fbxobj_->SetPosition({ (((int)ID % 10) - 4.5f) * 3.0f, 0, ((int)ID / 10) * 5.0f });
+		fbxobj_->SetRotation({ 0,DEGREE_HALF,0 });
+		fbxobj_->SetPosition({ player_pos.x + sinf(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius, 0,  player_pos.z + cos(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius });
 		fbxobj_->Update();
 	}
 }
@@ -105,6 +110,7 @@ void Bullet::ResultUpdate(const float& timer) {
 	}
 	TraceUpdate();
 	explo_->Update();
+
 	for (std::unique_ptr<Object2d>& state : status_) {
 		state->Update();
 	}
@@ -119,8 +125,8 @@ void Bullet::SetAggregation() {
 	position.x = (BulletPos.x - (pos.x + margin));
 	position.z = (BulletPos.z - (pos.z + margin));
 	if (powf(position.x, 2) + powf(position.z, 2) > 4 || collide) {
-		vel_follow.x = sin(-atan2f(position.x, position.z)) * 0.2f;
-		vel_follow.y = cos(-atan2f(position.x, position.z)) * 0.2f;
+		vel_follow.x = sinf(-atan2f(position.x, position.z)) * 0.2f;
+		vel_follow.y = cosf(-atan2f(position.x, position.z)) * 0.2f;
 		BulletPos.x += vel_follow.x;
 		BulletPos.z -= vel_follow.y;
 	}
@@ -178,19 +184,22 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 			trace->Draw();
 		}
 		shadow_->Draw();
+		under_status_->Draw();
 		OnFirstDraw(dxCommon);
 	}
 }
 
 void Bullet::Draw(DirectXCommon* dxCommon) {
-	//if (ID==0) {
-	//	ImGui::SetNextWindowPos(ImVec2(0, 500));
-	//	ImGui::Begin("bullet");
-	//	ImGui::Text("pos.y:%f", fbxobj_->GetPosition().y);
-	//	ImGui::Text("frame:%f", frame);
+	if (ID==0) {
+		ImGui::SetNextWindowPos(ImVec2(0, 500));
+		ImGui::Begin("bullet");
+		ImGui::Text("pos.x:%f", fbxobj_->GetPosition().x);
+		ImGui::Text("pos.z:%f", fbxobj_->GetPosition().z);
 
-	//	ImGui::End();
-	//}
+		ImGui::Text("frame:%f", frame);
+
+		ImGui::End();
+	}
 	if (isActive) {
 		Object3d::PreDraw();
 		fbxobj_->Draw(dxCommon->GetCmdList());
@@ -451,6 +460,8 @@ void Bullet::ShadowUpdate() {
 	shadow_->SetScale({ scale,scale, scale, });
 	shadow_->Update();
 	shadow_->SetPosition({ pos.x,0.01f, pos.z });
+	under_status_->Update();
+	under_status_->SetPosition({ pos.x,0.01f, pos.z });
 }
 
 void Bullet::TraceUpdate() {

@@ -97,7 +97,7 @@ public:
 		kpredicted,
 		kLeftFoot,
 		kRightFoot,
-
+		kUnderStatus,
 	};
 	enum particleName {
 		nul = 0,
