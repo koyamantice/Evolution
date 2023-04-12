@@ -2,6 +2,7 @@
 #include <SourceCode/User/ModelManager.h>
 #include"Easing.h"
 #include"ImageManager.h"
+#include <random>
 
 #define DEGREE_MAX 360.0f
 #define DEGREE_HALF 180.0f
@@ -49,11 +50,11 @@ void TitleText::Init() {
 		texts[i]->SetPosition({ pos[i] });
 
 	}
-	
+
 	Object3d* door_ = new Object3d();
 	door_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kDoor));
 	door_->Initialize();
-	door_->SetPosition({2.0f,0,10.0f});
+	door_->SetPosition({ 2.0f,0,10.0f });
 	door_->SetRotation({ 0,DEGREE_QUARTER,0 });
 	door_->SetScale({ 3.0f,3.0f,3.0f });
 	door.reset(door_);
@@ -72,7 +73,7 @@ void TitleText::Init() {
 	models.insert(std::make_pair("skydome", modelSkydome));
 	models.insert(std::make_pair("Ground", modelGround));
 	models.insert(std::make_pair("House", modelFighter));
-	models.insert(std::make_pair("Pine",modelPine));
+	models.insert(std::make_pair("Pine", modelPine));
 	levelData = LevelLoader::LoadFile("level_editor");
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {
@@ -136,21 +137,24 @@ void TitleText::Draw(DirectXCommon* dxCommon) {
 
 void TitleText::DoorUpdate() {
 	if (door_status == kOpening) {
+		std::mt19937 mt{ std::random_device{}() };
+		std::uniform_real_distribution<float> rnd(0.0, 1.0);
+
 		const float rnd_pos = 1.0f;
 		XMFLOAT3 mag{};
-		mag.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		mag.y = (float)rand() / RAND_MAX * rnd_pos;
-		mag.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		mag.x = rnd(mt) * rnd_pos - rnd_pos / 2.0f;
+		mag.y = rnd(mt) * rnd_pos;
+		mag.z = rnd(mt) * rnd_pos - rnd_pos / 2.0f;
 		const float rnd_vel = 0.2f;
 		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel;
+		vel.x = rnd(mt) * rnd_vel - rnd_vel / 2.0f;
+		vel.y = rnd(mt) * rnd_vel;
+		vel.z = rnd(mt) * rnd_vel;
 		vel.y += 0.1f;
 		const float rnd_acc = 0.01f;
 		XMFLOAT3 acc{};
-		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.x = rnd(mt) * rnd_acc - rnd_acc / 2.0f;
+		acc.y = rnd(mt) * rnd_acc - rnd_acc / 2.0f;
 		partMan->Add(60, { -2.0f + mag.x,2 + mag.y,10.0f + mag.z }, vel, acc, 3.0f, 0.0f, { 1.0f,1.0f,0,1.0f }, { 1.0f,1.0f,0,1.0f });
 	}
 	partMan->Update();

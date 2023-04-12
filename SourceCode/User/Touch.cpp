@@ -1,6 +1,7 @@
 #include"Touch.h"
 #include"ModelManager.h"
 #include "ImageManager.h"
+#include <random>
 
 
 
@@ -50,13 +51,14 @@ void Touch::Draw() {
 
 void Touch::FireAdd() {
 	XMFLOAT3 pos = touch_obj->GetPosition();
-
 	const float rnd_vel = 0.05f;
-	XMFLOAT3 vel{};
-	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	vel.y = (float)rand() / RAND_MAX * rnd_vel * 2.0f;
-	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
+	std::mt19937 mt{ std::random_device{}() };
+	std::uniform_real_distribution<float> rad(0, 1.0f);
+	XMFLOAT3 vel = {
+	vel.x = rad(mt) * rnd_vel - rnd_vel / 2.0f,
+	vel.y = rad(mt) * rnd_vel * 2.0f,
+	vel.z = rad(mt) * rnd_vel - rnd_vel / 2.0f
+	};
 	fire->Add(20, { pos.x,pos.y + 3.0f,pos.z }, vel, {}, 1.0f, 0.0f, s_color, e_color);
 
 	fire->Update();

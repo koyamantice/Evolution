@@ -116,10 +116,6 @@ bool BulletRed::DitchInit() {
 		return false;
 	}
 	frame = 0.0f;
-
-
-
-
 	command_ = BulletStatus::Ditch;
 	return true;
 }
