@@ -1,10 +1,10 @@
 #include"ModelManager.h"
 #include "FbxLoader.h"
 
-std::map<ModelManager::ModelName, Model*> ModelManager::model;
-std::map<ModelManager::FBXName, FBXModel*>  ModelManager::fbxModel;
+std::map<ModelManager::ModelName, Model*> ModelManager::model_;
+std::map<ModelManager::FBXName, FBXModel*>  ModelManager::fbxModel_;
 
-ModelManager* ModelManager::GetIns() {
+ModelManager* ModelManager::GetInstance() {
 	static ModelManager instans;
 	return &instans;
 }
@@ -35,15 +35,15 @@ void ModelManager::Initialize() {
 }
 
 void ModelManager::Finalize() {
-	model.clear();
-	fbxModel.clear();
+	model_.clear();
+	fbxModel_.clear();
 }
 
 void ModelManager::LoadModel(const ModelName modelName, std::string fileName) {
-	model[modelName] = new Model();
-	model[modelName] = Model::CreateFromOBJ(fileName);
+	model_[modelName] = new Model();
+	model_[modelName] = Model::CreateFromOBJ(fileName);
 }
 void ModelManager::LoadFBXModel(const FBXName modelName, std::string fileName) {
-	fbxModel[modelName] = new FBXModel();
-	fbxModel[modelName] = FbxLoader::GetInstance()->LoadModelFromFile(fileName);
+	fbxModel_[modelName] = new FBXModel();
+	fbxModel_[modelName] = FbxLoader::GetInstance()->LoadModelFromFile(fileName);
 }

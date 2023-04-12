@@ -32,7 +32,7 @@ Actor* ActorFactory::CreateActor(const std::string& sceneName, ActorComponent* n
 	
 	if (sceneName == "Honey") {
 		newActor = new Honey();
-		newActor->Initialize(ModelManager::GetIns()->GetModel(ModelManager::kNest), "Honey");
+		newActor->Initialize(ModelManager::GetInstance()->GetModel(ModelManager::kNest), "Honey");
 
 	}
 	if (sceneName == "CowKing") {
@@ -46,11 +46,11 @@ Bullet* ActorFactory::CreateBullet(const std::string& BulletKind) {
 	Bullet* newBullet=nullptr;
 	if (BulletKind=="Red") {
 		newBullet = new BulletRed();
-		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::kRedkobito));
+		newBullet->Initialize(ModelManager::GetInstance()->GetFBXModel(ModelManager::kRedkobito));
 	}
 	if (BulletKind == "Green") {
 		newBullet = new BulletGreen();
-		newBullet->Initialize(ModelManager::GetIns()->GetFBXModel(ModelManager::kGreenkobito));
+		newBullet->Initialize(ModelManager::GetInstance()->GetFBXModel(ModelManager::kGreenkobito));
 	}
 
 

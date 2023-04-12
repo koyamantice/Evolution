@@ -9,7 +9,7 @@ void CowKing::OnInitialize() {
 
 	collide_size = 3.0f;
 	
-	InitCommon(ModelManager::GetIns()->GetFBXModel(ModelManager::kCow), { 0.025f,0.025f, 0.025f });
+	InitCommon(ModelManager::GetInstance()->GetFBXModel(ModelManager::kCow), { 0.025f,0.025f, 0.025f });
 	//fbxObject_->PlayAnimation();
 
 	compornent = new EnemyUI();

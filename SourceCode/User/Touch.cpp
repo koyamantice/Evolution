@@ -13,7 +13,7 @@ Touch::~Touch() {
 
 void Touch::Initialize(const XMFLOAT3& pos, const XMFLOAT3& rot) {
 	Object3d* touch_obj_ = new Object3d();
-	touch_obj_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTouch));
+	touch_obj_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTouch));
 	touch_obj_->Initialize();
 	touch_obj_->SetPosition(pos);
 	touch_obj_->SetRotation(rot);

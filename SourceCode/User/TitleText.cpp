@@ -26,17 +26,17 @@ void TitleText::Init() {
 	for (int i = 0; i < 6; i++) {
 		Object3d* newText_ = new Object3d();
 		if (i == 0) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextG));
+			newText_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTextG));
 		} else if (i == 1) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextN));
+			newText_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTextN));
 		} else if (i == 2) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextO));
+			newText_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTextO));
 		} else if (i == 3) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextM));
+			newText_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTextM));
 		} else if (i == 4) {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextE));
+			newText_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTextE));
 		} else {
-			newText_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kTextN));
+			newText_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kTextN));
 		}
 		newText_->Initialize();
 		newText_->SetPosition(pos[i]);
@@ -51,7 +51,7 @@ void TitleText::Init() {
 	}
 	
 	Object3d* door_ = new Object3d();
-	door_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDoor));
+	door_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kDoor));
 	door_->Initialize();
 	door_->SetPosition({2.0f,0,10.0f});
 	door_->SetRotation({ 0,DEGREE_QUARTER,0 });

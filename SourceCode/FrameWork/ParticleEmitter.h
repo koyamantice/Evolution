@@ -110,5 +110,6 @@ private: // メンバ変数
 	float mdVel_ = 0.1f;
 	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
 	float mdAcc_ = 0.001f;
+
 	std::unique_ptr<ParticleManager> particleManager = nullptr;
 };

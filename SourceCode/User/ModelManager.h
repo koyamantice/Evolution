@@ -38,15 +38,15 @@ public:
 	};
 
 public:
-	static ModelManager* GetIns();		//取得用
+	static ModelManager* GetInstance();		//取得用
 
 	void Initialize();
 	void Finalize();
 	void LoadModel(const ModelName modelName, std::string fileName);
 	void LoadFBXModel(const FBXName modelName, std::string fileName);
-	Model* GetModel(ModelName modelName) { return model[modelName]; }
-	FBXModel* GetFBXModel(FBXName FBXName) { return fbxModel[FBXName]; }
+	Model* GetModel(ModelName modelName) { return model_[modelName]; }
+	FBXModel* GetFBXModel(FBXName FBXName) { return fbxModel_[FBXName]; }
 private:
-	static std::map<ModelName, Model*> model;	//モデル格納マップ
-	static std::map<FBXName, FBXModel*> fbxModel;
+	static std::map<ModelName, Model*> model_;	//モデル格納マップ
+	static std::map<FBXName, FBXModel*> fbxModel_;
 };

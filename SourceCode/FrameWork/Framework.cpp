@@ -50,7 +50,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 	Object3d::StaticInitialize(dxCommon_->GetDev(), dxCommon_->GetCmdList(), WinApp::window_width, WinApp::window_height);
 	// FBX関連静的初期化
 	FbxLoader::GetInstance()->Initialize(dxCommon_->GetDev());
-	ModelManager::GetIns()->Initialize();
+	ModelManager::GetInstance()->Initialize();
 	
 	//アクターマネージャーの初期化
 	ActorManager::GetInstance()->Initialize();
@@ -60,7 +60,7 @@ void Framework::Initialize(DirectXCommon* dxCommon) {
 }
 
 void Framework::Finalize() {
-	ModelManager::GetIns()->Finalize();
+	ModelManager::GetInstance()->Finalize();
 	SceneManager::GetInstance()->Finalize();
 	Input::GetInstance()->Finalize();
 	Sprite::Finalize();

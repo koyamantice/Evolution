@@ -124,8 +124,11 @@ public:
 	/// </summary>
 	/// <returns>マウス移動量</returns>
 	MouseMove GetMouseMove();
+	/// <summary>
+	/// マウス座標を取得
+	/// </summary>
+	/// <returns>マウス座標</returns>
 	MousePoint GetPoint();
-
 
 private: // メンバ変数
 	ComPtr<IDirectInput8> dinput_;

@@ -154,8 +154,6 @@ protected:
 	float follow_vel_ = 0.3f;
 
 
-	std::random_device seed_gen;
-
 	void DamageInit(BulletStatus status= BulletStatus::Attack);
 	void ScaryInit(const int& proba=5);
 	XMFLOAT3 s_rebound_{};

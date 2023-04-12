@@ -10,7 +10,7 @@ void MashGhost::OnInitialize() {
 	collide_size = 3.0f;
 	
 	InitCommon(
-		ModelManager::GetIns()->GetFBXModel(ModelManager::kMash),
+		ModelManager::GetInstance()->GetFBXModel(ModelManager::kMash),
 		baseScale_
 	);
 

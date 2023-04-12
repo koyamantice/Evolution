@@ -11,7 +11,7 @@ void Hornet::OnInitialize() {
 	collide_size = 2.0f;
 
 	InitCommon(
-		ModelManager::GetIns()->GetFBXModel(ModelManager::kBee),
+		ModelManager::GetInstance()->GetFBXModel(ModelManager::kBee),
 		baseScale_,
 		{ 0, -DEGREE_QUARTER, 0 }
 	);

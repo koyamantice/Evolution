@@ -22,7 +22,7 @@ void Honey::OnInitialize() {
 	obj->SetScale(base_sca);
 
 	honey_obj_ = std::make_unique<Object3d>();
-	honey_obj_->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kHoney));
+	honey_obj_->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kHoney));
 	honey_obj_->SetScale({});
 	honey_obj_->Initialize();
 

@@ -31,13 +31,13 @@ void BattleScene::BattleInit() {
 
 	//ステージの生成します
 	skydome = std::make_unique<Object3d>();
-	skydome->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kSkydome));
+	skydome->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kSkydome));
 	skydome->SetScale(XMFLOAT3(0.75f, 0.75f, 0.75f));
 	skydome->SetColor({ 1.0f ,1.0f ,1.0f ,1.0f });
 	skydome->Initialize();
 
 	ground = std::make_unique<Object3d>();
-	ground->SetModel(ModelManager::GetIns()->GetModel(ModelManager::kDungeon));
+	ground->SetModel(ModelManager::GetInstance()->GetModel(ModelManager::kDungeon));
 	ground->SetPosition(XMFLOAT3(-50, -0.5f, 50));
 	ground->SetScale(XMFLOAT3(5, 5, 5));
 	ground->Initialize();

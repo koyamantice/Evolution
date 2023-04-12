@@ -95,7 +95,7 @@ void Player::OnInitialize() {
 
 	fbxobj_ = std::make_unique<FBXObject3d>();
 	fbxobj_->Initialize();
-	fbxobj_->SetModel(ModelManager::GetIns()->GetFBXModel(ModelManager::kSeed));
+	fbxobj_->SetModel(ModelManager::GetInstance()->GetFBXModel(ModelManager::kSeed));
 	fbxobj_->SetScale({ 0.005f,0.005f, 0.005f });
 	fbxobj_->LoadAnimation();
 	fbxobj_->PlayAnimation();
