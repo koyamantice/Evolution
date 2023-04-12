@@ -23,8 +23,7 @@ void XorShift::init_xor128(unsigned long s) {
 }
 
 double XorShift::urand() {
-    uint32_t t;
-    t = xorsft_x ^ (xorsft_x << 11);
+    uint32_t t = xorsft_x ^ (xorsft_x << 11);
     xorsft_x = xorsft_y;
     xorsft_y = xorsft_z;
     xorsft_z = xorsft_w;

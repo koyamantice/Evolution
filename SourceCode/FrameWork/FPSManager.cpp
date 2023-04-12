@@ -2,7 +2,7 @@
 
 
 
-void FPSManager::Init() {
+void FPSManager::Initialize() {
 	if (QueryPerformanceFrequency(&timeFreq) == FALSE) {
 	}
 

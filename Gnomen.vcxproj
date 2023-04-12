@@ -102,7 +102,6 @@
     <ClCompile Include="SourceCode\Common\Helper.cpp" />
     <ClCompile Include="SourceCode\Common\Singleton.cpp" />
     <ClCompile Include="SourceCode\Common\TimedInvoke.cpp" />
-    <ClCompile Include="SourceCode\Common\Vec.cpp" />
     <ClCompile Include="SourceCode\Common\XorShift.cpp" />
     <ClCompile Include="SourceCode\FrameWork\ActorManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\AudioManager.cpp" />

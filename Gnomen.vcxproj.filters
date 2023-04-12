@@ -178,9 +178,6 @@
     <ClCompile Include="SourceCode\System\ActorFactory.cpp">
       <Filter>Obj\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Common\Vec.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\User\Aim.cpp">
       <Filter>User\自機関連\Player</Filter>
     </ClCompile>

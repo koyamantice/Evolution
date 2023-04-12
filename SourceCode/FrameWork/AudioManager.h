@@ -58,13 +58,25 @@ public: // メンバ関数
 	AudioManager();
 	~AudioManager();
 
-	// サウンドファイルの読み込みと再生
+	/// <summary>
+	/// リソース内のサウンドをサウンドデータに読み込みます
+	/// </summary>
+	/// <param name="filename">リソースデータ</param>
 	void LoadWave(const std::string& filename);
 
-	void PlayWave(const std::string& filename, const float& Volume);
-
+	/// <summary>
+	/// サウンドデータ内のサウンドを再生します
+	/// </summary>
+	/// <param name="filename">サウンドデータ</param>
+	///<param name="volume">ボリューム</param>
+	/// <param name="isloop">ループするか</param>
+	void PlayWave(const std::string& filename, const float& volume,bool isloop=false);
+	
+	/// <summary>
+	/// サウンドが再生中ならサウンドを停止します
+	/// </summary>
+	/// <param name="filename">サウンドデータ</param>
 	void StopWave(const std::string& filename);
-	void LoopWave(int texnumber, float Volume) {};
 private:
 
 	/// <summary>
@@ -82,14 +94,13 @@ private:
 	/// <param name="_SoundData">サウンドデータ</param>
 	void Unload(SoundData* _SoundData);
 
-
 private: // メンバ変数
 	//XAudio2のインスタンス
 	ComPtr<IXAudio2> xAudio2_;
 	//サウンドデータの連想配列
 	std::map<std::string, SoundData> soundDatas_;
 
-	IXAudio2MasteringVoice* masterVoice;
+	IXAudio2MasteringVoice* masterVoice_;
 	//サウンドデータ格納ディレクトリ
 	const std::string directoryPath_ = "Resources/Sound/";
 };

@@ -1,12 +1,11 @@
 #pragma once
+#include "WinApp.h"
+
+#define DIRECTINPUT_VERSION 0x0800
 
 #include <Windows.h>
 #include <wrl.h>
-#include "WinApp.h"
-#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-
-
 #include <Xinput.h>
 
 /// <summary>
@@ -116,10 +115,10 @@ public: // メンバ関数
 	bool TiltPushStick(STICK Stick,float DeadZone=0.3f);
 
 public:
-	const float& GetPosX() { return posX; }
-	const float& GetPosY() { return posY; }
-	const float& GetLeftControllerX() { return LeftControllerX; }
-	const float& GetLeftControllerY() { return LeftControllerY; }
+	const float& GetPosX() { return mouse_posX_; }
+	const float& GetPosY() { return mouse_posY_; }
+	const float& GetLeftControllerX() { return left_stick_posX_; }
+	const float& GetLeftControllerY() { return left_stick_posY_; }
 	/// <summary>
 	/// マウス移動量を取得
 	/// </summary>
@@ -129,32 +128,32 @@ public:
 
 
 private: // メンバ変数
-	ComPtr<IDirectInput8> dinput;
-	ComPtr<IDirectInputDevice8> devKeyboard;
-	BYTE key[256] = {};
-	BYTE keyPre[256] = {};
-	ComPtr<IDirectInputDevice8> devMouse;
-	DIMOUSESTATE2 mouseState = {};
-	DIMOUSESTATE2 mouseStatePre = {};
-	POINT mousePoint;
+	ComPtr<IDirectInput8> dinput_;
+	ComPtr<IDirectInputDevice8> devKeyboard_;
+	BYTE key_[256] = {};
+	BYTE keyPre_[256] = {};
+	ComPtr<IDirectInputDevice8> devMouse_;
+	DIMOUSESTATE2 mouseState_ = {};
+	DIMOUSESTATE2 mouseStatePre_ = {};
+	POINT mousePoint_;
 
 	//XINPUT(コントローラー用)
-	XINPUT_STATE xinputState;
-	XINPUT_STATE oldXinputState;
-	float shakePower = 0.0f;
-	int shakeTimer = 0;
+	XINPUT_STATE xinputState_;
+	XINPUT_STATE xinputStatePre_;
+
+	float shakePower_ = 0.0f;
+	int shakeTimer_ = 0;
+
 	bool CheckTrigger(XBOX Button);
-	bool CheckTilt(STICK Stick);
 
 	//デッドゾーンに入っているか(DeadRate : デッドゾーン判定の度合い、1.0fだとデフォルト)
 	bool StickInDeadZone(StickPos& Thumb);
 
+	float mouse_posX_ = 0;
+	float mouse_posY_ = 0;
+	float left_stick_posX_ = 0;
+	float left_stick_posY_ = 0;
 
-	float posX = 0;
-	float posY = 0;
-	float LeftControllerX = 0;
-	float LeftControllerY = 0;
-
-	WinApp* winApp;
+	WinApp* winApp_;
 };
 

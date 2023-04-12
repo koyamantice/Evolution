@@ -34,7 +34,7 @@ void TitleScene::Initialize(DirectXCommon* dxCommon) {
 	audioManager->LoadWave("BGM/titleBGM.wav");
 	audioManager->LoadWave("SE/pushstart.wav");
 
-	audioManager->PlayWave("BGM/titleBGM.wav", 0.3f);
+	audioManager->PlayWave("BGM/titleBGM.wav", 0.4f, true);
 
 
 	//‚ ‚Æ‚Åcsv
@@ -52,14 +52,11 @@ void TitleScene::Finalize() {
 //XV
 void TitleScene::Update(DirectXCommon* dxCommon) {
 	CameraUpdate();
+	if (sceneChanger_->GetEasingStart()) { sceneChanger_->ChangeScene(SceneName); return; }
 	lightGroup->SetPointLightPos(0,XMFLOAT3(pointLightPos));
 	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
 	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));
-	
-	
 	text->Upda();
-
-	if (sceneChanger_->GetEasingStart()) { sceneChanger_->ChangeScene(SceneName); return; }
 	InputUpdate();
 	SelectTextUpdate();
 }

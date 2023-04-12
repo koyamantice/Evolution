@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include <algorithm>
 #include <vector>
+
 using namespace DirectX;
 
 template<typename T>

@@ -10,53 +10,53 @@ Input* Input::GetInstance() {
 	return &instance;
 }
 
-bool Input::Initialize(WinApp* winApp) {
+bool Input::Initialize(WinApp* winApp_) {
 	HRESULT result = S_FALSE;
-	this->winApp = winApp;
+	this->winApp_ = winApp_;
 	// DirectInputオブジェクトの生成	
-	result = DirectInput8Create(winApp->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput, nullptr);
+	result = DirectInput8Create(winApp_->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput_, nullptr);
 	if (FAILED(result)) {
 		assert(0);
 		return result;
 	}
 
 	// キーボードデバイスの生成	
-	result = dinput->CreateDevice(GUID_SysKeyboard, &devKeyboard, NULL);
+	result = dinput_->CreateDevice(GUID_SysKeyboard, &devKeyboard_, NULL);
 	if (FAILED(result)) {
 		assert(0);
 		return result;
 	}
 
 	// マウスデバイスの生成	
-	result = dinput->CreateDevice(GUID_SysMouse, &devMouse, NULL);
+	result = dinput_->CreateDevice(GUID_SysMouse, &devMouse_, NULL);
 	if (FAILED(result)) {
 		assert(0);
 		return result;
 	}
 
 	// 入力データ形式のセット
-	result = devKeyboard->SetDataFormat(&c_dfDIKeyboard); // 標準形式
+	result = devKeyboard_->SetDataFormat(&c_dfDIKeyboard); // 標準形式
 	if (FAILED(result)) {
 		assert(0);
 		return result;
 	}
 
 	// 排他制御レベルのセット
-	result = devKeyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	result = devKeyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	if (FAILED(result)) {
 		assert(0);
 		return result;
 	}
 
 	// 入力データ形式のセット
-	result = devMouse->SetDataFormat(&c_dfDIMouse2); // 標準形式
+	result = devMouse_->SetDataFormat(&c_dfDIMouse2); // 標準形式
 	if (FAILED(result)) {
 		assert(0);
 		return result;
 	}
 
 	// 排他制御レベルのセット
-	result = devMouse->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	result = devMouse_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	if (FAILED(result)) {
 		assert(0);
 		return result;
@@ -70,51 +70,51 @@ void Input::Update() {
 	HRESULT result;
 
 	{// キーボード
-		result = devKeyboard->Acquire();	// キーボード動作開始
+		result = devKeyboard_->Acquire();	// キーボード動作開始
 
 		// 前回のキー入力を保存
-		memcpy(keyPre, key, sizeof(key));
+		memcpy(keyPre_, key_, sizeof(key_));
 
 		// キーの入力
-		result = devKeyboard->GetDeviceState(sizeof(key), key);
+		result = devKeyboard_->GetDeviceState(sizeof(key_), key_);
 	}
 
 	{// マウス
-		result = devMouse->Acquire();	// マウス動作開始
+		result = devMouse_->Acquire();	// マウス動作開始
 
 		// 前回の入力を保存
-		mouseStatePre = mouseState;
+		mouseStatePre_ = mouseState_;
 		// マウス座標を取得する
-		GetCursorPos(&mousePoint);
+		GetCursorPos(&mousePoint_);
 		// スクリーン座標をクライアント座標に変換する
-		ScreenToClient(winApp->GetHwnd(), &mousePoint);
+		ScreenToClient(winApp_->GetHwnd(), &mousePoint_);
 
 
 		// マウスの入力
-		result = devMouse->GetDeviceState(sizeof(mouseState), &mouseState);
+		result = devMouse_->GetDeviceState(sizeof(mouseState_), &mouseState_);
 	}
 
 	//コントローラー
-	oldXinputState = xinputState;
-//	ZeroMemory(&xinputState, sizeof(XINPUT_STATE));
+	xinputStatePre_ = xinputState_;
+//	ZeroMemory(&xinputState_, sizeof(XINPUT_STATE));
 
-	DWORD dwResult = XInputGetState(0, &xinputState);
+	DWORD dwResult = XInputGetState(0, &xinputState_);
 	if (dwResult == ERROR_SUCCESS) {
-		LeftControllerX = (float)xinputState.Gamepad.sThumbLX;
-		LeftControllerY = (float)xinputState.Gamepad.sThumbLY;
+		left_stick_posX_ = (float)xinputState_.Gamepad.sThumbLX;
+		left_stick_posY_ = (float)xinputState_.Gamepad.sThumbLY;
 
 		//コントローラーが接続されている
-		if (0 < shakeTimer) {
-			//shakeTimer--;
+		if (0 < shakeTimer_) {
+			//shakeTimer_--;
 			//XINPUT_VIBRATION vibration;
 			//ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 
-			//if (shakeTimer == 0) {
+			//if (shakeTimer_ == 0) {
 			//	vibration.wLeftMotorSpeed = (WORD) 0.0f; // use any value between 0-65535 here
 			//	vibration.wRightMotorSpeed =(WORD) 0.0f; // use any value between 0-65535 here
 			//} else {
-			//	vibration.wLeftMotorSpeed =  (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
-			//	vibration.wRightMotorSpeed = (WORD)(65535.0f * shakePower); // use any value between 0-65535 here
+			//	vibration.wLeftMotorSpeed =  (WORD)(65535.0f * shakePower_); // use any value between 0-65535 here
+			//	vibration.wRightMotorSpeed = (WORD)(65535.0f * shakePower_); // use any value between 0-65535 here
 			//}
 			//XInputSetState(dwResult, &vibration);
 		}
@@ -124,56 +124,56 @@ void Input::Update() {
 }
 
 void Input::Finalize() {
-	dinput.Reset();
-	devKeyboard.Reset();
-	devMouse.Reset();
+	dinput_.Reset();
+	devKeyboard_.Reset();
+	devMouse_.Reset();
 }
 
 bool Input::PushKey(BYTE keyNumber) {
 	// 異常な引数を検出
 	assert(0 <= keyNumber && keyNumber <= 256);
 	// 0でなければ押している
-	return key[keyNumber];
+	return key_[keyNumber];
 }
 
 bool Input::TriggerKey(BYTE keyNumber) {
 	// 異常な引数を検出
 	assert(0 <= keyNumber && keyNumber <= 256);
 	// 前回が0で、今回が0でなければトリガー
-	return !keyPre[keyNumber] && key[keyNumber];
+	return !keyPre_[keyNumber] && key_[keyNumber];
 }
 
 bool Input::ReleaseKey(BYTE keyNumber) {
 	// 異常な引数を検出
 	assert(0 <= keyNumber && keyNumber <= 256);
 	// 前回が1で、今回が0ならリリース
-	return keyPre[keyNumber] && !key[keyNumber];
+	return keyPre_[keyNumber] && !key_[keyNumber];
 }
 
 bool Input::PushMouse(MouseButton Button) {
-	int key = Button;
+	int key_ = Button;
 	// 0でなければ押している
-	return mouseState.rgbButtons[key];
+	return mouseState_.rgbButtons[key_];
 }
 
 bool Input::TriggerMouse(MouseButton Button) {
-	int key = Button;
+	int key_ = Button;
 	// 前回が0で、今回が0でなければトリガー
-	return !mouseStatePre.rgbButtons[key] && mouseState.rgbButtons[key];
+	return !mouseStatePre_.rgbButtons[key_] && mouseState_.rgbButtons[key_];
 }
 
 Input::MouseMove Input::GetMouseMove() {
 	MouseMove tmp{};
-	tmp.lX = mouseState.lX;
-	tmp.lY = mouseState.lY;
-	tmp.lZ = mouseState.lZ;
+	tmp.lX = mouseState_.lX;
+	tmp.lY = mouseState_.lY;
+	tmp.lZ = mouseState_.lZ;
 	return tmp;
 }
 
 Input::MousePoint Input::GetPoint() {
 	MousePoint tmp{};
-	tmp.lX = mousePoint.x;
-	tmp.lY = mousePoint.y;
+	tmp.lX = mousePoint_.x;
+	tmp.lY = mousePoint_.y;
 	return tmp;
 }
 
@@ -183,15 +183,15 @@ bool Input::TiltStick(STICK Stick) {
 	//右か左か
 	bool isLeftStick = Stick <= L_RIGHT;
 	if (isLeftStick) {
-		oldVec.x = oldXinputState.Gamepad.sThumbLX;
-		oldVec.y = oldXinputState.Gamepad.sThumbLY;
-		vec.x = xinputState.Gamepad.sThumbLX;
-		vec.y = xinputState.Gamepad.sThumbLY;
+		oldVec.x = xinputStatePre_.Gamepad.sThumbLX;
+		oldVec.y = xinputStatePre_.Gamepad.sThumbLY;
+		vec.x = xinputState_.Gamepad.sThumbLX;
+		vec.y = xinputState_.Gamepad.sThumbLY;
 	} else {
-		oldVec.x = oldXinputState.Gamepad.sThumbRX;
-		oldVec.y = oldXinputState.Gamepad.sThumbRY;
-		vec.x = xinputState.Gamepad.sThumbRX;
-		vec.y = xinputState.Gamepad.sThumbRY;
+		oldVec.x = xinputStatePre_.Gamepad.sThumbRX;
+		oldVec.y = xinputStatePre_.Gamepad.sThumbRY;
+		vec.x = xinputState_.Gamepad.sThumbRX;
+		vec.y = xinputState_.Gamepad.sThumbRY;
 	}
 	if (!StickInDeadZone(oldVec))return false;
 	if (StickInDeadZone(vec))return false;
@@ -218,11 +218,11 @@ bool Input::TiltPushStick(STICK Stick, float DeadZone) {
 	//右か左か
 	bool isLeftStick = Stick <= L_RIGHT;
 	if (isLeftStick) {
-		vec.x = xinputState.Gamepad.sThumbLX;
-		vec.y = xinputState.Gamepad.sThumbLY;
+		vec.x = xinputState_.Gamepad.sThumbLX;
+		vec.y = xinputState_.Gamepad.sThumbLY;
 	} else {
-		vec.x = xinputState.Gamepad.sThumbRX;
-		vec.y = xinputState.Gamepad.sThumbRY;
+		vec.x = xinputState_.Gamepad.sThumbRX;
+		vec.y = xinputState_.Gamepad.sThumbRY;
 	}
 
 	bool result = false;
@@ -243,11 +243,11 @@ bool Input::TiltPushStick(STICK Stick, float DeadZone) {
 
 bool Input::PushButton(XBOX Button) {
 	if (Button == LT) {
-		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bLeftTrigger;
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState_.Gamepad.bLeftTrigger;
 	} else if (Button == RT) {
-		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bRightTrigger;
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState_.Gamepad.bRightTrigger;
 	} else {
-		return xinputState.Gamepad.wButtons & Button;
+		return xinputState_.Gamepad.wButtons & Button;
 	}
 	assert(0);
 	return false;
@@ -256,13 +256,13 @@ bool Input::PushButton(XBOX Button) {
 bool Input::TriggerButton(XBOX Button) {
 	//トリガー
 	if (Button == LT) {
-		return oldXinputState.Gamepad.bLeftTrigger <= XINPUT_GAMEPAD_TRIGGER_THRESHOLD
+		return xinputStatePre_.Gamepad.bLeftTrigger <= XINPUT_GAMEPAD_TRIGGER_THRESHOLD
 		&& CheckTrigger(Button);
 	} else if (Button == RT) {
-		return oldXinputState.Gamepad.bRightTrigger <= XINPUT_GAMEPAD_TRIGGER_THRESHOLD
+		return xinputStatePre_.Gamepad.bRightTrigger <= XINPUT_GAMEPAD_TRIGGER_THRESHOLD
 		&& CheckTrigger(Button);
 	} else {
-		return !(oldXinputState.Gamepad.wButtons & Button)
+		return !(xinputStatePre_.Gamepad.wButtons & Button)
 		&& CheckTrigger(Button);
 	}
 	assert(0);
@@ -272,11 +272,11 @@ bool Input::TriggerButton(XBOX Button) {
 bool Input::CheckTrigger(XBOX Button) {
 
 	if (Button == LT) {
-		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bLeftTrigger;
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState_.Gamepad.bLeftTrigger;
 	} else if (Button == RT) {
-		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState.Gamepad.bRightTrigger;
+		return XINPUT_GAMEPAD_TRIGGER_THRESHOLD < xinputState_.Gamepad.bRightTrigger;
 	} else {
-		return xinputState.Gamepad.wButtons & Button;
+		return xinputState_.Gamepad.wButtons & Button;
 	}
 	assert(0);
 	return false;
@@ -284,7 +284,7 @@ bool Input::CheckTrigger(XBOX Button) {
 }
 
 bool Input::StickInDeadZone(StickPos& Thumb) {
-	bool x = false, y = false;
+	bool x,y = false;
 	if ((Thumb.x < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * 1.0f
 		&& Thumb.x > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * 1.0f)) {
 		Thumb.x = 0.0f;

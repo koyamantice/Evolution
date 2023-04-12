@@ -44,17 +44,17 @@ public:
 
 	bool IsEndRequst() { return endResquest_; }
 
-	void SetEnd(bool endResquest_) { this->endResquest_ = endResquest_; }
+	void SetEnd(bool endResquest) { this->endResquest_ = endResquest; }
 protected:
 	bool endResquest_ = false;
-	WinApp* winApp = nullptr;
-	DirectXCommon* dxcommon = nullptr;
+	WinApp* winApp_ = nullptr;
+	DirectXCommon* dxCommon_ = nullptr;
 
-	Input* input = nullptr;
-	FPSManager* fps = nullptr;
-	XorShift* xorShift=nullptr;
 	AbstractSceneFactory* sceneFactory_ = nullptr;
-	ImageManager* imageManager = nullptr;
-	SceneManager* scaneMana = nullptr;
-	PostEffect* postEffect = nullptr;
+
+	Input* input_ = Input::GetInstance();
+	FPSManager* fpsManager_ = FPSManager::GetInstance();
+	XorShift* xorShift_ = XorShift::GetInstance();
+	ImageManager* imageManager_ = ImageManager::GetIns();
+	SceneManager* sceneManager_ = nullptr;
 };

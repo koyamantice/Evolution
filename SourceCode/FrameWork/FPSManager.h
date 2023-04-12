@@ -24,7 +24,7 @@ public:
 	}
 
 	//‰Šú‰»
-	void Init();
+	void Initialize();
 	//FPS’²®
 	bool Run();
 	//

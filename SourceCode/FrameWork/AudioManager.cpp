@@ -15,16 +15,14 @@ AudioManager::~AudioManager() {
 }
 
 void  AudioManager::Initialize() {
-	HRESULT result;
-
 	// XAudioエンジンのインスタンスを生成
-	result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	HRESULT result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	if FAILED(result) {
 		assert(0);
 	}
 
 	// マスターボイスを生成
-	result = xAudio2_->CreateMasteringVoice(&masterVoice);
+	result = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	if FAILED(result) {
 		assert(0);
 	}
@@ -61,7 +59,7 @@ void AudioManager::LoadWave(const std::string& filename){
 	}
 
 	// RIFFヘッダーの読み込み
-	RiffHeader riff;
+	RiffHeader riff{};
 	file.read((char*)&riff, sizeof(riff));
 	// ファイルがRIFFかチェック
 	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
@@ -124,7 +122,6 @@ void AudioManager::StopWave(const std::string& filename) {
 	//サウンドデータの参照
 	SoundData& soundData = it->second;
 
-	
 	// 波形データの再生
 	XAUDIO2_VOICE_STATE xa2state;
 	soundData.pSourceVoice->GetState(&xa2state);
@@ -135,7 +132,7 @@ void AudioManager::StopWave(const std::string& filename) {
 
 }
 
-void AudioManager::PlayWave(const std::string& filename, const float& Volume) {
+void AudioManager::PlayWave(const std::string& filename, const float& volume, bool isloop) {
 	HRESULT result;
 
 	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
@@ -156,23 +153,16 @@ void AudioManager::PlayWave(const std::string& filename, const float& Volume) {
 	buf.pContext = soundData.pBuffer;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 	buf.AudioBytes = soundData.bufferSize;
-	soundData.pSourceVoice->SetVolume(Volume);
+	if (isloop) {
+		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+	} else {
+		buf.LoopCount = 0;
+	}
+	soundData.pSourceVoice->SetVolume(volume);
 	// 波形データの再生
 	result = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
 	result = soundData.pSourceVoice->Start(0);
 
-
-
-	//if (xaudio2state.BuffersQueued!=0) {
-	//	pSourceVoice->Stop(0);
-	//	if FAILED(result) {
-	//		delete[] pBuffer;
-	//		assert(0);
-	//		return;
-	//	}
-	//	pSourceVoice->FlushSourceBuffers();
-	//	pSourceVoice->SubmitSourceBuffer(&buf);
-	//}
 }
 
 
