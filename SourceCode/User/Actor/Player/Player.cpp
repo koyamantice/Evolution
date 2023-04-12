@@ -394,8 +394,8 @@ void Player::LimitArea() {
 
 	const float limit_Max = 48.0f;
 	const float limit_Min = -48.0f;
-	pos.x = clamp(pos.x, limit_Max, limit_Min);
 
+	pos.x = clamp(pos.x, limit_Max, limit_Min);
 	pos.z = clamp(pos.z, limit_Max, limit_Min);
 
 	obj->SetPosition(pos);

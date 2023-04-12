@@ -54,7 +54,7 @@ void Boss::InitCommon(FBXModel* model,XMFLOAT3 scale, XMFLOAT3 rotation) {
 	//丸影
 	shadow_ = Object2d::Create(ImageManager::shadow_, { 0,0,0 },
 		{ 0.7f,0.7f,0.7f }, { 1,1,1,1 });
-	shadow_->SetRotation({ 90,0,0 });
+	shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 	//パーティクル
 	particle_ = std::make_unique<ParticleEmitter>(ImageManager::nul);
 }
@@ -98,7 +98,7 @@ void Boss::ShadowUpdate() {
 
 	shadow_->SetScale({scale,scale, scale,});
 	shadow_->Update();
-	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.01f, fbxObject_->GetPosition().z });
+	shadow_->SetPosition({ fbxObject_->GetPosition().x,0.0001f, fbxObject_->GetPosition().z });
 }
 
 

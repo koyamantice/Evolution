@@ -198,8 +198,6 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-
-
 	/// <summary>
 	/// 頂点バッファの生成
 	/// </summary>

@@ -44,7 +44,7 @@ void Bullet::Initialize(FBXModel* model, const std::string& tag, ActorComponent*
 	shadow_->SetRotation({ DEGREE_QUARTER,0,0 });
 
 	under_status_ = Object2d::Create(ImageManager::kUnderStatus, { 0,0,0 },
-		{ 0.4f,0.4f,0.4f }, { 1,1,1,1 });
+		{ 0.4f,0.4f,0.4f }, { 1,0,1,0.0f });
 	under_status_->SetRotation({ DEGREE_QUARTER,0,0 });
 
 
@@ -142,13 +142,13 @@ void Bullet::SetAggregation() {
 
 void Bullet::LimitArea() {
 	XMFLOAT3 pos = fbxobj_->GetPosition();
-	const float limit_ = 48.0f;
 
-	pos.x = min(pos.x, limit_);
-	pos.x = max(pos.x, -limit_);
+	const float limit_Max = 48.0f;
+	const float limit_Min = -48.0f;
 
-	pos.z = min(pos.z, limit_);
-	pos.z = max(pos.z, -limit_);
+	pos.x = clamp(pos.x, limit_Max, limit_Min);
+	pos.z = clamp(pos.z, limit_Max, limit_Min);
+
 	fbxobj_->SetPosition(pos);
 }
 
@@ -184,7 +184,6 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 			trace->Draw();
 		}
 		shadow_->Draw();
-		under_status_->Draw();
 		OnFirstDraw(dxCommon);
 	}
 }
@@ -209,6 +208,7 @@ void Bullet::Draw(DirectXCommon* dxCommon) {
 
 void Bullet::LastDraw(DirectXCommon* dxCommon) {
 	if (isActive) {
+		if (isFinish) { return; }
 		if (noBoss) { 
 			if (command_ == BulletStatus::Control) {
 				Object2d::PreDraw();
@@ -217,17 +217,14 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 				Object2d::PreDraw();
 				status_[DitchState]->Draw();
 
-			}
-			return;
-		}
-		if (command_ == BulletStatus::Dead) {
-			Object2d::PreDraw();
-			chara_dead_->Draw();
-			return;
-		}
-		if (enemy->GetIsActive()) {
-			if (isFinish) { return; }
+			}		
 			if (command_ == BulletStatus::Wait) { return; }
+			Object2d::PreDraw(Object2d::blendtype::AddBlend);
+			under_status_->Draw();
+			return;
+		}else {
+			if (command_ == BulletStatus::Wait) { return; }
+			if (command_ == BulletStatus::Smash) { return; }
 			Object2d::PreDraw();
 				if (command_ == BulletStatus::Attack) {
 					status_[BattleState]->Draw();
@@ -246,6 +243,13 @@ void Bullet::LastDraw(DirectXCommon* dxCommon) {
 
 				}
  			if (burning) { explo_->Draw(); }
+			Object2d::PreDraw(Object2d::blendtype::AddBlend);
+			under_status_->Draw();
+		}
+		if (command_ == BulletStatus::Dead) {
+			Object2d::PreDraw();
+			chara_dead_->Draw();
+			return;
 		}
 		OnLastDraw(dxCommon);
 	}
@@ -459,9 +463,12 @@ void Bullet::ShadowUpdate() {
 
 	shadow_->SetScale({ scale,scale, scale, });
 	shadow_->Update();
-	shadow_->SetPosition({ pos.x,0.01f, pos.z });
+	shadow_->SetPosition({ pos.x,0.001f, pos.z });
 	under_status_->Update();
-	under_status_->SetPosition({ pos.x,0.01f, pos.z });
+	XMFLOAT3 rot=under_status_->GetRotation();
+	rot.y++;
+	under_status_->SetRotation(rot);
+	under_status_->SetPosition({ pos.x,0.002f, pos.z });
 }
 
 void Bullet::TraceUpdate() {
@@ -490,6 +497,7 @@ void Bullet::TraceUpdate() {
 }
 
 void Bullet::ControlUpdate() {
+	under_status_->SetColor({0.7f,0.4f,0.5f,1});
 	if (!dig_action) {
 		if (!Follow2Position(ActionActor->GetPosition(), ActionActor->GetSize())) {
 			audio_->PlayWave("SE/attack.wav", 0.5f);
@@ -554,9 +562,13 @@ void Bullet::SmashUpdate() {
 }
 
 void Bullet::DitchUpdate() {
+	under_status_->SetColor({ 0.1f,0.1f,1.0f,1 });
+
 }
 
 void Bullet::VanishUpdate() {
+	under_status_->SetColor({ 1,1,0.1f,1 });
+
 		XMFLOAT3 pos = fbxobj_->GetPosition();
 		XMFLOAT3 rot = fbxobj_->GetRotation();
 		pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
@@ -583,6 +595,7 @@ void Bullet::VanishUpdate() {
 }
 
 void Bullet::ScaryUpdate() {
+	under_status_->SetColor({ 0.1f,0.1f,1.0f,1 });
 	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 rot = fbxobj_->GetRotation();
 	pos.x = Ease(InOut, Quad, frame, pos.x, after_pos.x);
@@ -622,6 +635,7 @@ void Bullet::WakeUpUpdata() {
 }
 
 void Bullet::SlowUpdate() {
+	under_status_->SetColor({ 1.0f,0.3f,0.3f,1 });
 	if (wait) { wait = false; follow_frame = 0.0f; }
 	if (throwReady) {
 		XMFLOAT3 pos = fbxobj_->GetPosition();
@@ -657,6 +671,7 @@ void Bullet::SlowUpdate() {
 }
 
 void Bullet::DeadUpdate() {
+	under_status_->SetColor({ 0.1f,0.1f,0.1f,1 });
 	if (deadframe == 0.0f) {
 		audio_->PlayWave("SE/gnormDead.wav", 0.2f);
 	}
@@ -681,6 +696,7 @@ void Bullet::DeadUpdate() {
 }
 
 void Bullet::AttackUpdate() {
+	under_status_->SetColor({ 1.0f,0.3f,0.3f,1 });
 	if (noBoss) { return; }
 	if (Collision::CircleCollision(fbxobj_->GetPosition().x, fbxobj_->GetPosition().z, 15.0f, enemy->GetPosition().x, enemy->GetPosition().z, 1.0f)) {
 		Follow2Position(enemy->GetPosition(), 2.0f);
@@ -688,8 +704,8 @@ void Bullet::AttackUpdate() {
 }
 
 void Bullet::BattleUpdata() {
+	under_status_->SetColor({ 1.0f,0.3f,0.3f,1 });
 	XMFLOAT3 pos = fbxobj_->GetPosition();
-
 	if (damageframe >= 1.0f) {
 		damageframe = 0.0f;
 		command_ = next_command_;
