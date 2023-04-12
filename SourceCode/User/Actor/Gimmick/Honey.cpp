@@ -214,8 +214,10 @@ void Honey::EatenHoney() {
 		honey_obj_->SetScale({ 0,0,0 });
 		obj->SetScale(base_sca);
 		const float rnd_area = 80.0f;
-		float posX = (float)rand() / RAND_MAX * rnd_area - rnd_area / 2.0f;
-		float posZ = (float)rand() / RAND_MAX * rnd_area - rnd_area / 2.0f;
+		std::mt19937 mt{ std::random_device{}() };
+		std::uniform_real_distribution<float> dist(0.0, 1.0);
+		float posX = dist(mt) * rnd_area - rnd_area / 2.0f;
+		float posZ = dist(mt) * rnd_area - rnd_area / 2.0f;
 		obj->SetPosition({ posX,0.0f,posZ });
 		honey_obj_->SetPosition(obj->GetPosition());
 		phase_ = E_Phase::kRandSpawn;
@@ -258,7 +260,9 @@ void Honey::IntroOnUpdate(const float& timer) {
 
 float Honey::RandHeight(const float& base) {
 	const float rnd_vel = 0.05f * (stock + 1);
-	float Rand = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	std::mt19937 mt{ std::random_device{}() };
+	std::uniform_real_distribution<float> dist(0.0, 1.0);
+	float Rand = dist(mt)* rnd_vel - rnd_vel / 2.0f;
 	float itr = 0;
 	itr = Rand;
 

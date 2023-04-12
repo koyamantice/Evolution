@@ -89,7 +89,9 @@ void BulletGreen::ResultOnUpdate(const float& timer) {
 	}else {
 		pos.y += vel_; //+
 		float rnd_vel = 0.04f;
-		float margin = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		std::mt19937 mt{ std::random_device{}() };
+		std::uniform_real_distribution<float> dist(0.0, 1.0);
+		float margin = dist(mt)* rnd_vel - rnd_vel / 2.0f;
 		vel_ -= rnd_vel + margin;//
 		pos.y = max(0, pos.y);
 		//‰ñ“]

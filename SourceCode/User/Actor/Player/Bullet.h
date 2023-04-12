@@ -30,7 +30,7 @@ protected: // エイリアス
 		XMFLOAT2 vel_;
 		float weight;
 		float aveAngle;
-		float disvel = (float)(rand() % 5);
+		float disvel;
 		float dx = disvel * cosf(aveAngle * (XM_PI / 180));
 		float dy = disvel * sinf(aveAngle * (XM_PI / 180));
 

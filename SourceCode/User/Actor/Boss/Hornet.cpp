@@ -189,8 +189,10 @@ void Hornet::AttackPredict() {
 		motion_ = E_Motion::kFirstMoving;
 		collide_size = 2.0f;
 	} else {
-		int rnd_phase = rand() % 2;
-		if (rnd_phase == 1) {
+		std::mt19937 mt{ std::random_device{}() };
+		std::uniform_int_distribution<int> rnd_phase(1, 100);
+
+		if (rnd_phase(mt) > 50) {
 			phase_ = E_Phase::kChasePlayer;
 			motion_ = E_Motion::kFirstMoving;
 		} else {

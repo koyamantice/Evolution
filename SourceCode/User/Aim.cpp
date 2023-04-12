@@ -15,10 +15,10 @@ void Aim::Init() {
 	Whistle->SetRotation({ 90,0,0 });
 	Whistle->SetColor(HALF_ALPHA);
 
-	for (int i = 0; i < COMMENTMAX;i++) {
+	for (int i = 0; i < COMMENTMAX; i++) {
 		comment_ui_[i] = Object2d::Create(ImageManager::SlowUI + i, { 0,0,0 }, { 0.3f,0.3f,0.3f }, { 1,1,1,1 });
 		comment_ui_[i]->SetIsBillboard(true);
-		comment_ui_[i]->SetPosition({100,100,100});
+		comment_ui_[i]->SetPosition({ 100,100,100 });
 	}
 
 	for (int i = 0; i < GuidNum; i++) {
@@ -75,7 +75,7 @@ void Aim::Draw() {
 	Whistle->Draw();
 	comment_ui_[SHOT]->Draw();
 	if (explanation_now_ == RECOVERY) {
-		comment_ui_[RECOVERY+Animation]->Draw();
+		comment_ui_[RECOVERY + Animation]->Draw();
 	}
 	for (int i = 0; i < GuidNum; i++) {
 		Guid[i]->Draw();
@@ -100,7 +100,7 @@ void Aim::Move(float angle) {
 	aim_->SetRotation(Lrot);
 
 	if (input->TriggerButton(Input::B) || input->TriggerKey(DIK_SPACE)) {
-		if (explanation_now_== SHOT) {
+		if (explanation_now_ == SHOT) {
 			explanation_now_ = RECOVERY;
 		}
 		player = ActorManager::GetInstance()->SearchActor("Player");
@@ -122,39 +122,41 @@ void Aim::Move(float angle) {
 		XMFLOAT3 base = aim_->GetPosition();
 		for (int i = 0; i < 1; i++) {
 			const float rnd_rad = DEGREE_MAX;
+			std::mt19937 mt{ std::random_device{}() };
+			std::uniform_real_distribution<float> dist(0.0, 1.0);
 			XMFLOAT3 pos{};
-			float angle = (float)rand() / RAND_MAX * rnd_rad;
-			pos.x = base.x + (Area+0.5f) * sinf(angle);
-			pos.z = base.z + (Area+0.5f) * cosf(angle);
+			float angle = dist(mt) * rnd_rad;
+			pos.x = base.x + (Area + 0.5f) * sinf(angle);
+			pos.z = base.z + (Area + 0.5f) * cosf(angle);
 			const float rnd_vel = 0.4f;
 			XMFLOAT3 vel{};
-			vel.y = (float)rand() / RAND_MAX * rnd_vel;
+			vel.y = dist(mt) * rnd_vel;
 
 			partMan->Add(45, pos, vel, {}, 0.5f, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,0.0f });
 		}
 		ActorManager::GetInstance()->ChangeBulletCommand(base, Area);
-		Whistle->SetPosition({ base.x, base.y+(Area/4), base.z });
+		Whistle->SetPosition({ base.x, base.y + (Area / 4), base.z });
 		Whistle->SetScale({ Area * 0.3f,Area * 0.3f,Area * 0.3f });
-		Whistle->SetRotation({90 ,Lrot.y * 2.0f ,Lrot.z * 2.0f });
-		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f-(Area/ AreaMax) });
+		Whistle->SetRotation({ 90 ,Lrot.y * 2.0f ,Lrot.z * 2.0f });
+		Whistle->SetColor({ 1.0f,1.0f,1.0f,1.1f - (Area / AreaMax) });
 
 	} else {
 		Area = 0.0f;
 		Whistle->SetScale({ Area,Area,Area });
-	} 
+	}
 
 	XMFLOAT3 Lpos = aim_->GetPosition();
 
-	if (input->TiltPushStick(Input::L_UP   ,0.0f) ||
-		input->TiltPushStick(Input::L_DOWN ,0.0f) ||
-		input->TiltPushStick(Input::L_RIGHT,0.0f) ||
-		input->TiltPushStick(Input::L_LEFT ,0.0f) ||
+	if (input->TiltPushStick(Input::L_UP, 0.0f) ||
+		input->TiltPushStick(Input::L_DOWN, 0.0f) ||
+		input->TiltPushStick(Input::L_RIGHT, 0.0f) ||
+		input->TiltPushStick(Input::L_LEFT, 0.0f) ||
 		input->PushKey(DIK_W) ||
 		input->PushKey(DIK_S) ||
 		input->PushKey(DIK_D) ||
-		input->PushKey(DIK_A)||
+		input->PushKey(DIK_A) ||
 		enemy_set) {
-		after_pos = player->GetCameraPos(player->GetRotation().y,17);
+		after_pos = player->GetCameraPos(player->GetRotation().y, 17);
 		enemy_set = false;
 	}
 	Lpos.x = Ease(In, Quad, 0.5f, Lpos.x, after_pos.x);
@@ -179,11 +181,11 @@ void Aim::Move(float angle) {
 }
 
 void Aim::EnemySet() {
-	if (input->TriggerButton(Input::RT)||
+	if (input->TriggerButton(Input::RT) ||
 		input->TriggerKey(DIK_R)) {
 		XMFLOAT3 base = player->GetPosition();
 		Actor* enemy = ActorManager::GetInstance()->SearchActorArea(base);
-		if (enemy->GetTag()=="Player") { return; }
+		if (enemy->GetTag() == "Player") { return; }
 		XMFLOAT3 boss = enemy->GetPosition();
 		float itr = 0;
 		XMFLOAT3 position{};

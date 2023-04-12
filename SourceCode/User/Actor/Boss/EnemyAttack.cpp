@@ -35,12 +35,14 @@ void EnemyAttack::Updata() {
 	}
 	partMan->Update();
 	if (burning) {
+		std::mt19937 mt{ std::random_device{}() };
+		std::uniform_real_distribution<float> dist(0.0, 1.0);
 		XMFLOAT3 pos = Explo->GetPosition();
 		const float rnd_vel = 5.0f;
 		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.x = dist(mt) * rnd_vel - rnd_vel / 2.0f;
+		vel.y = dist(mt) * 2.0f;
+		vel.z = dist(mt) * rnd_vel - rnd_vel / 2.0f;
 		XMFLOAT3 acc{};
 		acc.y = -(float)vel.y / 10.0f;
 		partMan->Add(30, pos, vel, acc, 1.5, 0.0f, { 1.0f,1.0f,1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });
