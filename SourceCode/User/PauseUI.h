@@ -24,8 +24,8 @@ public:
 	void Reset();
 
 	enum class CameraSystem :int {
-		REVERSE = -1,
-		NOREVERSE = 1
+		REVERSE = 1,
+		NOREVERSE = -1
 	};
 	const CameraSystem& GetReverseCamera() { return reverse_camera; }
 

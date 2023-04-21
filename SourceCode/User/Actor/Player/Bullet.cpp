@@ -96,9 +96,10 @@ void Bullet::IntroUpdate(const float& timer, const int& _stage) {
 	IntroOnUpdate(timer);
 
 	if (_stage == SceneNum::kSecondScene) {
-		fbxobj_->SetRotation({ 0,DEGREE_HALF,0 });
+		fbxobj_->SetRotation({ 0,DirRotation(player_pos),0 });
 		fbxobj_->SetPosition({ player_pos.x + sinf(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius, 0,  player_pos.z + cos(((int)ID) * angle * (XM_PI / DEGREE_HALF)) * radius });
 		fbxobj_->Update();
+		ShadowUpdate();
 	}
 }
 
@@ -189,16 +190,6 @@ void Bullet::FirstDraw(DirectXCommon* dxCommon) {
 }
 
 void Bullet::Draw(DirectXCommon* dxCommon) {
-	if (ID==0) {
-		ImGui::SetNextWindowPos(ImVec2(0, 500));
-		ImGui::Begin("bullet");
-		ImGui::Text("pos.x:%f", fbxobj_->GetPosition().x);
-		ImGui::Text("pos.z:%f", fbxobj_->GetPosition().z);
-
-		ImGui::Text("frame:%f", frame);
-
-		ImGui::End();
-	}
 	if (isActive) {
 		Object3d::PreDraw();
 		fbxobj_->Draw(dxCommon->GetCmdList());

@@ -6,7 +6,7 @@
 #include"PlayerUI.h"
 #include <Easing.h>
 #include <Helper.h>
-
+#include "Collision.h"
 
 
 void Player::LoadData() {
@@ -299,8 +299,12 @@ void Player::OnCollision(const std::string& Tag) {
 		SetHitBound(old_pos);
 	}
 	if (Tag == "Honey") {
-		if (!onHoney) {
-			onHoney = true;
+		Actor* honey = ActorManager::GetInstance()->SearchActor(Tag);
+		XMFLOAT3 pos = fbxobj_->GetPosition();
+		if (Collision::SphereCollision2(pos,1.0f,honey->GetPosition(),5.0f)) {
+			if (!onHoney) {
+				onHoney = true;
+			}
 		}
 	}
 }

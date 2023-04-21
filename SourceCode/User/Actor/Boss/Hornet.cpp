@@ -18,7 +18,7 @@ void Hornet::OnInitialize() {
 
 	fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 
-	before_pos = { 0,20,0 };
+	before_pos = { 50,20,-20 };
 
 	compornent = new EnemyUI();
 	compornent->Initialize();
@@ -50,19 +50,18 @@ void Hornet::OnUpdate() {
 
 void Hornet::OnDraw(DirectXCommon* dxCommon) {
 	Object2d::PreDraw();
-	ImGui::SetNextWindowPos(ImVec2(1100, 240));
-	ImGui::SetNextWindowSize(ImVec2(180, 250));
+	//ImGui::SetNextWindowPos(ImVec2(1100, 240));
+	//ImGui::SetNextWindowSize(ImVec2(180, 250));
 
-	ImGui::Begin("enemy");
-	ImGui::Text("phase_:%d",(int)phase_);
-	ImGui::Text("waittimer_:%f", waittimer_);
-	ImGui::Text("hit_once_:%d", hit_once_);
-	ImGui::Text("GetRotation.x:%f", fbxObject_->GetRotation().x);
-	ImGui::Text("GetRotation.y:%f", fbxObject_->GetRotation().y);
-	ImGui::Text("GetRotation.z:%f", fbxObject_->GetRotation().z);
+	//ImGui::Begin("enemy");
+	//ImGui::Text("phase_:%d",(int)phase_);
+	//ImGui::Text("waittimer_:%f", waittimer_);
+	//ImGui::Text("hit_once_:%d", hit_once_);
+	//ImGui::Text("GetRotation.x:%f", fbxObject_->GetRotation().x);
+	//ImGui::Text("GetRotation.y:%f", fbxObject_->GetRotation().y);
+	//ImGui::Text("GetRotation.z:%f", fbxObject_->GetRotation().z);
 
-	ImGui::End();
-
+	//ImGui::End();
 	shadow_->Draw();
 	Object3d::PreDraw();
 	fbxObject_->Draw(dxCommon->GetCmdList());
@@ -111,30 +110,26 @@ void Hornet::IntroOnUpdate(const float& timer) {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	XMFLOAT3 rot = fbxObject_->GetRotation();
 
-	if (timer <= 0.2f) {
-		after_pos = {
-			0,
-			0,
-			0
-		};
-		if ((timer / 0.2f) < 1.0f) {
-			pos.y = Ease(Out, Quad, timer / 0.2f, before_pos.y, after_pos.y);
+	if (timer <= 0.5f) {
+		after_pos = {0,0,0};
+
+		if ((timer / 0.5f) < 1.0f) {
+			pos.x = Ease(Out, Quad, timer / 0.5f, before_pos.x, after_pos.x);
+			pos.y = Ease(Out, Quad, timer / 0.5f, before_pos.y, after_pos.y);
+			pos.z = Ease(Out, Quad, timer / 0.5f, before_pos.z, after_pos.z);
+			rot.y = DirRotation(after_pos);
 		} else {
 			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kPosingAnimiation));
 			before_pos = after_pos;
 		}
-	} else if (timer <= 0.5f) {
+	} else {
 		if (fbxObject_->GetIsFinish()) {
 			fbxObject_->StopAnimation();
 			fbxObject_->PlayAnimation(static_cast<size_t>(Animation_Type::kFlyAnimation));
 		}
-		after_pos = {
-		15,
-		-8,
-		10
-		};
-	}
+		rot.y = Ease(In,Linear,0.3f,rot.y,DirRotation(player_->GetPosition()));
 
+	}
 	fbxObject_->SetPosition(pos);
 	fbxObject_->SetRotation(rot);
 	fbxObject_->Update();

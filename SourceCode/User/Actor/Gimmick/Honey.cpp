@@ -28,7 +28,7 @@ void Honey::OnInitialize() {
 
 	phase_ = E_Phase::kWaitDriver;
 	
-	collide_size = 6.0f;
+	collide_size = 9.0f;
 
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 6; j++) {
@@ -129,7 +129,7 @@ void Honey::WaitDriver() {
 			sca.z = Ease(InOut, Circ, scale_damaged_frame_, base_sca.z, 0.0f);
 			obj->SetScale(sca);
 			collide_size = sca.x;
-			collide_size = max(collide_size, 1.0f);
+			collide_size = max(collide_size, 3.0f);
 		}
 		obj->SetPosition({ pos.x + RandHeight(pos.x),pos.y,pos.z + RandHeight(pos.z) });
 

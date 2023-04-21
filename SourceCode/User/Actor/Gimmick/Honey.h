@@ -26,7 +26,7 @@ private:
 	const XMFLOAT3 base_sca = { 6,4,6 };
 
 	float scale_damaged_frame_ = 0.0f;
-	const float kScaleFrameMax = 1000.0f;
+	const float kScaleFrameMax = 700.0f;
 	float scale_damage_ =1.0f/ kScaleFrameMax;
 	std::unique_ptr <ParticleEmitter> particleEmitter = nullptr;
 
