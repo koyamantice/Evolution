@@ -114,6 +114,7 @@
     <ClCompile Include="SourceCode\FrameWork\collision\MeshCollider.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\SphereCollider.cpp" />
     <ClCompile Include="SourceCode\FrameWork\collision\TouchableObject.cpp" />
+    <ClCompile Include="SourceCode\FrameWork\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\FrameWork\FPSManager.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Framework.cpp" />
     <ClCompile Include="SourceCode\FrameWork\Input.cpp" />
@@ -149,7 +150,6 @@
     <ClCompile Include="SourceCode\System\ActorFactory.cpp" />
     <ClCompile Include="SourceCode\System\BaseScene.cpp" />
     <ClCompile Include="SourceCode\System\BossLevelLoader.cpp" />
-    <ClCompile Include="SourceCode\System\DirectXCommon.cpp" />
     <ClCompile Include="SourceCode\System\Hud.cpp" />
     <ClCompile Include="SourceCode\System\LevelLoader.cpp" />
     <ClCompile Include="SourceCode\System\SceneFactory.cpp" />
@@ -204,6 +204,7 @@
     <ClInclude Include="SourceCode\FrameWork\collision\RaycastHit.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\SphereCollider.h" />
     <ClInclude Include="SourceCode\FrameWork\collision\TouchableObject.h" />
+    <ClInclude Include="SourceCode\FrameWork\DirectXCommon.h" />
     <ClInclude Include="SourceCode\FrameWork\FPSManager.h" />
     <ClInclude Include="SourceCode\FrameWork\Framework.h" />
     <ClInclude Include="SourceCode\FrameWork\Input.h" />
@@ -243,7 +244,6 @@
     <ClInclude Include="SourceCode\System\ActorFactory.h" />
     <ClInclude Include="SourceCode\System\BaseScene.h" />
     <ClInclude Include="SourceCode\System\BossLevelLoader.h" />
-    <ClInclude Include="SourceCode\System\DirectXCommon.h" />
     <ClInclude Include="SourceCode\System\Hud.h" />
     <ClInclude Include="SourceCode\System\LevelLoader.h" />
     <ClInclude Include="SourceCode\System\SceneFactory.h" />

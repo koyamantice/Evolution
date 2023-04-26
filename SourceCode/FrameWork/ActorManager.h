@@ -1,5 +1,5 @@
 #pragma once
-#include <SourceCode/System/DirectXCommon.h>
+#include <DirectXCommon.h>
 #include <list>
 #include <memory>
 #include<cassert>

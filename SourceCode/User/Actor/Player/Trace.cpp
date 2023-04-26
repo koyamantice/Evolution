@@ -9,7 +9,7 @@ void Trace::Initialize(const ImageFoot& imagefoot_, const float& rot_,const XMFL
 	
 	trace_ = Object2d::Create(ImageManager::kLeftFoot + imagefoot_,
 		{ pos_.x, 0.02f,pos_.z },
-		{ 0.05f,0.05f,0.05f }, { 1,1,1,1 });
+		{ 0.03f,0.03f,0.03f }, { 1,1,1,1 });
 	trace_->SetRotation({ 90.0f,rot_,0 });
 }
 

@@ -14,6 +14,19 @@ void DirectXCommon::Finalize()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	dxgiFactory.Reset();
+	cmdList.Reset();
+	cmdAllocator.Reset();
+	cmdQueue.Reset();
+	swapchain.Reset();
+	backBuffers.clear();
+	depthBuffer.Reset();
+	rtvHeaps.Reset();
+	dsvHeap.Reset();
+	fence.Reset();
+	fence.Reset();
+	imguiHeap.Reset();
+
 }
 
 void DirectXCommon::Initialize(WinApp* winApp) {
@@ -61,6 +74,10 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 void DirectXCommon::PreDraw() {
 	//#pragma regin グラフィックスコマンド
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
+
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 	//実行
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(), D3D12_RESOURCE_STATE_PRESENT,
 	D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -72,20 +89,13 @@ void DirectXCommon::PreDraw() {
 	cmdList->OMSetRenderTargets(1, &rtvH, false, &dsvH);
 
 	//画面クリア
-	float clearColor[] = { 1.0f,1.0f, 0.0f,1.0f }; // 黄色っぽい色
+	float clearColor[] = { 0.0f,0.0f, 0.75f,1.0f }; // 青っぽい色
 	cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	//描画コマンド
-
 	cmdList->RSSetViewports(1, &CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::window_width, WinApp::window_height));
-
 	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height));
-
-	// imgui開始
-	ImGui_ImplDX12_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
 }
 void DirectXCommon::ClearDepthBuffer() {
 	// 深度ステンシルビュー用デスクリプタヒープのハンドルを取得
@@ -100,7 +110,7 @@ void DirectXCommon::PostDraw() {
 	ID3D12DescriptorHeap* ppHeaps[] = { imguiHeap.Get() };
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.Get());
-	//#pragma regin グラフィックスコマンド
+//	#pragma regin グラフィックスコマンド
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
 	//リソースバリアを戻す
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET,
@@ -150,6 +160,14 @@ bool DirectXCommon::InitializeDevice() {
 		dredSettings->SetAutoBreadcrumbsEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
 		dredSettings->SetPageFaultEnablement(D3D12_DRED_ENABLEMENT_FORCED_ON);
 	}
+	// DREDレポートをオンに
+	//ID3D12Debug* debugController;
+	//if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+	//	debugController->EnableDebugLayer();
+	//	//debugController->SetEnableGPUBasedValidation(TRUE);
+	//}
+
+
 #endif
 	//dxgiファクトリーの生成
 	result = CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory));
@@ -199,6 +217,18 @@ bool DirectXCommon::InitializeDevice() {
 		assert(0);
 		return false;
 	}
+
+
+#ifdef _DEBUG
+	ComPtr<ID3D12InfoQueue>infoQueue;
+	if (SUCCEEDED(dev->QueryInterface(IID_PPV_ARGS (&infoQueue)))) {
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION,true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+	}
+#endif _DEBUG
+
+
 
 	return true;
 }
@@ -284,6 +314,28 @@ bool DirectXCommon::InitializeRenderTargetView() {
 		//handle.ptr += i * dev->GetDescriptorHandleIncrementSize(heapDesc.Type);
 		dev->CreateRenderTargetView(backBuffers[i].Get(), nullptr, handle);
 	}
+
+
+
+	for (size_t i = 0; i < backBuffers.size();i++) {
+		//
+		swapchain->GetBuffer((UINT)i,IID_PPV_ARGS(&backBuffers[i]));
+		//
+		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvHeaps->GetCPUDescriptorHandleForHeapStart();
+		//
+		rtvHandle.ptr += i * dev->GetDescriptorHandleIncrementSize(heapDesc.Type);
+		//
+		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+		rtvDesc.Format =  DXGI_FORMAT_R8G8B8A8_UNORM;
+		//DXGI_FORMAT_R8G8B8A8_UNORM;
+		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+		//
+		dev->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);
+	}
+
+
+
+
 	return true;
 }
 
@@ -365,7 +417,7 @@ bool DirectXCommon::InitImgui()
 		return false;
 	}
 	if (!ImGui_ImplDX12_Init(
-		GetDev(),
+		dev.Get(),
 		swcDesc.BufferCount,
 		swcDesc.BufferDesc.Format,
 		imguiHeap.Get(),
@@ -377,5 +429,14 @@ bool DirectXCommon::InitImgui()
 	}
 
 	return true;
+}
+
+void DirectXCommon::Reset() {
+	//ID3D12DebugDevice* debugInterface;
+
+	//if (SUCCEEDED(dev->QueryInterface(&debugInterface))) {
+	//	debugInterface->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL | D3D12_RLDO_IGNORE_INTERNAL);
+	//	debugInterface->Release();
+	//}
 }
 

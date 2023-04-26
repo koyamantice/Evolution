@@ -6,7 +6,7 @@
 #include <map>
 
 
-#include <SourceCode/System/DirectXCommon.h>
+#include <DirectXCommon.h>
 #include <LevelLoader.h>
 
 #include"FBXObject3d.h"
