@@ -40,7 +40,7 @@ private:
 /// 撃破後カメラ
 /// </summary>
 /// <param name="timer"></param>
-	void SmashCamera(const float& timer) override;
+	void SmashCamera(const float timer) override;
 
 	/// <summary>
 	/// クリア更新処理

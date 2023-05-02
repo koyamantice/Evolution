@@ -29,11 +29,11 @@ public:
 	/// <summary>
 	/// 最初の弾と役者更新
 	/// </summary>
-	void IntroUpdate(const float& timer, const std::string& voidname = "null", const int& _stage=0);
+	void IntroUpdate(const float timer, const std::string& voidname = "null", const int _stage=0);
 	/// <summary>
 	/// 最初の更新
 	/// </summary>
-	void ResultUpdate(const float& timer);
+	void ResultUpdate(const float timer);
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -62,10 +62,10 @@ public:
 
 	int SearchNum(const std::string& tag);
 	int SerchWaitBul();
-	Bullet* CommandBullet(const int& ID);
+	Bullet* CommandBullet(const int ID);
 	Bullet* SearchWaitBullet();
 	Bullet* SearchBulletBack();
-	Bullet* SetActionBullet(const XMFLOAT3& pos,const float& _collide_size=5.0f);
+	Bullet* SetActionBullet(const XMFLOAT3& pos,const float _collide_size=5.0f);
 	Bullet* SearchID(int ID);
 	void ChangeStatus(const Bullet::BulletStatus& old_status, const Bullet::BulletStatus& status, const XMFLOAT3& pos = {});
 

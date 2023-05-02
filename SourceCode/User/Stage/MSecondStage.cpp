@@ -184,7 +184,7 @@ void MSecondStage::ResultCamera(int timer) {
 	camera->Update();
 }
 
-void MSecondStage::SmashCamera(const float& timer) {
+void MSecondStage::SmashCamera(const float timer) {
 	XMFLOAT3  target_honey_ = honey_[smash_honey_]->GetPosition();
 
 	XMFLOAT3 e_eye = { target_honey_.x + camera_distance.x,target_honey_.y + camera_hight,target_honey_.z + camera_distance.z };

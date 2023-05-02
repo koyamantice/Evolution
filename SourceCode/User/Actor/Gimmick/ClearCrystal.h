@@ -23,7 +23,7 @@ private:
 	void OnUpdate()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinalize()override;
-	void ResultOnUpdate(const float& timer)override;
+	void ResultOnUpdate(const float timer)override;
 	void OnCollision(const std::string& Tag)override;
 	Actor* player=nullptr;
 

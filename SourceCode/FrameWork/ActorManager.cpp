@@ -30,7 +30,7 @@ void ActorManager::DemoUpdate() {
 		actor->Demo();
 	}
 }
-void ActorManager::IntroUpdate(const float& timer, const std::string& voidname, const int& _stage) {
+void ActorManager::IntroUpdate(const float timer, const std::string& voidname, const int _stage) {
 	if (voidname == "Bullet") {
 		for (std::unique_ptr<Actor>& actor : Actors) {
 			actor->IntroUpdate(timer);
@@ -50,7 +50,7 @@ void ActorManager::IntroUpdate(const float& timer, const std::string& voidname, 
 		}
 	}
 }
-void ActorManager::ResultUpdate(const float& timer) {
+void ActorManager::ResultUpdate(const float timer) {
 	for (std::unique_ptr<Actor>& actor : Actors) {
 		actor->ResultUpdate(timer);
 	}
@@ -185,7 +185,7 @@ int ActorManager::SerchWaitBul() {
 	return Bulletnum;
 }
 
-Bullet* ActorManager::CommandBullet(const int& ID) {
+Bullet* ActorManager::CommandBullet(const int ID) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* actor = itr->get();
 		if (actor->GetID() == ID) {
@@ -252,7 +252,7 @@ void ActorManager::ChangeBulletCommand(XMFLOAT3 pos, float scale) {
 	}
 }
 
-Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos, const float& _collide_size) {
+Bullet* ActorManager::SetActionBullet(const XMFLOAT3& pos, const float _collide_size) {
 	for (auto itr = Bullets.begin(); itr != Bullets.end(); ++itr) {
 		Bullet* bullet = itr->get();
 		if (bullet->GetCommand() != Bullet::BulletStatus::Attack) { continue; }

@@ -50,7 +50,7 @@ void Player::UpdateCommand() {
 	}
 }
 
-void Player::IntroOnUpdate(const float& timer) {
+void Player::IntroOnUpdate(const float timer) {
 	fbxobj_->Update();
 	IntroMove();
 	compornent->SetIsActive(false);
@@ -61,7 +61,7 @@ void Player::IntroMove() {
 	fbxobj_->SetRotation(obj->GetRotation());
 }
 
-void Player::ResultOnUpdate(const float& timer) {
+void Player::ResultOnUpdate(const float timer) {
 	fbxobj_->Update();
 	aim_->Upda(angle);
 	XMFLOAT3 pos = fbxobj_->GetPosition();
@@ -412,7 +412,7 @@ XMFLOAT3 Player::MoveVECTOR(XMVECTOR v, float angle) {
 	return pos;
 }
 
-DirectX::XMFLOAT3 Player::GetCameraPos(const float& angle, const float& str) {
+DirectX::XMFLOAT3 Player::GetCameraPos(const float angle, const float str) {
 	XMFLOAT3 pos = obj->GetPosition();
 	XMFLOAT3 cameraPos = MoveVECTOR(XMVECTOR{ 0,0,str,0 }, angle);
 	XMFLOAT3 itr = { pos.x - cameraPos.x,pos.y - cameraPos.y,pos.z - cameraPos.z };

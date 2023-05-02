@@ -106,7 +106,7 @@ void Hornet::HoneyControl() {
 	}
 }
 
-void Hornet::IntroOnUpdate(const float& timer) {
+void Hornet::IntroOnUpdate(const float timer) {
 	XMFLOAT3 pos = fbxObject_->GetPosition();
 	XMFLOAT3 rot = fbxObject_->GetRotation();
 

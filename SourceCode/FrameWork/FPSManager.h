@@ -28,5 +28,5 @@ public:
 	//FPS’²®
 	bool Run();
 	//
-	const float& GetFps() { return fps; }
+	const float GetFps() { return fps; }
 };

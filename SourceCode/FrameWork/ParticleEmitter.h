@@ -25,9 +25,9 @@ public: // メンバ関数
 	/// <param name="life">生存時間</param>
 	/// <param name="position">座標</param>
 	/// <param name="model">モデル</param>
-	void Add(const int& num, const int& life,
+	void Add(const int num, const int life,
 		const XMFLOAT3& position, const XMFLOAT3& average_vel, const XMFLOAT3& accel,
-		const float& start_scale, const float& end_scale,
+		const float start_scale, const float end_scale,
 		const XMFLOAT4& start_color, const XMFLOAT4& end_color);
 
 	/// <summary>
@@ -41,36 +41,36 @@ public: // メンバ関数
 	/// <param name="end_scale"></param>
 	/// <param name="start_color"></param>
 	/// <param name="end_color"></param>
-	void AddCommon(const int& life,
-		const XMFLOAT3& position, const float& average_vel, const float& average_accel,
-		const float& start_scale=1.0f, const float& end_scale = 1.0f,
+	void AddCommon(const int life,
+		const XMFLOAT3& position, const float average_vel, const float average_accel,
+		const float start_scale=1.0f, const float end_scale = 1.0f,
 		const XMFLOAT4& start_color={1,1,1,1}, const XMFLOAT4& end_color={1,1,1,1});
 
 
-	void AddInNest(const int& life,
-		const XMFLOAT3& position, const float& average_margin, const float& average_vel,
-		const float& start_scale = 1.0f, const float& end_scale = 0.0f,
+	void AddInNest(const int life,
+		const XMFLOAT3& position, const float average_margin, const float average_vel,
+		const float start_scale = 1.0f, const float end_scale = 0.0f,
 		const XMFLOAT4& start_color = { 1.0f,1.0f,0.0f,0.8f }, const XMFLOAT4& end_color = { 1.0f,1.0f,0.0f,0.0f });
 
-	void AddContraction(const int& _life,
+	void AddContraction(const int _life,
 		const XMFLOAT3& _position,
-		const float& _area,
-		const float& _average_vel,
-		const float& _start_scale = 1.5f, const float& _end_scale = 0.0f,
+		const float _area,
+		const float _average_vel,
+		const float _start_scale = 1.5f, const float _end_scale = 0.0f,
 		const XMFLOAT4& _start_color = { 0.5f,1.0f,0.5f,1.0f }, const XMFLOAT4& _end_color = { 0.5f,1.0f,0.5f,1.0f });
 
-	void AddCrystalMove(const int& _life,
+	void AddCrystalMove(const int _life,
 		const XMFLOAT3& _position,
-		const float& _area,
-		const float& _average_vel,
-		const float& _start_scale = 1.5f, const float& _end_scale = 0.0f,
+		const float _area,
+		const float _average_vel,
+		const float _start_scale = 1.5f, const float _end_scale = 0.0f,
 		const XMFLOAT4& _start_color = { 0.5f,1.0f,0.5f,1.0f }, const XMFLOAT4& _end_color = { 0.5f,1.0f,0.5f,1.0f });
 
-	void AddParabo(const int& _life,
+	void AddParabo(const int _life,
 		const XMFLOAT3& _position,
-		const float& _downHeight,
-		const float& _average_vel,
-		const float& _start_scale = 1.0f, const float& _end_scale = 0.0f,
+		const float _downHeight,
+		const float _average_vel,
+		const float _start_scale = 1.0f, const float _end_scale = 0.0f,
 		const XMFLOAT4& _start_color = { 1.0f,1.0f,1.0f,1.0f }, const XMFLOAT4& _end_color = { 1.0f,1.0f,1.0f,1.0f });
 
 

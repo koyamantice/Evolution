@@ -48,13 +48,13 @@ struct Vec2
 	Vec2 operator*(const Vec2& rhs)const {
 		return Vec2(x * rhs.x, y * rhs.y);
 	};
-	Vec2 operator*(const float& rhs)const {
+	Vec2 operator*(const float rhs)const {
 		return Vec2(x * rhs, y * rhs);
 	};
 	Vec2 operator/(const Vec2& rhs)const {
 		return Vec2(x / rhs.x, y / rhs.y);
 	};
-	Vec2 operator/(const float& rhs)const {
+	Vec2 operator/(const float rhs)const {
 		return Vec2(x / rhs, y / rhs);
 	};
 	Vec2 operator%(const Vec2& rhs) const {
@@ -138,13 +138,13 @@ struct Vec3
 	Vec3 operator*(const Vec3& rhs) const {
 		return Vec3(x * rhs.x, y * rhs.y, z * rhs.z);
 	};
-	Vec3 operator*(const float& rhs)const {
+	Vec3 operator*(const float rhs)const {
 		return Vec3(x * rhs, y * rhs, z * rhs);
 	};
 	Vec3 operator/(const Vec3& rhs)const {
 		return Vec3(x / rhs.x, y / rhs.y, z / rhs.z);
 	};
-	Vec3 operator/(const float& rhs)const {
+	Vec3 operator/(const float rhs)const {
 		return Vec3(x / rhs, y / rhs, z / rhs);
 	};
 	Vec3 operator%(const Vec3& rhs)const {
@@ -166,7 +166,7 @@ struct Vec3
 		y += rhs.y;
 		z += rhs.z;
 	};
-	void operator+=(const float& rhs) {
+	void operator+=(const float rhs) {
 		x += rhs;
 		y += rhs;
 		z += rhs;
@@ -176,7 +176,7 @@ struct Vec3
 		y -= rhs.y;
 		z -= rhs.z;
 	};
-	void operator-=(const float& rhs) {
+	void operator-=(const float rhs) {
 		x -= rhs;
 		y -= rhs;
 		z -= rhs;
@@ -186,7 +186,7 @@ struct Vec3
 		y *= rhs.y;
 		z *= rhs.z;
 	};
-	void operator*=(const float& rhs) {
+	void operator*=(const float rhs) {
 		x *= rhs;
 		y *= rhs;
 		z *= rhs;
@@ -196,7 +196,7 @@ struct Vec3
 		y /= rhs.y;
 		z /= rhs.z;
 	};
-	void operator/=(const float& rhs) {
+	void operator/=(const float rhs) {
 		x /= rhs;
 		y /= rhs;
 		z /= rhs;
@@ -249,7 +249,7 @@ struct Vec4
 	Vec4 operator*(const Vec4& rhs) {
 		return Vec4(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w);
 	}
-	Vec4 operator*(const float& rhs) {
+	Vec4 operator*(const float rhs) {
 		return Vec4(x * rhs, y * rhs, z * rhs, w * rhs);
 	}
 	Vec4 operator/(const Vec4& rhs) {

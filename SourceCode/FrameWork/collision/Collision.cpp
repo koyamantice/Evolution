@@ -7,7 +7,7 @@
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-bool Collision::CircleCollision(const float& X1, const float& Y1, const float& R1, const float& X2, const float& Y2, const float& R2) {
+bool Collision::CircleCollision(const float X1, const float Y1, const float R1, const float X2, const float Y2, const float R2) {
 	float a = X1 - X2;
 	float b = Y1 - Y2;
 	//2‚Â‚Ì‹——£‚ðŒvŽZ
@@ -23,7 +23,7 @@ bool Collision::CircleCollision(const float& X1, const float& Y1, const float& R
 }
 
 
-bool Collision::SphereCollision(const float& X1, const float& Y1, const float& Z1, const float& R1, const float& X2, const float& Y2, const float& Z2, const float& R2) {
+bool Collision::SphereCollision(const float X1, const float Y1, const float Z1, const float R1, const float X2, const float Y2, const float Z2, const float R2) {
 	float a = X1 - X2;
 	float b = Y1 - Y2;
 	float c = Z1 - Z2;
@@ -40,7 +40,7 @@ bool Collision::SphereCollision(const float& X1, const float& Y1, const float& Z
 	return true;
 }
 
-bool Collision::SphereCollision2(const XMFLOAT3& pos, const float& R1, const XMFLOAT3& pos2, const float& R2) {
+bool Collision::SphereCollision2(const XMFLOAT3& pos, const float R1, const XMFLOAT3& pos2, const float R2) {
 	float a = pos.x - pos2.x;
 	float b = pos.y - pos2.y;
 	float c = pos.z - pos2.z;

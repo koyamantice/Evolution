@@ -37,7 +37,7 @@ void BulletGreen::OnFinalize() {
 }
 
 
-void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int& Id) {
+void BulletGreen::BulletCollision(const XMFLOAT3& pos, const int Id) {
 	if (collide) { return; }
 	if (command_ == BulletStatus::Dead|| command_ == BulletStatus::Smash ) { return; }
 	if (isPlayActive) { return; }
@@ -62,7 +62,7 @@ void BulletGreen::VanishCommand() {
 	ScaryInit(50);
 }
 
-void BulletGreen::ResultOnUpdate(const float& timer) {
+void BulletGreen::ResultOnUpdate(const float timer) {
 	XMFLOAT3 rot = fbxobj_->GetRotation();
 	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();

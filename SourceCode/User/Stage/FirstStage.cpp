@@ -190,7 +190,7 @@ bool FirstStage::IntroUpdate() {
 	return true;
 }
 
-void FirstStage::IntroCamera(const float& timer) {
+void FirstStage::IntroCamera(const float timer) {
 	//’…’n‚µ‚Ä‚©‚ç‚Ì—P—\
 	const float delay = 0.9f;
 	const float reaching_time = intro_count_max * delay;
@@ -215,13 +215,13 @@ void FirstStage::IntroCamera(const float& timer) {
 void FirstStage::DescriptionUpdate() {
 }
 
-void FirstStage::ResultCamera(const float& timer) {
+void FirstStage::ResultCamera(const float timer) {
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();
 }
 
-void FirstStage::SmashCamera(const float& timer) {
+void FirstStage::SmashCamera(const float timer) {
 	XMFLOAT3 s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
 	XMFLOAT3 e_eye = { enemy_shadow->GetPosition().x + camera_distance.x,enemy_shadow->GetPosition().y + 25,enemy_shadow->GetPosition().z + camera_distance.z };
 	XMFLOAT3 ease_target = enemy_shadow->GetPosition();

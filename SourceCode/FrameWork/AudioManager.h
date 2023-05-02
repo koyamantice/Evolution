@@ -70,7 +70,7 @@ public: // メンバ関数
 	/// <param name="filename">サウンドデータ</param>
 	///<param name="volume">ボリューム</param>
 	/// <param name="isloop">ループするか</param>
-	void PlayWave(const std::string& filename, const float& volume,bool isloop=false);
+	void PlayWave(const std::string& filename, const float volume,bool isloop=false);
 	
 	/// <summary>
 	/// サウンドが再生中ならサウンドを停止します

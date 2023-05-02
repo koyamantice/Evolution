@@ -129,9 +129,9 @@ public: // メンバ関数
 	/// <param name="accel">加速度</param>
 	/// <param name="start_scale">開始時スケール</param>
 	/// <param name="end_scale">終了時スケール</param>
-	void Add(const int& life,
+	void Add(const int life,
 		const XMFLOAT3& position, const XMFLOAT3& velocity, const XMFLOAT3& accel,
-		const float& start_scale, const float& end_scale,
+		const float start_scale, const float end_scale,
 		const XMFLOAT4& start_color, const XMFLOAT4& end_color);
 
 	/// <summary>

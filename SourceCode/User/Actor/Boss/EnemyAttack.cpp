@@ -83,7 +83,7 @@ void EnemyAttack::Stamp(const XMFLOAT3& pos) {
 }
 
 
-void EnemyAttack::SetPredict(const bool& _predict, const float& _timer) {
+void EnemyAttack::SetPredict(const bool _predict, const float _timer) {
 	 this->predict = _predict;
 	 
 	 float sca = Ease(In,Linear,_timer,0, Predicted[PREDICTED]->GetScale().x);

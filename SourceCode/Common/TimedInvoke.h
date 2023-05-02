@@ -14,7 +14,7 @@ public:
 	/// </summary>
 	void Update();
 	//完了フラグ
-	const bool& GetIsFinish() { return isFinish; }
+	const bool GetIsFinish() { return isFinish; }
 
 private:
 	//コールバック

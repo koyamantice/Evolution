@@ -64,33 +64,33 @@ public:
 	const DirectX::XMFLOAT3& GetRotation() { return fbxobj_->GetRotation(); }
 
 	//ID取得
-	const int& GetID()const { return ID; }
+	const int GetID()const { return ID; }
 
 	//isAliveセッタ＆ゲッタ
-	void SetIsActive(const bool& Active) { isActive = Active; };
-	const bool& GetIsActive() { return isActive; }
+	void SetIsActive(const bool Active) { isActive = Active; };
+	const bool GetIsActive() { return isActive; }
 
 	//isRemoveセッタ＆ゲッタ
-	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
-	const bool& GetIsRemove() { return isRemove; }
+	void SetIsRemove(const bool Remove) { isRemove = Remove; };
+	const bool GetIsRemove() { return isRemove; }
 
 	//カメラ角度のセッタ＆ゲッタ
-	void SetAngle(const float& angle) { this->angle = angle; }
-	const float& GetAngle() { return angle; }
+	void SetAngle(const float angle) { this->angle = angle; }
+	const float GetAngle() { return angle; }
 	//プレイアクティブ
-	void SetsPlayActive(const bool& Play) { isPlayActive = Play; };
-	const bool& GetIsPlayActive() { return isPlayActive; }
+	void SetsPlayActive(const bool Play) { isPlayActive = Play; };
+	const bool GetIsPlayActive() { return isPlayActive; }
 	//
 	void SetCommand(const BulletStatus& command, XMFLOAT3 pos = { 0,0,0 });
 	const BulletStatus& GetCommand() { return command_; }
 	//
-	void SetDeadFlag(const bool& DeadFlag) { this->DeadFlag = DeadFlag; }
-	const bool& GetDeadFlag() { return DeadFlag; }
+	void SetDeadFlag(const bool DeadFlag) { this->DeadFlag = DeadFlag; }
+	const bool GetDeadFlag() { return DeadFlag; }
 	//基本処理
 	void Initialize(FBXModel* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
 	void Update();		//更新処理
-	void IntroUpdate(const float& timer, const int& _stage);
-	void ResultUpdate(const float& timer);
+	void IntroUpdate(const float timer, const int _stage);
+	void ResultUpdate(const float timer);
 	void FirstDraw(DirectXCommon* dxCommon);
 	void Draw(DirectXCommon* dxCommon);	//描画処理
 	void LastDraw(DirectXCommon* dxCommon);
@@ -103,7 +103,7 @@ public:
 	void Navigation(const XMFLOAT3& target);
 
 	void OnCollision(const std::string& Tag, const XMFLOAT3& pos);
-	virtual void BulletCollision(const XMFLOAT3& pos, const int& Id) {};
+	virtual void BulletCollision(const XMFLOAT3& pos, const int Id) {};
 protected:
 	virtual void OnInitialize() {};
 	virtual void OnUpdate() {};
@@ -112,8 +112,8 @@ protected:
 	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinalize() {};
 	virtual void DebugUpdate() {};
-	virtual void IntroOnUpdate(const float& timer) {};
-	virtual void ResultOnUpdate(const float& timer) {};
+	virtual void IntroOnUpdate(const float timer) {};
+	virtual void ResultOnUpdate(const float timer) {};
 	void SetAggregation();
 	void LimitArea();
 	void CommonUpdate();
@@ -150,12 +150,12 @@ protected:
 	static void(Bullet::* statusFuncTable[])();
 
 
-	bool Follow2Position(const XMFLOAT3& _pos, const float& _radius = 2.0f);
+	bool Follow2Position(const XMFLOAT3& _pos, const float _radius = 2.0f);
 	float follow_vel_ = 0.3f;
 
 
 	void DamageInit(BulletStatus status= BulletStatus::Attack);
-	void ScaryInit(const int& proba=5);
+	void ScaryInit(const int proba=5);
 	XMFLOAT3 s_rebound_{};
 	XMFLOAT3 e_rebound_{};
 

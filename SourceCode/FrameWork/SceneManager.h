@@ -27,8 +27,8 @@ public:
 	void Finalize();
 
 	//シーン終了リクエスト
-	const bool& IsEndRequst() { return endResquest_; }
-	void SetEnd(const bool& endResquest_) { this->endResquest_ = endResquest_; }
+	const bool IsEndRequst() { return endResquest_; }
+	void SetEnd(const bool endResquest_) { this->endResquest_ = endResquest_; }
 
 public:
 	//次シーンに変更します。
@@ -41,9 +41,9 @@ private:
 	//シーン終了
 	bool endResquest_ = false;
 	//今のシーン
-	BaseScene* scene_ = nullptr;
+	std::unique_ptr<BaseScene> scene_ = nullptr;
 	//次のシーン
-	BaseScene* nextScene_ = nullptr;
+	std::unique_ptr<BaseScene> nextScene_ = nullptr;
 	//シーンファクトリー
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 

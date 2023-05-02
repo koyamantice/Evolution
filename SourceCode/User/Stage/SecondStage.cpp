@@ -140,18 +140,18 @@ bool SecondStage::IntroUpdate() {
 	}
 	return false;
 }
-void SecondStage::IntroCamera(const float& timer) {
+void SecondStage::IntroCamera(const float timer) {
 
 
 
 
 }
-void SecondStage::ResultCamera(const float& timer) {
+void SecondStage::ResultCamera(const float timer) {
 	camera->SetTarget(player_shadow->GetCameraPos(camera_angle, camera_target));
 	camera->SetEye(XMFLOAT3{ player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z });
 	camera->Update();
 }
-void SecondStage::SmashCamera(const float& timer) {
+void SecondStage::SmashCamera(const float timer) {
 	XMFLOAT3 s_eye = { player_shadow->GetPosition().x + camera_distance.x,player_shadow->GetPosition().y + camera_hight,player_shadow->GetPosition().z + camera_distance.z };
 	XMFLOAT3 e_eye = { enemy_shadow->GetPosition().x + camera_distance.x,enemy_shadow->GetPosition().y + 25,enemy_shadow->GetPosition().z + camera_distance.z };
 	XMFLOAT3 ease_target = enemy_shadow->GetPosition();

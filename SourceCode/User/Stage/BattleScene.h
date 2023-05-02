@@ -45,7 +45,7 @@ protected:
 	/// 撃破後カメラ
 	/// </summary>
 	/// <param name="timer"></param>
-	virtual void SmashCamera(const float& timer) {};
+	virtual void SmashCamera(const float timer) {};
 
 	/// <summary>
 	/// 説明表示用の更新
@@ -78,7 +78,7 @@ protected:
 	/// </summary>
 	/// <param name="base"></param>
 	/// <returns></returns>
-	float RandHeight(const float& base);
+	float RandHeight(const float base);
 	/// <summary>
 	/// バトルステージ専用の描画処理(前)
 	/// </summary>

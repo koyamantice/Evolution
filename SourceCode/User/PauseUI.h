@@ -29,9 +29,9 @@ public:
 	};
 	const CameraSystem& GetReverseCamera() { return reverse_camera; }
 
-	const bool& GetEndFlag() { return endflag; }
-	void SetEndFlag(const bool& endflag) { this->endflag = endflag; }
-	const int& GetBar() { return static_cast<int>(frameBar_); }
+	const bool GetEndFlag() { return endflag; }
+	void SetEndFlag(const bool endflag) { this->endflag = endflag; }
+	const int GetBar() { return static_cast<int>(frameBar_); }
 private:
 
 	//ŠÖ”ƒ|ƒCƒ“ƒ^

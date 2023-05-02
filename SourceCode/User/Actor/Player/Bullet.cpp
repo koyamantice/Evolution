@@ -80,7 +80,7 @@ void Bullet::Update() {
 	}
 }
 
-void Bullet::IntroUpdate(const float& timer, const int& _stage) {
+void Bullet::IntroUpdate(const float timer, const int _stage) {
 	if (!isActive) { return; }
 	const float delay = 0.5f;
 	const float first_hight = 100;
@@ -103,7 +103,7 @@ void Bullet::IntroUpdate(const float& timer, const int& _stage) {
 	}
 }
 
-void Bullet::ResultUpdate(const float& timer) {
+void Bullet::ResultUpdate(const float timer) {
 	isFinish = true;
 	ResultOnUpdate(timer);
 	if (burning) {
@@ -358,7 +358,7 @@ void Bullet::OnCollision(const std::string& Tag, const XMFLOAT3& pos) {
 }
 
 
-bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float& _radius) {
+bool Bullet::Follow2Position(const XMFLOAT3& _pos, const float _radius) {
 	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 position{};
 	position.x = (_pos.x - pos.x);
@@ -401,7 +401,7 @@ void Bullet::DamageInit(BulletStatus status) {
 	}
 }
 
-void Bullet::ScaryInit(const int& proba) {
+void Bullet::ScaryInit(const int proba) {
 	if (command_ == BulletStatus::Scary) { return; }
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_int_distribution<int> dist(1, 100);

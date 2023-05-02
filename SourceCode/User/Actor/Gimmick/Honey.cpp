@@ -75,7 +75,7 @@ void Honey::OnDraw(DirectXCommon* dxCommon) {
 void Honey::OnFinalize() {
 }
 
-void Honey::ResultOnUpdate(const float& Timer) {
+void Honey::ResultOnUpdate(const float Timer) {
 
 	obj->Update();
 
@@ -240,7 +240,7 @@ void Honey::RandSpawn() {
 	}
 }
 
-void Honey::IntroOnUpdate(const float& timer) {
+void Honey::IntroOnUpdate(const float timer) {
 	//ŠÖ”‚ª“n‚·Å‰‚Ì’l
 	const float start_timer = 0.5f;
 	//
@@ -258,7 +258,7 @@ void Honey::IntroOnUpdate(const float& timer) {
 	}
 }
 
-float Honey::RandHeight(const float& base) {
+float Honey::RandHeight(const float base) {
 	const float rnd_vel = 0.05f * (stock + 1);
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);

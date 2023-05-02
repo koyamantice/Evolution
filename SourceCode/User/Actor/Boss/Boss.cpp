@@ -38,7 +38,7 @@ void Boss::LoadData(const std::string& bossname) {
 
 }
 
-void Boss::ResultOnUpdate(const float& timer) {
+void Boss::ResultOnUpdate(const float timer) {
 	isResult_ = true;
 	fbxObject_->Update();
 	ShadowUpdate();

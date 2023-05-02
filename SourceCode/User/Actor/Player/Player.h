@@ -28,9 +28,9 @@ private:
 	void OnLastDraw(DirectXCommon* dxCommon)override;
 	void OnFinalize()override;
 
-	void IntroOnUpdate(const float& timer)override;
+	void IntroOnUpdate(const float timer)override;
 	void IntroMove();
-	void ResultOnUpdate(const float& timer)override;
+	void ResultOnUpdate(const float timer)override;
 
 	void OnCollision(const std::string& Tag)override;
 	//å≈óLä÷êî
@@ -43,7 +43,7 @@ private:
 	bool PushMoveButton();
 
 	XMFLOAT3 MoveVECTOR(DirectX::XMVECTOR v, float angle);
-	XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) override;
+	XMFLOAT3 GetCameraPos(const float angle, const float str = 10) override;
 
 private:
 	std::unique_ptr<FBXObject3d> fbxobj_ = nullptr;

@@ -20,7 +20,7 @@ class Boss :public Actor {
 public:
 	virtual ~Boss() = default;
 protected:
-	void ResultOnUpdate(const float& timer)override;
+	void ResultOnUpdate(const float timer)override;
 	/// <summary>
 	/// ‹¤’Ê‰Šú‰»
 	/// </summary>

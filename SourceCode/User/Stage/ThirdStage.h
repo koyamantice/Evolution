@@ -28,13 +28,13 @@ private:
 	/// 導入カメラ
 	/// </summary>
 	/// <param name="timer"></param>
-	void IntroCamera(const float& timer);
+	void IntroCamera(const float timer);
 
 	/// <summary>
 	/// クリア後カメラ
 	/// </summary>
 	/// <param name="timer"></param>
-	void ResultCamera(const float& timer);
+	void ResultCamera(const float timer);
 
 	/// <summary>
 	///	導入部分の更新処理

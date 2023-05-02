@@ -50,7 +50,7 @@ public:
 	/// イージングスタート
 	/// </summary>
 	void  ChangeStart() { easing_start = true; }
-	const bool& GetEasingStart() { return easing_start; }
+	const bool GetEasingStart() { return easing_start; }
 private:
 	std::list<std::unique_ptr<Sprite>> sprites;
 

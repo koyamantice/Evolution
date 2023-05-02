@@ -73,7 +73,7 @@ public:
 	DirectX::XMFLOAT3 GetAFTIMAGE(const int& num) { return imagin_[num + 1]; }
 	
 	//座標の取得
-	virtual DirectX::XMFLOAT3 GetCameraPos(const float& angle, const float& str = 10) { return {0,0,0}; };
+	virtual DirectX::XMFLOAT3 GetCameraPos(const float angle, const float str = 10) { return {0,0,0}; };
 	//角度の取得
 	void SetRotation(const DirectX::XMFLOAT3& rot) { obj->SetRotation(rot); }
 	const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }	
@@ -90,7 +90,7 @@ public:
 	//Player固有の処理
 	virtual const XMFLOAT3& GetLockPos() { return obj->GetPosition(); };
 	void SetHitBound(const XMFLOAT3& pos) { hitBound.isHit = true; hitBound.HitingPos = pos; };
-	const bool& GetHitBound() { return  hitBound.isHit; }
+	const bool GetHitBound() { return  hitBound.isHit; }
 	//当たり判定サイズ取得
 	const float& GetSize()const { return collide_size; }
 
@@ -100,37 +100,37 @@ public:
 	const std::string& GetTag() { return tag; }
 
 	//isAliveセッタ＆ゲッタ
-	void SetIsActive(const bool& Active) { isActive = Active; };
-	const bool& GetIsActive() { return isActive; }
+	void SetIsActive(const bool Active) { isActive = Active; };
+	const bool GetIsActive() { return isActive; }
 
 	//isRemoveセッタ＆ゲッタ
-	void SetIsRemove(const bool& Remove) { isRemove = Remove; };
-	const bool& GetIsRemove() { return isRemove; }
+	void SetIsRemove(const bool Remove) { isRemove = Remove; };
+	const bool GetIsRemove() { return isRemove; }
 		
 	//isRemoveセッタ＆ゲッタ
-	void SetIsUnrivaled(const bool& _isUnrivaled) { isUnrivaled = _isUnrivaled; };
-	const bool& GetIsUnrivaled() { return isUnrivaled; }
+	void SetIsUnrivaled(const bool _isUnrivaled) { isUnrivaled = _isUnrivaled; };
+	const bool GetIsUnrivaled() { return isUnrivaled; }
 
 	//isReferセッタ＆ゲッタ
-	void SetIsRefer(const bool& isRefer) { this->isRefer = isRefer; };
-	const bool& GetIsRefer() { return isRefer; }
+	void SetIsRefer(const bool isRefer) { this->isRefer = isRefer; };
+	const bool GetIsRefer() { return isRefer; }
 
 	//canMoveセッタ＆ゲッタ
-	void SetCanMove(const bool& canMove) { this->canMove = canMove; };
-	const bool& GetCanMove() { return canMove; }
+	void SetCanMove(const bool canMove) { this->canMove = canMove; };
+	const bool GetCanMove() { return canMove; }
 
 	//カメラ角度のセッタ＆ゲッタ
-	void SetAngle(const float& angle) { this->angle = angle; }
-	const float& GetAngle() { return angle; }
+	void SetAngle(const float angle) { this->angle = angle; }
+	const float GetAngle() { return angle; }
 	//ワイルドイント引数
-	void SetStock(const int& Stock) { this->stock = Stock; };
-	const int& GetStock() { return stock; }
+	void SetStock(const int Stock) { this->stock = Stock; };
+	const int GetStock() { return stock; }
 	//ワイルドブール引数
-	void SetPause(const bool& pause) { this->pause = pause; }
-	const bool& GetPause() { return pause; }
+	void SetPause(const bool pause) { this->pause = pause; }
+	const bool GetPause() { return pause; }
 	//衝突判定
-	void SetCollide(const bool& collide) { this->collide = collide; }
-	const bool& GetCollide() { return collide; }
+	void SetCollide(const bool collide) { this->collide = collide; }
+	const bool GetCollide() { return collide; }
 
 	//各処理
 	void Initialize(Model* model, const std::string& tag = "None", ActorComponent* compornent = nullptr);	//初期化処理
@@ -139,12 +139,12 @@ public:
 	/// 導入アップデート
 	/// </summary>
 	/// <param name="Timer"></param>
-	void IntroUpdate(const float& Timer);
+	void IntroUpdate(const float Timer);
 	/// <summary>
 	/// 終了アップデート
 	/// </summary>
 	/// <param name="Timer"></param>
-	void ResultUpdate(const float& Timer);
+	void ResultUpdate(const float Timer);
 
 	void Demo();		//更新処理
 
@@ -162,8 +162,8 @@ public:
 	virtual void OnLastDraw(DirectXCommon* dxCommon) {};
 	virtual void OnFinalize() {};
 	virtual void DebugUpdate() {};
-	virtual void IntroOnUpdate(const float& Timer) {};
-	virtual void ResultOnUpdate(const float& Timer) {};
+	virtual void IntroOnUpdate(const float Timer) {};
+	virtual void ResultOnUpdate(const float Timer) {};
 	virtual void OnCollision(const std::string& Tag) {};
 protected:
 	std::unique_ptr<Object3d> obj;

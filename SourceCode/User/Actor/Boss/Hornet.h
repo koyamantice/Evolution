@@ -14,7 +14,7 @@ private:
 	void OnFinalize()override;
 	void OnCollision(const std::string& Tag)override;
 
-	void IntroOnUpdate(const float& timer)override;
+	void IntroOnUpdate(const float timer)override;
 
 	//オーバーライドメンバ関数
 	void StartAction() override;

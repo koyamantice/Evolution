@@ -3,7 +3,7 @@
 void SceneManager::Finalize() {
 	//最後のシーンの終了と開放
 	scene_->Finalize();
-	delete scene_;
+	scene_.reset();
 }
 
 SceneManager* SceneManager::GetInstance() {
@@ -17,10 +17,10 @@ void SceneManager::Update(DirectXCommon* dxCommon) {
 		//旧シーンの終了
 		if (scene_) {
 			scene_->Finalize();
-			delete scene_;
+			scene_.reset();
 		}
-		scene_ = nextScene_;
-		nextScene_ = nullptr;
+		scene_= std::move(nextScene_);
+		nextScene_.reset();
 		scene_->Initialize(dxCommon);
 	}
 	scene_->Update(dxCommon);
@@ -34,5 +34,5 @@ void SceneManager::ChangeScene(const std::string& sceneName) {
 	assert(sceneFactory_);
 	assert(nextScene_ == nullptr);
 	//次のシーン生成
-	nextScene_=sceneFactory_->CreateScene(sceneName);
+	nextScene_= sceneFactory_->CreateScene(sceneName);
 }

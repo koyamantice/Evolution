@@ -10,13 +10,13 @@ ParticleEmitter::ParticleEmitter(const UINT& texnumber) {
 
 }
 
-void ParticleEmitter::Add(const int& num, const int& life, const XMFLOAT3& position, const XMFLOAT3& velocity, const XMFLOAT3& accel, const float& start_scale, const float& end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
+void ParticleEmitter::Add(const int num, const int life, const XMFLOAT3& position, const XMFLOAT3& velocity, const XMFLOAT3& accel, const float start_scale, const float end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
 
 	particleManager->Add(life, position, velocity, accel, start_scale, end_scale, start_color, end_color);
 
 }
 
-void ParticleEmitter::AddCommon(const int& life, const XMFLOAT3& position, const float& average_vel, const float& average_accel, const float& start_scale, const float& end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
+void ParticleEmitter::AddCommon(const int life, const XMFLOAT3& position, const float average_vel, const float average_accel, const float start_scale, const float end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);
 
@@ -35,7 +35,7 @@ void ParticleEmitter::AddCommon(const int& life, const XMFLOAT3& position, const
 
 }
 
-void ParticleEmitter::AddInNest(const int& life, const XMFLOAT3& position, const float& average_margin, const float& average_vel, const float& start_scale, const float& end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
+void ParticleEmitter::AddInNest(const int life, const XMFLOAT3& position, const float average_margin, const float average_vel, const float start_scale, const float end_scale, const XMFLOAT4& start_color, const XMFLOAT4& end_color) {
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);
 
@@ -51,7 +51,7 @@ void ParticleEmitter::AddInNest(const int& life, const XMFLOAT3& position, const
 
 }
 
-void ParticleEmitter::AddContraction(const int& _life, const XMFLOAT3& _position, const float& _area, const float& _average_vel, const float& _start_scale, const float& _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
+void ParticleEmitter::AddContraction(const int _life, const XMFLOAT3& _position, const float _area, const float _average_vel, const float _start_scale, const float _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);
 
@@ -71,7 +71,7 @@ void ParticleEmitter::AddContraction(const int& _life, const XMFLOAT3& _position
 
 }
 
-void ParticleEmitter::AddCrystalMove(const int& _life, const XMFLOAT3& _position, const float& _area, const float& _average_vel, const float& _start_scale, const float& _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
+void ParticleEmitter::AddCrystalMove(const int _life, const XMFLOAT3& _position, const float _area, const float _average_vel, const float _start_scale, const float _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);
 	//ÉâÉìÉ_ÉÄÇ»äpìxÇéÊìæÇµÇ‹Ç∑ÅB
@@ -93,7 +93,7 @@ void ParticleEmitter::AddCrystalMove(const int& _life, const XMFLOAT3& _position
 
 }
 
-void ParticleEmitter::AddParabo(const int& _life, const XMFLOAT3& _position, const float& _downHeight, const float& _average_vel, const float& _start_scale, const float& _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
+void ParticleEmitter::AddParabo(const int _life, const XMFLOAT3& _position, const float _downHeight, const float _average_vel, const float _start_scale, const float _end_scale, const XMFLOAT4& _start_color, const XMFLOAT4& _end_color) {
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);
 

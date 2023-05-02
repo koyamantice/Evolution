@@ -39,7 +39,7 @@ private:
 	void OnUpdate()override;
 	void OnDraw(DirectXCommon* dxCommon)override;
 	void OnFinalize()override;
-	void ResultOnUpdate(const float& Timer) override;
+	void ResultOnUpdate(const float Timer) override;
 
 	void OnCollision(const std::string& Tag) override;
 
@@ -69,8 +69,8 @@ private:
 	//Ç«ÇÃçsìÆÇéÊÇÈÇ©
 	E_Phase phase_ = E_Phase::kWaitDriver;
 
-	void IntroOnUpdate(const float& timer)override;
+	void IntroOnUpdate(const float timer)override;
 
-	float RandHeight(const float& base);
+	float RandHeight(const float base);
 };
 

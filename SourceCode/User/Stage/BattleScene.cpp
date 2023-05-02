@@ -244,10 +244,10 @@ bool BattleScene::PauseUpdate() {
 	return false;
 }
 
-float BattleScene::RandHeight(const float& base) {
+float BattleScene::RandHeight(const float base) {
 	std::mt19937 mt{ std::random_device{}() };
 	std::uniform_real_distribution<float> dist(0.0, 1.0);
-	const float& rnd_vel = 0.95f;
+	const float rnd_vel = 0.95f;
 	float Rand = dist(mt) * rnd_vel - rnd_vel / 2.0f;
 	float itr = 0;
 	itr = base + Rand;

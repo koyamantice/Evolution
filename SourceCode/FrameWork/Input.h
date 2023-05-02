@@ -115,10 +115,10 @@ public: // メンバ関数
 	bool TiltPushStick(STICK Stick,float DeadZone=0.3f);
 
 public:
-	const float& GetPosX() { return mouse_posX_; }
-	const float& GetPosY() { return mouse_posY_; }
-	const float& GetLeftControllerX() { return left_stick_posX_; }
-	const float& GetLeftControllerY() { return left_stick_posY_; }
+	const float GetPosX() { return mouse_posX_; }
+	const float GetPosY() { return mouse_posY_; }
+	const float GetLeftControllerX() { return left_stick_posX_; }
+	const float GetLeftControllerY() { return left_stick_posY_; }
 	/// <summary>
 	/// マウス移動量を取得
 	/// </summary>

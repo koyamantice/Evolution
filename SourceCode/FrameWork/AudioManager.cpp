@@ -132,7 +132,7 @@ void AudioManager::StopWave(const std::string& filename) {
 
 }
 
-void AudioManager::PlayWave(const std::string& filename, const float& volume, bool isloop) {
+void AudioManager::PlayWave(const std::string& filename, const float volume, bool isloop) {
 	HRESULT result;
 
 	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);

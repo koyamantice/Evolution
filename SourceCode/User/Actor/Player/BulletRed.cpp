@@ -28,7 +28,7 @@ void BulletRed::OnInitialize() {
 }
 
 
-void BulletRed::ResultOnUpdate(const float& timer) {
+void BulletRed::ResultOnUpdate(const float timer) {
 	XMFLOAT3 rot = fbxobj_->GetRotation();
 	XMFLOAT3 pos = fbxobj_->GetPosition();
 	XMFLOAT3 p_pos = player->GetPosition();
@@ -82,7 +82,7 @@ void BulletRed::ResultOnUpdate(const float& timer) {
 	fbxobj_->Update();
 }
 
-void BulletRed::BulletCollision(const XMFLOAT3& pos, const int& Id) {
+void BulletRed::BulletCollision(const XMFLOAT3& pos, const int Id) {
 	if (collide) { return; }
 	if (command_ == BulletStatus::Dead || command_ == BulletStatus::Smash) { return; }
 	if (isPlayActive) { return; }

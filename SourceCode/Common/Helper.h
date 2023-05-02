@@ -20,5 +20,5 @@ T GetParabolicHeight(T pos_, T vel, T hightest, T timest) {
     return itr_;
 }
 
-XMFLOAT3 Bound(const XMFLOAT3& pos_, const XMFLOAT3& pos2_, const float& power_);
+XMFLOAT3 Bound(const XMFLOAT3& pos_, const XMFLOAT3& pos2_, const float power_);
 

@@ -71,6 +71,6 @@ void ClearCrystal::OnDraw(DirectXCommon* dxCommon) {
 void ClearCrystal::OnFinalize() {
 }
 
-void ClearCrystal::ResultOnUpdate(const float& timer) {
+void ClearCrystal::ResultOnUpdate(const float timer) {
 	partcleEmitter_->Update();
 }

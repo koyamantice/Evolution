@@ -23,7 +23,7 @@ public:
 
 	void Stamp(const XMFLOAT3& pos);
 
-	void SetPredict(const bool& _predict, const float& _timer);
+	void SetPredict(const bool _predict, const float _timer);
 private:
 	bool burning = false;
 	float scale = 0.0f;

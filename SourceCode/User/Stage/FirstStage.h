@@ -31,20 +31,20 @@ private:
 	/// 導入カメラ
 	/// </summary>
 	/// <param name="timer"></param>
-	void IntroCamera(const float& timer);
+	void IntroCamera(const float timer);
 	
 	/// <summary>
 	/// クリア後カメラ
 	/// </summary>
 	/// <param name="timer"></param>
-	void ResultCamera(const float& timer);
+	void ResultCamera(const float timer);
 
 
 	/// <summary>
 	/// 撃破後カメラ
 	/// </summary>
 	/// <param name="timer"></param>
-	void SmashCamera(const float& timer) override;
+	void SmashCamera(const float timer) override;
 
 
 
