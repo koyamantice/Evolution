@@ -16,7 +16,7 @@ AudioManager::~AudioManager() {
 
 void  AudioManager::Initialize() {
 	// XAudioエンジンのインスタンスを生成
-	HRESULT result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	 result = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	if FAILED(result) {
 		assert(0);
 	}
@@ -113,7 +113,7 @@ void AudioManager::LoadWave(const std::string& filename){
 }
 
 void AudioManager::StopWave(const std::string& filename) {
-	//HRESULT result;
+	// result;
 
 	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
 	//読み込んでなければアサート
@@ -133,7 +133,7 @@ void AudioManager::StopWave(const std::string& filename) {
 }
 
 void AudioManager::PlayWave(const std::string& filename, const float volume, bool isloop) {
-	HRESULT result;
+	 result;
 
 	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
 	//読み込んでなければアサート

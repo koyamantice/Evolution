@@ -70,7 +70,7 @@ void ParticleManager::CreateCommon(ID3D12Device* device,Camera* camera, ID3D12Gr
 }
 
 void ParticleManager::Initialize(UINT texNumber) {
-	HRESULT result;
+	 result;
 	this->texNumber = texNumber;
 	CreateModel();
 	// 定数バッファの生成
@@ -88,7 +88,7 @@ void ParticleManager::Initialize(UINT texNumber) {
 }
 
 void ParticleManager::Update() {
-	HRESULT result;
+	 result;
 
 	// 寿命が尽きたパーティクルを全削除
 	particles.remove_if([](Particle& x) { return x.frame >= x.num_frame; });
@@ -222,7 +222,7 @@ void ParticleManager::Add(const int life,
 }
 
 void ParticleManager::InitializeDescriptorHeap() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 
 	// デスクリプタヒープを生成	
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
@@ -239,7 +239,7 @@ void ParticleManager::InitializeDescriptorHeap() {
 }
 
 void ParticleManager::InitializeGraphicsPipeline() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト
 	ComPtr<ID3DBlob> gsBlob;	// ジオメトリシェーダオブジェクト
@@ -413,7 +413,7 @@ void ParticleManager::InitializeGraphicsPipeline() {
 	}
 }
 void ParticleManager::CreateAddBlendPipeline() {
-	HRESULT result;
+	 result;
 
 	ComPtr<ID3DBlob> vsBlob;		//頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> gsBlob;		//ジオメトリシェーダオブジェクト
@@ -600,7 +600,7 @@ void ParticleManager::CreateAddBlendPipeline() {
 }
 
 void ParticleManager::CreateSubBlendPipeline() {
-	HRESULT result;
+	 result;
 
 	ComPtr<ID3DBlob> vsBlob;		//頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> gsBlob;		//ジオメトリシェーダオブジェクト
@@ -792,7 +792,7 @@ void ParticleManager::LoadTexture(UINT texNumber, const std::string& filename) {
 	// nullptrチェック
 	assert(device);
 
-	HRESULT result;
+	 result;
 
 	// WICテクスチャのロード
 	TexMetadata metadata{};
@@ -864,7 +864,7 @@ void ParticleManager::LoadTexture(UINT texNumber, const std::string& filename) {
 }
 
 void ParticleManager::CreateModel() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPos) * vertexCount);
 

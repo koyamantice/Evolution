@@ -104,7 +104,7 @@ void DirectXCommon::ClearDepthBuffer() {
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 void DirectXCommon::PostDraw() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 	// imgui描画
 	ImGui::Render();
 	ID3D12DescriptorHeap* ppHeaps[] = { imguiHeap.Get() };
@@ -147,7 +147,7 @@ void DirectXCommon::PostDraw() {
 }
 
 bool DirectXCommon::InitializeDevice() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 #ifdef _DEBUG
 	ComPtr<ID3D12Debug> debugController;
 	//デバッグレイヤーをオンに
@@ -234,7 +234,7 @@ bool DirectXCommon::InitializeDevice() {
 }
 
 bool DirectXCommon::CreateSwapChain() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 	//スワップチェーンの生成
 	DXGI_SWAP_CHAIN_DESC1 swapchainDesc{};
 	swapchainDesc.Width = WinApp::window_width;
@@ -260,7 +260,7 @@ bool DirectXCommon::CreateSwapChain() {
 }
 
 bool DirectXCommon::InitializeCommand() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 
 	result = dev->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
 		IID_PPV_ARGS(&cmdAllocator));
@@ -287,7 +287,7 @@ bool DirectXCommon::InitializeCommand() {
 }
 
 bool DirectXCommon::InitializeRenderTargetView() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 
 	//でスクリプタヒープの生成
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};
@@ -341,7 +341,7 @@ bool DirectXCommon::InitializeRenderTargetView() {
 
 //深度バッファ
 bool DirectXCommon::InitializeDepthBuffer() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 
 	CD3DX12_RESOURCE_DESC depthResDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_D32_FLOAT, WinApp::window_width, WinApp::window_height, 1, 0, 1, 0,
@@ -376,7 +376,7 @@ bool DirectXCommon::InitializeDepthBuffer() {
 }
 
 bool DirectXCommon::CreateFence() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 	result = dev->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 	if (FAILED(result)) {
 		assert(0);
@@ -387,7 +387,7 @@ bool DirectXCommon::CreateFence() {
 
 bool DirectXCommon::InitImgui()
 {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 
 	// デスクリプタヒープを生成
 	D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};

@@ -29,7 +29,7 @@ PostEffect::PostEffect()
 }
 
 void PostEffect::Initialize() {
-	HRESULT result;
+	 result;
 	//Sprite::Initialize();
 	Sprite::CreateVertices();
 	// 頂点データ
@@ -184,7 +184,7 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList) {
 
 	// 定数バッファにデータ転送
 	ConstBufferData* constMap = nullptr;
-	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
+	 result = this->constBuff->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		constMap->color = this->color;
 		constMap->mat = XMMatrixIdentity();	// 行列の合成	
@@ -262,7 +262,7 @@ void PostEffect::PostDrawScene(ID3D12GraphicsCommandList* cmdList) {
 }
 
 void PostEffect::CreateGraphicsPipelineState() {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト

@@ -11,7 +11,7 @@ Input* Input::GetInstance() {
 }
 
 bool Input::Initialize(WinApp* winApp_) {
-	HRESULT result = S_FALSE;
+	 result = S_FALSE;
 	this->winApp_ = winApp_;
 	// DirectInputオブジェクトの生成	
 	result = DirectInput8Create(winApp_->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput_, nullptr);
@@ -67,7 +67,7 @@ bool Input::Initialize(WinApp* winApp_) {
 }
 
 void Input::Update() {
-	HRESULT result;
+	 result;
 
 	{// キーボード
 		result = devKeyboard_->Acquire();	// キーボード動作開始
