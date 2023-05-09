@@ -322,14 +322,13 @@ void FbxLoader::ParseMaterial(FBXModel* FBXModel, FbxNode* fbxNode)
 
 void FbxLoader::LoadTexture(FBXModel* FBXModel, const std::string& fullpath)
 {
-    HRESULT result = S_FALSE;
     //WICテクスチャのロード
     TexMetadata& metadata = FBXModel->metadata;
     ScratchImage& scratchImg = FBXModel->scratchImg;
     //ユニコード文字列に変換
     wchar_t wfilepath[128];
     MultiByteToWideChar(CP_ACP, 0, fullpath.c_str(), -1, wfilepath, _countof(wfilepath));
-    result = LoadFromWICFile(wfilepath, WIC_FLAGS_NONE, &metadata, scratchImg);
+    HRESULT result = LoadFromWICFile(wfilepath, WIC_FLAGS_NONE, &metadata, scratchImg);
     if (FAILED(result)) {
         assert(0);
     }

@@ -281,18 +281,8 @@ bool Object3d::Initialize()
 	// nullptrチェック
 	assert(device);
 
-	HRESULT result;
-	//// 定数バッファの生成
-	//result = device->CreateCommittedResource(
-	//	&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
-	//	D3D12_HEAP_FLAG_NONE,
-	//	&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff),
-	//	D3D12_RESOURCE_STATE_GENERIC_READ,
-	//	nullptr,
-	//	IID_PPV_ARGS(&constBuff));
-
 	// 定数バッファの生成B0
-	result = device->CreateCommittedResource(
+	HRESULT result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB0) + 0xff) & ~0xff),
@@ -308,8 +298,6 @@ bool Object3d::Initialize()
 void Object3d::Update()
 {
 	assert(camera);
-
-	HRESULT result;
 	//行列の更新
 	UpdateWorldMatrix();
 
@@ -318,7 +306,7 @@ void Object3d::Update()
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
-	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
+	HRESULT result = constBuffB0->Map(0, nullptr, (void**)&constMap);
 	constMap->color = color;
 	constMap->viewproj = matViewProjection;
 	constMap->world = matWorld;

@@ -32,9 +32,8 @@ void Material::Initialize()
 
 void Material::CreateConstantBuffer()
 {
-	HRESULT result;
 	// 定数バッファの生成
-	result = device->CreateCommittedResource(
+	HRESULT result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff)&~0xff),
@@ -56,8 +55,6 @@ void Material::LoadTexture(const std::string& directoryPath, CD3DX12_CPU_DESCRIP
 	cpuDescHandleSRV = cpuHandle;
 	gpuDescHandleSRV = gpuHandle;
 
-	HRESULT result = S_FALSE;
-
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	metadata.format = MakeSRGB(metadata.format);
@@ -70,7 +67,7 @@ void Material::LoadTexture(const std::string& directoryPath, CD3DX12_CPU_DESCRIP
 	// ユニコード文字列に変換
 	MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
 
-	result = LoadFromWICFile(
+	HRESULT result = LoadFromWICFile(
 		wfilepath, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
@@ -129,10 +126,9 @@ void Material::LoadTexture(const std::string& directoryPath, CD3DX12_CPU_DESCRIP
 
 void Material::Update()
 {
-	HRESULT result;
 	// 定数バッファへデータ転送
 	ConstBufferDataB1* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
+	HRESULT result = constBuff->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		constMap->ambient = ambient;
 		constMap->diffuse = diffuse;

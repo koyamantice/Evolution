@@ -7,11 +7,10 @@ FBXModel::~FBXModel()
 }
 void FBXModel::CreateBuffers(ID3D12Device* device)
 {
-    HRESULT result;
     // 頂点データ全体のサイズ
     UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUvSkin) * vertices.size());
     // 頂点バッファ生成
-    result = device->CreateCommittedResource(
+    HRESULT result= device->CreateCommittedResource(
         &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
         D3D12_HEAP_FLAG_NONE,
         &CD3DX12_RESOURCE_DESC::Buffer(sizeVB),

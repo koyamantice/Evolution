@@ -38,12 +38,10 @@ void Mesh::SetMaterial(Material * material)
 }
 
 void Mesh::CreateBuffers()
-{
-	HRESULT result;
-		
+{		
 	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv)*vertices.size());
 	// 頂点バッファ生成
-	result = device->CreateCommittedResource(
+	HRESULT result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer(sizeVB),

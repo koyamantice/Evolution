@@ -38,9 +38,8 @@ void LightGroup::Initialize()
 
 	DefaultLightSetting();
 
-	HRESULT result;
 	// 定数バッファの生成
-	result = device->CreateCommittedResource(
+	HRESULT result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff),
@@ -76,10 +75,9 @@ void LightGroup::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterInde
 
 void LightGroup::TransferConstBuffer()
 {
-	HRESULT result;
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
+	HRESULT result = constBuff->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		// 環境光
 		constMap->ambientColor = ambientColor;

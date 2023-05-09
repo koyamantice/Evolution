@@ -16,7 +16,6 @@ ComPtr<ID3D12RootSignature> FBXObject3d::rootsignature;
 ComPtr<ID3D12PipelineState> FBXObject3d::pipelinestate;
 
 void FBXObject3d::CreateGraphicsPipeline() {
-	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
 	ComPtr<ID3DBlob> psBlob;    // ピクセルシェーダオブジェクト
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
@@ -24,7 +23,7 @@ void FBXObject3d::CreateGraphicsPipeline() {
 	assert(device);
 
 	// 頂点シェーダの読み込みとコンパイル
-	result = D3DCompileFromFile(
+	HRESULT result = D3DCompileFromFile(
 		L"Resources/shaders/FBXVS.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
@@ -188,9 +187,8 @@ void FBXObject3d::StaticInitializeCommon(ID3D12Device* device, Camera* camera) {
 }
 
 void FBXObject3d::Initialize(FBXModel* model, XMFLOAT3 scale, XMFLOAT3 rotation) {
-	HRESULT result;
 	// 定数バッファの生成
-	result = device->CreateCommittedResource(
+	HRESULT result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataTransform) + 0xff) & ~0xff),
@@ -239,10 +237,9 @@ void FBXObject3d::Update() {
 	// カメラ座標
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
-	HRESULT result;
 	// 定数バッファへデータ転送
 	ConstBufferDataTransform* constMap = nullptr;
-	result = constBuffTransform->Map(0, nullptr, (void**)&constMap);
+	HRESULT result = constBuffTransform->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) {
 		constMap->viewproj = matViewProjection;
 		constMap->color = color;

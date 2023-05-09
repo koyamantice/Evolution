@@ -221,13 +221,12 @@ bool Sprite::LoadTexture(UINT texnumber, const wchar_t* filename) {
 	// nullptrチェック
 	assert(device);
 
-	HRESULT result;
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
-	result = LoadFromWICFile(
+	HRESULT result = LoadFromWICFile(
 		filename, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
@@ -292,14 +291,12 @@ bool Sprite::LoadTexture(UINT texnumber, const wchar_t* filename) {
 bool Sprite::LoadTextureDDS(UINT texnumber, const wchar_t* filename) {
 	// nullptrチェック
 	assert(device);
-
-	HRESULT result;
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
-	result = LoadFromDDSFile(
+	HRESULT result = LoadFromDDSFile(
 		filename, DDS_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {

@@ -114,14 +114,12 @@ std::unique_ptr<Object2d> Object2d::Create(UINT texNumber, XMFLOAT3 position, XM
 
 bool Object2d::InitializeDescriptorHeap()
 {
-	HRESULT result = S_FALSE;
-
 	// デスクリプタヒープを生成	
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
 	descHeapDesc.NumDescriptors = srvCount; // シェーダーリソースビュー1つ
-	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
+	HRESULT result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
 	if (FAILED(result)) {
 		assert(0);
 		return false;
@@ -155,8 +153,6 @@ void Object2d::InitializeCamera(int window_width, int window_height)
 }
 
 bool Object2d::AddInitializeGraphicsPipeline() {
-	HRESULT result = S_FALSE;
-
 	// 頂点レイアウト
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
 		{ // xy座標(1行で書いたほうが見やすい)
@@ -239,7 +235,7 @@ bool Object2d::AddInitializeGraphicsPipeline() {
 
 	ComPtr<ID3DBlob> rootSigBlob;
 	// バージョン自動判定のシリアライズ
-	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
+	HRESULT result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
 	// ルートシグネチャの生成
 	result = device->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&rootsignature[AddBlend]));
 	if (FAILED(result)) {
@@ -418,12 +414,11 @@ bool Object2d::LoadTexture(UINT texnumber, const wchar_t* filename)
 	// nullptrチェック
 	assert(device);
 
-	HRESULT result;
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
-	result = LoadFromWICFile(
+	HRESULT result = LoadFromWICFile(
 		filename, WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
@@ -489,13 +484,12 @@ bool Object2d::LoadTextureDDS(UINT texnumber, const wchar_t* filename) {
 	// nullptrチェック
 	assert(device);
 
-	HRESULT result;
 	// WICテクスチャのロード
 	TexMetadata metadata{};
 	metadata.format = MakeSRGB(metadata.format);
 	ScratchImage scratchImg{};
 
-	result = LoadFromDDSFile(
+	HRESULT result = LoadFromDDSFile(
 		filename, DDS_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
@@ -724,10 +718,8 @@ bool Object2d::Initialize()
 {
 	// nullptrチェック
 	assert(device);
-
-	HRESULT result;
 	// 定数バッファの生成
-	result = device->CreateCommittedResource(
+	HRESULT result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
 		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) + 0xff) & ~0xff),
@@ -741,7 +733,6 @@ bool Object2d::Initialize()
 void Object2d::Update() {
 	assert(camera);
 
-	HRESULT result;
 	XMMATRIX matScale, matRot, matTrans;
 
 	// スケール、回転、平行移動行列の計算
@@ -779,7 +770,7 @@ void Object2d::Update() {
 
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
-	result = constBuff->Map(0, nullptr, (void**)&constMap);
+	HRESULT result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->color = color;
 	constMap->mat = matWorld * matViewProjection;	// 行列の合成
 	constBuff->Unmap(0, nullptr);
